@@ -34,3 +34,10 @@ This will start the backend server on the specified port (default is 3000) and c
 ## Usage
 
 Once the backend is up and running, you can start making requests to it from your frontend or API client.
+
+
+## File Structure
+
+Each data object is grouped under the routes folder. There will be a route file that declares all the routes, a controller file that contains all the route functionality and the model file that contains the schema.
+
+Use the existing user folder as reference.
