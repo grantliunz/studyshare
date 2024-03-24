@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, loginWithGoogle, useAuth } from "../../util/firebase";
 
@@ -11,6 +11,10 @@ export default function Login() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState("");
   const user = useAuth();
+
+  if (user) {
+    navigate("/");
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,12 +37,6 @@ export default function Login() {
     await loginWithGoogle();
     navigate("/");
   };
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
 
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
