@@ -3,29 +3,28 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { createUser } from "../../util/firebase";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../util/firebase";
 
-export default function Login() {
+export default function Signup() {
     const navigate = useNavigate();
     const [notice, setNotice] = useState("");
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const email = data.get("email") as string;
         const password = data.get("password") as string;
-        console.log({ email, password });
-        login(email, password)
-            .then((user) => {
-                console.log(user);
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error(error);
-                setNotice("Invalid email or password");
-            });
+        const confirmPassword = data.get("confirmPassword") as string;
+
+        if (password !== confirmPassword) {
+            setNotice("Passwords do not match");
+            return;
+        }
+        const user = await createUser(email, password);
+        console.log(user);
+        navigate("/");
     };
 
     return (
@@ -51,6 +50,17 @@ export default function Login() {
                 autoComplete="current-password"
             />
 
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+            />
+
             <p>{notice}</p>
 
             <Button
@@ -59,17 +69,12 @@ export default function Login() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-                Log In
+                Sign Up
             </Button>
             <Grid container>
-                <Grid item xs>
-                    <Link href="#" variant="body2">
-                        Forgot password?
-                    </Link>
-                </Grid>
                 <Grid item>
-                    <Link href="/signup" variant="body2">
-                        {"Don't have an account? Sign Up"}
+                    <Link href="/login" variant="body2">
+                        {"Already have an account? Log in"}
                     </Link>
                 </Grid>
             </Grid>
