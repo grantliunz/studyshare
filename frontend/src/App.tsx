@@ -8,23 +8,23 @@ import Signup from "./pages/signup/Signup.tsx";
 import { useAuth } from "./util/firebase.tsx";
 
 function App() {
-    const user = useAuth();
-    return (
-        <>
-            <CssBaseline />
-            <Routes>
-                <Route path="/" element={<Landing user={user} />} />
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
-                <Route
-                    path="/signup"
-                    element={<Signup />}
-                />
-            </Routes>
-        </>
-    );
+  const user = useAuth();
+  return (
+    <>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<Landing user={user} />} />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+      </Routes>
+    </>
+  );
 }
 
 export default App;
