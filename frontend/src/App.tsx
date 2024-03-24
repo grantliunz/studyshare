@@ -9,7 +9,6 @@ import { useAuth } from "./util/firebase.tsx";
 
 function App() {
     const user = useAuth();
-
     return (
         <>
             <CssBaseline />
@@ -17,11 +16,11 @@ function App() {
                 <Route path="/" element={<Landing user={user} />} />
                 <Route
                     path="/login"
-                    element={user ? <Landing user={user} /> : <Login />}
+                    element={<Login />}
                 />
                 <Route
                     path="/signup"
-                    element={user ? <Landing user={user} /> : <Signup />}
+                    element={<Signup />}
                 />
             </Routes>
         </>
