@@ -8,8 +8,10 @@ import {
     onAuthStateChanged,
     browserSessionPersistence,
     User,
+    signInWithRedirect,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FB_API_KEY,
@@ -22,6 +24,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 const useAuth = () => {
     const [user, setUser] = useState<User | null>(null); // State to hold the current user
@@ -53,6 +56,10 @@ const login = async (email: string, password: string) => {
     return await signInWithEmailAndPassword(auth, email, password);
 };
 
+const loginWithGoogle = async () => {
+    await signInWithRedirect(auth, provider);
+};
+
 const logout = async () => {
     return await signOut(auth);
 };
@@ -61,4 +68,4 @@ const getCurrentUser = () => {
     return auth.currentUser;
 };
 
-export { useAuth, createUser, login, logout, getCurrentUser };
+export { useAuth, createUser, login, logout, getCurrentUser, loginWithGoogle };

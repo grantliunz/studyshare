@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../util/firebase";
+import { login, loginWithGoogle } from "../../util/firebase";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -26,6 +26,11 @@ export default function Login() {
                 console.error(error);
                 setNotice("Invalid email or password");
             });
+    };
+
+    const submitGoogle = async () => {
+        await loginWithGoogle();
+        navigate("/");
     };
 
     return (
@@ -73,6 +78,7 @@ export default function Login() {
                     </Link>
                 </Grid>
             </Grid>
+            <Button onClick={submitGoogle}>Log In with Google</Button>
         </Box>
     );
 }

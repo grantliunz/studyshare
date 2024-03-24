@@ -15,8 +15,14 @@ function App() {
             <CssBaseline />
             <Routes>
                 <Route path="/" element={<Landing user={user} />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
+                <Route
+                    path="/login"
+                    element={user ? <Landing user={user} /> : <Login />}
+                />
+                <Route
+                    path="/signup"
+                    element={user ? <Landing user={user} /> : <Signup />}
+                />
             </Routes>
         </>
     );
