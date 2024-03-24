@@ -1,1 +1,0 @@
-// Mongo schema goes here
