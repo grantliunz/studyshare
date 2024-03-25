@@ -22,6 +22,31 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FB_APP_ID
 };
 
+function getFirebaseErrorMessage(errorCode: string): string {
+  switch (errorCode) {
+    case 'auth/invalid-email':
+      return 'The email address is invalid.';
+    case 'auth/user-disabled':
+      return 'This user account has been disabled.';
+    case 'auth/user-not-found':
+      return 'User not found. Please check your email or sign up.';
+    case 'auth/wrong-password':
+      return 'Incorrect password. Please try again.';
+    case 'auth/missing-password':
+      return 'Please enter a password.';
+    case 'auth/email-already-in-use':
+      return 'The email address is already in use.';
+    case 'auth/weak-password':
+      return 'The password is too weak. Please use a stronger password.';
+    case 'auth/network-request-failed':
+      return 'There was a network error. Please check your internet connection and try again.';
+    case 'auth/too-many-requests':
+      return 'Too many unsuccessful login attempts. Please try again later.';
+    default:
+      return 'An unknown error occurred.';
+  }
+}
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -68,4 +93,12 @@ const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-export { useAuth, createUser, login, logout, getCurrentUser, loginWithGoogle };
+export {
+  useAuth,
+  createUser,
+  login,
+  logout,
+  getCurrentUser,
+  loginWithGoogle,
+  getFirebaseErrorMessage
+};

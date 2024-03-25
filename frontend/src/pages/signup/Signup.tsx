@@ -3,9 +3,10 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { createUser } from '../../util/firebase';
+import { createUser, getFirebaseErrorMessage } from '../../util/firebase';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -22,9 +23,15 @@ export default function Signup() {
       setNotice('Passwords do not match');
       return;
     }
-    const user = await createUser(email, password);
-    console.log(user);
-    navigate('/');
+    createUser(email, password)
+      .then((user) => {
+        console.log(user);
+        navigate('/');
+      })
+      .catch((error: FirebaseError) => {
+        console.error(error);
+        setNotice(getFirebaseErrorMessage(error.code));
+      });
   };
 
   return (
