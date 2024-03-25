@@ -24,12 +24,10 @@ export default function Signup() {
       return;
     }
     createUser(email, password)
-      .then((user) => {
-        console.log(user);
+      .then(() => {
         navigate('/');
       })
       .catch((error: FirebaseError) => {
-        console.error(error);
         setNotice(getFirebaseErrorMessage(error.code));
       });
   };
