@@ -1,6 +1,6 @@
-import Button from "@mui/material/Button";
-import { User } from "firebase/auth";
-import { logout } from "../../util/firebase";
+import Button from '@mui/material/Button';
+import { User } from 'firebase/auth';
+import { logout } from '../../util/firebase';
 
 export default function Landing({ user }: { user: User | null }) {
   return (
@@ -13,11 +13,7 @@ export default function Landing({ user }: { user: User | null }) {
       ) : (
         <>
           <p>{user.email}</p>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={logout}
-          >
+          <Button variant="contained" color="primary" onClick={logout}>
             Log out
           </Button>
         </>

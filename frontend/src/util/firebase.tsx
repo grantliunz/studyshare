@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,10 +8,10 @@ import {
   onAuthStateChanged,
   browserSessionPersistence,
   User,
-  signInWithRedirect,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
-import { GoogleAuthProvider } from "firebase/auth";
+  signInWithRedirect
+} from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FB_API_KEY,
@@ -19,7 +19,7 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FB_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FB_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FB_APP_ID,
+  appId: import.meta.env.VITE_FB_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -41,7 +41,7 @@ const useAuth = () => {
         return unsubscribe; // Return the unsubscribe function
       })
       .catch((error) => {
-        console.error("Error setting persistence: ", error);
+        console.error('Error setting persistence: ', error);
       });
   }, []);
 

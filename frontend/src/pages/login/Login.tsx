@@ -1,41 +1,41 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login, loginWithGoogle, useAuth } from "../../util/firebase";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login, loginWithGoogle, useAuth } from '../../util/firebase';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useState('');
   const user = useAuth();
 
   if (user) {
-    navigate("/");
+    navigate('/');
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+    const email = data.get('email') as string;
+    const password = data.get('password') as string;
     console.log({ email, password });
     login(email, password)
       .then((user) => {
         console.log(user);
-        navigate("/");
+        navigate('/');
       })
       .catch((error) => {
         console.error(error);
-        setNotice("Invalid email or password");
+        setNotice(error.message);
       });
   };
 
   const submitGoogle = async () => {
     await loginWithGoogle();
-    navigate("/");
+    navigate('/');
   };
 
   return (
@@ -63,12 +63,7 @@ export default function Login() {
 
       <p>{notice}</p>
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-      >
+      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Log In
       </Button>
       <Grid container>

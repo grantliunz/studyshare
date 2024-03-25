@@ -1,30 +1,30 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import { createUser } from "../../util/firebase";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { createUser } from '../../util/firebase';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
-    const confirmPassword = data.get("confirmPassword") as string;
+    const email = data.get('email') as string;
+    const password = data.get('password') as string;
+    const confirmPassword = data.get('confirmPassword') as string;
 
     if (password !== confirmPassword) {
-      setNotice("Passwords do not match");
+      setNotice('Passwords do not match');
       return;
     }
     const user = await createUser(email, password);
     console.log(user);
-    navigate("/");
+    navigate('/');
   };
 
   return (
@@ -63,18 +63,13 @@ export default function Signup() {
 
       <p>{notice}</p>
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-      >
+      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Sign Up
       </Button>
       <Grid container>
         <Grid item>
           <Link href="/login" variant="body2">
-            {"Already have an account? Log in"}
+            {'Already have an account? Log in'}
           </Link>
         </Grid>
       </Grid>
