@@ -1,8 +1,8 @@
 import Button from '@mui/material/Button';
-import { User } from 'firebase/auth';
-import { logout } from '../../util/firebase';
+import { useAuth } from '../../contexts/UserContext';
 
-export default function Landing({ user }: { user: User | null }) {
+export default function Landing() {
+  const { user, logout } = useAuth();
   return (
     <div>
       <h1>Landing Page</h1>

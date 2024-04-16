@@ -5,18 +5,14 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getFirebaseErrorMessage,
-  login,
-  loginWithGoogle,
-  useAuth
-} from '../../util/firebase';
+import { getFirebaseErrorMessage } from '../../util/firebase';
 import { FirebaseError } from 'firebase/app';
+import { useAuth } from '../../contexts/UserContext';
 
 export default function Login() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
-  const user = useAuth();
+  const { user, login, loginWithGoogle } = useAuth();
 
   if (user) {
     navigate('/');
@@ -27,7 +23,6 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const password = data.get('password') as string;
-    console.log({ email, password });
     login(email, password)
       .then(() => {
         navigate('/');
