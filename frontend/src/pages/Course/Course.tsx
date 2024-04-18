@@ -7,8 +7,9 @@ export default function CoursePage() {
       <h1>Course Page</h1>
 
       <SearchBar title="Search for a course" />
+      <br/>
 
-      <CourseCard />
+      <CourseCard courseCode='SOFTENG 284' courseName='Data Structures and Algorithms'/>
     </div>
   );
 }

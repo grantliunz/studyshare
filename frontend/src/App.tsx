@@ -6,7 +6,7 @@ import Landing from './pages/landing/Landing.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
 import { AuthProvider } from './contexts/UserContext.tsx';
-import CoursePage from './pages/Course/Course.tsx';
+import CoursePage from './pages/course/Course.tsx';
 
 function App() {
   return (
