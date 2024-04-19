@@ -227,10 +227,17 @@ const Assessment = () => {
             key={question.number.join('')}
             label={question.number.join('')}
             style={
-              { textTransform: 'none' } &&
               currentQuestion === question.number.join('')
-                ? { color: '#5D707F', backgroundColor: 'white' }
-                : { color: 'white', backgroundColor: '#5D707F' }
+                ? {
+                    backgroundColor: 'white',
+                    color: '#5D707F',
+                    textTransform: 'none'
+                  }
+                : {
+                    backgroundColor: '#5D707F',
+                    color: 'white',
+                    textTransform: 'none'
+                  }
             }
             value={question.number.join('')}
           />
