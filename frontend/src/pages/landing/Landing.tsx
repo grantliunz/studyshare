@@ -13,6 +13,7 @@ export default function Landing() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.grid} />
       <h1 className={styles.title}>StudyShare</h1>
       <p>
         The collaborative platform where students come together to share,
@@ -29,7 +30,7 @@ export default function Landing() {
       >
         Get Started
       </Button>
-      {user && <Button onClick={logout}>Logout (temoprary)</Button>}
+      {user && <Button onClick={logout}>Logout (temporary)</Button>}
     </div>
   );
 }

@@ -1,4 +1,16 @@
+.grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(/src/assets/grid.svg);
+  z-index: -1;
+}
+
 .container {
+  position: relative;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -12,11 +24,14 @@
 .title {
   font-family: Jomhuria;
   font-size: 16rem;
-  color: var(--dark-color);
+  color: rgba(65, 112, 155, 1);
   margin: 0;
   height: 300px;
 }
 
+
+
 .button {
-  font-size: 12rem;
+  font-size: 1.5rem;
+  /* Adjust button font size as needed */
 }
