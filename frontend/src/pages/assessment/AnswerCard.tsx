@@ -27,7 +27,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             display: 'flex',
             width: '100%',
             padding: '12px',
-            columnGap: '10px'
+            columnGap: '24px'
           }}
         >
           <PersonCard
