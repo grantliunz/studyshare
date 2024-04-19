@@ -1,16 +1,27 @@
 import { Answer } from './Assessment';
 import PersonCard from '../../components/PersonCard';
-import UpDownVote from '../../components/UpDownVote';
+import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import CommentCard from './CommentCard';
 
 type AnswerCardProps = {
   answer: Answer;
 };
 
 const AnswerCard = ({ answer }: AnswerCardProps) => {
+  const handleVoteChange = (
+    oldVoteDirection: VoteDirection,
+    newVoteDirection: VoteDirection
+  ) => {
+    oldVoteDirection === VoteDirection.UP && answer.rating.upvotes--;
+    oldVoteDirection === VoteDirection.DOWN && answer.rating.downvotes--;
+    newVoteDirection === VoteDirection.UP && answer.rating.upvotes++;
+    newVoteDirection === VoteDirection.DOWN && answer.rating.downvotes++;
+  };
+
   return (
     <>
-      <div style={{ display: 'flex', columnGap: '16px', alignItems: 'center' }}>
+      <div style={{ alignItems: 'center', display: 'flex', columnGap: '16px' }}>
         <UpDownVote
           rating={answer.rating}
           style={{
@@ -19,15 +30,16 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             justifyContent: 'space-between',
             width: '30px'
           }}
+          onChange={handleVoteChange}
         />
         <div
           style={{
             alignItems: 'center',
             backgroundColor: '#d9d9d9',
+            columnGap: '24px',
             display: 'flex',
             width: '100%',
-            padding: '12px',
-            columnGap: '24px'
+            padding: '12px'
           }}
         >
           <PersonCard
@@ -55,8 +67,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
               <div
                 style={{
                   border: '1px dashed black',
-                  width: '1px',
-                  marginLeft: '11px'
+                  marginLeft: '11px',
+                  width: '1px'
                 }}
               />
               <div
@@ -67,28 +79,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 }}
               >
                 {answer.comments.map((comment) => (
-                  <div
-                    style={{
-                      alignItems: 'center',
-                      columnGap: '20px',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '100%',
-                      fontSize: '0.7rem'
-                    }}
-                  >
-                    <UpDownVote
-                      rating={comment.rating}
-                      style={{ display: 'flex', flexDirection: 'column' }}
-                    />
-                    <PersonCard
-                      avatarPos="top"
-                      avatarSize="28px"
-                      name={comment.author}
-                      style={{ width: '80px' }}
-                    />
-                    {comment.text}
-                  </div>
+                  <CommentCard comment={comment} />
                 ))}
               </div>
             </div>

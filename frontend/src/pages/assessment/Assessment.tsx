@@ -207,11 +207,22 @@ const Assessment = () => {
         value={currentQuestion}
         onChange={handleQuestionChange}
         orientation="vertical"
-        style={{ minWidth: 'fit-content' }}
+        style={{
+          minWidth: 'fit-content',
+          backgroundColor: '#5D707F'
+        }}
+        TabIndicatorProps={{ style: { backgroundColor: 'white' } }}
       >
         {dummyAssessment.questions.map((question) => (
           <Tab
+            key={question.number.join('')}
             label={question.number.join('')}
+            style={
+              { textTransform: 'none' } &&
+              currentQuestion === question.number.join('')
+                ? { color: '#5D707F', backgroundColor: 'white' }
+                : { color: 'white', backgroundColor: '#5D707F' }
+            }
             value={question.number.join('')}
           />
         ))}
@@ -225,6 +236,7 @@ const Assessment = () => {
       >
         {dummyAssessment.questions.map((question) => (
           <TabPanel
+            key={question.number.join('')}
             selectedValue={currentQuestion}
             value={question.number.join('')}
           >

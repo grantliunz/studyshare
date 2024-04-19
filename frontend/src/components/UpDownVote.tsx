@@ -9,31 +9,69 @@ import { Rating } from '../pages/assessment/Assessment';
 type UpDownVoteProps = {
   rating: Rating;
   style?: React.CSSProperties;
+  onChange?: (
+    oldVoteDirection: VoteDirection,
+    newVoteDirection: VoteDirection
+  ) => any;
 };
 
-const UpDownVote = ({ rating, style }: UpDownVoteProps) => {
-  const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
+export enum VoteDirection {
+  UP = 1,
+  DOWN = -1,
+  NEUTRAL = 0
+}
 
-  const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
+const UpDownVote = ({
+  rating,
+  style,
+  onChange = () => {}
+}: UpDownVoteProps) => {
+  const [voteState, setVoteState] = useState<VoteDirection>(
+    VoteDirection.NEUTRAL
+  );
+
+  const handleVote = (
+    oldVoteDirection: VoteDirection,
+    newVoteDirection: VoteDirection
+  ) => {
+    setVoteState(newVoteDirection);
+    onChange(oldVoteDirection, newVoteDirection);
+  };
 
   return (
     <div style={style}>
       <IconButton
-        onClick={() => {
-          setIsDownvoted(false);
-          setIsUpvoted(!isUpvoted);
-        }}
+        onClick={() =>
+          handleVote(
+            voteState,
+            voteState === VoteDirection.UP
+              ? VoteDirection.NEUTRAL
+              : VoteDirection.UP
+          )
+        }
       >
-        {isUpvoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+        {voteState === VoteDirection.UP ? (
+          <ThumbUpIcon />
+        ) : (
+          <ThumbUpOutlinedIcon />
+        )}
       </IconButton>
       {rating.upvotes - rating.downvotes}
       <IconButton
-        onClick={() => {
-          setIsUpvoted(false);
-          setIsDownvoted(!isDownvoted);
-        }}
+        onClick={() =>
+          handleVote(
+            voteState,
+            voteState === VoteDirection.DOWN
+              ? VoteDirection.NEUTRAL
+              : VoteDirection.DOWN
+          )
+        }
       >
-        {isDownvoted ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon />}
+        {voteState === VoteDirection.DOWN ? (
+          <ThumbDownIcon />
+        ) : (
+          <ThumbDownOutlinedIcon />
+        )}
       </IconButton>
     </div>
   );

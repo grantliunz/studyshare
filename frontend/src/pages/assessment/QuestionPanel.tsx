@@ -63,8 +63,8 @@ const QuestionPanel = ({ question }: QuestionPanelProps) => {
         </div>
       </div>
       <div style={{ margin: '20px 0px 0px 20px' }}>
-        {question.answers.map((answer) => (
-          <AnswerCard answer={answer} />
+        {question.answers.map((answer, index) => (
+          <AnswerCard key={index} answer={answer} />
         ))}
       </div>
     </>

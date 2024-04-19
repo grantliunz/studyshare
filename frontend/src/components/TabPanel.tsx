@@ -1,4 +1,3 @@
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 interface TabPanelProps {
@@ -18,11 +17,7 @@ const TabPanel = (props: TabPanelProps) => {
       aria-labelledby={`vertical-tab-${value}`}
       {...other}
     >
-      {value === selectedValue && (
-        <Box>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === selectedValue && <Box>{children}</Box>}
     </div>
   );
 };
