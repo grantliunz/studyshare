@@ -4,7 +4,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { getFirebaseErrorMessage } from '../../util/firebase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { useAuth } from '../../contexts/UserContext';
@@ -12,7 +12,13 @@ import { useAuth } from '../../contexts/UserContext';
 export default function Signup() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
-  const { createUser } = useAuth();
+  const { user, createUser } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

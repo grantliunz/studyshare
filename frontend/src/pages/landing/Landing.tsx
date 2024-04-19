@@ -1,11 +1,12 @@
 import Button from '@mui/material/Button';
 import styles from './Landing.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/UserContext';
 
 export default function Landing() {
   const navigate = useNavigate();
 
-  // const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const onClick = () => {
     navigate('/login');
   };
@@ -28,6 +29,7 @@ export default function Landing() {
       >
         Get Started
       </Button>
+      {user && <Button onClick={logout}>Logout (temoprary)</Button>}
     </div>
   );
 }

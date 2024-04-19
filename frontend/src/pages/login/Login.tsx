@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFirebaseErrorMessage } from '../../util/firebase';
 import { FirebaseError } from 'firebase/app';
@@ -14,9 +14,11 @@ export default function Login() {
   const [notice, setNotice] = useState('');
   const { user, login, loginWithGoogle } = useAuth();
 
-  if (user) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
