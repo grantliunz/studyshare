@@ -22,6 +22,7 @@ const theme = createTheme({
     }
   }
 });
+import Assessment from './pages/assessment/Assessment.tsx';
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/course" element={<CoursePage />} />
         <Route path="/universities" element={<University />} />
+        <Route path="/assessment/:id" element={<Assessment />} />
       </Routes>
     </ThemeProvider>
   );
