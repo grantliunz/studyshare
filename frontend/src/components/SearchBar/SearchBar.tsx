@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
+import './SearchBar.css';
 
 interface SearchBarProps {
   title: string;

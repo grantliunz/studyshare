@@ -35,7 +35,20 @@ export default function Signup() {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      noValidate
+      sx={{ mt: 1 }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100vh',
+        maxWidth: '600px',
+        margin: '0 auto'
+      }}
+    >
       <TextField
         margin="normal"
         required
@@ -70,7 +83,13 @@ export default function Signup() {
 
       <p>{notice}</p>
 
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="secondary"
+        sx={{ mt: 3, mb: 2 }}
+      >
         Sign Up
       </Button>
       <Grid container>
