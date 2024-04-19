@@ -159,7 +159,17 @@ const dummyAssessment: {
             upvotes: 20,
             downvotes: 2
           },
-          comments: [],
+          comments: [
+            {
+              text: 'Your research is false',
+              author: 'Connor Rizz Stevens',
+              rating: {
+                id: '1',
+                upvotes: 10,
+                downvotes: 100
+              }
+            }
+          ],
           timestamp: '19/04/2024'
         },
         {
@@ -199,8 +209,7 @@ const Assessment = () => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        border: '1px solid black',
-        width: '100vw'
+        width: '100%'
       }}
     >
       <Tabs
@@ -227,13 +236,7 @@ const Assessment = () => {
           />
         ))}
       </Tabs>
-      <div
-        className={styles.questionContainer}
-        style={{
-          border: '1px solid black',
-          flexGrow: 1
-        }}
-      >
+      <div className={styles.questionContainer} style={{ flexGrow: 1 }}>
         {dummyAssessment.questions.map((question) => (
           <TabPanel
             key={question.number.join('')}

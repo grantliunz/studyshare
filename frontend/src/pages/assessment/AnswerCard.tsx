@@ -3,12 +3,17 @@ import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import CommentCard from './CommentCard';
+import { IconButton, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 type AnswerCardProps = {
   answer: Answer;
 };
 
 const AnswerCard = ({ answer }: AnswerCardProps) => {
+  const [newComment, setNewComment] = useState<string>('');
+
   const handleVoteChange = (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
@@ -17,6 +22,15 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     oldVoteDirection === VoteDirection.DOWN && answer.rating.downvotes--;
     newVoteDirection === VoteDirection.UP && answer.rating.upvotes++;
     newVoteDirection === VoteDirection.DOWN && answer.rating.downvotes++;
+  };
+
+  const handleAddCommentChange = (text: string) => {
+    setNewComment(text);
+  };
+
+  const handleCreateNewComment = () => {
+    console.log(newComment);
+    // TODO
   };
 
   return (
@@ -78,13 +92,47 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                   rowGap: '20px'
                 }}
               >
-                {answer.comments.map((comment) => (
-                  <CommentCard comment={comment} />
+                {answer.comments.map((comment, i) => (
+                  <CommentCard key={i} comment={comment} />
                 ))}
               </div>
             </div>
           </>
         )}
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleCreateNewComment();
+          }}
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <TextField
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <IconButton type="submit">
+                  <SendOutlinedIcon />
+                </IconButton>
+              )
+            }}
+            multiline
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleAddCommentChange(event.target.value)
+            }
+            placeholder="Add a comment"
+            size="small"
+            style={{
+              alignSelf: 'start',
+              display: 'flex',
+              justifySelf: 'start',
+              margin: '4px'
+            }}
+          />
+        </form>
       </div>
     </>
   );

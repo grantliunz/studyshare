@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
 import { Question } from './Assessment';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import OutlinedFlagRoundedIcon from '@mui/icons-material/OutlinedFlagRounded';
 import AnswerCard from './AnswerCard';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 type QuestionPanelProps = {
   question: Question;
@@ -15,6 +16,16 @@ type QuestionPanelProps = {
 const QuestionPanel = ({ question }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
+  const [newAnswer, setNewAnswer] = useState<string>('');
+
+  const handleNewAnswerChange = (text: string) => {
+    setNewAnswer(text);
+  };
+
+  const handleNewAnswer = () => {
+    console.log(newAnswer);
+    // TODO
+  };
 
   return (
     <>
@@ -67,6 +78,36 @@ const QuestionPanel = ({ question }: QuestionPanelProps) => {
           <AnswerCard key={index} answer={answer} />
         ))}
       </div>
+      <form
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '100px 24px 50px 50px',
+          rowGap: '10px',
+          alignItems: 'start'
+        }}
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleNewAnswer();
+        }}
+      >
+        <p style={{ margin: '0px', fontWeight: '500', fontSize: '1.3rem' }}>
+          Your Answer
+        </p>
+        <TextField
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton type="submit">
+                <SendOutlinedIcon />
+              </IconButton>
+            )
+          }}
+          multiline
+          onChange={(event) => handleNewAnswerChange(event.target.value)}
+          placeholder="Your answer"
+        />
+      </form>
     </>
   );
 };
