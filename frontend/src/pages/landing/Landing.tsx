@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import styles from './Landing.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
+import { Paper } from '@mui/material';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -13,12 +14,13 @@ export default function Landing() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.grid} />
+      <div className="grid" />
       <h1 className={styles.title}>StudyShare</h1>
-      <p>
+      <Paper className={styles.description}>
         The collaborative platform where students come together to share,
+        <br />
         review, and elevate their exam preparation.
-      </p>
+      </Paper>
       <Button
         onClick={onClick}
         variant="contained"

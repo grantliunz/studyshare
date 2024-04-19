@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { useAuth } from '../../contexts/UserContext';
+import styles from './Signup.module.css';
+import { Paper } from '@mui/material';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -41,70 +43,74 @@ export default function Signup() {
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      noValidate
-      sx={{ mt: 1 }}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: '100vh',
-        maxWidth: '600px',
-        margin: '0 auto'
-      }}
-    >
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        autoComplete="email"
-        autoFocus
-      />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Password"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-      />
-
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        name="confirmPassword"
-        label="Confirm Password"
-        type="password"
-        id="confirmPassword"
-        autoComplete="current-password"
-      />
-
-      <p>{notice}</p>
-
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="secondary"
-        sx={{ mt: 3, mb: 2 }}
+    <div className={styles.container}>
+      <div className="grid" />
+      <Paper
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ mt: 1 }}
+        style={{
+          minWidth: '60vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          margin: '0 auto',
+          backgroundColor: 'white',
+          padding: '20px'
+        }}
       >
-        Sign Up
-      </Button>
-      <Grid container>
-        <Grid item>
-          <Link href="/login" variant="body2">
-            {'Already have an account? Log in'}
-          </Link>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+        />
+
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="confirmPassword"
+          label="Confirm Password"
+          type="password"
+          id="confirmPassword"
+          autoComplete="current-password"
+        />
+
+        <p>{notice}</p>
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Sign Up
+        </Button>
+        <Grid container>
+          <Grid item>
+            <Link href="/login" variant="body2">
+              {'Already have an account? Log in'}
+            </Link>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Paper>
+    </div>
   );
 }
