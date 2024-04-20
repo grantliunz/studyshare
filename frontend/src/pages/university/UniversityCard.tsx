@@ -31,7 +31,8 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
         flex: 1,
         height: '310px',
         width: '230px',
-        margin: '10px'
+        margin: '10px',
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)'
       }}
     >
       <CardActionArea
@@ -39,7 +40,9 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
           display: 'flex',
           height: 'inherit',
           justifyContent: 'space-between',
-          padding: '12px 16px'
+          padding: '12px 16px',
+          marginTop: '30px',
+          alignItems: 'flex-end'
         }}
         onClick={() => navigate(`/university/${university.id}`)}
       >
@@ -47,23 +50,13 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
             justifyContent: 'flex-end',
-            padding: '0px'
+            padding: '0px',
+            width: '100%',
+            textOverflow: 'ellipsis'
           }}
         >
-          <Button
-            onClick={onClick}
-            variant="contained"
-            style={{
-              fontSize: '1.5rem',
-              backgroundColor: 'white',
-              color: 'black',
-              maxLines: 2
-            }}
-          >
-            {university.name}
-          </Button>
+          <p className={styles.universityName}>{university.name}</p>
         </CardContent>
       </CardActionArea>
     </Card>
