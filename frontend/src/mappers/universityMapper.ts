@@ -1,6 +1,7 @@
-import { University } from '../types/types'; // Import the University interface from your types file
+import { University } from '../types/types';
+import { Mapper } from './mapper';
 
-export default function mapUniversityData(data: any): University[] {
+export default function mapUniversityData(data: any): Mapper<University[]> {
   return data.map((universityData: any) => ({
     id: universityData._id,
     name: universityData.Name,

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Mapper } from '../mappers/mapper';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
 export default function useGet<T>(
   url: string,
   initialState: T | null = null,
-  mappingDTO: (data: any) => T
+  mappingDTO: Mapper<T>
 ) {
   const [data, setData] = useState<T | null>(initialState);
   const [isLoading, setLoading] = useState(false);
