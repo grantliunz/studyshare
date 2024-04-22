@@ -1,5 +1,4 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
-
 import './App.css';
 import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
@@ -7,8 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
 import University from './pages/university/University.tsx';
 import CoursePage from './pages/course/Course.tsx';
-import { useAuth } from './contexts/UserContext.tsx';
-
 import { ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header/Header.tsx';
 
