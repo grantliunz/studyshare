@@ -38,7 +38,7 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
           padding: '12px 16px',
           alignItems: 'flex-end'
         }}
-        onClick={() => navigate(`/universities/${university.id}`)}
+        onClick={() => navigate(`/${university.id}`)}
       >
         <CardContent
           style={{

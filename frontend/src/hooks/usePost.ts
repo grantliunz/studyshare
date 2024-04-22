@@ -12,10 +12,8 @@ export default function usePost<T, R>(url: string, mappingDTO: Mapper<R>) {
     setLoading(true);
     setError(null);
     try {
-      console.log(`${BACKEND_URL}${url}`);
       const response = await axios.post(`${BACKEND_URL}${url}`, data);
       const mappedData = mappingDTO(response.data);
-      console.log(mappedData);
       return mappedData;
     } catch (error) {
       console.error('Error posting data:', error);
