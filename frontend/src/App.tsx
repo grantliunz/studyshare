@@ -6,6 +6,7 @@ import Landing from './pages/landing/Landing.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
 import University from './pages/university/University.tsx';
+import Assessments from './pages/assessments/Assessments.tsx';
 import CoursePage from './pages/course/Course.tsx';
 import { useAuth } from './contexts/UserContext.tsx';
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/assessments" element={<Assessments/>} />
         <Route path="/course" element={<CoursePage />} />
         <Route path="/universities" element={<University />} />
       </Routes>
