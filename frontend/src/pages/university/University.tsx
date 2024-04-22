@@ -15,6 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import type { University, PostUniversity } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
+import API from '../../util/api';
 
 export default function University() {
   const { user, logout } = useAuth();
@@ -30,11 +31,7 @@ export default function University() {
     data: universitiesData,
     isLoading: isLoadingUniversities,
     refresh: refreshUniversities
-  } = useGet<University[]>(
-    '/university/getAllUniversities',
-    [],
-    mapGetUniversitiesData
-  );
+  } = useGet<University[]>(API.getUniversities, [], mapGetUniversitiesData);
 
   const {
     postData: addUniversity,
