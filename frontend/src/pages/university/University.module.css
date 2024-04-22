@@ -6,25 +6,7 @@
   column-gap: 30px;
   row-gap: 30px;
 }
-/* University.module.css */
-.addButtonContainer {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 100;
-}
 
-.addButton {
-  padding: 15px;
-  background-color: #333333;
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.addButton:hover {
-  background-color: #555555;
-}
 
 .form-overlay {
   position: fixed;

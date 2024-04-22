@@ -35,10 +35,6 @@ export default function AddUniversityForm({
       aria-labelledby="add-university-modal"
       aria-describedby="add-university-modal-description"
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500
-      }}
     >
       <Fade in={open}>
         <div className={styles.modal}>
