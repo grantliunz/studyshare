@@ -26,9 +26,7 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
     <Card
       elevation={2}
       style={{
-        backgroundColor: '#D9D9D9',
         backgroundImage: `url(${university.image})`,
-        flex: 1,
         height: '310px',
         width: '230px',
         margin: '10px',

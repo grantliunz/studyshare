@@ -9,30 +9,35 @@ import { getFirebaseErrorMessage } from '../../util/firebase';
 import { FirebaseError } from 'firebase/app';
 import { useAuth } from '../../contexts/UserContext';
 import styles from './Login.module.css';
-import { Paper } from '@mui/material';
+import { Paper, CircularProgress } from '@mui/material';
 
 export default function Login() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
+  const [loading, setLoading] = useState(false); // State to track loading state
   const { user, login, loginWithGoogle } = useAuth();
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/universities');
     }
   }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true); // Set loading state to true
+
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const password = data.get('password') as string;
     login(email, password)
       .then(() => {
-        navigate('/');
+        navigate('/universities');
+        setLoading(false); // Set loading state to false on success
       })
       .catch((error: FirebaseError) => {
         setNotice(getFirebaseErrorMessage(error.code));
+        setLoading(false); // Set loading state to false on error
       });
   };
 
@@ -88,8 +93,10 @@ export default function Login() {
           variant="contained"
           color="secondary"
           sx={{ mt: 3, mb: 2 }}
+          disabled={loading}
+          endIcon={loading && <CircularProgress size={20} />}
         >
-          Log In
+          {!loading ? 'Log In' : ''}
         </Button>
         <Grid container>
           <Grid item xs>

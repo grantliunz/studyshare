@@ -12,6 +12,10 @@ export default function Landing() {
     navigate('/login');
   };
 
+  if (user) {
+    navigate('/universities');
+  }
+
   return (
     <div className={styles.container}>
       <div className="grid" />
@@ -32,7 +36,6 @@ export default function Landing() {
       >
         Get Started
       </Button>
-      {user && <Button onClick={logout}>Logout (temporary)</Button>}
     </div>
   );
 }
