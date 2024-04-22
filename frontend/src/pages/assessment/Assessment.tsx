@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import styles from './Assessment.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 
@@ -228,6 +228,28 @@ export type QuestionWithFullNumber = {
   fullNumber: string;
 };
 
+const buildOrderedQuestionsArray = (questions: Question[]) => {
+  const result: QuestionWithFullNumber[] = [];
+  questions.forEach((qn) => traverseSubQuestion(result, qn, qn.number));
+  return result;
+};
+
+const traverseSubQuestion = (
+  result: QuestionWithFullNumber[],
+  question: Question,
+  parentNumber: string
+) => {
+  if (question.content) {
+    return result.push({
+      question,
+      fullNumber: parentNumber
+    });
+  } else
+    question.subquestions!.forEach((qn) =>
+      traverseSubQuestion(result, qn, parentNumber + qn.number)
+    );
+};
+
 const Assessment = () => {
   const { id } = useParams();
   console.log(id);
@@ -238,6 +260,41 @@ const Assessment = () => {
   const handleQuestionChange = (newQuestion: QuestionWithFullNumber) => {
     setCurrentQuestion(newQuestion);
   };
+
+  const orderedQuestionsArray = buildOrderedQuestionsArray(
+    dummyAssessment.questions
+  );
+
+  const [prevQuestion, setPrevQuestion] = useState<
+    QuestionWithFullNumber | undefined
+  >(undefined);
+
+  const [nextQuestion, setNextQuestion] = useState<
+    QuestionWithFullNumber | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (currentQuestion) {
+      const currIndex = orderedQuestionsArray.findIndex(
+        (question) => question.fullNumber === currentQuestion.fullNumber
+      );
+
+      setPrevQuestion(
+        currIndex > 0 ? orderedQuestionsArray[currIndex - 1] : undefined
+      );
+
+      setNextQuestion(
+        currIndex < orderedQuestionsArray.length - 1
+          ? orderedQuestionsArray[currIndex + 1]
+          : undefined
+      );
+    } else {
+      setNextQuestion(undefined);
+      setPrevQuestion(undefined);
+    }
+  }, [currentQuestion]);
+
+  console.log(prevQuestion);
 
   return (
     <div
@@ -266,7 +323,12 @@ const Assessment = () => {
       </div>
       <div className={styles.questionContainer} style={{ flexGrow: 1 }}>
         {currentQuestion ? (
-          <QuestionPanel questionWithFullNumber={currentQuestion} />
+          <QuestionPanel
+            questionWithFullNumber={currentQuestion}
+            prevQuestionWithFullNumber={prevQuestion}
+            nextQuestionWithFullNumber={nextQuestion}
+            setQuestion={setCurrentQuestion}
+          />
         ) : (
           <p>Click a question to get started!</p>
         )}

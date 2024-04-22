@@ -1,4 +1,4 @@
-import { IconButton, TextField } from '@mui/material';
+import { Button, IconButton, TextField } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
 import { QuestionWithFullNumber } from './Assessment';
 import { useState } from 'react';
@@ -8,12 +8,24 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import OutlinedFlagRoundedIcon from '@mui/icons-material/OutlinedFlagRounded';
 import AnswerCard from './AnswerCard';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 
 type QuestionPanelProps = {
   questionWithFullNumber: QuestionWithFullNumber;
+  prevQuestionWithFullNumber: QuestionWithFullNumber | undefined;
+  nextQuestionWithFullNumber: QuestionWithFullNumber | undefined;
+  setQuestion: React.Dispatch<
+    React.SetStateAction<QuestionWithFullNumber | undefined>
+  >;
 };
 
-const QuestionPanel = ({ questionWithFullNumber }: QuestionPanelProps) => {
+const QuestionPanel = ({
+  questionWithFullNumber,
+  prevQuestionWithFullNumber,
+  nextQuestionWithFullNumber,
+  setQuestion
+}: QuestionPanelProps) => {
   const { question, fullNumber } = questionWithFullNumber;
 
   const [isStarred, setIsStarred] = useState<boolean>(false);
@@ -31,6 +43,26 @@ const QuestionPanel = ({ questionWithFullNumber }: QuestionPanelProps) => {
 
   return (
     <>
+      <div style={{ marginTop: '10px', overflow: 'hidden' }}>
+        {prevQuestionWithFullNumber && (
+          <Button
+            onClick={() => setQuestion(prevQuestionWithFullNumber)}
+            startIcon={<ArrowBackRoundedIcon />}
+            style={{ float: 'left' }}
+          >
+            {prevQuestionWithFullNumber?.fullNumber}
+          </Button>
+        )}
+        {nextQuestionWithFullNumber && (
+          <Button
+            onClick={() => setQuestion(nextQuestionWithFullNumber)}
+            endIcon={<ArrowForwardRoundedIcon />}
+            style={{ float: 'right' }}
+          >
+            {nextQuestionWithFullNumber?.fullNumber}
+          </Button>
+        )}
+      </div>
       <div
         // header
         style={{
