@@ -27,6 +27,8 @@ export function getFirebaseErrorMessage(errorCode: string): string {
       return 'There was a network error. Please check your internet connection and try again.';
     case 'auth/too-many-requests':
       return 'Too many unsuccessful login attempts. Please try again later.';
+    case 'auth/invalid-credential':
+      return 'Incorrect login credentials. Please try again.';
     default:
       return 'An unknown error occurred.';
   }
