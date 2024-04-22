@@ -3,18 +3,19 @@ import styles from './Landing.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
 import { Paper } from '@mui/material';
+import { useEffect } from 'react';
 
 export default function Landing() {
   const navigate = useNavigate();
-
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user) {
+      navigate('/universities');
+    }
+  }, [user]);
   const onClick = () => {
     navigate('/login');
   };
-
-  if (user) {
-    navigate('/universities');
-  }
 
   return (
     <div className={styles.container}>

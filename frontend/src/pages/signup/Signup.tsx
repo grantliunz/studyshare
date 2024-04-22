@@ -20,7 +20,7 @@ export default function Signup() {
     if (user) {
       navigate('/universities');
     }
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

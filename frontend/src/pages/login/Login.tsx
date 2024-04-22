@@ -21,7 +21,7 @@ export default function Login() {
     if (user) {
       navigate('/universities');
     }
-  }, []);
+  }, [user]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
