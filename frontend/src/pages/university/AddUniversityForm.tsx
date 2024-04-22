@@ -15,17 +15,23 @@ export default function AddUniversityForm({
   onClose
 }: AddUniversityFormProps) {
   const [name, setName] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name) return;
+    if (!name.trim()) {
+      setError('Please enter a valid university name.');
+      return;
+    }
     onAddUniversity(name);
     setName(''); // Clear input after submitting
+    setError(''); // Clear error message
     onClose(); // Close the form
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
+    setError(''); // Clear error message on input change
   };
 
   return (
@@ -53,6 +59,8 @@ export default function AddUniversityForm({
               required
               fullWidth
               className={styles.inputField}
+              error={!!error}
+              helperText={error}
             />
             <Button
               type="submit"

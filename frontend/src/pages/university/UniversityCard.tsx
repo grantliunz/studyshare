@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 type UniversityCardProps = {
   university: {
-    id: number;
+    id: string;
     name: string;
     image: string;
   };
@@ -19,9 +19,6 @@ type UniversityCardProps = {
 
 const UniversityCard = ({ university }: UniversityCardProps) => {
   const navigate = useNavigate();
-  const onClick = () => {
-    console.log('You clicked on the university card!');
-  };
   return (
     <Card
       elevation={2}
@@ -39,19 +36,20 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
           height: 'inherit',
           justifyContent: 'space-between',
           padding: '12px 16px',
-          marginTop: '30px',
           alignItems: 'flex-end'
         }}
-        onClick={() => navigate(`/university/${university.id}`)}
+        onClick={() => navigate(`/${university.id}`)}
       >
         <CardContent
           style={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex',
             padding: '0px',
             width: '100%',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-word',
+            marginBottom: '-30px'
           }}
         >
           <p className={styles.universityName}>{university.name}</p>

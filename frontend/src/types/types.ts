@@ -1,6 +1,12 @@
 export interface University {
   id: string;
   name: string;
-  courses: string[]; // Array of course IDs
+  image: string;
+  courses: string[];
   createdAt: Date;
+}
+
+export interface PostUniversity {
+  Name: string;
+  Courses?: { Name: string }[];
 }

@@ -8,14 +8,15 @@ import { useEffect } from 'react';
 export default function Landing() {
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  const onClick = () => {
+    navigate('/universities');
+  };
   useEffect(() => {
     if (user) {
-      navigate('/universities');
+      onClick();
     }
   }, [user]);
-  const onClick = () => {
-    navigate('/login');
-  };
 
   return (
     <div className={styles.container}>
