@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 type UniversityCardProps = {
   university: {
-    id: number;
+    id: string;
     name: string;
     image: string;
   };
