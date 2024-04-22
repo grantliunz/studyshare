@@ -1,0 +1,15 @@
+.cardContent {
+  display: flex;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.courseCode {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.courseName {
+  font-size: 1.5rem;
+}
