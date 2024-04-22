@@ -27,7 +27,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         cursor: 'pointer',
         outline: 'none',
         maxHeight: 70,
-        marginBottom: 1
+        marginBottom: 1.5
       }}
       onClick={onClick}
     >

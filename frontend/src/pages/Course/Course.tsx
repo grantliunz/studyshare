@@ -1,9 +1,10 @@
-import CourseCard from '../../components/CourseCard';
+import CourseCard from './CourseCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddCourseForm from './AddCourseForm';
 import style from './Course.module.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AddButton from '../../components/AddButton/AddButton';
 
 interface course {
   id: number;
@@ -100,6 +101,7 @@ export default function CoursePage() {
         onAddCourse={handleAddCourse}
         onClose={handleCloseForm}
       />
+      <AddButton handleOpenForm={handleOpenForm} />
     </div>
   );
 }
