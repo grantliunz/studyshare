@@ -289,10 +289,6 @@ const Assessment = () => {
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionWithFullNumber>();
 
-  const handleQuestionChange = (newQuestion: QuestionWithFullNumber) => {
-    setCurrentQuestion(newQuestion);
-  };
-
   const orderedQuestionsArray = buildOrderedQuestionsArray(
     dummyAssessment.questions
   );
@@ -325,8 +321,6 @@ const Assessment = () => {
       setPrevQuestion(undefined);
     }
   }, [currentQuestion]);
-
-  console.log(prevQuestion);
 
   return (
     <div
