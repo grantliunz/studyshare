@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
+import style from './SearchBar.module.css';
 
 interface SearchBarProps {
   title: string;
@@ -7,7 +8,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ title }) => {
   return (
-    <div className="search-bar">
+    <div className={style.searchBar}>
       <input className="input" type="text" placeholder={title} />
       <button className="button">
         <SearchIcon />

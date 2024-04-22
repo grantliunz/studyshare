@@ -6,19 +6,32 @@ import Landing from './pages/landing/Landing.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
 import { AuthProvider } from './contexts/UserContext.tsx';
-import University from './pages/university/University.tsx';
+
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1E1E1E'
+    },
+    secondary: {
+      main: '#c5d5ff'
+    }
+  }
+});
 
 function App() {
   return (
-    <AuthProvider>
-      <CssBaseline />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/universities" element={<University />} />
-      </Routes>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <CssBaseline />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
