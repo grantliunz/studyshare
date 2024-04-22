@@ -1,6 +1,6 @@
 import { IconButton, TextField } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { Question } from './Assessment';
+import { QuestionWithFullNumber } from './Assessment';
 import { useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
@@ -10,10 +10,12 @@ import AnswerCard from './AnswerCard';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 type QuestionPanelProps = {
-  question: Question;
+  questionWithFullNumber: QuestionWithFullNumber;
 };
 
-const QuestionPanel = ({ question }: QuestionPanelProps) => {
+const QuestionPanel = ({ questionWithFullNumber }: QuestionPanelProps) => {
+  const { question, fullNumber } = questionWithFullNumber;
+
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
   const [newAnswer, setNewAnswer] = useState<string>('');
@@ -41,12 +43,12 @@ const QuestionPanel = ({ question }: QuestionPanelProps) => {
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        {question.number.join('')}
+        {fullNumber}
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>
       </div>
-      <div>{question.text}</div>
+      <div>{question.content?.text}</div>
       <div
         style={{
           alignItems: 'end',
@@ -56,8 +58,11 @@ const QuestionPanel = ({ question }: QuestionPanelProps) => {
           padding: '0px 20px'
         }}
       >
-        {question.answers.length === 0 ? 'No' : question.answers.length} Answer
-        {question.answers.length === 1 ? '' : 's'}
+        {question.content!.answers.length === 0
+          ? 'No'
+          : question.content!.answers.length}{' '}
+        Answer
+        {question.content!.answers.length === 1 ? '' : 's'}
         <div
           style={{
             display: 'flex',
@@ -67,14 +72,14 @@ const QuestionPanel = ({ question }: QuestionPanelProps) => {
         >
           Created by
           <PersonCard
-            name={question.author}
+            name={question.content!.author}
             avatarPos="left"
             style={{ columnGap: '8px' }}
           />
         </div>
       </div>
       <div style={{ margin: '20px 0px 0px 20px' }}>
-        {question.answers.map((answer, index) => (
+        {question.content!.answers.map((answer, index) => (
           <AnswerCard key={index} answer={answer} />
         ))}
       </div>
