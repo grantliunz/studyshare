@@ -1,23 +1,42 @@
 import Button from '@mui/material/Button';
+import styles from './Landing.module.css';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
+import { Paper } from '@mui/material';
+import { useEffect } from 'react';
 
 export default function Landing() {
-  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user) {
+      navigate('/universities');
+    }
+  }, [user]);
+  const onClick = () => {
+    navigate('/login');
+  };
+
   return (
-    <div>
-      <h1>Landing Page</h1>
-      {!user ? (
-        <Button variant="contained" color="primary" href="/login">
-          Login
-        </Button>
-      ) : (
-        <>
-          <p>{user.email}</p>
-          <Button variant="contained" color="primary" onClick={logout}>
-            Log out
-          </Button>
-        </>
-      )}
+    <div className={styles.container}>
+      <div className="grid" />
+      <h1 className={styles.title}>StudyShare</h1>
+      <Paper className={styles.description}>
+        The collaborative platform where students come together to share,
+        <br />
+        review, and elevate their exam preparation.
+      </Paper>
+      <Button
+        onClick={onClick}
+        variant="contained"
+        color="secondary"
+        className={styles.button}
+        style={{
+          fontSize: '1.5rem'
+        }}
+      >
+        Get Started
+      </Button>
     </div>
   );
 }
