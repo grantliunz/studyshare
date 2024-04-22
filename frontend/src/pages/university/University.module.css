@@ -1,7 +1,7 @@
 .universitiesGrid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   padding: 30px;
   column-gap: 30px;
   row-gap: 30px;
@@ -84,4 +84,16 @@
 
 .form button:hover {
   background-color: #0056b3;
+}
+
+.title {
+  align-self: center;
+  margin-bottom: 10px;
+
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

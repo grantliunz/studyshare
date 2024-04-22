@@ -1,4 +1,4 @@
-.search-bar {
+.searchBar {
   display: flex;
   align-items: center;
   background-color: #e7e7e7;
@@ -8,7 +8,7 @@
   min-width: 400px;
 }
 
-.search-bar input {
+.searchBar input {
   border: none;
   outline: none;
   background-color: transparent;
@@ -17,7 +17,7 @@
   font-size: 1rem;
 }
 
-.search-bar button {
+.searchBar button {
   background: none;
   border: none;
   cursor: pointer;

@@ -5,6 +5,7 @@ import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
+import University from './pages/university/University.tsx';
 import { AuthProvider } from './contexts/UserContext.tsx';
 
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/universities" element={<University />} />
         </Routes>
       </AuthProvider>
     </ThemeProvider>

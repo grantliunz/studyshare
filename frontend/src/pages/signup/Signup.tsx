@@ -2,28 +2,30 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { getFirebaseErrorMessage } from '../../util/firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getFirebaseErrorMessage } from '../../util/firebase';
 import { FirebaseError } from 'firebase/app';
 import { useAuth } from '../../contexts/UserContext';
 import styles from './Signup.module.css';
-import { Paper } from '@mui/material';
+import { Paper, CircularProgress } from '@mui/material';
 
 export default function Signup() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
+  const [loading, setLoading] = useState(false); // State to track loading state
   const { user, createUser } = useAuth();
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/universities');
     }
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true); // Set loading state to true
+
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const password = data.get('password') as string;
@@ -31,14 +33,17 @@ export default function Signup() {
 
     if (password !== confirmPassword) {
       setNotice('Passwords do not match');
+      setLoading(false); // Set loading state to false
       return;
     }
+
     createUser(email, password)
       .then(() => {
-        navigate('/');
+        navigate('/universities');
       })
       .catch((error: FirebaseError) => {
         setNotice(getFirebaseErrorMessage(error.code));
+        setLoading(false); // Set loading state to false
       });
   };
 
@@ -100,8 +105,10 @@ export default function Signup() {
           variant="contained"
           color="secondary"
           sx={{ mt: 3, mb: 2 }}
+          disabled={loading}
+          endIcon={loading && <CircularProgress size={20} />}
         >
-          Sign Up
+          {!loading ? 'Sign Up' : ''}
         </Button>
         <Grid container>
           <Grid item>

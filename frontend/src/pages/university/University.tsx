@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import UniversityCard from './UniversityCard';
 import AddUniversityForm from './AddUniversityForm';
 import styles from './University.module.css';
 import clock from '../../assets/clock.png';
 import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 
 interface University {
   id: number;
@@ -27,8 +29,9 @@ const universities: University[] = [
 ];
 
 export default function University() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddUniversity = (name: string) => {
     // Implement adding a new university to your data (e.g., API call)
@@ -53,9 +56,14 @@ export default function University() {
     setShowForm(false);
   };
 
+  const signOut = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
-    <div>
-      <h1>University Page</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>University Page</h1>
       <SearchBar title={'Search for a university'} />
       <div className={styles.universitiesGrid}>
         {universities.map((university) => (
@@ -67,13 +75,13 @@ export default function University() {
         onAddUniversity={handleAddUniversity}
         onClose={handleCloseForm}
       />
-
       {/* Add Button */}
       <div className={styles.addButtonContainer}>
         <button className={styles.addButton} onClick={handleOpenForm}>
           <AddIcon />
         </button>
       </div>
+      {user && <Button onClick={signOut}>Logout (temporary)</Button>}
     </div>
   );
 }
