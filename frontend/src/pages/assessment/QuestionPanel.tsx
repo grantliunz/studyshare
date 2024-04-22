@@ -26,7 +26,7 @@ const QuestionPanel = ({
   nextQuestionWithFullNumber,
   setQuestion
 }: QuestionPanelProps) => {
-  const { question, fullNumber } = questionWithFullNumber;
+  const { question, hierarchy } = questionWithFullNumber;
 
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
@@ -48,18 +48,18 @@ const QuestionPanel = ({
           <Button
             onClick={() => setQuestion(prevQuestionWithFullNumber)}
             startIcon={<ArrowBackRoundedIcon />}
-            style={{ float: 'left' }}
+            style={{ float: 'left', textTransform: 'none' }}
           >
-            {prevQuestionWithFullNumber?.fullNumber}
+            {prevQuestionWithFullNumber?.hierarchy.join('')}
           </Button>
         )}
         {nextQuestionWithFullNumber && (
           <Button
             onClick={() => setQuestion(nextQuestionWithFullNumber)}
             endIcon={<ArrowForwardRoundedIcon />}
-            style={{ float: 'right' }}
+            style={{ float: 'right', textTransform: 'none' }}
           >
-            {nextQuestionWithFullNumber?.fullNumber}
+            {nextQuestionWithFullNumber?.hierarchy.join('')}
           </Button>
         )}
       </div>
@@ -75,7 +75,7 @@ const QuestionPanel = ({
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        {fullNumber}
+        {hierarchy}
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>

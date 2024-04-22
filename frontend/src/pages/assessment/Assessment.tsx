@@ -257,29 +257,41 @@ const dummyAssessment: Assessment = {
 
 export type QuestionWithFullNumber = {
   question: Question;
-  fullNumber: string;
+  hierarchy: string[];
 };
 
 const buildOrderedQuestionsArray = (questions: Question[]) => {
   const result: QuestionWithFullNumber[] = [];
-  questions.forEach((qn) => traverseSubQuestion(result, qn, qn.number));
+  questions.forEach((qn) => traverseSubQuestion(result, qn, [qn.number]));
   return result;
 };
 
 const traverseSubQuestion = (
   result: QuestionWithFullNumber[],
   question: Question,
-  parentNumber: string
+  currentHierarchy: string[]
 ) => {
   if (question.content) {
     return result.push({
       question,
-      fullNumber: parentNumber
+      hierarchy: currentHierarchy
     });
   } else
     question.subquestions!.forEach((qn) =>
-      traverseSubQuestion(result, qn, parentNumber + qn.number)
+      traverseSubQuestion(result, qn, [...currentHierarchy, qn.number])
     );
+};
+
+const arrayEquals = (arr1: Array<any>, arr2: Array<any>): boolean => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const Assessment = () => {
@@ -303,8 +315,8 @@ const Assessment = () => {
 
   useEffect(() => {
     if (currentQuestion) {
-      const currIndex = orderedQuestionsArray.findIndex(
-        (question) => question.fullNumber === currentQuestion.fullNumber
+      const currIndex = orderedQuestionsArray.findIndex((question) =>
+        arrayEquals(question.hierarchy, currentQuestion.hierarchy)
       );
 
       setPrevQuestion(
@@ -334,14 +346,17 @@ const Assessment = () => {
         style={{
           backgroundColor: '#E8E9EC',
           minHeight: '100vh',
-          padding: '12px 8px'
+          padding: '12px 8px',
+          display: 'flex',
+          flexDirection: 'column',
+          rowGap: '8px'
         }}
       >
         {dummyAssessment.questions.map((question) => (
           <QuestionNumber
             key={question.number}
             question={question}
-            parentNumber={question.number}
+            parentNumbers={[question.number]}
             setQuestion={setCurrentQuestion}
             currentQuestion={currentQuestion}
           />

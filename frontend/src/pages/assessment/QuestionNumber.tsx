@@ -3,12 +3,13 @@ import { Question, QuestionWithFullNumber } from './Assessment';
 import { useState } from 'react';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 
 type QuestionNumberProps = {
   question: Question;
   currentQuestion: QuestionWithFullNumber | undefined;
-  parentNumber: string;
+  parentNumbers: string[];
   setQuestion: React.Dispatch<
     React.SetStateAction<QuestionWithFullNumber | undefined>
   >;
@@ -17,21 +18,26 @@ type QuestionNumberProps = {
 const QuestionNumber = ({
   question,
   currentQuestion,
-  parentNumber,
+  parentNumbers,
   setQuestion
 }: QuestionNumberProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
+  const handleAddQuestion = (parentHierarchy: string[]) => {
+    console.log(parentHierarchy);
+  };
+
   return (
     <div>
       {question.subquestions && (
-        <div>
+        <>
           <div
             style={{
               alignItems: 'center',
+              columnGap: '4px',
               display: 'flex',
               flexDirection: 'row',
-              paddingRight: '20px'
+              width: '100%'
             }}
           >
             <IconButton
@@ -45,39 +51,50 @@ const QuestionNumber = ({
               )}
             </IconButton>
             {question.number}
+            <IconButton
+              style={{ padding: '4px', marginLeft: 'auto' }}
+              onClick={() => handleAddQuestion(parentNumbers)}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
           </div>
           <div
             style={{
+              display: 'flex',
+              flexDirection: 'column',
               height: isExpanded ? 'auto' : '0px',
               paddingLeft: '20px',
+              rowGap: '8px',
               visibility: isExpanded ? 'inherit' : 'hidden'
             }}
           >
             {question.subquestions.map((q) => (
               <QuestionNumber
-                key={parentNumber + q.number}
+                key={parentNumbers.join('') + q.number}
                 question={q}
-                parentNumber={parentNumber + q.number}
+                parentNumbers={[...parentNumbers, q.number]}
                 setQuestion={setQuestion}
                 currentQuestion={currentQuestion}
               />
             ))}
           </div>
-        </div>
+        </>
       )}
       {question.content && (
         <Button
           onClick={() =>
             setQuestion({
               question,
-              fullNumber: parentNumber
+              hierarchy: parentNumbers
             })
           }
           style={{
             textTransform: 'none',
             backgroundColor:
               currentQuestion?.question === question ? '#41403E' : '#E8E9EC',
-            color: currentQuestion?.question === question ? 'white' : 'black'
+            color: currentQuestion?.question === question ? 'white' : 'black',
+            border: '1px solid black',
+            padding: '0px'
           }}
         >
           {question.number}
