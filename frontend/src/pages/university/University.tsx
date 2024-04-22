@@ -4,9 +4,9 @@ import { useAuth } from '../../contexts/UserContext';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import UniversityCard from './UniversityCard';
 import AddUniversityForm from './AddUniversityForm';
+import AddButton from '../../components/AddButton/AddButton'; // Import AddButton component
 import styles from './University.module.css';
 import clock from '../../assets/clock.png';
-import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 
 interface University {
@@ -75,12 +75,7 @@ export default function University() {
         onAddUniversity={handleAddUniversity}
         onClose={handleCloseForm}
       />
-      {/* Add Button */}
-      <div className={styles.addButtonContainer}>
-        <button className={styles.addButton} onClick={handleOpenForm}>
-          <AddIcon />
-        </button>
-      </div>
+      <AddButton handleOpenForm={handleOpenForm} />
       {user && <Button onClick={signOut}>Logout (temporary)</Button>}
     </div>
   );
