@@ -1,5 +1,4 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
-
 import './App.css';
 import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
@@ -8,8 +7,6 @@ import Signup from './pages/signup/Signup.tsx';
 import University from './pages/university/University.tsx';
 import Assessments from './pages/assessments/Assessments.tsx';
 import CoursePage from './pages/course/Course.tsx';
-import { useAuth } from './contexts/UserContext.tsx';
-
 import { ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header/Header.tsx';
 
@@ -23,6 +20,7 @@ const theme = createTheme({
     }
   }
 });
+import Assessment from './pages/assessment/Assessment.tsx';
 
 function App() {
   const location = useLocation();
@@ -43,6 +41,7 @@ function App() {
         <Route path="/assessments" element={<Assessments/>} />
         <Route path="/course" element={<CoursePage />} />
         <Route path="/universities" element={<University />} />
+        <Route path="/assessment/:id" element={<Assessment />} />
       </Routes>
     </ThemeProvider>
   );
