@@ -3,6 +3,8 @@ import styles from './Assessment.module.css';
 import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
+import { Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 export type Question = {
   number: string;
@@ -334,6 +336,11 @@ const Assessment = () => {
     }
   }, [currentQuestion]);
 
+  const handleAddQuestion = (parentHierarchy: string[]) => {
+    // TODO
+    console.log(parentHierarchy);
+  };
+
   return (
     <div
       style={{
@@ -359,8 +366,21 @@ const Assessment = () => {
             parentNumbers={[question.number]}
             setQuestion={setCurrentQuestion}
             currentQuestion={currentQuestion}
+            handleAddQuestion={handleAddQuestion}
           />
         ))}
+        <IconButton
+          size="small"
+          style={{
+            alignSelf: 'center',
+            border: '1px solid black',
+            borderRadius: '5px',
+            marginTop: '8px'
+          }}
+          onClick={() => handleAddQuestion([])}
+        >
+          <AddIcon fontSize="small" />
+        </IconButton>
       </div>
       <div className={styles.questionContainer} style={{ flexGrow: 1 }}>
         {currentQuestion ? (

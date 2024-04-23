@@ -13,19 +13,17 @@ type QuestionNumberProps = {
   setQuestion: React.Dispatch<
     React.SetStateAction<QuestionWithFullNumber | undefined>
   >;
+  handleAddQuestion: (parentHierarchy: string[]) => any;
 };
 
 const QuestionNumber = ({
   question,
   currentQuestion,
   parentNumbers,
-  setQuestion
+  setQuestion,
+  handleAddQuestion
 }: QuestionNumberProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
-
-  const handleAddQuestion = (parentHierarchy: string[]) => {
-    console.log(parentHierarchy);
-  };
 
   return (
     <div>
@@ -75,6 +73,7 @@ const QuestionNumber = ({
                 parentNumbers={[...parentNumbers, q.number]}
                 setQuestion={setQuestion}
                 currentQuestion={currentQuestion}
+                handleAddQuestion={handleAddQuestion}
               />
             ))}
           </div>
