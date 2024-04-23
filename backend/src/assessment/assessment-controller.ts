@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 import { CreateAssessmentDTO } from "./assessment-dto";
 import Assessment from "./assessment-model";
 import Course from "../course/course-model";
-import { Schema } from "mongoose";
 
 
 // Controller function to create a new assessment

@@ -1,9 +1,9 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface IQuestion extends Document {
     QuestionNumber: string;
     Image: string[];
-    Question: string;
+    QuestionText: string;
     Answers: Schema.Types.ObjectId[];
     Watchers: Schema.Types.ObjectId[];
     Comments: Schema.Types.ObjectId[];
@@ -18,7 +18,7 @@ const questionSchema: Schema<IQuestion> = new Schema({
     Image: {
         type: [String]
     },
-    Question: {
+    QuestionText: {
         type: String,
         required: true
     },

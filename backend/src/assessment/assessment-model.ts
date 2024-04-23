@@ -7,7 +7,6 @@ export interface IAssessment extends Document {
     Year: number;
     Semester: SemesterType;
     Questions: Types.ObjectId[];
-    AnswerText: string;
 }
 
 const assessmentSchema: Schema<IAssessment> = new Schema({
