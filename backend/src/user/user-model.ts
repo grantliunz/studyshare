@@ -2,6 +2,7 @@ import mongoose, { Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
     Name: string;
+    Email?: string;
     Questions: Schema.Types.ObjectId[];
     Answers: Schema.Types.ObjectId[];
     WatchList: Schema.Types.ObjectId[];
@@ -13,6 +14,10 @@ const userSchema: Schema<IUser> = new Schema({
     Name: {
         type: String,
         required: true
+    },
+    Email: {
+        type: String,
+        unique: true
     },
     Questions: {
         type: [Schema.Types.ObjectId],

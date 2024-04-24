@@ -1,16 +1,15 @@
 import mongoose, { Types, Schema, Model } from 'mongoose';
 import { AssessmentType, SemesterType } from './assessment-enums';
 
-export interface IAsssessment extends Document {
+export interface IAssessment extends Document {
     AssessmentType: AssessmentType;
     Number: number;
     Year: number;
     Semester: SemesterType;
     Questions: Types.ObjectId[];
-    AnswerText: string;
 }
 
-const assessmentSchema: Schema<IAsssessment> = new Schema({
+const assessmentSchema: Schema<IAssessment> = new Schema({
     AssessmentType: {
         type: String,
         enum: Object.values(AssessmentType),
@@ -38,5 +37,5 @@ const assessmentSchema: Schema<IAsssessment> = new Schema({
     timestamps: {}
 });
 
-const Assessment: Model<IAsssessment> = mongoose.model('Assessment', assessmentSchema);
+const Assessment: Model<IAssessment> = mongoose.model('Assessment', assessmentSchema);
 export default Assessment;

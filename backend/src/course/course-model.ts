@@ -1,9 +1,9 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface ICourse extends Document {
     Name: string;
     Code: string;
-    Assessments: Schema.Types.ObjectId[];
+    Assessments: Types.ObjectId[];
 }
 
 

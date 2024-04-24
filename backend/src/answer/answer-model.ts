@@ -1,11 +1,11 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface IAnswer extends Document {
     AnswerText: string;
     AnswerImage: string;
-    Rating: Schema.Types.ObjectId;
-    Comments: [Schema.Types.ObjectId];
-    Author: Schema.Types.ObjectId;
+    Rating: Types.ObjectId;
+    Comments: [Types.ObjectId];
+    Author: Types.ObjectId;
 }
 
 const answerSchema: Schema<IAnswer> = new Schema({

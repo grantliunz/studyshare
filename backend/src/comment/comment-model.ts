@@ -1,10 +1,10 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface IComment extends Document {
     Text: string;
-    PreviousComment: Schema.Types.ObjectId;
-    Author: Schema.Types.ObjectId;
-    Rating: Schema.Types.ObjectId;
+    PreviousComment: Types.ObjectId;
+    Author: Types.ObjectId;
+    Rating: Types.ObjectId;
 }
 
 

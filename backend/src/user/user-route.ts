@@ -3,7 +3,10 @@ import * as User from "./user-controller";
 
 const router = express.Router();
 
-// Dummy route to see how it works
-router.get("/hello", User.dummyTest);
+router.post("/createUser", User.createUser);
+router.get("/getAllUsers", User.getAllUsers);
+router.get("/getUser/:userId", User.getUser);
+router.put("/updateUser/:userId", User.updateUser);
+router.delete("/deleteUser/:userId", User.deleteUser);
 
 export default router;
