@@ -3,6 +3,7 @@ import Answer from "./answer-model";
 import Question from "../question/question-model";
 import { CreateAnswerDTO } from "./answer-dto";
 import { validationResult } from "express-validator";
+import Rating from "../rating/rating-model";
 
 
 // Controller function to create a new answer
@@ -21,8 +22,14 @@ export const createAnswer = async (req: Request<{ questionId: string }, {}, Crea
       return res.status(404).json({ message: "Question not found" });
     }
 
+    // create a new Rating instance
+    const rating = new Rating({ Upvotes: 0, Downvotes: 0 });
+
+    // save the rating to the database
+    const createdRating = await rating.save();
+
     // create a new answer instance
-    const answer = new Answer({ AnswerText, AnswerImage, Author });
+    const answer = new Answer({ AnswerText, AnswerImage, Author, Rating: createdRating._id });
     // save the answer to the database
     const createdAnswer = await answer.save();
 
