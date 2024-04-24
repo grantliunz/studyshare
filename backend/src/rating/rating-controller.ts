@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Rating from "./rating-model";
 import Answer from "../answer/answer-model";
-import Comment from "../question/question-model";
+import Comment from "../comment/comment-model";
 import { CreateRatingDTO } from "./rating-dto";
 import { validationResult } from "express-validator";
 
