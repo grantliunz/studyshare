@@ -3,7 +3,11 @@ import * as Rating from "./rating-controller";
 
 const router = express.Router();
 
-// Dummy route to see how it works
-router.get("/hello", Rating.dummyTest);
+router.get("/getRatingByAnswer/:answerId", Rating.getRatingByAnswer);
+router.get("/getRatingByComment/:commentId", Rating.getRatingByComment);
+router.get("/getRating/:ratingId", Rating.getRating);
+router.put("/updateRating/:ratingId", Rating.updateRating);
+router.delete("/deleteRating/:ratingId", Rating.deleteRating);
+
 
 export default router;
