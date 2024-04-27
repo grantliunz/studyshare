@@ -5,6 +5,8 @@ import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import NewQuestion from './NewQuestion';
+import { set } from 'firebase/database';
 
 export type Question = {
   number: string;
@@ -315,6 +317,11 @@ const Assessment = () => {
     QuestionWithFullNumber | undefined
   >(undefined);
 
+  const [newQuestionOpen, setNewQuestionOpen] = useState(false);
+  const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
+    string[]
+  >([]);
+
   useEffect(() => {
     if (currentQuestion) {
       const currIndex = orderedQuestionsArray.findIndex((question) =>
@@ -337,8 +344,14 @@ const Assessment = () => {
   }, [currentQuestion]);
 
   const handleAddQuestion = (parentHierarchy: string[]) => {
+    setNewQuestionOpen(true);
     // TODO
     console.log(parentHierarchy);
+  };
+
+  const handleNewQuestionClose = () => {
+    setNewQuestionOpen(false);
+    setNewQuestionParentHierarchy([]);
   };
 
   return (
@@ -346,13 +359,13 @@ const Assessment = () => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        width: '100%'
+        width: '100%',
+        minHeight: '100vh'
       }}
     >
       <div
         style={{
           backgroundColor: '#E8E9EC',
-          minHeight: '100vh',
           padding: '12px 8px',
           display: 'flex',
           flexDirection: 'column',
@@ -394,6 +407,11 @@ const Assessment = () => {
           <p>Click a question to get started!</p>
         )}
       </div>
+      <NewQuestion
+        open={newQuestionOpen}
+        handleClose={handleNewQuestionClose}
+        parent={newQuestionParentHierarchy}
+      />
     </div>
   );
 };
