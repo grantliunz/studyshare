@@ -15,56 +15,6 @@ import {
 } from '../../mappers/courseMapper';
 import { CircularProgress } from '@mui/material';
 
-// interface course {
-//   id: number;
-//   courseCode: string;
-//   courseName: string;
-// }
-
-// const courseData = [
-//   { courseCode: 'SOFTENG 284', courseName: 'Data Structures and Algorithms' },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   },
-//   { courseCode: 'SOFTENG 206', courseName: 'Software Engineering' },
-//   {
-//     courseCode: 'SOFTENG 251',
-//     courseName: 'Introduction to Software Engineering'
-//   }
-// ];
-
 export default function CoursePage() {
   const [showForm, setShowForm] = useState(false);
   const { id } = useParams();
