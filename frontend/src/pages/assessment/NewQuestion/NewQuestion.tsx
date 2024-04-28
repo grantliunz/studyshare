@@ -1,25 +1,24 @@
-import {
-  Modal,
-  Box,
-  IconButton,
-  Button,
-  CircularProgress
-} from '@mui/material';
+import { Modal, Box, IconButton, Button, TextField } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useState } from 'react';
-import ScaleRoundedIcon from '@mui/icons-material/ScaleRounded';
+import styles from './NewQuestion.module.css';
+import './NewQuestion.module.css';
 
 type newQuestionProps = {
   open: boolean;
   handleClose: () => void;
   parent: string[];
+  defaultQuestionNumber: string;
 };
 
 export default function NewQuestion({
   open,
   handleClose,
-  parent
+  parent,
+  defaultQuestionNumber
 }: newQuestionProps) {
+  console.log('parent', parent);
+
   return (
     <Modal
       open={open}
@@ -40,7 +39,7 @@ export default function NewQuestion({
           borderRadius: '5px',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'start',
           boxSizing: 'border-box'
         }}
       >
@@ -71,6 +70,28 @@ export default function NewQuestion({
             <ClearIcon />
           </IconButton>
         </div>
+        <div style={{ display: 'flex' }}>
+          <p>Question Number: &nbsp;</p>
+          <p>{parent.length == 0 ? '' : parent.join('.') + '.'}</p>
+          <input
+            className={styles.questionNumberInput}
+            defaultValue={defaultQuestionNumber}
+          />
+        </div>
+        <div
+          style={{
+            width: '100%',
+            padding: '20px 0'
+          }}
+        >
+          <TextField
+            multiline
+            minRows={3}
+            fullWidth
+            placeholder="Enter question here"
+          />
+        </div>
+        <Button variant="contained">Submit</Button>
       </Box>
     </Modal>
   );

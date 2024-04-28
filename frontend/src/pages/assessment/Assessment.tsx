@@ -5,8 +5,9 @@ import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import NewQuestion from './NewQuestion';
+import NewQuestion from './NewQuestion/NewQuestion';
 import { set } from 'firebase/database';
+import { findNextQuestionNumber } from '../../util/questionNumber';
 
 export type Question = {
   number: string;
@@ -344,9 +345,8 @@ const Assessment = () => {
   }, [currentQuestion]);
 
   const handleAddQuestion = (parentHierarchy: string[]) => {
+    setNewQuestionParentHierarchy(parentHierarchy);
     setNewQuestionOpen(true);
-    // TODO
-    console.log(parentHierarchy);
   };
 
   const handleNewQuestionClose = () => {
@@ -411,6 +411,10 @@ const Assessment = () => {
         open={newQuestionOpen}
         handleClose={handleNewQuestionClose}
         parent={newQuestionParentHierarchy}
+        defaultQuestionNumber={findNextQuestionNumber(
+          newQuestionParentHierarchy,
+          dummyAssessment.questions
+        )}
       />
     </div>
   );
