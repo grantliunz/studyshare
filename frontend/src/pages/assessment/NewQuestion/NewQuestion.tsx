@@ -1,7 +1,6 @@
 import { Modal, Box, IconButton, Button } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './NewQuestion.module.css';
-import './NewQuestion.module.css';
 import Editor from '../../../components/Editor/Editor';
 import { useState } from 'react';
 

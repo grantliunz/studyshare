@@ -6,7 +6,6 @@ import QuestionNumber from './QuestionNumber';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
-import { set } from 'firebase/database';
 import { findNextQuestionNumber } from '../../util/questionNumber';
 
 export type Question = {

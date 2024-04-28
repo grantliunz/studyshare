@@ -1,6 +1,5 @@
 import 'react-quill/dist/quill.snow.css';
 import styles from './Editor.module.css';
-import './Editor.module.css';
 import QuillEditor from 'react-quill';
 
 type editorProps = {
