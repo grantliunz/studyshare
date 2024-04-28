@@ -1,8 +1,9 @@
 .container {
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  width: 100%;
   flex-grow: 1;
+  overflow-x: hidden;
 }
 
 .questionsTabContainer {

@@ -46,7 +46,7 @@ const QuestionPanel = ({
           questionWithFullNumber.hierarchy
         )
       }
-      style={{ width: '100%' }}
+      style={{ overflow: 'hidden', width: '100%' }}
     >
       <div style={{ paddingTop: '10px', display: 'flex' }}>
         {prevQuestionWithFullNumber && (
@@ -115,12 +115,14 @@ const QuestionPanel = ({
           />
         </div>
       </div>
-      <div style={{ margin: '20px 0px 0px 20px', width: '100%' }}>
+      <div style={{ margin: '20px' }}>
         {question.content!.answers.map((answer, index) => (
           <AnswerCard key={index} answer={answer} />
         ))}
       </div>
-      <div style={{ height: '500px', padding: '30px 20px' }}>
+      <div
+        style={{ height: '500px', padding: '30px 20px', marginBottom: '100px' }}
+      >
         <NewAnswer
           handleSubmitAnswer={(answer: string) =>
             handleSubmitAnswer(questionWithFullNumber, answer)

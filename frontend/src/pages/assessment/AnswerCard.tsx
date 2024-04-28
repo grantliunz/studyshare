@@ -35,13 +35,12 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ overflow: 'hidden', width: '100%' }}>
       <div
         style={{
           alignItems: 'center',
-          display: 'flex',
           columnGap: '16px',
-          width: '100%'
+          display: 'flex'
         }}
       >
         <UpDownVote
@@ -61,7 +60,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             columnGap: '24px',
             display: 'flex',
             width: '100%',
-            padding: '12px'
+            overflow: 'hidden',
+            padding: '24px'
           }}
         >
           <PersonCard
@@ -70,9 +70,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             style={{ alignItems: 'center' }}
           />
           <ReactQuill
-            style={{
-              width: '100%'
-            }}
+            style={{ overflow: 'hidden' }}
             value={answer.text}
             readOnly={true}
             theme={'bubble'}
