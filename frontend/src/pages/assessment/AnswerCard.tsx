@@ -6,6 +6,7 @@ import CommentCard from './CommentCard';
 import { IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import ReactQuill from 'react-quill';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -34,8 +35,15 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   };
 
   return (
-    <>
-      <div style={{ alignItems: 'center', display: 'flex', columnGap: '16px' }}>
+    <div style={{ width: '100%' }}>
+      <div
+        style={{
+          alignItems: 'center',
+          display: 'flex',
+          columnGap: '16px',
+          width: '100%'
+        }}
+      >
         <UpDownVote
           rating={answer.rating}
           style={{
@@ -61,7 +69,14 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             avatarSize="36px"
             style={{ alignItems: 'center' }}
           />
-          {answer.text}
+          <ReactQuill
+            style={{
+              width: '100%'
+            }}
+            value={answer.text}
+            readOnly={true}
+            theme={'bubble'}
+          />
         </div>
       </div>
       <div style={{ marginLeft: '46px' }}>
@@ -134,7 +149,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           />
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

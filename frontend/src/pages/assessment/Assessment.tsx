@@ -7,6 +7,8 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
 import { findNextQuestionNumber } from '../../util/questionNumber';
+import { arrayEquals } from '../../util/arrays';
+import { useAuth } from '../../contexts/UserContext';
 
 export type Question = {
   number: string;
@@ -286,37 +288,22 @@ const traverseSubQuestion = (
     );
 };
 
-const arrayEquals = (arr1: Array<any>, arr2: Array<any>): boolean => {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
-};
-
 const Assessment = () => {
+  const { user } = useAuth();
   const { id } = useParams();
   console.log(id);
-
+  const [assessment, setAssessment] = useState<Assessment>(dummyAssessment);
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionWithFullNumber>();
-
   const orderedQuestionsArray = buildOrderedQuestionsArray(
-    dummyAssessment.questions
+    assessment.questions
   );
-
   const [prevQuestion, setPrevQuestion] = useState<
     QuestionWithFullNumber | undefined
   >(undefined);
-
   const [nextQuestion, setNextQuestion] = useState<
     QuestionWithFullNumber | undefined
   >(undefined);
-
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
   const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
     string[]
@@ -353,25 +340,32 @@ const Assessment = () => {
     setNewQuestionParentHierarchy([]);
   };
 
+  const handleSubmitAnswer = (
+    questionWithFullNumber: QuestionWithFullNumber,
+    answer: string
+  ) => {
+    const newAnswer = {
+      text: answer,
+      author: user?.email || 'Anonymous',
+      rating: {
+        id: '1',
+        upvotes: 0,
+        downvotes: 0
+      },
+      comments: [],
+      timestamp: new Date().toISOString()
+    };
+
+    questionWithFullNumber.question.content?.answers.push(newAnswer);
+    setAssessment({
+      ...assessment
+    });
+  };
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%',
-        minHeight: '100vh'
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: '#E8E9EC',
-          padding: '12px 8px',
-          display: 'flex',
-          flexDirection: 'column',
-          rowGap: '8px'
-        }}
-      >
-        {dummyAssessment.questions.map((question) => (
+    <div className={styles.container}>
+      <div className={styles.questionsTabContainer}>
+        {assessment.questions.map((question) => (
           <QuestionNumber
             key={question.number}
             question={question}
@@ -394,25 +388,28 @@ const Assessment = () => {
           <AddIcon fontSize="small" />
         </IconButton>
       </div>
-      <div className={styles.questionContainer} style={{ flexGrow: 1 }}>
-        {currentQuestion ? (
+      {currentQuestion ? (
+        orderedQuestionsArray.map((question) => (
           <QuestionPanel
-            questionWithFullNumber={currentQuestion}
+            key={question.hierarchy.join('')}
+            currentQuestion={currentQuestion}
+            questionWithFullNumber={question}
             prevQuestionWithFullNumber={prevQuestion}
             nextQuestionWithFullNumber={nextQuestion}
             setQuestion={setCurrentQuestion}
+            handleSubmitAnswer={handleSubmitAnswer}
           />
-        ) : (
-          <p>Click a question to get started!</p>
-        )}
-      </div>
+        ))
+      ) : (
+        <p>Click a question to get started!</p>
+      )}
       <NewQuestion
         open={newQuestionOpen}
         handleClose={handleNewQuestionClose}
         parent={newQuestionParentHierarchy}
         defaultQuestionNumber={findNextQuestionNumber(
           newQuestionParentHierarchy,
-          dummyAssessment.questions
+          assessment.questions
         )}
       />
     </div>

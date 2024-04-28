@@ -1,4 +1,4 @@
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
 import { QuestionWithFullNumber } from './Assessment';
 import { useState } from 'react';
@@ -7,48 +7,53 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import OutlinedFlagRoundedIcon from '@mui/icons-material/OutlinedFlagRounded';
 import AnswerCard from './AnswerCard';
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import NewAnswer from './NewAnswer/NewAnswer';
+import { arrayEquals } from '../../util/arrays';
 
 type QuestionPanelProps = {
+  currentQuestion: QuestionWithFullNumber;
   questionWithFullNumber: QuestionWithFullNumber;
   prevQuestionWithFullNumber: QuestionWithFullNumber | undefined;
   nextQuestionWithFullNumber: QuestionWithFullNumber | undefined;
   setQuestion: React.Dispatch<
     React.SetStateAction<QuestionWithFullNumber | undefined>
   >;
+  handleSubmitAnswer: (
+    questionWithFullNumber: QuestionWithFullNumber,
+    answer: string
+  ) => any;
 };
 
 const QuestionPanel = ({
+  currentQuestion,
   questionWithFullNumber,
   prevQuestionWithFullNumber,
   nextQuestionWithFullNumber,
-  setQuestion
+  setQuestion,
+  handleSubmitAnswer
 }: QuestionPanelProps) => {
   const { question, hierarchy } = questionWithFullNumber;
-
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
-  const [newAnswer, setNewAnswer] = useState<string>('');
-
-  const handleNewAnswerChange = (text: string) => {
-    setNewAnswer(text);
-  };
-
-  const handleNewAnswer = () => {
-    console.log(newAnswer);
-    // TODO
-  };
 
   return (
-    <>
-      <div style={{ marginTop: '10px', overflow: 'hidden' }}>
+    <div
+      hidden={
+        !arrayEquals(
+          currentQuestion.hierarchy,
+          questionWithFullNumber.hierarchy
+        )
+      }
+      style={{ width: '100%' }}
+    >
+      <div style={{ paddingTop: '10px', display: 'flex' }}>
         {prevQuestionWithFullNumber && (
           <Button
             onClick={() => setQuestion(prevQuestionWithFullNumber)}
             startIcon={<ArrowBackRoundedIcon />}
-            style={{ float: 'left', textTransform: 'none' }}
+            style={{ textTransform: 'none', marginRight: 'auto' }}
           >
             {prevQuestionWithFullNumber?.hierarchy.join('')}
           </Button>
@@ -57,7 +62,7 @@ const QuestionPanel = ({
           <Button
             onClick={() => setQuestion(nextQuestionWithFullNumber)}
             endIcon={<ArrowForwardRoundedIcon />}
-            style={{ float: 'right', textTransform: 'none' }}
+            style={{ textTransform: 'none', marginLeft: 'auto' }}
           >
             {nextQuestionWithFullNumber?.hierarchy.join('')}
           </Button>
@@ -75,7 +80,7 @@ const QuestionPanel = ({
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        {hierarchy}
+        <h2 style={{ margin: '0px' }}>{hierarchy}</h2>
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>
@@ -110,42 +115,19 @@ const QuestionPanel = ({
           />
         </div>
       </div>
-      <div style={{ margin: '20px 0px 0px 20px' }}>
+      <div style={{ margin: '20px 0px 0px 20px', width: '100%' }}>
         {question.content!.answers.map((answer, index) => (
           <AnswerCard key={index} answer={answer} />
         ))}
       </div>
-      <form
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '100px 24px 50px 50px',
-          rowGap: '10px',
-          alignItems: 'start'
-        }}
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleNewAnswer();
-        }}
-      >
-        <p style={{ margin: '0px', fontWeight: '500', fontSize: '1.3rem' }}>
-          Your Answer
-        </p>
-        <TextField
-          fullWidth
-          InputProps={{
-            endAdornment: (
-              <IconButton type="submit">
-                <SendOutlinedIcon />
-              </IconButton>
-            )
-          }}
-          multiline
-          onChange={(event) => handleNewAnswerChange(event.target.value)}
-          placeholder="Your answer"
+      <div style={{ height: '500px', padding: '30px 20px' }}>
+        <NewAnswer
+          handleSubmitAnswer={(answer: string) =>
+            handleSubmitAnswer(questionWithFullNumber, answer)
+          }
         />
-      </form>
-    </>
+      </div>
+    </div>
   );
 };
 

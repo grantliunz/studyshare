@@ -84,8 +84,10 @@ export default function NewQuestion({
         </div>
         <div
           style={{
-            width: '100%',
-            padding: '20px 0'
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '100%'
           }}
         >
           <Editor value={value} setValue={setValue} />
