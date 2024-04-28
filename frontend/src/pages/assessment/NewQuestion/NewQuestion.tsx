@@ -34,8 +34,8 @@ export default function NewQuestion({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '800px',
-          height: '600px',
+          width: '1000px',
+          height: '800px',
           backgroundColor: '#fff',
           padding: '20px',
           borderRadius: '5px',
@@ -83,8 +83,7 @@ export default function NewQuestion({
         <div
           style={{
             width: '100%',
-            padding: '20px 0',
-            flex: '1'
+            padding: '20px 0'
           }}
         >
           <Editor handleSubmit={handleSubmit} />

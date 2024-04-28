@@ -1,9 +1,9 @@
 import { useState } from 'react';
-
-import QuillEditor from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styles from './Editor.module.css';
+import './Editor.module.css';
 import { Button } from '@mui/material';
+import QuillEditor from 'react-quill';
 
 type editorProps = {
   handleSubmit: (value: string) => void;
@@ -56,14 +56,23 @@ export default function Editor({ handleSubmit }: editorProps) {
 
   return (
     <div className={styles.container}>
-      <QuillEditor
-        className={styles.editor}
-        theme="snow"
-        value={value}
-        formats={formats}
-        modules={modules}
-        onChange={(value) => setValue(value)}
-      />
+      <div
+        style={{
+          height: '600px',
+          overflow: 'hidden',
+          paddingBottom: '80px'
+        }}
+      >
+        <QuillEditor
+          theme="snow"
+          value={value}
+          className={styles.editor}
+          formats={formats}
+          modules={modules}
+          onChange={(value) => setValue(value)}
+        />
+      </div>
+
       <Button
         variant="contained"
         onClick={onSubmit}
