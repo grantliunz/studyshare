@@ -13,7 +13,14 @@ import {
   mapGetCoursesData,
   mapGetCourseData
 } from '../../mappers/courseMapper';
-import { CircularProgress } from '@mui/material';
+import {
+  CircularProgress,
+  Select,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  SelectChangeEvent
+} from '@mui/material';
 
 export default function CoursePage() {
   const [showForm, setShowForm] = useState(false);
@@ -21,6 +28,8 @@ export default function CoursePage() {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState<string>('');
+  const [yearLevels, setYearLevels] = useState<string[]>([]);
+
   const [displayedData, setDisplayedData] = useState<
     Course[] | null | undefined
   >(null);
@@ -38,17 +47,27 @@ export default function CoursePage() {
   } = usePost<PostCourse, Course>(`${API.postCourse}/${id}`, mapGetCourseData);
 
   useEffect(() => {
-    if (!query.trim()) {
+    console.log(yearLevels);
+    if (!query.trim() && yearLevels.length === 0) {
       setDisplayedData(courseData);
     } else {
-      const filtered = courseData?.filter(
-        (course) =>
+      const filtered = courseData?.filter((course) => {
+        const codeNumber = course.Code.match(/\d+/)?.[0];
+        const yearLevel = codeNumber?.charAt(0);
+        if (!yearLevel) return false;
+        const matchesQuery =
           course.Name.toLowerCase().includes(query.toLowerCase()) ||
-          course.Code.toLowerCase().includes(query.toLowerCase())
-      );
+          course.Code.toLowerCase().includes(query.toLowerCase());
+
+        const meetsYearLevelCriteria =
+          yearLevels.length === 0 ||
+          (yearLevel && yearLevels.includes(yearLevel));
+
+        return matchesQuery && meetsYearLevelCriteria;
+      });
       setDisplayedData(filtered);
     }
-  }, [query, courseData]);
+  }, [query, courseData, yearLevels]);
 
   const handleAddCourse = async (courseName: string, courseCode: string) => {
     if (!courseName.trim() || !courseCode.trim()) {
@@ -79,10 +98,29 @@ export default function CoursePage() {
     setQuery(newQuery);
   };
 
+  const onYearLevelChange = (event: SelectChangeEvent<string[]>) => {
+    setYearLevels(event.target.value as string[]);
+  };
+
   return (
     <div className={style.container}>
       <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
       <br />
+
+      <Select
+        multiple
+        value={yearLevels}
+        onChange={onYearLevelChange}
+        displayEmpty
+        className={style.yearLevelSelect}
+      >
+        <MenuItem value="1">100</MenuItem>
+        <MenuItem value="2">200</MenuItem>
+        <MenuItem value="3">300</MenuItem>
+        <MenuItem value="4">400</MenuItem>
+        <MenuItem value="7">700</MenuItem>
+        {/* Add more options as needed */}
+      </Select>
 
       {isLoadingCourses && <CircularProgress />}
       {displayedData &&
