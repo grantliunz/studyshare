@@ -21,7 +21,8 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-  SelectChangeEvent
+  SelectChangeEvent,
+  OutlinedInput
 } from '@mui/material';
 
 export default function CoursePage() {
@@ -110,22 +111,16 @@ export default function CoursePage() {
         <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
 
         <FormControl className={style.yearLevelSelect}>
-          <InputLabel
-            id="year-level-select-label"
-            className={style.yearLevelInputLabel}
-          >
-            Filter by Year Level
-          </InputLabel>
+          <InputLabel id="year-level-select-label">Select Year</InputLabel>
           <Select
             labelId="year-level-select-label"
             id="year-level-select"
             multiple
             value={yearLevels}
             onChange={onYearLevelChange}
+            input={<OutlinedInput label="Select Year" />}
             renderValue={(selected) =>
-              (selected as string[])
-                .map((value) => `${Number(value) * 100}`)
-                .join(', ')
+              selected.map((value) => value + '00').join(', ')
             }
           >
             <MenuItem value="1">
