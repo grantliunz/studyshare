@@ -5,3 +5,40 @@
   align-items: center;
   margin-top: 100px;
 }
+
+.searchAndFilter {
+  display: flex;
+  align-items: center; /* Vertically center the items */
+  margin-bottom: 20px;
+}
+
+.searchAndFilter > * {
+  margin-right: 30px; /* Adjust the spacing between the SearchBar and the FormControl */
+}
+
+.yearLevelSelect {
+  background-color: #e7e7e7;
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  width: 300px;
+}
+
+.yearLevelInputLabel {
+  font-size: 14px;
+  color: #333; /* Adjust the color as needed */
+}
+
+.yearLevelSelectMenu {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.yearLevelSelectMenuItem {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.yearLevelCheckboxLabel {
+  font-size: 14px;
+}
