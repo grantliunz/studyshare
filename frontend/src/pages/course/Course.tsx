@@ -15,6 +15,8 @@ import {
 } from '../../mappers/courseMapper';
 import {
   CircularProgress,
+  FormControl,
+  InputLabel,
   Select,
   MenuItem,
   Checkbox,
@@ -104,23 +106,53 @@ export default function CoursePage() {
 
   return (
     <div className={style.container}>
-      <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
-      <br />
-
-      <Select
-        multiple
-        value={yearLevels}
-        onChange={onYearLevelChange}
-        displayEmpty
-        className={style.yearLevelSelect}
-      >
-        <MenuItem value="1">100</MenuItem>
-        <MenuItem value="2">200</MenuItem>
-        <MenuItem value="3">300</MenuItem>
-        <MenuItem value="4">400</MenuItem>
-        <MenuItem value="7">700</MenuItem>
-        {/* Add more options as needed */}
-      </Select>
+      <div className={style.searchAndFilter}>
+        <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
+        <FormControl className={style.yearLevelSelect}>
+          <InputLabel id="year-level-select-label">
+            Filter by Year Level
+          </InputLabel>
+          <Select
+            labelId="year-level-select-label"
+            id="year-level-select"
+            multiple
+            value={yearLevels}
+            onChange={onYearLevelChange}
+            renderValue={(selected) => (selected as string[]).join(', ')}
+          >
+            <MenuItem value="1">
+              <FormControlLabel
+                control={<Checkbox checked={yearLevels.includes('1')} />}
+                label="100"
+              />
+            </MenuItem>
+            <MenuItem value="2">
+              <FormControlLabel
+                control={<Checkbox checked={yearLevels.includes('2')} />}
+                label="200"
+              />
+            </MenuItem>
+            <MenuItem value="3">
+              <FormControlLabel
+                control={<Checkbox checked={yearLevels.includes('3')} />}
+                label="300"
+              />
+            </MenuItem>
+            <MenuItem value="4">
+              <FormControlLabel
+                control={<Checkbox checked={yearLevels.includes('4')} />}
+                label="400"
+              />
+            </MenuItem>
+            <MenuItem value="7">
+              <FormControlLabel
+                control={<Checkbox checked={yearLevels.includes('7')} />}
+                label="700"
+              />
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </div>
 
       {isLoadingCourses && <CircularProgress />}
       {displayedData &&
