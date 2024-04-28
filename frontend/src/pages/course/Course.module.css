@@ -9,21 +9,25 @@
 .searchAndFilter {
   display: flex;
   align-items: center; /* Vertically center the items */
+  margin-bottom: 20px;
 }
 
 .searchAndFilter > * {
   margin-right: 30px; /* Adjust the spacing between the SearchBar and the FormControl */
 }
 
-/* In your CSS file or CSS module */
 .yearLevelSelect {
-  margin-left: 10px;
-  width: 300px; /* Adjust the width as needed */
+  background-color: #e7e7e7;
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  width: 300px;
 }
 
 .yearLevelInputLabel {
   font-size: 14px;
   color: #333; /* Adjust the color as needed */
+  border-color: #999;
 }
 
 .yearLevelSelectMenu {

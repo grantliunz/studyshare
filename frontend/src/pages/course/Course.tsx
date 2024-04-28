@@ -108,8 +108,12 @@ export default function CoursePage() {
     <div className={style.container}>
       <div className={style.searchAndFilter}>
         <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
+
         <FormControl className={style.yearLevelSelect}>
-          <InputLabel id="year-level-select-label">
+          <InputLabel
+            id="year-level-select-label"
+            className={style.yearLevelInputLabel}
+          >
             Filter by Year Level
           </InputLabel>
           <Select
@@ -118,7 +122,11 @@ export default function CoursePage() {
             multiple
             value={yearLevels}
             onChange={onYearLevelChange}
-            renderValue={(selected) => (selected as string[]).join(', ')}
+            renderValue={(selected) =>
+              (selected as string[])
+                .map((value) => `${Number(value) * 100}`)
+                .join(', ')
+            }
           >
             <MenuItem value="1">
               <FormControlLabel
