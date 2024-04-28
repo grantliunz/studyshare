@@ -1,8 +1,8 @@
-import { Modal, Box, IconButton, Button, TextField } from '@mui/material';
+import { Modal, Box, IconButton } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useState } from 'react';
 import styles from './NewQuestion.module.css';
 import './NewQuestion.module.css';
+import Editor from '../../../components/Editor/Editor';
 
 type newQuestionProps = {
   open: boolean;
@@ -17,7 +17,9 @@ export default function NewQuestion({
   parent,
   defaultQuestionNumber
 }: newQuestionProps) {
-  console.log('parent', parent);
+  function handleSubmit(value: string) {
+    console.log(value);
+  }
 
   return (
     <Modal
@@ -32,8 +34,8 @@ export default function NewQuestion({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '400px',
+          width: '800px',
+          height: '600px',
           backgroundColor: '#fff',
           padding: '20px',
           borderRadius: '5px',
@@ -81,17 +83,12 @@ export default function NewQuestion({
         <div
           style={{
             width: '100%',
-            padding: '20px 0'
+            padding: '20px 0',
+            flex: '1'
           }}
         >
-          <TextField
-            multiline
-            minRows={3}
-            fullWidth
-            placeholder="Enter question here"
-          />
+          <Editor handleSubmit={handleSubmit} />
         </div>
-        <Button variant="contained">Submit</Button>
       </Box>
     </Modal>
   );
