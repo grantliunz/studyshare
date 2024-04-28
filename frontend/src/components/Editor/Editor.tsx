@@ -1,21 +1,14 @@
-import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import styles from './Editor.module.css';
 import './Editor.module.css';
-import { Button } from '@mui/material';
 import QuillEditor from 'react-quill';
 
 type editorProps = {
-  handleSubmit: (value: string) => void;
+  value: string;
+  setValue: (value: string) => void;
 };
 
-export default function Editor({ handleSubmit }: editorProps) {
-  const [value, setValue] = useState('');
-
-  function onSubmit() {
-    handleSubmit(value);
-  }
-
+export default function Editor({ value, setValue }: editorProps) {
   const modules = {
     toolbar: {
       container: [
@@ -60,7 +53,7 @@ export default function Editor({ handleSubmit }: editorProps) {
         style={{
           height: '600px',
           overflow: 'hidden',
-          paddingBottom: '80px'
+          paddingBottom: '60px'
         }}
       >
         <QuillEditor
@@ -72,16 +65,6 @@ export default function Editor({ handleSubmit }: editorProps) {
           onChange={(value) => setValue(value)}
         />
       </div>
-
-      <Button
-        variant="contained"
-        onClick={onSubmit}
-        style={{
-          width: 'fit-content'
-        }}
-      >
-        Submit
-      </Button>
     </div>
   );
 }

@@ -1,8 +1,9 @@
-import { Modal, Box, IconButton } from '@mui/material';
+import { Modal, Box, IconButton, Button } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './NewQuestion.module.css';
 import './NewQuestion.module.css';
 import Editor from '../../../components/Editor/Editor';
+import { useState } from 'react';
 
 type newQuestionProps = {
   open: boolean;
@@ -17,7 +18,9 @@ export default function NewQuestion({
   parent,
   defaultQuestionNumber
 }: newQuestionProps) {
-  function handleSubmit(value: string) {
+  const [value, setValue] = useState('');
+
+  function handleSubmit() {
     console.log(value);
   }
 
@@ -86,7 +89,17 @@ export default function NewQuestion({
             padding: '20px 0'
           }}
         >
-          <Editor handleSubmit={handleSubmit} />
+          <Editor value={value} setValue={setValue} />
+
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            style={{
+              width: 'fit-content'
+            }}
+          >
+            Submit
+          </Button>
         </div>
       </Box>
     </Modal>
