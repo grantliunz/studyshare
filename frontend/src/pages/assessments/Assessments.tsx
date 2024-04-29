@@ -15,7 +15,7 @@ interface AssessmentsPageProps {
 }
 
 export enum AssessmentType {
-    NotActive = "NotActive",
+    NotSet = "NotSet",
     Exam = "Exam",
     Test = "Test",
     Other = "Other"
@@ -79,7 +79,8 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
     }
 
     const [matchingAssessments, setMatchingAssessments] = useState(props.Assessments);
-    const [showForm, setShowForm] = useState(AssessmentType.NotActive);
+    const [assessmentTypeState, setAssessmentTypeState] = useState(AssessmentType.NotSet);
+    const [showForm, setShowForm] = useState(false);
 
     function matchString (assessment: any, searchText: string){
         const str = assessment.Year.toString() + " " + mapSemesterToString(assessment.Semester) + " " + assessment.Number.toString() + " " + assessment.Name;
@@ -110,7 +111,8 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
 
     const handleOpenForm = (type : AssessmentType) => {
         console.log(type);
-        setShowForm(type);
+        setShowForm(true);
+        setAssessmentTypeState(type);
     }
 
     const handleAddAssessment = async (formInputs : any[], assessmentType : AssessmentType) => { // any[] is used for now, i guess you could use a DTO later
@@ -118,7 +120,7 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
     }
 
     const handleCloseForm = () => {
-        setShowForm(AssessmentType.NotActive);
+        setShowForm(false);
     }
 
     return (
@@ -159,7 +161,8 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
                     ))}
                     
                     <AddAssessmentForm
-                        state={showForm}
+                        state={assessmentTypeState}
+                        show={showForm}
                         onAddAssessment={handleAddAssessment}
                         onClose={handleCloseForm}
                     />

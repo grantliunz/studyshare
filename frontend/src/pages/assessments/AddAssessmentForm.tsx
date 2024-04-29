@@ -2,10 +2,10 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Modal, Backdrop, Fade, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddAssessmentForm.module.css';
-import { Visibility } from '@mui/icons-material';
 
 interface AddAssessmentFormProps {
   state: string;
+  show: boolean;
   onAddAssessment: (formInputs: FormInputs, assessmentType : string) => void;
   onClose: () => void;
 }
@@ -25,7 +25,7 @@ type FormInputErrors = {
 }
 
 export default function AddAssessmentForm({
-  state,
+  state, show,
   onAddAssessment,
   onClose
 }: AddAssessmentFormProps) {
@@ -93,8 +93,7 @@ export default function AddAssessmentForm({
         updateError('name', 'Please enter a valid name.');
         return;
     }
-
-    onAddAssessment(currentInput, state);
+    onAddAssessment(currentInput, state); //returns the current input fields and the type of assessment (exam, test, other)
     clearInputs(); // Clear input after submitting
     clearErrors(); // Clear error message after submitting
     onClose(); // Close the form
@@ -103,13 +102,13 @@ export default function AddAssessmentForm({
 
   return (
     <Modal
-      open={state !== 'NotActive'}
+      open={show}
       onClose={onClose}
       aria-labelledby="add-Assessment-modal"
       aria-describedby="add-Assessment-modal-description"
       closeAfterTransition
     >
-      <Fade in={state !== 'NotActive'}>
+      <Fade in={show}>
         <div className={styles.modal}>
           <div className={styles.header}>
             <h2>Add {state + (state === 'Other' ? " Assessment" : "")}</h2>
