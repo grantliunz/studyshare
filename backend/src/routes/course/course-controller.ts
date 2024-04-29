@@ -37,15 +37,11 @@ export const createCourse = async (
     }
 
     // create a new course instance and add code and assessments if available
-<<<<<<< HEAD:backend/src/course/course-controller.ts
     const course = new Course({
-      Name,
-      Code,
-      University: req.params.universityId
+      name,
+      code,
+      university: req.params.universityId
     });
-=======
-    const course = new Course({ name, code });
->>>>>>> be15311 (refactror: refactor routes folder structure):backend/src/routes/course/course-controller.ts
 
     // save the course to the database
     const createdCourse = await course.save();
