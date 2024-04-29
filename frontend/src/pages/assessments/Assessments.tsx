@@ -3,17 +3,25 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import AssessmentCard from "./AssessmentCard";
 import AddAssessmentButton from "./AddAssessmentButton";
 import styles from './Assessments.module.css';
+import AssessmentCardOther from "./AssessmentCardOther";
+import AddUniversityForm from "../university/AddUniversityForm";
+import AddAssessmentForm from "./AddAssessmentForm";
 
 interface AssessmentsPageProps {
     Name: string;
     Code?: string;
     // Assessments?: AssessmentDisplayDTO[];
     Assessments: any[]; // replace when backend is ready
-
 }
 
-export default function Assessments(props?: AssessmentsPageProps) {
+export enum AssessmentType {
+    NotActive = "NotActive",
+    Exam = "Exam",
+    Test = "Test",
+    Other = "Other"
+}
 
+export default function Assessments(props?: AssessmentsPageProps) { // change to just an id and fetch the data from the backend
     // remove this section when backend is ready
     if (props?.Assessments === undefined){
         // default course
@@ -70,9 +78,9 @@ export default function Assessments(props?: AssessmentsPageProps) {
     }
 
     const [matchingAssessments, setMatchingAssessments] = useState(props.Assessments);
+    const [showForm, setShowForm] = useState(AssessmentType.NotActive);
 
     function searchAssessments(searchText: string){
-        console.log(searchText)
         setMatchingAssessments(props.Assessments.filter((assessment) => {
             return assessment.Number.toString().includes(searchText) || 
             assessment.Year.toString().includes(searchText) || 
@@ -80,8 +88,21 @@ export default function Assessments(props?: AssessmentsPageProps) {
         })); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
     }
 
+    const handleOpenForm = (type : AssessmentType) => {
+        console.log(type);
+        setShowForm(type);
+    }
+
+    const handleAddAssessment = async (name: string) => {
+        return; // TODO: implement this 
+    }
+
+    const handleCloseForm = () => {
+        setShowForm(AssessmentType.NotActive);
+    }
+
     return (
-        <div>
+        <div style={{ paddingLeft: '7%', paddingRight: '7%' }}>
             <h1>{props.Name}</h1>
             <SearchBar title="Search for a past paper" onQueryChange={searchAssessments}/>
             
@@ -94,7 +115,7 @@ export default function Assessments(props?: AssessmentsPageProps) {
                         ? <AssessmentCard assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Exam)}/>
                 </div>
 
                 <h2 className={styles.typeHeader}>Tests</h2>
@@ -105,7 +126,7 @@ export default function Assessments(props?: AssessmentsPageProps) {
                         ? <AssessmentCard assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Test)}/>
                 </div>
 
                 <h2 className={styles.typeHeader}>Other</h2>
@@ -113,10 +134,17 @@ export default function Assessments(props?: AssessmentsPageProps) {
                     
                     {matchingAssessments.map((assessment) => 
                         ( assessment.AssessmentType === "Other" 
-                        ? <AssessmentCard assessment={assessment}/>
+                        ? <AssessmentCardOther assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    
+                    <AddAssessmentForm
+                        state={showForm}
+                        onAddAssessment={handleAddAssessment}
+                        onClose={handleCloseForm}
+                    />
+
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Other)}/>
                 </div>
             </div>
         </div>

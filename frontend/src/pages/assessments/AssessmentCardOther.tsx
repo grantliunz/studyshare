@@ -2,12 +2,13 @@ import { Button } from "@mui/material";
 import styles from './AssessmentCard.module.css';
 
 
-type AssessmentCardProps = {
+type AssessmentCardOtherProps = {
     assessment: {
         AssessmentType: string;
         Number: number;
         Year: number;
         Semester: string;
+        Name?: string;
     }
 }
 // interface AssessmentCardProps {
@@ -17,7 +18,7 @@ type AssessmentCardProps = {
 //     Semester: string;
 // }
 
-export default function AssessmentCard({assessment}: AssessmentCardProps) {
+export default function AssessmentCardOther({assessment}: AssessmentCardOtherProps) {
     return (
         <Button variant="contained" sx={{
             borderRadius: '10px',
@@ -25,7 +26,7 @@ export default function AssessmentCard({assessment}: AssessmentCardProps) {
         }}
         style={{
             display: 'block',
-            width: '200px',
+            width: '300px',
             backgroundColor: '#D9D9D9',
             color: 'black',
             textTransform: 'none',
