@@ -51,7 +51,6 @@ export default function CoursePage() {
   } = usePost<PostCourse, Course>(`${API.postCourse}/${id}`, mapGetCourseData);
 
   useEffect(() => {
-    console.log(yearLevels);
     if (!query.trim() && yearLevels.length === 0) {
       setDisplayedData(courseData);
     } else {

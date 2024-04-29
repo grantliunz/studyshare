@@ -1,98 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AssessmentCard from './AssessmentCard';
 import AddAssessmentButton from './AddAssessmentButton';
 import styles from './Assessments.module.css';
 import AssessmentCardOther from './AssessmentCardOther';
-import AddUniversityForm from '../university/AddUniversityForm';
 import AddAssessmentForm, { FormInputs } from './AddAssessmentForm';
 import { useParams } from 'react-router-dom';
 import useGet from '../../hooks/useGet';
 import { Assessment, AssessmentType } from '../../types/assessment';
 import API from '../../util/api';
-
-interface AssessmentsPageProps {
-  Name: string;
-  Code?: string;
-  // Assessments?: AssessmentDisplayDTO[];
-  Assessments: any[]; // replace when backend is ready
-}
+import { CircularProgress } from '@mui/material';
+import { Course } from '../../types/types';
 
 export default function Assessments() {
-  // change to just an id and fetch the data from the backend
-  // remove this section when backend is ready
-  //   if (props?.Assessments === undefined) {
-  //     // default course
-  //     props = {
-  //       Name: 'Default Course Name',
-  //       Code: 'ABC 123',
-  //       Assessments: [
-  //         {
-  //           AssessmentType: 'Exam',
-  //           Number: 1,
-  //           Year: 2019,
-  //           Semester: 'First'
-  //         },
-  //         {
-  //           AssessmentType: 'Exam',
-  //           Number: 2,
-  //           Year: 2019,
-  //           Semester: 'Second'
-  //         },
-  //         {
-  //           AssessmentType: 'Test',
-  //           Number: 3,
-  //           Year: 2020,
-  //           Semester: 'Second'
-  //         },
-  //         {
-  //           AssessmentType: 'Other',
-  //           Number: 3,
-  //           Year: 2020,
-  //           Semester: 'Second',
-  //           Name: 'Practise Exam 1'
-  //         },
-  //         {
-  //           AssessmentType: 'Exam',
-  //           Number: 2,
-  //           Year: 2018,
-  //           Semester: 'Second'
-  //         },
-  //         {
-  //           AssessmentType: 'Exam',
-  //           Number: 2,
-  //           Year: 2022,
-  //           Semester: 'Second'
-  //         },
-  //         {
-  //           AssessmentType: 'Exam',
-  //           Number: 2,
-  //           Year: 2023,
-  //           Semester: 'Second'
-  //         }
-  //       ]
-  //     };
-  //   }
-
   const { courseId } = useParams();
   console.log(courseId);
 
   const {
-    data: polledAssessemets,
+    data: course,
+    isLoading: isFetchingCourse,
+    error: getCourseError
+  } = useGet<Course>(`${API.getCourse}/${courseId}`, undefined);
+
+  const {
+    data: assessments,
     isLoading: isFetchingAssessments,
     error: getAssessmentsError
-  } = useGet<Assessment[]>(`${API.getCourseAssessments}/${courseId}`);
+  } = useGet<Assessment[]>(`${API.getCourseAssessments}/${courseId}`, []);
 
   const [assessmentTypeState, setAssessmentTypeState] =
-    useState<AssessmentType>(AssessmentType.ASSIGNMENT);
+    useState<AssessmentType>(AssessmentType.EXAM);
   const [showForm, setShowForm] = useState(false);
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [searchText, setSearchText] = useState<string>('');
+  // const [assessments, setAssessments] = useState<Assessment[]>([]);
 
-  useEffect(() => {
-    if (polledAssessemets) {
-      setAssessments(polledAssessemets);
-    }
-  }, [polledAssessemets]);
+  // useEffect(() => {
+  //   if (polledAssessemets) {
+  //     setAssessments(polledAssessemets);
+  //   }
+  // }, [polledAssessemets]);
 
   function matchString(assessment: any, searchText: string) {
     const str =
@@ -122,11 +68,12 @@ export default function Assessments() {
   }
 
   function searchAssessments(searchText: string) {
-    setAssessments(
-      assessments.filter((assessment) => {
-        return matchString(assessment, searchText);
-      })
-    ); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
+    setSearchText(searchText);
+    // setAssessments(
+    //   assessments.filter((assessment) => {
+    //     return matchString(assessment, searchText);
+    //   })
+    // ); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
   }
 
   const handleOpenForm = (type: AssessmentType) => {
@@ -147,9 +94,14 @@ export default function Assessments() {
     setShowForm(false);
   };
 
+  if (isFetchingAssessments || isFetchingCourse) {
+    return <CircularProgress />;
+  }
+
   return (
     <div style={{ paddingLeft: '7%', paddingRight: '7%' }}>
-      <h1>PLACEHOLDER TEXT</h1>
+      <h1>{course?.code}</h1>
+      <h2>{course?.name}</h2>
       <SearchBar
         title="Search for a past paper"
         onQueryChange={searchAssessments}
@@ -158,11 +110,14 @@ export default function Assessments() {
       <div>
         <h2 className={styles.typeHeader}>Exams</h2>
         <div className={styles.assessmentType}>
-          {assessments.map((assessment) =>
-            assessment.type === 'Exam' ? (
-              <AssessmentCard assessment={assessment} />
-            ) : null
-          )}
+          {assessments &&
+            assessments
+              .filter((assessment) => matchString(assessment, searchText))
+              .map((assessment) =>
+                assessment.type === 'Exam' ? (
+                  <AssessmentCard assessment={assessment} />
+                ) : null
+              )}
           <AddAssessmentButton
             handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
           />
@@ -170,11 +125,12 @@ export default function Assessments() {
 
         <h2 className={styles.typeHeader}>Tests</h2>
         <div className={styles.assessmentType}>
-          {assessments.map((assessment) =>
-            assessment.type === 'Test' ? (
-              <AssessmentCard assessment={assessment} />
-            ) : null
-          )}
+          {assessments &&
+            assessments.map((assessment) =>
+              assessment.type === 'Test' ? (
+                <AssessmentCard assessment={assessment} />
+              ) : null
+            )}
           <AddAssessmentButton
             handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
           />
@@ -182,11 +138,12 @@ export default function Assessments() {
 
         <h2 className={styles.typeHeader}>Other</h2>
         <div className={styles.assessmentType}>
-          {assessments.map((assessment) =>
-            assessment.type === 'Other' ? (
-              <AssessmentCardOther assessment={assessment} />
-            ) : null
-          )}
+          {assessments &&
+            assessments.map((assessment) =>
+              assessment.type === 'Other' ? (
+                <AssessmentCardOther assessment={assessment} />
+              ) : null
+            )}
 
           <AddAssessmentForm
             state={assessmentTypeState}
