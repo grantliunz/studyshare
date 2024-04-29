@@ -4,7 +4,7 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
-import { Rating } from '../pages/assessment/Assessment';
+import { Rating } from '../pages/assessment/AssessmentPage';
 
 type UpDownVoteProps = {
   rating: Rating;

@@ -1,4 +1,4 @@
-import { Answer } from './Assessment';
+import { Answer } from './AssessmentPage';
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
@@ -6,6 +6,7 @@ import CommentCard from './CommentCard';
 import { IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import ReactQuill from 'react-quill';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -34,8 +35,14 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   };
 
   return (
-    <>
-      <div style={{ alignItems: 'center', display: 'flex', columnGap: '16px' }}>
+    <div style={{ overflow: 'hidden', width: '100%' }}>
+      <div
+        style={{
+          alignItems: 'center',
+          columnGap: '12px',
+          display: 'flex'
+        }}
+      >
         <UpDownVote
           rating={answer.rating}
           style={{
@@ -50,18 +57,24 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           style={{
             alignItems: 'center',
             backgroundColor: '#d9d9d9',
-            columnGap: '24px',
+            columnGap: '16px',
             display: 'flex',
             width: '100%',
-            padding: '12px'
+            overflow: 'hidden',
+            padding: '0px 12px'
           }}
         >
           <PersonCard
             name={answer.author}
-            avatarSize="36px"
-            style={{ alignItems: 'center' }}
+            avatarSize="32px"
+            style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />
-          {answer.text}
+          <ReactQuill
+            style={{ overflow: 'hidden', height: 'fit-content' }}
+            value={answer.text}
+            readOnly={true}
+            theme={'bubble'}
+          />
         </div>
       </div>
       <div style={{ marginLeft: '46px' }}>
@@ -89,7 +102,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  rowGap: '20px'
+                  rowGap: '12px'
                 }}
               >
                 {answer.comments.map((comment, i) => (
@@ -134,7 +147,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           />
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

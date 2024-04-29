@@ -1,4 +1,4 @@
-import { Question } from '../pages/assessment/Assessment';
+import { Question } from '../types/assessment';
 
 export function findNextQuestionNumber(
   parentHierarchy: string[],

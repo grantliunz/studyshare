@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex-grow: 1;
+  overflow-x: hidden;
+}
+
+.questionsTabContainer {
+  background-color: #e8e9ec;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}

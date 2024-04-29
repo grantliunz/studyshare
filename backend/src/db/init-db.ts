@@ -3,8 +3,8 @@ dotenv.config();
 
 import mongoose from 'mongoose';
 // TODO import your schema here
-import University from '../university/university-model';
-import Course from '../course/course-model';
+import University from '../routes/university/university-model';
+import Course from '../routes/course/course-model';
 
 // Hardcoded a University list for testing
 const university = new University({

@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
 import University from './university-model';
-import Course from './../course/course-model';
+import Course from '../course/course-model';
 import { CreateUniversityDTO } from './university-dto';
 
-import { getRandomClockTower } from './../utils/clockTower';
+import { getRandomClockTower } from '../../utils/clockTower';
 
 // Controller function to create a new university
 export const createUniversity = async (

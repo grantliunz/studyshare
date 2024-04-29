@@ -50,7 +50,7 @@ export default function Editor({ value, setValue }: editorProps) {
     <div className={styles.container}>
       <div
         style={{
-          height: '600px',
+          height: '100%',
           overflow: 'hidden',
           paddingBottom: '60px'
         }}
