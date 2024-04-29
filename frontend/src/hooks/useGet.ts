@@ -28,7 +28,7 @@ export default function useGet<T>(
       setLoading(false);
     }
     fetchData();
-  }, [url, refreshToggle, mappingDTO]);
+  }, [url, refreshToggle]);
 
   function refresh() {
     setRefreshToggle(!refreshToggle);

@@ -45,62 +45,29 @@ const traverseSubQuestion = (
 const AssessmentPage = () => {
   const { user } = useAuth();
   const { id } = useParams();
-  const [assessmentId, setAssessmentId] = useState<string>(
-    '662f489ffb97d36123d48ee7'
-  );
+
   const {
-    data: polledAssessment,
+    data: assessment,
     isLoading: isFetchingAssessment,
     refresh: refreshAssessment
-  } = useGet<Assessment>(`${API.getAssessment}/${assessmentId}`, null);
+  } = useGet<Assessment>(`${API.getAssessment}/${id}`);
 
-  console.log(polledAssessment);
-  // const [assessment, setAssessment] = useState<Assessment>(dummyAssessment);
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionWithFullNumber>();
-
   const [orderedQuestionsArray, setOrderedQuestionsArray] =
     useState<QuestionWithFullNumber[]>();
-  if (polledAssessment) {
-    setOrderedQuestionsArray(
-      buildOrderedQuestionsArray(polledAssessment.questions)
-    );
-  }
-  const [prevQuestion, setPrevQuestion] = useState<
-    QuestionWithFullNumber | undefined
-  >(undefined);
-  const [nextQuestion, setNextQuestion] = useState<
-    QuestionWithFullNumber | undefined
-  >(undefined);
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
   const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
     string[]
   >([]);
 
   useEffect(() => {
-    if (currentQuestion && orderedQuestionsArray) {
-      const currIndex = orderedQuestionsArray.findIndex((question) =>
-        arrayEquals(question.hierarchy, currentQuestion.hierarchy)
+    if (assessment) {
+      setOrderedQuestionsArray(
+        buildOrderedQuestionsArray(assessment.questions)
       );
-
-      setPrevQuestion(
-        currIndex > 0 ? orderedQuestionsArray[currIndex - 1] : undefined
-      );
-
-      setNextQuestion(
-        currIndex < orderedQuestionsArray.length - 1
-          ? orderedQuestionsArray[currIndex + 1]
-          : undefined
-      );
-    } else {
-      setNextQuestion(undefined);
-      setPrevQuestion(undefined);
     }
-  }, [
-    currentQuestion?.hierarchy.join(''),
-    polledAssessment?.id,
-    orderedQuestionsArray
-  ]);
+  }, [assessment]);
 
   const handleAddQuestion = (parentHierarchy: string[]) => {
     setNewQuestionParentHierarchy(parentHierarchy);
@@ -116,7 +83,7 @@ const AssessmentPage = () => {
     questionWithFullNumber: QuestionWithFullNumber,
     answer: string
   ) => {
-    if (polledAssessment) {
+    if (assessment) {
       const newAnswer = {
         text: answer,
         author: user?.email || 'Anonymous',
@@ -140,7 +107,9 @@ const AssessmentPage = () => {
     postData: addAssessment,
     isLoading: isAddingAssessment,
     error: addAssessmentError
-  } = usePost<Assessment, Assessment>(`${API.postAssessment}/${id}`);
+  } = usePost<Assessment, Assessment>(
+    `${API.postAssessment}/662c8fc218556c7b26bf7971`
+  );
 
   const handleAddAssessment = async () => {
     if (id) {
@@ -155,13 +124,13 @@ const AssessmentPage = () => {
 
   return (
     <div className={styles.container}>
-      {!polledAssessment || !orderedQuestionsArray ? (
+      {!assessment || !orderedQuestionsArray ? (
         <div>Error!</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
             <Button onClick={() => handleAddAssessment()}>Click me</Button>
-            {polledAssessment.questions.map((question) => (
+            {assessment.questions.map((question) => (
               <QuestionNumber
                 key={question.number}
                 question={question}
@@ -185,13 +154,19 @@ const AssessmentPage = () => {
             </IconButton>
           </div>
           {currentQuestion ? (
-            orderedQuestionsArray.map((question) => (
+            orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
                 key={question.hierarchy.join('')}
                 currentQuestion={currentQuestion}
                 questionWithFullNumber={question}
-                prevQuestionWithFullNumber={prevQuestion}
-                nextQuestionWithFullNumber={nextQuestion}
+                prevQuestionWithFullNumber={
+                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                }
+                nextQuestionWithFullNumber={
+                  index < orderedQuestionsArray.length - 1
+                    ? orderedQuestionsArray[index + 1]
+                    : undefined
+                }
                 setQuestion={setCurrentQuestion}
                 handleSubmitAnswer={handleSubmitAnswer}
               />
@@ -207,14 +182,14 @@ const AssessmentPage = () => {
               Click a question to get started!
             </p>
           )}
-          {polledAssessment.questions.length > 0 && (
+          {assessment.questions.length > 0 && (
             <NewQuestion
               open={newQuestionOpen}
               handleClose={handleNewQuestionClose}
               parent={newQuestionParentHierarchy}
               defaultQuestionNumber={findNextQuestionNumber(
                 newQuestionParentHierarchy,
-                polledAssessment.questions
+                assessment.questions
               )}
             />
           )}
