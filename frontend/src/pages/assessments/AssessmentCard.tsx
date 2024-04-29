@@ -18,6 +18,22 @@ type AssessmentCardProps = {
 // }
 
 export default function AssessmentCard({assessment}: AssessmentCardProps) {
+
+    function mapSemesterToString(semester: string){
+        switch (semester){
+            case "First":
+                return "Semester 1";
+            case "Second":
+                return "Semester 2";
+            case "Third":
+                return "Semester 3";
+            case "Other":
+                return "Other Semester";
+            default:
+                return semester;
+        }
+    }
+
     return (
         <Button variant="contained" sx={{
             borderRadius: '10px',
@@ -33,7 +49,7 @@ export default function AssessmentCard({assessment}: AssessmentCardProps) {
             
         }}>
             <p className={styles.yearText}>{assessment.Year}</p>
-            <p className={styles.semesterText}> {assessment.Semester + " Semester"}</p>
+            <p className={styles.semesterText}> {mapSemesterToString(assessment.Semester)}</p>
         </Button>
     );
 };
