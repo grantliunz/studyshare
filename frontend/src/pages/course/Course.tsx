@@ -40,7 +40,8 @@ export default function CoursePage() {
   const {
     data: courseData,
     isLoading: isLoadingCourses,
-    refresh: refreshCourses
+    refresh: refreshCourses,
+    error: errorString = null
   } = useGet<Course[]>(`${API.getCourses}/${id}`, [], mapGetCoursesData);
 
   const {
@@ -104,58 +105,47 @@ export default function CoursePage() {
   const onYearLevelChange = (event: SelectChangeEvent<string[]>) => {
     setYearLevels(event.target.value as string[]);
   };
-
   return (
     <div className={style.container}>
-      <div className={style.searchAndFilter}>
-        <SearchBar title="Search for a course" onQueryChange={onQueryChange} />
-
-        <FormControl className={style.yearLevelSelect}>
-          <InputLabel id="year-level-select-label">Select Year</InputLabel>
-          <Select
-            labelId="year-level-select-label"
-            id="year-level-select"
-            multiple
-            value={yearLevels}
-            onChange={onYearLevelChange}
-            input={<OutlinedInput label="Select Year" />}
-            renderValue={(selected) =>
-              selected.map((value) => value + '00').join(', ')
-            }
-          >
-            <MenuItem value="1">
-              <FormControlLabel
-                control={<Checkbox checked={yearLevels.includes('1')} />}
-                label="100"
-              />
-            </MenuItem>
-            <MenuItem value="2">
-              <FormControlLabel
-                control={<Checkbox checked={yearLevels.includes('2')} />}
-                label="200"
-              />
-            </MenuItem>
-            <MenuItem value="3">
-              <FormControlLabel
-                control={<Checkbox checked={yearLevels.includes('3')} />}
-                label="300"
-              />
-            </MenuItem>
-            <MenuItem value="4">
-              <FormControlLabel
-                control={<Checkbox checked={yearLevels.includes('4')} />}
-                label="400"
-              />
-            </MenuItem>
-            <MenuItem value="7">
-              <FormControlLabel
-                control={<Checkbox checked={yearLevels.includes('7')} />}
-                label="700"
-              />
-            </MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      {errorString ? (
+        <div>{errorString}</div>
+      ) : (
+        !isLoadingCourses && (
+          <div className={style.searchAndFilter}>
+            <SearchBar
+              title="Search for a course"
+              onQueryChange={onQueryChange}
+            />
+            <FormControl className={style.yearLevelSelect}>
+              <InputLabel id="year-level-select-label">Select Year</InputLabel>
+              <Select
+                labelId="year-level-select-label"
+                id="year-level-select"
+                multiple
+                value={yearLevels}
+                onChange={onYearLevelChange}
+                input={<OutlinedInput label="Select Year" />}
+                renderValue={(selected) =>
+                  selected.map((value) => value + '00').join(', ')
+                }
+              >
+                {[1, 2, 3, 4, 7].map((value) => (
+                  <MenuItem key={value} value={value.toString()}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={yearLevels.includes(value.toString())}
+                        />
+                      }
+                      label={value * 100}
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        )
+      )}
 
       {isLoadingCourses && <CircularProgress />}
       {displayedData &&

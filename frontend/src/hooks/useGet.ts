@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Mapper } from '../mappers/mapper';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
@@ -12,6 +12,7 @@ export default function useGet<T>(
   const [data, setData] = useState<T | null>(initialState);
   const [isLoading, setLoading] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -20,8 +21,9 @@ export default function useGet<T>(
         const response = await axios.get(`${BACKEND_URL}${url}`);
         const mappedData = mappingDTO(response.data);
         setData(mappedData);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching data:', error);
+        setError(error.response?.data?.message || 'An error occurred');
       }
       setLoading(false);
     }
@@ -32,5 +34,5 @@ export default function useGet<T>(
     setRefreshToggle(!refreshToggle);
   }
 
-  return { data, isLoading, refresh };
+  return { data, isLoading, refresh, error };
 }
