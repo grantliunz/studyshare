@@ -93,7 +93,7 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
         setShowForm(type);
     }
 
-    const handleAddAssessment = async (name: string) => {
+    const handleAddAssessment = async (formInputs : any[], assessmentType : AssessmentType) => { // any[] is used for now, i guess you could use a DTO later
         return; // TODO: implement this 
     }
 
