@@ -4,10 +4,10 @@ import { CreateAnswerDTO } from '../answer/answer-dto';
 import { CreateRewardDTO } from '../reward/reward-dto';
 
 export interface CreateUserDTO extends Document {
-  Name: string;
-  Email?: string;
-  Questions: CreateQuestionDTO[] | Types.ObjectId[];
-  Answers: CreateAnswerDTO[] | Types.ObjectId[];
-  WatchList: CreateUserDTO[] | Types.ObjectId[];
-  Rewards: CreateRewardDTO[] | Types.ObjectId[];
+  name: string;
+  email?: string;
+  questions: CreateQuestionDTO[] | Types.ObjectId[];
+  answers: CreateAnswerDTO[] | Types.ObjectId[];
+  watchList: CreateUserDTO[] | Types.ObjectId[];
+  rewards: CreateRewardDTO[] | Types.ObjectId[];
 }

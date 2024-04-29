@@ -6,18 +6,18 @@ const mapGetUniversitiesData: Mapper<University[]> = (
   // Assuming the API response data is an array of objects
   return data.map((universityData: any) => ({
     id: universityData._id,
-    name: universityData.Name,
-    image: universityData.Image,
-    courses: universityData.Courses,
+    name: universityData.name,
+    image: universityData.image,
+    courses: universityData.courses,
     createdAt: new Date(universityData.createdAt.seconds * 1000) // Convert seconds to milliseconds
   }));
 };
 const mapGetUniversityData: Mapper<University> = (data: any): University => {
   return {
     id: data._id,
-    name: data.Name,
-    image: data.Image,
-    courses: data.Courses,
+    name: data.name,
+    image: data.image,
+    courses: data.courses,
     createdAt: new Date(data.createdAt.seconds * 1000) // Convert seconds to milliseconds
   };
 };

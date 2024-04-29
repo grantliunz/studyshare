@@ -47,7 +47,7 @@ export const createCourse = async (
     const createdCourse = await course.save();
 
     // add the course ID to the university's courses array
-    university.Courses.push(createdCourse._id);
+    university.courses.push(createdCourse._id);
 
     // save the university with the updated courses array
     await university.save();
@@ -87,7 +87,7 @@ export const getAllCoursesInUniversity = async (
     }
 
     // fetch all courses in the university
-    const courses = await Course.find({ _id: { $in: university.Courses } });
+    const courses = await Course.find({ _id: { $in: university.courses } });
 
     res.status(200).json(courses); // respond with all courses in the university
   } catch (error) {
@@ -127,7 +127,7 @@ export const updateCourse = async (
     // find the course by its ID and update it
     const updatedCourse = await Course.findByIdAndUpdate(
       req.params.id,
-      { name: name, code: code },
+      { name, code },
       { new: true }
     );
 

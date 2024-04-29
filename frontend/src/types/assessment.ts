@@ -1,7 +1,6 @@
 export type Question = {
   number: string;
   content?: {
-    image?: string;
     text: string;
     answers: Answer[]; // temp
     watchers: string[]; // temp
@@ -13,7 +12,6 @@ export type Question = {
 };
 
 export type Answer = {
-  image?: string;
   text?: string;
   author: string;
   rating: Rating;
@@ -22,7 +20,6 @@ export type Answer = {
 };
 
 export type Comment = {
-  image?: string;
   text?: string;
   author: string;
   rating: Rating;
@@ -37,9 +34,24 @@ export type Rating = {
 export type Assessment = {
   courseId: string;
   id: string;
-  type: 'Exam' | 'Test' | 'Lab' | 'Assignment' | 'Other';
+  type: AssessmentType;
   number?: number;
   year: number;
-  semester: 'First' | 'Second' | 'Third' | 'Other';
+  semester: SemesterType;
   questions: Question[];
 };
+
+export enum AssessmentType {
+  EXAM = 'Exam',
+  TEST = 'Test',
+  LAB = 'Lab',
+  ASSIGNMENT = 'Assignment',
+  OTHER = 'Other'
+}
+
+export enum SemesterType {
+  FIRST = 'First',
+  SECOND = 'Second',
+  THIRD = 'Third',
+  OTHER = 'Other'
+}

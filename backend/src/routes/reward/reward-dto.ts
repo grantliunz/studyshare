@@ -1,5 +1,6 @@
 export interface CreateRewardDTO {
-    Upvotes?: number;
-    Downvotes?: number;    
-  }
-  
+  upvotes?: number;
+  downvotes?: number;
+}
+
+// why is it upvotes and downvotes

@@ -1,32 +1,34 @@
 import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface IComment extends Document {
-    Text: string;
-    PreviousComment: Types.ObjectId;
-    Author: Types.ObjectId;
-    Rating: Types.ObjectId;
+  text: string;
+  previousComment: Types.ObjectId;
+  author: Types.ObjectId;
+  rating: Types.ObjectId;
 }
 
-
-const commentSchema: Schema<IComment> = new Schema({
-    Text: {
-        type: String,
+const commentSchema: Schema<IComment> = new Schema(
+  {
+    text: {
+      type: String
     },
-    PreviousComment: {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
+    previousComment: {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment'
     },
-    Author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
     },
-    Rating: {
-        type: Schema.Types.ObjectId,
-        ref: 'Rating'
+    rating: {
+      type: Schema.Types.ObjectId,
+      ref: 'Rating'
     }
-}, {
+  },
+  {
     timestamps: {}
-});
+  }
+);
 
 const Comment: Model<IComment> = mongoose.model('Comment', commentSchema);
 export default Comment;

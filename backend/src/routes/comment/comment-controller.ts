@@ -15,7 +15,7 @@ export const createComment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { Text, PreviousComment, Author } = req.body; // assuming request body contains comment data
+    const { text, previousComment, author } = req.body; // assuming request body contains comment data
 
     // Get the answer by its ID
     const answer = await Answer.findById(req.params.answerId);
@@ -32,9 +32,9 @@ export const createComment = async (
 
     // create a new comment instance
     const comment = new Comment({
-      Text,
-      PreviousComment,
-      Author,
+      text,
+      previousComment,
+      author,
       Rating: createdRating._id
     });
 
@@ -42,7 +42,7 @@ export const createComment = async (
     const createdComment = await comment.save();
 
     // add the comment ID to the answer's comments
-    answer.Comments.push(createdComment._id);
+    answer.comments.push(createdComment._id);
 
     // save the answer with the updated comments array
     await answer.save();
@@ -67,7 +67,7 @@ export const getAllComments = async (
     }
 
     // fetch all comments from the database
-    const comments = await Comment.find({ _id: { $in: answer.Comments } });
+    const comments = await Comment.find({ _id: { $in: answer.comments } });
 
     res.status(200).json(comments); // respond with the fetched comments
   } catch (error) {
@@ -104,7 +104,7 @@ export const updateComment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { Text, PreviousComment, Author } = req.body; // assuming request body contains updated comment data
+    const { text, previousComment, author } = req.body; // assuming request body contains updated comment data
 
     // Get the comment by its ID
     const comment = await Comment.findById(req.params.commentId);
@@ -114,7 +114,7 @@ export const updateComment = async (
     }
 
     // update the comment fields
-    comment.Text = Text;
+    comment.text = text;
 
     // save the updated comment to the database
     const updatedComment = await comment.save();

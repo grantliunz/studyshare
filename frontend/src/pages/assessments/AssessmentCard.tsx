@@ -1,15 +1,15 @@
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
-
+import { AssessmentType, SemesterType } from '../../types/assessment';
 
 type AssessmentCardProps = {
-    assessment: {
-        AssessmentType: string;
-        Number: number;
-        Year: number;
-        Semester: string;
-    }
-}
+  assessment: {
+    type: AssessmentType;
+    number?: number;
+    year: number;
+    semester: SemesterType;
+  };
+};
 // interface AssessmentCardProps {
 //     AssessmentType: string;
 //     Number: number;
@@ -17,39 +17,43 @@ type AssessmentCardProps = {
 //     Semester: string;
 // }
 
-export default function AssessmentCard({assessment}: AssessmentCardProps) {
-
-    function mapSemesterToString(semester: string){
-        switch (semester){
-            case "First":
-                return "Semester 1";
-            case "Second":
-                return "Semester 2";
-            case "Third":
-                return "Semester 3";
-            case "Other":
-                return "Other Semester";
-            default:
-                return semester;
-        }
+export default function AssessmentCard({ assessment }: AssessmentCardProps) {
+  function mapSemesterToString(semester: string) {
+    switch (semester) {
+      case 'First':
+        return 'Semester 1';
+      case 'Second':
+        return 'Semester 2';
+      case 'Third':
+        return 'Semester 3';
+      case 'Other':
+        return 'Other Semester';
+      default:
+        return semester;
     }
+  }
 
-    return (
-        <Button variant="contained" sx={{
-            borderRadius: '10px',
-            boxShadow: 3
-        }}
-        style={{
-            display: 'block',
-            width: '200px',
-            backgroundColor: '#D9D9D9',
-            color: 'black',
-            textTransform: 'none',
-            margin: '10px',
-            
-        }}>
-            <p className={styles.yearText}>{assessment.Year}</p>
-            <p className={styles.semesterText}> {mapSemesterToString(assessment.Semester)}</p>
-        </Button>
-    );
-};
+  return (
+    <Button
+      variant="contained"
+      sx={{
+        borderRadius: '10px',
+        boxShadow: 3
+      }}
+      style={{
+        display: 'block',
+        width: '200px',
+        backgroundColor: '#D9D9D9',
+        color: 'black',
+        textTransform: 'none',
+        margin: '10px'
+      }}
+    >
+      <p className={styles.yearText}>{assessment.year}</p>
+      <p className={styles.semesterText}>
+        {' '}
+        {mapSemesterToString(assessment.semester)}
+      </p>
+    </Button>
+  );
+}

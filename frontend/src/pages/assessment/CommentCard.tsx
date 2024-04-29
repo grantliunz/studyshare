@@ -1,6 +1,6 @@
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
-import { Comment } from './AssessmentPage';
+import { Comment } from '../../types/assessment';
 
 type CommentCardProps = {
   comment: Comment;

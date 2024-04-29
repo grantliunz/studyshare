@@ -15,7 +15,7 @@ export const createAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { AnswerText, AnswerImage, Author } = req.body; // assuming request body contains answer data
+    const { answerText, answerImage, author } = req.body; // assuming request body contains answer data
 
     // Get the question by its ID
     const question = await Question.findById(req.params.questionId);
@@ -25,23 +25,23 @@ export const createAnswer = async (
     }
 
     // create a new Rating instance
-    const rating = new Rating({ Upvotes: 0, Downvotes: 0 });
+    const rating = new Rating({ upvotes: 0, downvotes: 0 });
 
     // save the rating to the database
     const createdRating = await rating.save();
 
     // create a new answer instance
     const answer = new Answer({
-      AnswerText,
-      AnswerImage,
-      Author,
-      Rating: createdRating._id
+      answerText,
+      answerImage,
+      author,
+      rating: createdRating._id
     });
     // save the answer to the database
     const createdAnswer = await answer.save();
 
     // add the answer ID to the question's answers
-    question.Answers.push(createdAnswer._id);
+    question.content?.answers.push(createdAnswer._id);
 
     // save the question with the updated answers array
     await question.save();
@@ -66,7 +66,9 @@ export const getAllAnswers = async (
     }
 
     // fetch all answers from the database
-    const answers = await Answer.find({ _id: { $in: question.Answers } });
+    const answers = await Answer.find({
+      _id: { $in: question.content?.answers }
+    });
 
     res.status(200).json(answers); // respond with all answers
   } catch (error) {
@@ -103,7 +105,7 @@ export const updateAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { AnswerText, AnswerImage } = req.body; // assuming request body contains answer data
+    const { answerText, answerImage } = req.body; // assuming request body contains answer data
 
     // Get the answer by its ID
     const answer = await Answer.findById(req.params.answerId);
@@ -113,8 +115,8 @@ export const updateAnswer = async (
     }
 
     // update the answer properties
-    answer.AnswerText = AnswerText;
-    answer.AnswerImage = AnswerImage ?? '';
+    answer.answerText = answerText;
+    answer.answerImage = answerImage ?? '';
 
     // save the updated answer
     const updatedAnswer = await answer.save();

@@ -3,9 +3,9 @@ import { CreateCommentDTO } from '../comment/comment-dto';
 import { CreateRatingDTO } from '../rating/rating-dto';
 
 export interface CreateAnswerDTO {
-  AnswerText: string;
-  AnswerImage?: string;
-  Rating?: CreateRatingDTO | Types.ObjectId;
-  Comments?: CreateCommentDTO[] | Types.ObjectId[];
-  Author: Types.ObjectId;
+  answerText: string;
+  answerImage?: string;
+  rating?: CreateRatingDTO | Types.ObjectId;
+  comments?: CreateCommentDTO[] | Types.ObjectId[];
+  author: Types.ObjectId;
 }
