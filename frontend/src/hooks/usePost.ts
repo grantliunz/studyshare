@@ -4,7 +4,10 @@ import { Mapper } from '../mappers/mapper';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
-export default function usePost<T, R>(url: string, mappingDTO: Mapper<R>) {
+export default function usePost<T, R>(
+  url: string,
+  mappingDTO: Mapper<R> = (data: any) => data
+) {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

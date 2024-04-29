@@ -15,7 +15,7 @@ export const createCourse = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { Name, Code } = req.body; // assuming request body contains course data
+    const { name, code } = req.body; // assuming request body contains course data
 
     // Get the university by its ID
     const university = await University.findById(req.params.universityId);
@@ -25,8 +25,8 @@ export const createCourse = async (
 
     // check if course with the same name already exists
     const existingCourse = await Course.findOne({
-      Name,
-      Code,
+      name,
+      code,
       University: req.params.universityId
     });
 
@@ -37,11 +37,15 @@ export const createCourse = async (
     }
 
     // create a new course instance and add code and assessments if available
+<<<<<<< HEAD:backend/src/course/course-controller.ts
     const course = new Course({
       Name,
       Code,
       University: req.params.universityId
     });
+=======
+    const course = new Course({ name, code });
+>>>>>>> be15311 (refactror: refactor routes folder structure):backend/src/routes/course/course-controller.ts
 
     // save the course to the database
     const createdCourse = await course.save();
@@ -122,12 +126,12 @@ export const updateCourse = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { Name, Code } = req.body; // assuming request body contains course data
+    const { name, code } = req.body; // assuming request body contains course data
 
     // find the course by its ID and update it
     const updatedCourse = await Course.findByIdAndUpdate(
       req.params.id,
-      { Name, Code },
+      { name: name, code: code },
       { new: true }
     );
 

@@ -1,5 +1,5 @@
 import { Button, IconButton } from '@mui/material';
-import { Question, QuestionWithFullNumber } from './Assessment';
+import { Question, QuestionWithFullNumber } from './AssessmentPage';
 import { useState } from 'react';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';

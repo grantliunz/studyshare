@@ -1,4 +1,4 @@
-import { Answer } from './Assessment';
+import { Answer } from './AssessmentPage';
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
@@ -39,7 +39,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       <div
         style={{
           alignItems: 'center',
-          columnGap: '16px',
+          columnGap: '12px',
           display: 'flex'
         }}
       >
@@ -57,20 +57,20 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           style={{
             alignItems: 'center',
             backgroundColor: '#d9d9d9',
-            columnGap: '24px',
+            columnGap: '16px',
             display: 'flex',
             width: '100%',
             overflow: 'hidden',
-            padding: '24px'
+            padding: '0px 12px'
           }}
         >
           <PersonCard
             name={answer.author}
-            avatarSize="36px"
-            style={{ alignItems: 'center' }}
+            avatarSize="32px"
+            style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />
           <ReactQuill
-            style={{ overflow: 'hidden' }}
+            style={{ overflow: 'hidden', height: 'fit-content' }}
             value={answer.text}
             readOnly={true}
             theme={'bubble'}
@@ -102,7 +102,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  rowGap: '20px'
+                  rowGap: '12px'
                 }}
               >
                 {answer.comments.map((comment, i) => (

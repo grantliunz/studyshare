@@ -7,7 +7,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 export default function useGet<T>(
   url: string,
   initialState: T | null = null,
-  mappingDTO: Mapper<T>
+  mappingDTO: Mapper<T> = (data: any) => data
 ) {
   const [data, setData] = useState<T | null>(initialState);
   const [isLoading, setLoading] = useState(false);

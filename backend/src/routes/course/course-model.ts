@@ -1,26 +1,21 @@
 import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface ICourse extends Document {
-  Name: string;
-  Code: string;
-  University: string;
-  Assessments: Types.ObjectId[];
+  name: string;
+  code: string;
+  assessments: Types.ObjectId[];
 }
 
 const courseSchema: Schema<ICourse> = new Schema(
   {
-    Name: {
+    name: {
       type: String,
       required: true
     },
-    Code: {
+    code: {
       type: String
     },
-    University: {
-      type: String,
-      required: true
-    },
-    Assessments: {
+    assessments: {
       type: [Schema.Types.ObjectId],
       ref: 'Assessment',
       default: []

@@ -29,15 +29,14 @@ export default function NewQuestion({
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      style={{
+        display: 'flex',
+        placeItems: 'center',
+        justifyContent: 'center'
+      }}
     >
       <Box
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '1000px',
-          height: '800px',
           backgroundColor: '#fff',
           padding: '20px',
           borderRadius: '5px',

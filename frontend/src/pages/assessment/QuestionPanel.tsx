@@ -1,6 +1,6 @@
 import { Button, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { QuestionWithFullNumber } from './Assessment';
+import { QuestionWithFullNumber } from './AssessmentPage';
 import { useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
@@ -121,7 +121,7 @@ const QuestionPanel = ({
         ))}
       </div>
       <div
-        style={{ height: '500px', padding: '30px 20px', marginBottom: '100px' }}
+        style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
       >
         <NewAnswer
           handleSubmitAnswer={(answer: string) =>
