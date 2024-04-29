@@ -5,7 +5,7 @@ const API = {
   postCourse: '/course/createCourse',
   postAssessment: '/assessment',
   getAssessment: '/assessment',
-  getCourseAssessments: '/getAllAssessments'
+  getCourseAssessments: '/assessment/getAllAssessments'
 };
 
 export default API;
