@@ -52,7 +52,8 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
                     AssessmentType: "Other",
                     Number: 3,
                     Year: 2020,
-                    Semester: "Second"
+                    Semester: "Second",
+                    Name: "Practise Exam 1"
                 }, 
                 {
                     AssessmentType: "Exam",

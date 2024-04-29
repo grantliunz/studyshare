@@ -11,12 +11,6 @@ type AssessmentCardOtherProps = {
         Name?: string;
     }
 }
-// interface AssessmentCardProps {
-//     AssessmentType: string;
-//     Number: number;
-//     Year: number;
-//     Semester: string;
-// }
 
 export default function AssessmentCardOther({assessment}: AssessmentCardOtherProps) {
     return (
@@ -33,8 +27,8 @@ export default function AssessmentCardOther({assessment}: AssessmentCardOtherPro
             margin: '10px',
             
         }}>
-            <p className={styles.yearText}>{assessment.Year}</p>
-            <p className={styles.semesterText}> {assessment.Semester + " Semester"}</p>
+            <p className={styles.yearText}>{assessment.Name}</p>
+            <p className={styles.otherYearText}> {assessment.Year}</p>
         </Button>
     );
 };
