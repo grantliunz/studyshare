@@ -20,7 +20,6 @@ type UniversityCardProps = {
 
 const UniversityCard = ({ university }: UniversityCardProps) => {
   const navigate = useNavigate();
-  console.log(mapIdToImage(university.image));
   return (
     <Card
       elevation={2}
@@ -50,8 +49,7 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
             padding: '0px',
             width: '100%',
             textOverflow: 'ellipsis',
-            wordBreak: 'break-word',
-            marginBottom: '-30px'
+            wordBreak: 'break-word'
           }}
         >
           <p className={styles.universityName}>{university.name}</p>
