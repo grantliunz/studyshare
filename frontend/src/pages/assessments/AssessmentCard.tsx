@@ -1,12 +1,13 @@
 import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
+import { AssessmentType, SemesterType } from '../../types/assessment';
 
 type AssessmentCardProps = {
   assessment: {
-    AssessmentType: string;
-    Number: number;
-    Year: number;
-    Semester: string;
+    type: AssessmentType;
+    number?: number;
+    year: number;
+    semester: SemesterType;
   };
 };
 // interface AssessmentCardProps {
@@ -48,10 +49,10 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
         margin: '10px'
       }}
     >
-      <p className={styles.yearText}>{assessment.Year}</p>
+      <p className={styles.yearText}>{assessment.year}</p>
       <p className={styles.semesterText}>
         {' '}
-        {mapSemesterToString(assessment.Semester)}
+        {mapSemesterToString(assessment.semester)}
       </p>
     </Button>
   );

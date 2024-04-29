@@ -35,7 +35,7 @@ export const createComment = async (
       text,
       previousComment,
       author,
-      rating: createdRating._id
+      Rating: createdRating._id
     });
 
     // save the comment to the database

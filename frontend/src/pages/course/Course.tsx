@@ -154,7 +154,7 @@ export default function CoursePage() {
             key={index}
             courseCode={course.code}
             courseName={course.name}
-            onClick={() => navigate(`/${id}/${course.id}`)}
+            onClick={() => navigate(`/${id}/${course.id}/assessments`)}
           />
         ))}
       <AddCourseForm
