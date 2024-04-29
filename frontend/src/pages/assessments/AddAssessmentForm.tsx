@@ -83,7 +83,7 @@ export default function AddAssessmentForm({
       return;
     }
 
-    if (currentInput.assessmentNumber <= 0 && state !== 'Other') { // // test for a bad assessment number
+    if (currentInput.assessmentNumber <= 0 && state !== 'Other' && state !=='Exam') { // // test for a bad assessment number
         updateError('assessmentNumber', 'Please enter a valid assessment number.');
         return;
     }
@@ -103,7 +103,9 @@ export default function AddAssessmentForm({
   return (
     <Modal
       open={show}
-      onClose={onClose}
+      onClose={() => {clearInputs();
+        onClose();
+      }}
       aria-labelledby="add-Assessment-modal"
       aria-describedby="add-Assessment-modal-description"
       closeAfterTransition
@@ -132,7 +134,7 @@ export default function AddAssessmentForm({
             /> 
 
             <TextField 
-              disabled={state === 'Other'}
+              disabled={state === 'Other' || state === 'Exam'}
               style={{marginBottom: '10px'}}
               label="Assessment Number"
               variant="outlined"
