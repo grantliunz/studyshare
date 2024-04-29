@@ -37,7 +37,11 @@ export const createCourse = async (
     }
 
     // create a new course instance and add code and assessments if available
-    const course = new Course({ Name, Code });
+    const course = new Course({
+      Name,
+      Code,
+      University: req.params.universityId
+    });
 
     // save the course to the database
     const createdCourse = await course.save();
