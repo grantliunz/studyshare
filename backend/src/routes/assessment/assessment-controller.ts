@@ -14,7 +14,7 @@ export const createAssessment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { type, year, semester, questions = [] } = req.body; // assuming request body contains assessment data
+    const { type, year, semester, questions = [], name, number } = req.body; // assuming request body contains assessment data
 
     // Get the course by its ID
     const course = await Course.findById(req.params.courseId);
@@ -28,7 +28,9 @@ export const createAssessment = async (
       type,
       year,
       semester,
-      course: req.params.courseId
+      course: req.params.courseId,
+      name,
+      number
     });
 
     if (existingAssessment) {
@@ -43,7 +45,8 @@ export const createAssessment = async (
       type,
       year,
       semester,
-      questions
+      questions,
+      name
     });
 
     // save the assessment to the database
@@ -79,7 +82,7 @@ export const getAllAssessmentsInCourse = async (
 ) => {
   try {
     // fetch all assessments from the database
-    const assessments = await Assessment.find({ Course: req.params.courseId });
+    const assessments = await Assessment.find({ course: req.params.courseId });
 
     res.status(200).json(assessments); // respond with all assessments
   } catch (error) {

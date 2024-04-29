@@ -33,7 +33,8 @@ export type Rating = {
 
 export type Assessment = {
   courseId: string;
-  id: string;
+  _id?: string;
+  name?: string;
   type: AssessmentType;
   number?: number;
   year: number;

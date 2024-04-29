@@ -1,7 +1,6 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import {
   Modal,
-  Backdrop,
   Fade,
   TextField,
   Button,
@@ -12,7 +11,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddAssessmentForm.module.css';
-import { AssessmentType } from '../../types/assessment';
+import { AssessmentType, SemesterType } from '../../types/assessment';
 
 interface AddAssessmentFormProps {
   state: AssessmentType;
@@ -22,14 +21,14 @@ interface AddAssessmentFormProps {
 }
 
 export type FormInputs = {
-  assessmentNumber: number;
+  number?: number;
   year: number;
-  semester: string;
-  name: string;
+  semester: SemesterType;
+  name?: string;
 };
 
 type FormInputErrors = {
-  assessmentNumber: string;
+  number: string;
   year: string;
   semester: string;
   name: string;
@@ -42,14 +41,12 @@ export default function AddAssessmentForm({
   onClose
 }: AddAssessmentFormProps) {
   const [currentInput, setCurrentInput] = useState<FormInputs>({
-    assessmentNumber: 0,
     year: 2024,
-    semester: '',
-    name: ''
+    semester: SemesterType.FIRST
   });
   const [currentInputErrors, setCurrentInputErrors] = useState<FormInputErrors>(
     {
-      assessmentNumber: '',
+      number: '',
       year: '',
       semester: '',
       name: ''
@@ -72,16 +69,14 @@ export default function AddAssessmentForm({
 
   function clearInputs() {
     setCurrentInput({
-      assessmentNumber: 0,
       year: 2024,
-      semester: '',
-      name: ''
+      semester: SemesterType.FIRST
     });
   }
 
   function clearErrors() {
     setCurrentInputErrors({
-      assessmentNumber: '',
+      number: '',
       year: '',
       semester: '',
       name: ''
@@ -90,7 +85,7 @@ export default function AddAssessmentForm({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!currentInput.year) return;
     if (currentInput.year < 1980 || currentInput.year > 2024) {
       // test for a bad year
       updateError('year', 'Please enter a valid Year.');
@@ -98,9 +93,9 @@ export default function AddAssessmentForm({
     }
 
     if (
-      currentInput.assessmentNumber <= 0 &&
       state !== 'Other' &&
-      state !== 'Exam'
+      state !== 'Exam' &&
+      (!currentInput.number || currentInput.number <= 0)
     ) {
       // // test for a bad assessment number
       updateError(
@@ -110,7 +105,10 @@ export default function AddAssessmentForm({
       return;
     }
 
-    if (state === 'Other' && !currentInput.name.trim()) {
+    if (
+      state === 'Other' &&
+      (!currentInput.name || !currentInput.name.trim())
+    ) {
       // test for a bad name
       // TODO: Check if the name is already used in the database (optional, can just assume noone tries to make the same assessment twice)
       updateError('name', 'Please enter a valid name.');
@@ -160,13 +158,12 @@ export default function AddAssessmentForm({
               style={{ marginBottom: '10px' }}
               label="Assessment Number"
               variant="outlined"
-              value={currentInput.assessmentNumber}
-              onChange={(e) => updateInput('assessmentNumber', e.target.value)}
+              onChange={(e) => updateInput('number', e.target.value)}
               type="number"
               required
               fullWidth
               className={styles.inputField}
-              helperText={currentInputErrors.assessmentNumber}
+              helperText={currentInputErrors.number}
             />
 
             <FormControl fullWidth disabled={state === 'Other'}>
@@ -189,7 +186,6 @@ export default function AddAssessmentForm({
             <TextField
               label="Name"
               variant="outlined"
-              value={currentInput.name}
               onChange={(e) => updateInput('name', e.target.value)}
               required
               fullWidth

@@ -11,6 +11,7 @@ import { Assessment, AssessmentType } from '../../types/assessment';
 import API from '../../util/api';
 import { CircularProgress } from '@mui/material';
 import { Course } from '../../types/types';
+import usePost from '../../hooks/usePost';
 
 export default function Assessments() {
   const { courseId } = useParams();
@@ -25,30 +26,31 @@ export default function Assessments() {
   const {
     data: assessments,
     isLoading: isFetchingAssessments,
+    refresh: refreshAssessments,
     error: getAssessmentsError
   } = useGet<Assessment[]>(`${API.getCourseAssessments}/${courseId}`, []);
+
+  console.log(assessments);
+
+  const {
+    postData: createAssessment,
+    isLoading: isCreatingAssessment,
+    error: createAssessmentError
+  } = usePost<Assessment, Assessment>(`${API.postAssessment}/${courseId}`);
 
   const [assessmentTypeState, setAssessmentTypeState] =
     useState<AssessmentType>(AssessmentType.EXAM);
   const [showForm, setShowForm] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
-  // const [assessments, setAssessments] = useState<Assessment[]>([]);
-
-  // useEffect(() => {
-  //   if (polledAssessemets) {
-  //     setAssessments(polledAssessemets);
-  //   }
-  // }, [polledAssessemets]);
-
-  function matchString(assessment: any, searchText: string) {
+  function matchString(assessment: Assessment, searchText: string) {
     const str =
-      assessment.Year.toString() +
+      assessment.year.toString() +
       ' ' +
-      mapSemesterToString(assessment.Semester) +
+      mapSemesterToString(assessment.semester) +
       ' ' +
-      assessment.Number.toString() +
+      assessment.number?.toString() +
       ' ' +
-      assessment.Name;
+      assessment.name;
     return str.toLowerCase().includes(searchText.toLowerCase());
   }
 
@@ -69,11 +71,6 @@ export default function Assessments() {
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
-    // setAssessments(
-    //   assessments.filter((assessment) => {
-    //     return matchString(assessment, searchText);
-    //   })
-    // ); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
   }
 
   const handleOpenForm = (type: AssessmentType) => {
@@ -87,7 +84,19 @@ export default function Assessments() {
     type: AssessmentType
   ) => {
     // any[] is used for now, i guess you could use a DTO later
-    return; // TODO: implement this
+    console.log(formInputs);
+    if (!courseId) {
+      console.log('no course id');
+      return;
+    }
+    const newAssessment = await createAssessment({
+      courseId,
+      type,
+      questions: [],
+      ...formInputs
+    });
+    console.log(newAssessment);
+    refreshAssessments();
   };
 
   const handleCloseForm = () => {
@@ -115,7 +124,10 @@ export default function Assessments() {
               .filter((assessment) => matchString(assessment, searchText))
               .map((assessment) =>
                 assessment.type === 'Exam' ? (
-                  <AssessmentCard assessment={assessment} />
+                  <AssessmentCard
+                    key={assessment._id}
+                    assessment={assessment}
+                  />
                 ) : null
               )}
           <AddAssessmentButton
@@ -141,7 +153,10 @@ export default function Assessments() {
           {assessments &&
             assessments.map((assessment) =>
               assessment.type === 'Other' ? (
-                <AssessmentCardOther assessment={assessment} />
+                <AssessmentCardOther
+                  key={assessment._id}
+                  assessment={assessment}
+                />
               ) : null
             )}
 

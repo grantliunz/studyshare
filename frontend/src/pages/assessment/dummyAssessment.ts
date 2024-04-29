@@ -8,7 +8,7 @@ export const dummyAssessment2 = {
 };
 export const dummyAssessment1: Assessment = {
   courseId: '662c8fc218556c7b26bf7971',
-  id: '1',
+  _id: '1',
   type: 'Exam',
   year: 2023,
   semester: 'First',
