@@ -7,20 +7,20 @@ export interface University {
 }
 
 export interface PostUniversity {
-  Name: string;
-  Courses?: { Name: string }[];
+  name: string;
+  courses?: { Name: string }[];
 }
 
 export interface Course {
   id: string;
-  Name: string;
-  Code: string;
-  Assessments: string[];
+  name: string;
+  code: string;
+  assessments: string[];
   createdAt: Date;
 }
 
 export interface PostCourse {
-  Name: string;
-  Code: string;
-  Assessments?: { Name: string }[];
+  name: string;
+  code: string;
+  assessments?: { Name: string }[];
 }

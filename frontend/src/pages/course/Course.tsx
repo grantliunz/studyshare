@@ -56,12 +56,12 @@ export default function CoursePage() {
       setDisplayedData(courseData);
     } else {
       const filtered = courseData?.filter((course) => {
-        const codeNumber = course.Code.match(/\d+/)?.[0];
+        const codeNumber = course.code.match(/\d+/)?.[0];
         const yearLevel = codeNumber?.charAt(0);
         if (!yearLevel) return false;
         const matchesQuery =
-          course.Name.toLowerCase().includes(query.toLowerCase()) ||
-          course.Code.toLowerCase().includes(query.toLowerCase());
+          course.name.toLowerCase().includes(query.toLowerCase()) ||
+          course.code.toLowerCase().includes(query.toLowerCase());
 
         const meetsYearLevelCriteria =
           yearLevels.length === 0 ||
@@ -79,8 +79,8 @@ export default function CoursePage() {
     }
 
     const newCourseData: PostCourse = {
-      Code: courseCode,
-      Name: courseName
+      code: courseCode,
+      name: courseName
     };
 
     const addedCourse = await addCourse(newCourseData);
@@ -152,8 +152,8 @@ export default function CoursePage() {
         displayedData.map((course, index) => (
           <CourseCard
             key={index}
-            courseCode={course.Code}
-            courseName={course.Name}
+            courseCode={course.code}
+            courseName={course.name}
             onClick={() => navigate(`/${id}/${course.id}`)}
           />
         ))}

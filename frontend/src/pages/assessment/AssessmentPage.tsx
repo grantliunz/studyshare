@@ -11,7 +11,7 @@ import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
 import usePost from '../../hooks/usePost';
 import { Assessment, Question } from '../../types/assessment';
-import { dummyAssessment, dummyAssessment2 } from './dummyAssessment';
+import { dummyAssessment1, dummyAssessment2 } from './dummyAssessment';
 import useGet from '../../hooks/useGet';
 
 export type QuestionWithFullNumber = {

@@ -1,4 +1,4 @@
-import { Document, Schema, Model, Types, model } from 'mongoose';
+import { Document, Schema, Model, Types, model, Date } from 'mongoose';
 
 export interface IUniversity extends Document {
   name: string;
@@ -23,7 +23,7 @@ const universitySchema: Schema<IUniversity> = new Schema<IUniversity>(
     ]
   },
   {
-    timestamps: {}
+    timestamps: true
   }
 );
 

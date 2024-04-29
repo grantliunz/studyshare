@@ -3,7 +3,7 @@ import mongoose, { Model, Schema, Types } from 'mongoose';
 export interface ICourse extends Document {
   name: string;
   code: string;
-  university: string;
+  university: Types.ObjectId;
   assessments: Types.ObjectId[];
 }
 
@@ -17,8 +17,9 @@ const courseSchema: Schema<ICourse> = new Schema(
       type: String
     },
     university: {
-      type: String,
-      required: true
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'University'
     },
     assessments: {
       type: [Schema.Types.ObjectId],

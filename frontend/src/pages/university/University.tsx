@@ -57,9 +57,7 @@ export default function University() {
       return;
     }
 
-    const newUniversityData: PostUniversity = {
-      Name: name
-    };
+    const newUniversityData: PostUniversity = { name };
     const addedUniversity = await addUniversity(newUniversityData);
 
     if (addedUniversity) {
