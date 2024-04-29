@@ -14,7 +14,7 @@ export const createAssessment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { type, year, semester } = req.body; // assuming request body contains assessment data
+    const { type, year, semester, questions = [] } = req.body; // assuming request body contains assessment data
 
     // Get the course by its ID
     const course = await Course.findById(req.params.courseId);
@@ -39,10 +39,11 @@ export const createAssessment = async (
 
     // create a new assessment instance
     const assessment = new Assessment({
+      course: req.params.courseId,
       type,
       year,
       semester,
-      course: req.params.courseId
+      questions
     });
 
     // save the assessment to the database

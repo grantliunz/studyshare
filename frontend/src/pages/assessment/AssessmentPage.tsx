@@ -7,7 +7,6 @@ import { Button, CircularProgress, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
 import { findNextQuestionNumber } from '../../util/questionNumber';
-import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
 import usePost from '../../hooks/usePost';
@@ -112,10 +111,8 @@ const AssessmentPage = () => {
   );
 
   const handleAddAssessment = async () => {
-    if (id) {
-      const addedAssessment = await addAssessment(dummyAssessment);
-      console.log(addedAssessment);
-    }
+    const addedAssessment = await addAssessment(dummyAssessment);
+    console.log(addedAssessment);
   };
 
   if (isFetchingAssessment) {
@@ -125,11 +122,13 @@ const AssessmentPage = () => {
   return (
     <div className={styles.container}>
       {!assessment || !orderedQuestionsArray ? (
-        <div>Error!</div>
+        <div>Error retrieving assessment details</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
-            <Button onClick={() => handleAddAssessment()}>Click me</Button>
+            <Button onClick={() => handleAddAssessment()}>
+              Click me to add a dummy assessment
+            </Button>
             {assessment.questions.map((question) => (
               <QuestionNumber
                 key={question.number}
