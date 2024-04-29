@@ -8,6 +8,7 @@ import {
 } from '@mui/material'; // Import necessary components from Material-UI
 import styles from './UniversityCard.module.css';
 import { useNavigate } from 'react-router-dom';
+import { mapIdToImage } from '../../util/utils';
 
 type UniversityCardProps = {
   university: {
@@ -19,11 +20,12 @@ type UniversityCardProps = {
 
 const UniversityCard = ({ university }: UniversityCardProps) => {
   const navigate = useNavigate();
+  console.log(mapIdToImage(university.image));
   return (
     <Card
       elevation={2}
       style={{
-        backgroundImage: `url(${university.image})`,
+        backgroundImage: `url(${mapIdToImage(university.image)})`,
         height: '310px',
         width: '230px',
         margin: '10px',

@@ -20,7 +20,6 @@ import API from '../../util/api';
 export default function University() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
   const [showForm, setShowForm] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [displayedData, setDisplayedData] = useState<
