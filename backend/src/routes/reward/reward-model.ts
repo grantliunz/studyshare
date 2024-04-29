@@ -1,22 +1,24 @@
 import mongoose, { Model, Schema } from 'mongoose';
 
 export interface IReward extends Document {
-    Name: string;
-    Badge: string;
+  name: string;
+  badge: string;
 }
 
-const rewardSchema: Schema<IReward> = new Schema({
-
-    Name: {
-        type: String,
-        required: true
+const rewardSchema: Schema<IReward> = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
     },
-    Badge: {
-        type: String,
-    },
-}, {
+    badge: {
+      type: String
+    }
+  },
+  {
     timestamps: {}
-});
+  }
+);
 
 const Reward: Model<IReward> = mongoose.model('Reward', rewardSchema);
 export default Reward;

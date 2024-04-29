@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-
 import University from './university-model';
 import Course from '../course/course-model';
 import { CreateUniversityDTO } from './university-dto';
-
 import { getRandomClockTower } from '../../utils/clockTower';
 
 // Controller function to create a new university
@@ -17,10 +15,10 @@ export const createUniversity = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { Name, Courses } = req.body; // Assuming request body contains university data
+    const { name, courses } = req.body; // Assuming request body contains university data
 
     // Check if university with the same name already exists
-    const existingUniversity = await University.findOne({ Name });
+    const existingUniversity = await University.findOne({ name });
     if (existingUniversity) {
       return res
         .status(400)
@@ -30,8 +28,8 @@ export const createUniversity = async (
     // Create an array to store the IDs of the courses
     const courseIds = [];
     // Iterate over the courses received in the request body
-    if (Courses) {
-      for (const courseData of Courses) {
+    if (courses) {
+      for (const courseData of courses) {
         // Check if course already exists
         const existingCourse = await new Course(courseData).save();
         // Push the ID of the saved course into the courseIds array
@@ -41,9 +39,9 @@ export const createUniversity = async (
     const randomClockTower = getRandomClockTower();
     // Create a new university instance with the courseIds array
     const university = new University({
-      Name,
-      Courses: courseIds,
-      Image: randomClockTower
+      name,
+      image: randomClockTower,
+      courses: courseIds
     });
 
     // Save the university to the database

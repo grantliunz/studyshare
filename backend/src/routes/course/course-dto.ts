@@ -5,5 +5,5 @@ export interface CourseDTO {
   name: string;
   code?: string;
   university: string;
-  Assessments?: CreateAssessmentDTO[] | Types.ObjectId[];
+  assessments?: CreateAssessmentDTO[] | Types.ObjectId[];
 }

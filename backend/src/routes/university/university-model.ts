@@ -1,27 +1,32 @@
 import { Document, Schema, Model, Types, model } from 'mongoose';
 
 export interface IUniversity extends Document {
-    Name: string;
-    Image: string;
-    Courses: Types.ObjectId[]; 
+  name: string;
+  image: string;
+  courses: Types.ObjectId[];
 }
 
-const universitySchema: Schema<IUniversity> = new Schema<IUniversity>({
-    Name: {
-        type: String,
-        required: true
+const universitySchema: Schema<IUniversity> = new Schema<IUniversity>(
+  {
+    name: {
+      type: String,
+      required: true
     },
-    Image: {
-        type: String
+    image: {
+      type: String
     },
-    Courses: [{
+    courses: [
+      {
         type: Schema.Types.ObjectId,
-        ref: "Course"
-    }]
-}, {
+        ref: 'Course'
+      }
+    ]
+  },
+  {
     timestamps: {}
-});
+  }
+);
 
-const University: Model<IUniversity> = model('University', universitySchema); 
+const University: Model<IUniversity> = model('University', universitySchema);
 
 export default University;

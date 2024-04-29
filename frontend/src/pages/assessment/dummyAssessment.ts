@@ -1,6 +1,12 @@
 import { Assessment } from '../../types/assessment';
 
-export const dummyAssessment: Assessment = {
+export const dummyAssessment2 = {
+  courseId: '662c8fc218556c7b26bf7971',
+  type: 'Exam',
+  year: 2023,
+  semester: 'First'
+};
+export const dummyAssessment1: Assessment = {
   courseId: '662c8fc218556c7b26bf7971',
   id: '1',
   type: 'Exam',

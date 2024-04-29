@@ -1,7 +1,6 @@
 export type Question = {
   number: string;
   content?: {
-    image?: string;
     text: string;
     answers: Answer[]; // temp
     watchers: string[]; // temp
@@ -13,7 +12,6 @@ export type Question = {
 };
 
 export type Answer = {
-  image?: string;
   text?: string;
   author: string;
   rating: Rating;
@@ -22,7 +20,6 @@ export type Answer = {
 };
 
 export type Comment = {
-  image?: string;
   text?: string;
   author: string;
   rating: Rating;

@@ -14,7 +14,7 @@ export const createQuestion = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { QuestionNumber, Image, QuestionText, Author } = req.body; // assuming request body contains question data
+    const { number, content, subquestions } = req.body; // assuming request body contains question data
 
     // Get the assessment by its ID
     const assessment = await Assessment.findById(req.params.assessmentId);
@@ -25,10 +25,9 @@ export const createQuestion = async (
 
     // create a new question instance
     const question = new Question({
-      QuestionNumber,
-      Image,
-      QuestionText,
-      Author
+      number,
+      content,
+      subquestions
     });
     // save the question to the database
     const createdQuestion = await question.save();
@@ -91,7 +90,7 @@ export const updateQuestion = async (
   res: Response
 ) => {
   try {
-    const { QuestionNumber, Image, QuestionText } = req.body; // assuming request body contains question data
+    const { number, content, subquestions } = req.body; // assuming request body contains question data
 
     // Get the question by its ID
     const question = await Question.findById(req.params.id);
@@ -101,9 +100,9 @@ export const updateQuestion = async (
     }
 
     // update the question with the new data
-    question.QuestionNumber = QuestionNumber;
-    question.Image = Image;
-    question.QuestionText = QuestionText;
+    question.number = number;
+    question.content = content;
+    question.subquestions = subquestions;
 
     // save the updated question
     const updatedQuestion = await question.save();

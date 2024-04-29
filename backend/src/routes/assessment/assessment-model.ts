@@ -14,7 +14,8 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
   {
     course: {
       type: Schema.Types.ObjectId,
-      required: true
+      required: true,
+      ref: 'Course'
     },
     type: {
       type: String,

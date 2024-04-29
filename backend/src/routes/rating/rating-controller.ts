@@ -19,7 +19,7 @@ export const getRatingByAnswer = async (
     }
 
     // fetch the rating of the answer
-    const rating = await Rating.findById(answer.Rating);
+    const rating = await Rating.findById(answer.rating);
 
     res.status(200).json(rating); // respond with the rating
   } catch (error) {
@@ -41,7 +41,7 @@ export const getRatingByComment = async (
     }
 
     // fetch the rating of the comment
-    const rating = await Rating.findById(comment.Rating);
+    const rating = await Rating.findById(comment.rating);
 
     res.status(200).json(rating); // respond with the rating
   } catch (error) {
@@ -88,9 +88,9 @@ export const updateRating = async (
     }
 
     // Update the rating
-    rating.Upvotes = req.body.Upvotes !== undefined ? req.body.Upvotes : 0;
-    rating.Downvotes =
-      req.body.Downvotes !== undefined ? req.body.Downvotes : 0;
+    rating.upvotes = req.body.upvotes !== undefined ? req.body.upvotes : 0;
+    rating.downvotes =
+      req.body.downvotes !== undefined ? req.body.downvotes : 0;
 
     // Save the updated rating to the database
     const updatedRating = await rating.save();

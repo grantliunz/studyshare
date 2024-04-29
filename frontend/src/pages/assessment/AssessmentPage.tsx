@@ -11,7 +11,7 @@ import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
 import usePost from '../../hooks/usePost';
 import { Assessment, Question } from '../../types/assessment';
-import { dummyAssessment } from './dummyAssessment';
+import { dummyAssessment, dummyAssessment2 } from './dummyAssessment';
 import useGet from '../../hooks/useGet';
 
 export type QuestionWithFullNumber = {
@@ -111,7 +111,7 @@ const AssessmentPage = () => {
   );
 
   const handleAddAssessment = async () => {
-    const addedAssessment = await addAssessment(dummyAssessment);
+    const addedAssessment = await addAssessment(dummyAssessment2);
     console.log(addedAssessment);
   };
 
@@ -121,14 +121,14 @@ const AssessmentPage = () => {
 
   return (
     <div className={styles.container}>
+      <Button onClick={() => handleAddAssessment()}>
+        Click me to add a dummy assessment
+      </Button>
       {!assessment || !orderedQuestionsArray ? (
         <div>Error retrieving assessment details</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
-            <Button onClick={() => handleAddAssessment()}>
-              Click me to add a dummy assessment
-            </Button>
             {assessment.questions.map((question) => (
               <QuestionNumber
                 key={question.number}
