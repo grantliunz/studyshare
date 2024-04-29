@@ -3,17 +3,25 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import AssessmentCard from "./AssessmentCard";
 import AddAssessmentButton from "./AddAssessmentButton";
 import styles from './Assessments.module.css';
+import AssessmentCardOther from "./AssessmentCardOther";
+import AddUniversityForm from "../university/AddUniversityForm";
+import AddAssessmentForm from "./AddAssessmentForm";
 
 interface AssessmentsPageProps {
     Name: string;
     Code?: string;
     // Assessments?: AssessmentDisplayDTO[];
     Assessments: any[]; // replace when backend is ready
-
 }
 
-export default function Assessments(props?: AssessmentsPageProps) {
+export enum AssessmentType {
+    NotSet = "NotSet",
+    Exam = "Exam",
+    Test = "Test",
+    Other = "Other"
+}
 
+export default function Assessments(props?: AssessmentsPageProps) { // change to just an id and fetch the data from the backend
     // remove this section when backend is ready
     if (props?.Assessments === undefined){
         // default course
@@ -44,7 +52,8 @@ export default function Assessments(props?: AssessmentsPageProps) {
                     AssessmentType: "Other",
                     Number: 3,
                     Year: 2020,
-                    Semester: "Second"
+                    Semester: "Second",
+                    Name: "Practise Exam 1"
                 }, 
                 {
                     AssessmentType: "Exam",
@@ -70,18 +79,52 @@ export default function Assessments(props?: AssessmentsPageProps) {
     }
 
     const [matchingAssessments, setMatchingAssessments] = useState(props.Assessments);
+    const [assessmentTypeState, setAssessmentTypeState] = useState(AssessmentType.NotSet);
+    const [showForm, setShowForm] = useState(false);
+
+    function matchString (assessment: any, searchText: string){
+        const str = assessment.Year.toString() + " " + mapSemesterToString(assessment.Semester) + " " + assessment.Number.toString() + " " + assessment.Name;
+        return str.toLowerCase().includes(searchText.toLowerCase());
+
+    }
+
+    function mapSemesterToString(semester: string){
+        switch (semester){
+            case "First":
+                return "Semester 1";
+            case "Second":
+                return "Semester 2";
+            case "Third":
+                return "Semester 3";
+            case "Other":
+                return "Other Semester";
+            default:
+                return semester;
+        }
+    }
 
     function searchAssessments(searchText: string){
-        console.log(searchText)
         setMatchingAssessments(props.Assessments.filter((assessment) => {
-            return assessment.Number.toString().includes(searchText) || 
-            assessment.Year.toString().includes(searchText) || 
-            assessment.Semester.includes(searchText);
+            return matchString(assessment, searchText)
         })); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
     }
 
+    const handleOpenForm = (type : AssessmentType) => {
+        console.log(type);
+        setShowForm(true);
+        setAssessmentTypeState(type);
+    }
+
+    const handleAddAssessment = async (formInputs : any[], assessmentType : AssessmentType) => { // any[] is used for now, i guess you could use a DTO later
+        return; // TODO: implement this 
+    }
+
+    const handleCloseForm = () => {
+        setShowForm(false);
+    }
+
     return (
-        <div>
+        <div style={{ paddingLeft: '7%', paddingRight: '7%' }}>
             <h1>{props.Name}</h1>
             <SearchBar title="Search for a past paper" onQueryChange={searchAssessments}/>
             
@@ -94,7 +137,7 @@ export default function Assessments(props?: AssessmentsPageProps) {
                         ? <AssessmentCard assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Exam)}/>
                 </div>
 
                 <h2 className={styles.typeHeader}>Tests</h2>
@@ -105,7 +148,7 @@ export default function Assessments(props?: AssessmentsPageProps) {
                         ? <AssessmentCard assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Test)}/>
                 </div>
 
                 <h2 className={styles.typeHeader}>Other</h2>
@@ -113,10 +156,18 @@ export default function Assessments(props?: AssessmentsPageProps) {
                     
                     {matchingAssessments.map((assessment) => 
                         ( assessment.AssessmentType === "Other" 
-                        ? <AssessmentCard assessment={assessment}/>
+                        ? <AssessmentCardOther assessment={assessment}/>
                         : null
                     ))}
-                    <AddAssessmentButton />
+                    
+                    <AddAssessmentForm
+                        state={assessmentTypeState}
+                        show={showForm}
+                        onAddAssessment={handleAddAssessment}
+                        onClose={handleCloseForm}
+                    />
+
+                    <AddAssessmentButton handleOpenForm={() => handleOpenForm(AssessmentType.Other)}/>
                 </div>
             </div>
         </div>

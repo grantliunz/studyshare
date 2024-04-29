@@ -1,0 +1,16 @@
+.addButtonContainer {
+    display: flex;
+    align-items: center;
+    margin:10px
+
+}
+
+
+.addButton {
+    padding: 6px;
+    background-color: #AFAFAF;
+    border: none;
+    color: black;
+    border-radius: 10px;
+    cursor: pointer;
+}
