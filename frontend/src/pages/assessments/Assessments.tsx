@@ -81,11 +81,30 @@ export default function Assessments(props?: AssessmentsPageProps) { // change to
     const [matchingAssessments, setMatchingAssessments] = useState(props.Assessments);
     const [showForm, setShowForm] = useState(AssessmentType.NotActive);
 
+    function matchString (assessment: any, searchText: string){
+        const str = assessment.Year.toString() + " " + mapSemesterToString(assessment.Semester) + " " + assessment.Number.toString() + " " + assessment.Name;
+        return str.toLowerCase().includes(searchText.toLowerCase());
+
+    }
+
+    function mapSemesterToString(semester: string){
+        switch (semester){
+            case "First":
+                return "Semester 1";
+            case "Second":
+                return "Semester 2";
+            case "Third":
+                return "Semester 3";
+            case "Other":
+                return "Other Semester";
+            default:
+                return semester;
+        }
+    }
+
     function searchAssessments(searchText: string){
         setMatchingAssessments(props.Assessments.filter((assessment) => {
-            return assessment.Number.toString().includes(searchText) || 
-            assessment.Year.toString().includes(searchText) || 
-            assessment.Semester.includes(searchText);
+            return matchString(assessment, searchText)
         })); // should probably update this to match the displayed text later, will do when the enums and stuff are available to frontend
     }
 
