@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { CourseDTO } from './course-dto';
 import Course from './course-model';
 import University from '../university/university-model';
+import { isValidObjectId } from 'mongoose';
 
 // controller function to create a new course
 export const createCourse = async (
@@ -18,7 +19,6 @@ export const createCourse = async (
 
     // Get the university by its ID
     const university = await University.findById(req.params.universityId);
-
     if (!university) {
       return res.status(404).json({ message: 'University not found' });
     }
@@ -76,9 +76,12 @@ export const getAllCoursesInUniversity = async (
   res: Response
 ) => {
   try {
+    // Validate universityId
+    if (!isValidObjectId(req.params.universityId)) {
+      return res.status(404).json({ message: 'University not Found' });
+    }
     // get the university by its ID
     const university = await University.findById(req.params.universityId);
-
     if (!university) {
       return res.status(404).json({ message: 'University not found' });
     }
@@ -88,6 +91,7 @@ export const getAllCoursesInUniversity = async (
 
     res.status(200).json(courses); // respond with all courses in the university
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
