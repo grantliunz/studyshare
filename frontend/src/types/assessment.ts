@@ -1,39 +1,37 @@
 export type Question = {
-  number: string;
-  content?: {
-    text: string;
-    answers: Answer[]; // temp
-    watchers: string[]; // temp
-    comments: string[]; // temp
-    timestamp: string;
-    author: string;
-  };
-  subquestions?: Question[];
+  _id: string;
+  assessment: string;
+  number: string[];
+  text: string;
+  author: string;
+  answers: Answer[];
+  watchers: string[]; // might need to change to a user object
+  comments: Comment[];
 };
 
 export type Answer = {
-  text?: string;
+  _id: string;
+  text: string;
   author: string;
   rating: Rating;
   comments: Comment[];
-  timestamp: string;
 };
 
 export type Comment = {
-  text?: string;
+  text: string;
   author: string;
   rating: Rating;
 };
 
 export type Rating = {
-  id: string;
   upvotes: number;
   downvotes: number;
 };
 
 export type Assessment = {
   courseId: string;
-  id: string;
+  _id?: string;
+  name?: string;
   type: AssessmentType;
   number?: number;
   year: number;

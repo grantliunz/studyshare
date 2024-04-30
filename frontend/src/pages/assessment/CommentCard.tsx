@@ -1,6 +1,9 @@
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
+import useGet from '../../hooks/useGet';
 import { Comment } from '../../types/assessment';
+import { UserDisplayDTO } from '../../types/user';
+import API from '../../util/api';
 
 type CommentCardProps = {
   comment: Comment;
@@ -15,6 +18,10 @@ const CommentCard = ({ comment }: CommentCardProps) => {
     newVoteDirection === VoteDirection.UP && comment.rating.upvotes++;
     newVoteDirection === VoteDirection.DOWN && comment.rating.downvotes++;
   };
+
+  const { data: author } = useGet<UserDisplayDTO>(
+    `${API.getUser}/${comment.author}`
+  );
 
   return (
     <div
@@ -35,7 +42,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
       <PersonCard
         avatarPos="top"
         avatarSize="28px"
-        name={comment.author}
+        name={author?.name || 'Anonymous'}
         style={{ width: '80px' }}
       />
       {comment.text}

@@ -1,9 +1,11 @@
 import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
 import { AssessmentType, SemesterType } from '../../types/assessment';
+import { useNavigate } from 'react-router-dom';
 
 type AssessmentCardProps = {
   assessment: {
+    _id?: string;
     type: AssessmentType;
     number?: number;
     year: number;
@@ -33,8 +35,11 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
     }
   }
 
+  const navigate = useNavigate();
+
   return (
     <Button
+      onClick={() => navigate(`/assessment/${assessment._id}`)}
       variant="contained"
       sx={{
         borderRadius: '10px',

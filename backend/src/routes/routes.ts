@@ -9,10 +9,12 @@ import answerRouter from './answer/answer-route';
 import universityRouter from './university/university-route';
 import courseRouter from './course/course-route';
 import assessmentRouter from './assessment/assessment-route';
+import commentRouter from './comment/comment-route';
 
 // Use routers
 router.use('/user', userRouter);
 router.use('/question', questionRouter);
+router.use('/comment', commentRouter);
 router.use('/answer', answerRouter);
 router.use('/university', universityRouter);
 router.use('/course', courseRouter);

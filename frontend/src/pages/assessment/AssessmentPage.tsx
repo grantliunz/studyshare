@@ -1,48 +1,123 @@
 import { useParams } from 'react-router-dom';
-import styles from './Assessment.module.css';
+import styles from './AssessmentPage.module.css';
 import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
-import { Button, CircularProgress, IconButton } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
-import { findNextQuestionNumber } from '../../util/questionNumber';
-import { useAuth } from '../../contexts/UserContext';
+import {
+  convertRomanToNumber,
+  isRomanNumeral
+} from '../../util/questionNumber';
 import API from '../../util/api';
-import usePost from '../../hooks/usePost';
 import { Assessment, Question } from '../../types/assessment';
-import { dummyAssessment1, dummyAssessment2 } from './dummyAssessment';
 import useGet from '../../hooks/useGet';
+import { arrayEquals } from '../../util/arrays';
 
-export type QuestionWithFullNumber = {
-  question: Question;
-  hierarchy: string[];
+export type QuestionNode = {
+  number: string[];
+  subquestions?: QuestionNode[];
+  question?: Question;
 };
 
-const buildOrderedQuestionsArray = (questions: Question[]) => {
-  const result: QuestionWithFullNumber[] = [];
-  questions.forEach((qn) => traverseSubQuestion(result, qn, [qn.number]));
-  return result;
+// Helper function to determine the type of a value (number, letter, or roman numeral)
+const getValueType = (value: any) => {
+  if (!Number.isNaN(Number(value))) {
+    return 'number';
+  } else if (typeof value === 'string') {
+    if (isRomanNumeral(value)) {
+      return 'roman';
+    } else if (/^[a-zA-Z]$/.test(value)) {
+      return 'letter';
+    }
+  }
+  return 'unknown'; // Default to 'unknown' for unrecognized types
 };
 
-const traverseSubQuestion = (
-  result: QuestionWithFullNumber[],
-  question: Question,
-  currentHierarchy: string[]
-) => {
-  if (question.content) {
-    return result.push({
-      question,
-      hierarchy: currentHierarchy
-    });
-  } else
-    question.subquestions!.forEach((qn) =>
-      traverseSubQuestion(result, qn, [...currentHierarchy, qn.number])
-    );
+const compareLastValues = (a: QuestionNode, b: QuestionNode) => {
+  const lastValueA = a.number.at(-1);
+  const lastValueB = b.number.at(-1);
+
+  // Determine the type of lastValueA and lastValueB
+  const typeA = getValueType(lastValueA);
+  const typeB = getValueType(lastValueB);
+
+  if (typeA === 'number' && typeB === 'number') {
+    return compareValues(lastValueA, lastValueB, 'number');
+  } else if (typeA === 'roman' && typeB === 'roman') {
+    return compareValues(lastValueA, lastValueB, 'roman');
+  } else {
+    return compareValues(lastValueA, lastValueB, 'letter');
+  }
+};
+
+// Helper function to compare values of the same type (number, letter, or roman numeral)
+const compareValues = (valueA: any, valueB: any, type: string) => {
+  if (type === 'number') {
+    return valueA - valueB;
+  } else if (type === 'roman') {
+    // Compare Roman numerals using their numerical values
+    const numericValueA = convertRomanToNumber(valueA);
+    const numericValueB = convertRomanToNumber(valueB);
+    return numericValueA - numericValueB;
+  } else {
+    // Compare letters based on their ASCII codes
+    return valueA.localeCompare(valueB);
+  }
+};
+
+const buildQuestionsTree = (questions: Question[]) => {
+  // could use a map of visited for efficiency
+  const root: QuestionNode = { number: [] };
+  questions.forEach((question) => {
+    let currentRoot = root;
+    const hierarchy = question.number;
+    for (let i = 0; i < hierarchy.length; i++) {
+      const currHierarchy = hierarchy.slice(0, i + 1);
+      const node = currentRoot.subquestions
+        ? currentRoot.subquestions.find((questionNode) =>
+            arrayEquals(questionNode.number, currHierarchy)
+          )
+        : undefined;
+      if (!node) {
+        const newNode =
+          i === hierarchy.length - 1
+            ? { number: currHierarchy, question }
+            : { number: currHierarchy };
+        if (currentRoot.subquestions) {
+          currentRoot.subquestions.push(newNode);
+          currentRoot.subquestions =
+            currentRoot.subquestions.sort(compareLastValues);
+        } else {
+          currentRoot.subquestions = [newNode];
+        }
+        currentRoot = newNode;
+      } else {
+        currentRoot = node;
+      }
+    }
+  });
+  return root;
+};
+
+// builds a sorted array of questions
+const buildOrderedQuestionsArray = (root: QuestionNode) => {
+  const arr: Question[] = [];
+
+  const traverseNode = (node: QuestionNode) => {
+    if (node.subquestions) {
+      node.subquestions.forEach((subQn) => traverseNode(subQn));
+    } else if (node.question) {
+      arr.push(node.question);
+    }
+  };
+
+  traverseNode(root);
+  return arr;
 };
 
 const AssessmentPage = () => {
-  const { user } = useAuth();
   const { id } = useParams();
 
   const {
@@ -51,68 +126,32 @@ const AssessmentPage = () => {
     refresh: refreshAssessment
   } = useGet<Assessment>(`${API.getAssessment}/${id}`);
 
-  const [currentQuestion, setCurrentQuestion] =
-    useState<QuestionWithFullNumber>();
-  const [orderedQuestionsArray, setOrderedQuestionsArray] =
-    useState<QuestionWithFullNumber[]>();
+  const [currentQuestion, setCurrentQuestion] = useState<Question>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
-  const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
+  const [newQuestionParentNumber, setNewQuestionParentNumber] = useState<
     string[]
+  >([]);
+  const [rootNode, setRootNode] = useState<QuestionNode>({ number: [] });
+  const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
+    Question[]
   >([]);
 
   useEffect(() => {
     if (assessment) {
-      setOrderedQuestionsArray(
-        buildOrderedQuestionsArray(assessment.questions)
-      );
+      const root = buildQuestionsTree(assessment.questions);
+      setRootNode(root);
+      setOrderedQuestionsArray(buildOrderedQuestionsArray(root));
     }
   }, [assessment]);
 
-  const handleAddQuestion = (parentHierarchy: string[]) => {
-    setNewQuestionParentHierarchy(parentHierarchy);
+  const handleAddQuestion = (parentNumber: string[]) => {
+    setNewQuestionParentNumber(parentNumber);
     setNewQuestionOpen(true);
   };
 
   const handleNewQuestionClose = () => {
     setNewQuestionOpen(false);
-    setNewQuestionParentHierarchy([]);
-  };
-
-  const handleSubmitAnswer = (
-    questionWithFullNumber: QuestionWithFullNumber,
-    answer: string
-  ) => {
-    if (assessment) {
-      const newAnswer = {
-        text: answer,
-        author: user?.email || 'Anonymous',
-        rating: {
-          id: '1',
-          upvotes: 0,
-          downvotes: 0
-        },
-        comments: [],
-        timestamp: new Date().toISOString()
-      };
-      questionWithFullNumber.question.content?.answers.push(newAnswer);
-      // setAssessment({
-      //   ...polledAssessment
-      // });
-    }
-  };
-
-  // DELETE
-  const {
-    postData: addAssessment,
-    isLoading: isAddingAssessment,
-    error: addAssessmentError
-  } = usePost<Assessment, Assessment>(
-    `${API.postAssessment}/662c8fc218556c7b26bf7971`
-  );
-
-  const handleAddAssessment = async () => {
-    const addedAssessment = await addAssessment(dummyAssessment2);
-    console.log(addedAssessment);
+    setNewQuestionParentNumber([]);
   };
 
   if (isFetchingAssessment) {
@@ -121,24 +160,22 @@ const AssessmentPage = () => {
 
   return (
     <div className={styles.container}>
-      <Button onClick={() => handleAddAssessment()}>
-        Click me to add a dummy assessment
-      </Button>
-      {!assessment || !orderedQuestionsArray ? (
+      {!assessment || !rootNode ? (
         <div>Error retrieving assessment details</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
-            {assessment.questions.map((question) => (
-              <QuestionNumber
-                key={question.number}
-                question={question}
-                parentNumbers={[question.number]}
-                setQuestion={setCurrentQuestion}
-                currentQuestion={currentQuestion}
-                handleAddQuestion={handleAddQuestion}
-              />
-            ))}
+            <h3 style={{ margin: '0px' }}>Questions</h3>
+            {rootNode.subquestions &&
+              rootNode.subquestions.map((question) => (
+                <QuestionNumber
+                  key={question.number.join(',')}
+                  questionNode={question}
+                  setQuestion={setCurrentQuestion}
+                  currentQuestion={currentQuestion}
+                  handleAddQuestion={handleAddQuestion}
+                />
+              ))}
             <IconButton
               size="small"
               style={{
@@ -155,19 +192,19 @@ const AssessmentPage = () => {
           {currentQuestion ? (
             orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
-                key={question.hierarchy.join('')}
+                refreshAssessment={refreshAssessment}
+                key={question.number.join()}
                 currentQuestion={currentQuestion}
-                questionWithFullNumber={question}
-                prevQuestionWithFullNumber={
+                question={question}
+                prevQuestion={
                   index > 0 ? orderedQuestionsArray[index - 1] : undefined
                 }
-                nextQuestionWithFullNumber={
+                nextQuestion={
                   index < orderedQuestionsArray.length - 1
                     ? orderedQuestionsArray[index + 1]
                     : undefined
                 }
                 setQuestion={setCurrentQuestion}
-                handleSubmitAnswer={handleSubmitAnswer}
               />
             ))
           ) : (
@@ -181,17 +218,16 @@ const AssessmentPage = () => {
               Click a question to get started!
             </p>
           )}
-          {assessment.questions.length > 0 && (
-            <NewQuestion
-              open={newQuestionOpen}
-              handleClose={handleNewQuestionClose}
-              parent={newQuestionParentHierarchy}
-              defaultQuestionNumber={findNextQuestionNumber(
-                newQuestionParentHierarchy,
-                assessment.questions
-              )}
-            />
-          )}
+
+          <NewQuestion
+            open={newQuestionOpen}
+            handleClose={handleNewQuestionClose}
+            parentNumber={newQuestionParentNumber}
+            onAddQuestion={() => {
+              refreshAssessment();
+              handleNewQuestionClose();
+            }}
+          />
         </>
       )}
     </div>

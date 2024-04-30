@@ -14,13 +14,13 @@ export const createAssessment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { type, year, semester, questions = [] } = req.body; // assuming request body contains assessment data
+    const { type, year, semester, questions = [], name, number } = req.body; // assuming request body contains assessment data
 
     // Get the course by its ID
     const course = await Course.findById(req.params.courseId);
 
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ error: 'Course not found' });
     }
 
     // check if assessment with the same type, year, and semester already exists
@@ -28,7 +28,9 @@ export const createAssessment = async (
       type,
       year,
       semester,
-      course: req.params.courseId
+      course: req.params.courseId,
+      name,
+      number
     });
 
     if (existingAssessment) {
@@ -43,7 +45,8 @@ export const createAssessment = async (
       type,
       year,
       semester,
-      questions
+      questions,
+      name
     });
 
     // save the assessment to the database
@@ -58,7 +61,7 @@ export const createAssessment = async (
     res.status(201).json(createdAssessment); // respond with the created assessment
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -69,7 +72,7 @@ export const getAllAssessments = async (req: Request, res: Response) => {
 
     res.status(200).json(assessments); // respond with all assessments
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -79,11 +82,11 @@ export const getAllAssessmentsInCourse = async (
 ) => {
   try {
     // fetch all assessments from the database
-    const assessments = await Assessment.find({ Course: req.params.courseId });
+    const assessments = await Assessment.find({ course: req.params.courseId });
 
     res.status(200).json(assessments); // respond with all assessments
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -93,15 +96,23 @@ export const getAssessment = async (
 ) => {
   try {
     // fetch the assessment by its ID
-    const assessment = await Assessment.findById(req.params.id);
+    const assessment = await Assessment.findById(req.params.id).populate({
+      path: 'questions',
+      populate: {
+        path: 'answers',
+        populate: {
+          path: 'comments'
+        }
+      }
+    });
 
     if (!assessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
+      return res.status(404).json({ error: 'Assessment not found' });
     }
 
     res.status(200).json(assessment); // respond with the assessment
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -119,7 +130,7 @@ export const updateAssessment = async (
     const assessment = await Assessment.findById(req.params.id);
 
     if (!assessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
+      return res.status(404).json({ error: 'Assessment not found' });
     }
 
     const { type, year, semester } = req.body;
@@ -138,7 +149,7 @@ export const updateAssessment = async (
 
     res.status(200).json(updatedAssessment); // respond with the updated assessment
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -151,11 +162,11 @@ export const deleteAssessment = async (
     const deletedAssessment = await Assessment.findByIdAndDelete(req.params.id);
 
     if (!deletedAssessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
+      return res.status(404).json({ error: 'Assessment not found' });
     }
 
     res.status(200).json(deletedAssessment); // respond with the deleted assessment
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };

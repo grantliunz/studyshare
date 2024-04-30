@@ -4,6 +4,7 @@ import { CreateQuestionDTO } from '../question/question-dto';
 
 export interface CreateAssessmentDTO extends Document {
   type: AssessmentType;
+  name?: string;
   number?: number;
   year: number;
   semester: SemesterType;

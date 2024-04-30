@@ -1,11 +1,4 @@
-import React from 'react';
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  Typography
-} from '@mui/material'; // Import necessary components from Material-UI
+import { Card, CardActionArea, CardContent } from '@mui/material'; // Import necessary components from Material-UI
 import styles from './UniversityCard.module.css';
 import { useNavigate } from 'react-router-dom';
 import { mapIdToImage } from '../../util/utils';

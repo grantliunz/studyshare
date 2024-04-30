@@ -8,6 +8,7 @@ export interface IAssessment extends Document {
   semester: SemesterType;
   questions: Types.ObjectId[];
   course: Types.ObjectId;
+  name?: string;
 }
 
 const assessmentSchema: Schema<IAssessment> = new Schema(
@@ -16,6 +17,9 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'Course'
+    },
+    name: {
+      type: String
     },
     type: {
       type: String,

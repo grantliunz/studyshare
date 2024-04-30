@@ -1,24 +1,29 @@
 import mongoose, { Document, Model, Schema, Types } from 'mongoose';
 
 export interface IAnswer extends Document {
-  answerText: string;
-  answerImage: string;
-  rating: Types.ObjectId;
+  text: string;
+  rating: {
+    upvotes: number;
+    downvotes: number;
+  };
   comments: [Types.ObjectId];
   author: Types.ObjectId;
 }
 
 const answerSchema: Schema<IAnswer> = new Schema(
   {
-    answerText: {
-      type: String
-    },
-    answerImage: {
+    text: {
       type: String
     },
     rating: {
-      type: Schema.Types.ObjectId,
-      ref: 'Rating'
+      upvotes: {
+        type: Number,
+        required: true
+      },
+      downvotes: {
+        type: Number,
+        required: true
+      }
     },
     comments: {
       type: [Schema.Types.ObjectId],
