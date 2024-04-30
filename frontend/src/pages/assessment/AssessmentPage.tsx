@@ -12,31 +12,42 @@ import API from '../../util/api';
 import { Assessment, Question } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 
-export type QuestionWithFullNumber = {
-  question: Question;
-  hierarchy: string[];
+export type QuestionNode = {
+  number: string;
+  subquestions?: QuestionNode[];
+  question?: Question;
 };
 
-const buildOrderedQuestionsArray = (questions: Question[]) => {
-  const result: QuestionWithFullNumber[] = [];
-  questions.forEach((qn) => traverseSubQuestion(result, qn, [qn.number]));
-  return result;
-};
+const buildQuestionsTree = (questions: Question[]) => {
+  // could use a map of visited for efficiency
+  const root: QuestionNode = { number: 'root' };
+  questions.forEach((question) => {
+    let currentRoot = root;
+    const hierarchy = question.number;
+    for (const [index, level] of hierarchy.entries()) {
+      const node = currentRoot.subquestions
+        ? currentRoot.subquestions.find(
+            (questionNode) => questionNode.number === level
+          )
+        : undefined;
+      if (!node) {
+        const newNode =
+          index === hierarchy.length - 1
+            ? { number: level, question }
+            : { number: level };
+        if (currentRoot.subquestions) {
+          currentRoot.subquestions.push(newNode);
+        } else {
+          currentRoot.subquestions = [newNode];
+        }
+        currentRoot = newNode;
+      } else {
+        currentRoot = node;
+      }
+    }
+  });
 
-const traverseSubQuestion = (
-  result: QuestionWithFullNumber[],
-  question: Question,
-  currentHierarchy: string[]
-) => {
-  if (question.content) {
-    return result.push({
-      question,
-      hierarchy: currentHierarchy
-    });
-  } else
-    question.subquestions!.forEach((qn) =>
-      traverseSubQuestion(result, qn, [...currentHierarchy, qn.number])
-    );
+  return root;
 };
 
 const AssessmentPage = () => {
@@ -49,20 +60,19 @@ const AssessmentPage = () => {
     refresh: refreshAssessment
   } = useGet<Assessment>(`${API.getAssessment}/${id}`);
 
-  const [currentQuestion, setCurrentQuestion] =
-    useState<QuestionWithFullNumber>();
-  const [orderedQuestionsArray, setOrderedQuestionsArray] =
-    useState<QuestionWithFullNumber[]>();
+  const [currentQuestion, setCurrentQuestion] = useState<Question>();
+  // const [orderedQuestionsArray, setOrderedQuestionsArray] =
+  //   useState<Question[]>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
   const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
     string[]
   >([]);
 
+  const [rootNode, setRootNode] = useState<QuestionNode>({ number: 'root' });
+
   useEffect(() => {
     if (assessment) {
-      setOrderedQuestionsArray(
-        buildOrderedQuestionsArray(assessment.questions)
-      );
+      setRootNode(buildQuestionsTree(assessment.questions));
     }
   }, [assessment]);
 
@@ -76,10 +86,7 @@ const AssessmentPage = () => {
     setNewQuestionParentHierarchy([]);
   };
 
-  const handleSubmitAnswer = (
-    questionWithFullNumber: QuestionWithFullNumber,
-    answer: string
-  ) => {
+  const handleSubmitAnswer = (questionWithFullNumber: any, answer: string) => {
     if (assessment) {
       const newAnswer = {
         text: answer,
@@ -105,22 +112,22 @@ const AssessmentPage = () => {
 
   return (
     <div className={styles.container}>
-      {!assessment || !orderedQuestionsArray ? (
+      {!assessment || !rootNode ? (
         <div>Error retrieving assessment details</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
-            <h3>Questions</h3>
-            {assessment.questions.map((question) => (
-              <QuestionNumber
-                key={question.number}
-                question={question}
-                parentNumbers={[question.number]}
-                setQuestion={setCurrentQuestion}
-                currentQuestion={currentQuestion}
-                handleAddQuestion={handleAddQuestion}
-              />
-            ))}
+            <h3 style={{ margin: '0px' }}>Questions</h3>
+            {rootNode.subquestions &&
+              rootNode.subquestions.map((question) => (
+                <QuestionNumber
+                  key={question.number}
+                  questionNode={question}
+                  setQuestion={setCurrentQuestion}
+                  currentQuestion={currentQuestion}
+                  handleAddQuestion={handleAddQuestion}
+                />
+              ))}
             <IconButton
               size="small"
               style={{
@@ -135,17 +142,17 @@ const AssessmentPage = () => {
             </IconButton>
           </div>
           {currentQuestion ? (
-            orderedQuestionsArray.map((question, index) => (
+            assessment.questions.map((question, index) => (
               <QuestionPanel
-                key={question.hierarchy.join('')}
+                key={question.number.join()}
                 currentQuestion={currentQuestion}
-                questionWithFullNumber={question}
-                prevQuestionWithFullNumber={
-                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                question={question}
+                prevQuestion={
+                  index > 0 ? assessment.questions[index - 1] : undefined
                 }
-                nextQuestionWithFullNumber={
-                  index < orderedQuestionsArray.length - 1
-                    ? orderedQuestionsArray[index + 1]
+                nextQuestion={
+                  index < assessment.questions.length - 1
+                    ? assessment.questions[index + 1]
                     : undefined
                 }
                 setQuestion={setCurrentQuestion}
@@ -164,7 +171,7 @@ const AssessmentPage = () => {
             </p>
           )}
 
-          <NewQuestion
+          {/* <NewQuestion
             open={newQuestionOpen}
             handleClose={handleNewQuestionClose}
             parent={newQuestionParentHierarchy}
@@ -176,7 +183,7 @@ const AssessmentPage = () => {
                   )
                 : '1'
             }
-          />
+          /> */}
         </>
       )}
     </div>

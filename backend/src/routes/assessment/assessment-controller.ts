@@ -96,7 +96,9 @@ export const getAssessment = async (
 ) => {
   try {
     // fetch the assessment by its ID
-    const assessment = await Assessment.findById(req.params.id);
+    const assessment = await Assessment.findById(req.params.id).populate(
+      'questions'
+    );
 
     if (!assessment) {
       return res.status(404).json({ message: 'Assessment not found' });

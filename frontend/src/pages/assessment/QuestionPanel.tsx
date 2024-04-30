@@ -1,6 +1,5 @@
 import { Button, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { QuestionWithFullNumber } from './AssessmentPage';
 import { useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
@@ -11,60 +10,51 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import NewAnswer from './NewAnswer/NewAnswer';
 import { arrayEquals } from '../../util/arrays';
+import { Question } from '../../types/assessment';
+import ReactQuill from 'react-quill';
 
 type QuestionPanelProps = {
-  currentQuestion: QuestionWithFullNumber;
-  questionWithFullNumber: QuestionWithFullNumber;
-  prevQuestionWithFullNumber: QuestionWithFullNumber | undefined;
-  nextQuestionWithFullNumber: QuestionWithFullNumber | undefined;
-  setQuestion: React.Dispatch<
-    React.SetStateAction<QuestionWithFullNumber | undefined>
-  >;
-  handleSubmitAnswer: (
-    questionWithFullNumber: QuestionWithFullNumber,
-    answer: string
-  ) => any;
+  currentQuestion: Question;
+  question: Question;
+  prevQuestion: Question | undefined;
+  nextQuestion: Question | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
+  handleSubmitAnswer: (question: Question, answer: string) => any;
 };
 
 const QuestionPanel = ({
   currentQuestion,
-  questionWithFullNumber,
-  prevQuestionWithFullNumber,
-  nextQuestionWithFullNumber,
+  question,
+  prevQuestion,
+  nextQuestion,
   setQuestion,
   handleSubmitAnswer
 }: QuestionPanelProps) => {
-  const { question, hierarchy } = questionWithFullNumber;
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
 
   return (
     <div
-      hidden={
-        !arrayEquals(
-          currentQuestion.hierarchy,
-          questionWithFullNumber.hierarchy
-        )
-      }
+      hidden={!arrayEquals(currentQuestion.number, question.number)}
       style={{ overflow: 'hidden', width: '100%' }}
     >
       <div style={{ paddingTop: '10px', display: 'flex' }}>
-        {prevQuestionWithFullNumber && (
+        {prevQuestion && (
           <Button
-            onClick={() => setQuestion(prevQuestionWithFullNumber)}
+            onClick={() => setQuestion(prevQuestion)}
             startIcon={<ArrowBackRoundedIcon />}
             style={{ textTransform: 'none', marginRight: 'auto' }}
           >
-            {prevQuestionWithFullNumber?.hierarchy.join('')}
+            {prevQuestion?.number.join('')}
           </Button>
         )}
-        {nextQuestionWithFullNumber && (
+        {nextQuestion && (
           <Button
-            onClick={() => setQuestion(nextQuestionWithFullNumber)}
+            onClick={() => setQuestion(nextQuestion)}
             endIcon={<ArrowForwardRoundedIcon />}
             style={{ textTransform: 'none', marginLeft: 'auto' }}
           >
-            {nextQuestionWithFullNumber?.hierarchy.join('')}
+            {nextQuestion.number.join('')}
           </Button>
         )}
       </div>
@@ -80,12 +70,24 @@ const QuestionPanel = ({
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        <h2 style={{ margin: '0px' }}>{hierarchy}</h2>
+        <h2 style={{ margin: '0px' }}>{question.number}</h2>
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>
       </div>
-      <div>{question.content?.text}</div>
+      <ReactQuill
+        style={{
+          overflow: 'hidden',
+          height: 'fit-content',
+          border: '1px solid #B0B0B0',
+          borderRadius: '10px',
+          margin: '10px',
+          minHeight: '100px'
+        }}
+        value={question.text}
+        readOnly={true}
+        theme={'bubble'}
+      />
       <div
         style={{
           alignItems: 'end',
@@ -95,11 +97,8 @@ const QuestionPanel = ({
           padding: '0px 20px'
         }}
       >
-        {question.content!.answers.length === 0
-          ? 'No'
-          : question.content!.answers.length}{' '}
-        Answer
-        {question.content!.answers.length === 1 ? '' : 's'}
+        {question.answers.length === 0 ? 'No' : question.answers.length} Answer
+        {question.answers.length === 1 ? '' : 's'}
         <div
           style={{
             display: 'flex',
@@ -109,14 +108,14 @@ const QuestionPanel = ({
         >
           Created by
           <PersonCard
-            name={question.content!.author}
+            name={question.author}
             avatarPos="left"
             style={{ columnGap: '8px' }}
           />
         </div>
       </div>
       <div style={{ margin: '20px' }}>
-        {question.content!.answers.map((answer, index) => (
+        {question.answers.map((answer, index) => (
           <AnswerCard key={index} answer={answer} />
         ))}
       </div>
@@ -125,7 +124,7 @@ const QuestionPanel = ({
       >
         <NewAnswer
           handleSubmitAnswer={(answer: string) =>
-            handleSubmitAnswer(questionWithFullNumber, answer)
+            handleSubmitAnswer(question, answer)
           }
         />
       </div>

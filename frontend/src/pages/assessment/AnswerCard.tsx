@@ -1,4 +1,3 @@
-import { Answer } from './AssessmentPage';
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
@@ -7,6 +6,7 @@ import { IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
+import { Answer } from '../../types/assessment';
 
 type AnswerCardProps = {
   answer: Answer;

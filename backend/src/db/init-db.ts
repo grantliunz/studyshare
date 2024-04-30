@@ -5,6 +5,13 @@ import mongoose, { mongo } from 'mongoose';
 // TODO import your schema here
 import University from '../routes/university/university-model';
 import Course from '../routes/course/course-model';
+import Question from '../routes/question/question-model';
+import Assessment from '../routes/assessment/assessment-model';
+import {
+  AssessmentType,
+  SemesterType
+} from '../routes/assessment/assessment-enums';
+import User from '../routes/user/user-model';
 
 // Hardcoded a University list for testing
 
@@ -18,6 +25,33 @@ const university = new University({
     })
   ]
 });
+
+const users = [
+  new User({
+    name: 'Aaron Rodrigues',
+    email: 'aaron@gmail.com',
+    questions: [],
+    answers: [],
+    watchList: [],
+    rewards: []
+  }),
+  new User({
+    name: 'Connor Stevens',
+    email: 'connor@gmail.com',
+    questions: [],
+    answers: [],
+    watchList: [],
+    rewards: []
+  }),
+  new User({
+    name: 'Grant Liu',
+    email: 'grant@gmail.com',
+    questions: [],
+    answers: [],
+    watchList: [],
+    rewards: []
+  })
+];
 
 const universities = [
   new University({
@@ -71,6 +105,101 @@ const courses = [
   })
 ];
 
+const assessments = [
+  new Assessment({
+    type: AssessmentType.EXAM,
+    year: 2024,
+    semester: SemesterType.FIRST,
+    questions: []
+  }),
+  new Assessment({
+    type: AssessmentType.TEST,
+    year: 2024,
+    semester: SemesterType.FIRST,
+    number: 1,
+    questions: []
+  }),
+  new Assessment({
+    type: AssessmentType.EXAM,
+    year: 2023,
+    semester: SemesterType.FIRST,
+    questions: []
+  }),
+  new Assessment({
+    type: AssessmentType.OTHER,
+    year: 2024,
+    semester: SemesterType.FIRST,
+    name: 'Problem Sheet 1',
+    questions: []
+  })
+];
+
+const questions = [
+  new Question({
+    number: ['1', 'a', 'i'],
+    text: '<p>How can I be like Penqor</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['1', 'a', 'ii'],
+    text: '<p>How long did Penqor spend at green place?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['1', 'a', 'iii'],
+    text: '<p>What is green place?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['1', 'b', 'i'],
+    text: '<p>Friend help?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['1', 'b', 'ii'],
+    text: '<p>What sound does a monkey make?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['1', 'b', 'iii'],
+    text: '<p>How much can a gorilla deadlift?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['2', 'a'],
+    text: '<p>How much did Penqor deadlift last week?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['2', 'b'],
+    text: '<p>How much can you deadlift?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  }),
+  new Question({
+    number: ['3'],
+    text: '<p>Where is ardo?</p>',
+    answers: [],
+    watchers: [],
+    comments: []
+  })
+];
+
 // This is a standalone program which will populate the database with initial data.
 async function run() {
   try {
@@ -79,6 +208,10 @@ async function run() {
 
     // TODO Clear db
     await mongoose.connection.db.dropDatabase();
+
+    for (const user of users) {
+      await user.save();
+    }
 
     for (const uni of universities) {
       await uni.save(); // save() will input timestamps
@@ -91,6 +224,23 @@ async function run() {
       );
       relatedUni?.courses.push(course._id);
       await relatedUni?.save();
+    }
+
+    for (const assessment of assessments) {
+      assessment.course = courses[0]._id;
+      await assessment.save();
+      courses[0].assessments.push(assessment._id);
+      await courses[0].save();
+    }
+
+    for (const question of questions) {
+      question.assessment = assessments[0]._id;
+      question.author = users[0]._id;
+      await question.save();
+      assessments[0].questions.push(question._id);
+      await assessments[0].save();
+      users[0].questions.push(question.id);
+      await users[0].save();
     }
 
     await mongoose.disconnect();

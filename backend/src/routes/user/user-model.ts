@@ -8,6 +8,7 @@ export interface IUser extends Document {
   watchList: Schema.Types.ObjectId[];
   rewards: Schema.Types.ObjectId[];
 }
+
 const userSchema: Schema<IUser> = new Schema(
   {
     name: {

@@ -7,14 +7,14 @@ import { useState } from 'react';
 type newQuestionProps = {
   open: boolean;
   handleClose: () => void;
-  parent: string[];
+  parentQuestionId: string;
   defaultQuestionNumber: string;
 };
 
 export default function NewQuestion({
   open,
   handleClose,
-  parent,
+  parentQuestionId,
   defaultQuestionNumber
 }: newQuestionProps) {
   const [value, setValue] = useState('');
@@ -43,7 +43,9 @@ export default function NewQuestion({
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
-          padding: '20px'
+          height: '80%',
+          padding: '20px',
+          width: '80%'
         }}
       >
         <div
@@ -85,7 +87,8 @@ export default function NewQuestion({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
+            height: '350px',
+            marginBottom: '10px',
             width: '100%'
           }}
         >

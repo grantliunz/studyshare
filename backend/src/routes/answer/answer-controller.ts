@@ -41,7 +41,7 @@ export const createAnswer = async (
     const createdAnswer = await answer.save();
 
     // add the answer ID to the question's answers
-    question.content?.answers.push(createdAnswer._id);
+    question.answers.push(createdAnswer._id);
 
     // save the question with the updated answers array
     await question.save();
@@ -67,7 +67,7 @@ export const getAllAnswers = async (
 
     // fetch all answers from the database
     const answers = await Answer.find({
-      _id: { $in: question.content?.answers }
+      _id: { $in: question.answers }
     });
 
     res.status(200).json(answers); // respond with all answers

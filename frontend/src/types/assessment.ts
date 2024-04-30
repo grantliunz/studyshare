@@ -1,14 +1,11 @@
 export type Question = {
-  number: string;
-  content?: {
-    text: string;
-    answers: Answer[]; // temp
-    watchers: string[]; // temp
-    comments: string[]; // temp
-    timestamp: string;
-    author: string;
-  };
-  subquestions?: Question[];
+  assessment: string;
+  number: string[];
+  text: string;
+  author: string;
+  answers: Answer[];
+  watchers: string[]; // might need to change to a user object
+  comments: Comment[];
 };
 
 export type Answer = {
