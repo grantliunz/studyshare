@@ -24,7 +24,7 @@ export const createUser = async (
 
     res.status(201).json(createdUser); // respond with the created user
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -36,7 +36,7 @@ export const getAllUsers = async (req: Request<{}, {}, {}>, res: Response) => {
 
     res.status(200).json(users); // respond with the users
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -50,12 +50,12 @@ export const getUser = async (
     const user = await User.findById(req.params.userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     res.status(200).json(user); // respond with the user
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -74,7 +74,7 @@ export const updateUser = async (
     const user = await User.findById(req.params.userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     // Update the user with the new data
@@ -86,7 +86,7 @@ export const updateUser = async (
 
     res.status(200).json(user); // respond with the updated user
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -100,7 +100,7 @@ export const deleteUser = async (
     const user = await User.findById(req.params.userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     // delete the user from the database
@@ -108,6 +108,6 @@ export const deleteUser = async (
 
     res.status(204).end(); // respond with no content
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
