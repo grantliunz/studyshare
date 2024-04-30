@@ -16,6 +16,7 @@ import type { University, PostUniversity } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
+import { AxiosError } from 'axios';
 
 export default function University() {
   const { user, logout } = useAuth();
@@ -29,17 +30,9 @@ export default function University() {
   const {
     data: universitiesData,
     isLoading: isLoadingUniversities,
-    refresh: refreshUniversities
+    refresh: refreshUniversities,
+    error: errorString = null
   } = useGet<University[]>(API.getUniversities, [], mapGetUniversitiesData);
-
-  const {
-    postData: addUniversity,
-    isLoading: isAddingUniversity,
-    error: addUniversityError
-  } = usePost<PostUniversity, University>(
-    '/university/createUniversity',
-    mapGetUniversityData
-  );
 
   useEffect(() => {
     if (!query.trim()) {
@@ -51,20 +44,6 @@ export default function University() {
       setDisplayedData(filtered);
     }
   }, [query, universitiesData]);
-
-  const handleAddUniversity = async (name: string) => {
-    if (!name.trim()) {
-      return;
-    }
-
-    const newUniversityData: PostUniversity = { name };
-    const addedUniversity = await addUniversity(newUniversityData);
-
-    if (addedUniversity) {
-      setShowForm(false);
-      refreshUniversities();
-    }
-  };
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -85,29 +64,34 @@ export default function University() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>University Page</h1>
-      <SearchBar
-        title={'Search for a university'}
-        onQueryChange={onQueryChange}
-      />
-      <div className={styles.universitiesGrid}>
-        {isLoadingUniversities && <CircularProgress />}
-        {displayedData &&
-          displayedData.map((university) => (
-            <UniversityCard key={university.id} university={university} />
-          ))}
-        {displayedData?.length === 0 && !isLoadingUniversities && (
-          <p>No universities found</p>
-        )}
-      </div>
-      <AddUniversityForm
-        open={showForm}
-        onAddUniversity={handleAddUniversity}
-        onClose={handleCloseForm}
-      />
-      {isAddingUniversity && <CircularProgress />}
-      <AddButton handleOpenForm={handleOpenForm} />
-      {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+      {errorString ? (
+        <div>{errorString}</div>
+      ) : (
+        <>
+          <h1 className={styles.title}>University Page</h1>
+          <SearchBar
+            title={'Search for a university'}
+            onQueryChange={onQueryChange}
+          />
+          <div className={styles.universitiesGrid}>
+            {isLoadingUniversities && <CircularProgress />}
+            {displayedData &&
+              displayedData.map((university) => (
+                <UniversityCard key={university.id} university={university} />
+              ))}
+            {!isLoadingUniversities &&
+              displayedData?.length === 0 &&
+              !errorString && <p>No universities found</p>}
+          </div>
+          <AddUniversityForm
+            open={showForm}
+            onClose={handleCloseForm}
+            refreshUniversities={refreshUniversities}
+          />
+          <AddButton handleOpenForm={handleOpenForm} />
+          {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+        </>
+      )}
     </div>
   );
 }

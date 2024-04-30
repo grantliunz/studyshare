@@ -49,7 +49,7 @@ export const createUniversity = async (
 
     return res.status(201).json(createdUniversity); // Respond with the created university
   } catch (error) {
-    return res.status(500).json({ message: `Internal server error: ${error}` });
+    return res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
