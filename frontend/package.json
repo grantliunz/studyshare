@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@shared/types": "file:../types",
     "axios": "^1.6.8",
     "firebase": "^10.9.0",
     "react": "^18.2.0",
