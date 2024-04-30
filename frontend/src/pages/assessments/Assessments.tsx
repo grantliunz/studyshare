@@ -15,7 +15,6 @@ import usePost from '../../hooks/usePost';
 
 export default function Assessments() {
   const { courseId } = useParams();
-  console.log(courseId);
 
   const {
     data: course,
@@ -29,8 +28,6 @@ export default function Assessments() {
     refresh: refreshAssessments,
     error: getAssessmentsError
   } = useGet<Assessment[]>(`${API.getCourseAssessments}/${courseId}`, []);
-
-  console.log(assessments);
 
   const {
     postData: createAssessment,
@@ -83,8 +80,6 @@ export default function Assessments() {
     formInputs: FormInputs,
     type: AssessmentType
   ) => {
-    // any[] is used for now, i guess you could use a DTO later
-    console.log(formInputs);
     if (!courseId) {
       console.log('no course id');
       return;
@@ -95,7 +90,6 @@ export default function Assessments() {
       questions: [],
       ...formInputs
     });
-    console.log(newAssessment);
     refreshAssessments();
   };
 
@@ -140,7 +134,7 @@ export default function Assessments() {
           {assessments &&
             assessments.map((assessment) =>
               assessment.type === 'Test' ? (
-                <AssessmentCard assessment={assessment} />
+                <AssessmentCard key={assessment._id} assessment={assessment} />
               ) : null
             )}
           <AddAssessmentButton

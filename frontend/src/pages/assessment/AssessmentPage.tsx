@@ -1,17 +1,15 @@
 import { useParams } from 'react-router-dom';
-import styles from './Assessment.module.css';
+import styles from './AssessmentPage.module.css';
 import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
-import { Button, CircularProgress, IconButton } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
 import { findNextQuestionNumber } from '../../util/questionNumber';
 import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
-import usePost from '../../hooks/usePost';
 import { Assessment, Question } from '../../types/assessment';
-import { dummyAssessment1, dummyAssessment2 } from './dummyAssessment';
 import useGet from '../../hooks/useGet';
 
 export type QuestionWithFullNumber = {
@@ -101,34 +99,18 @@ const AssessmentPage = () => {
     }
   };
 
-  // DELETE
-  const {
-    postData: addAssessment,
-    isLoading: isAddingAssessment,
-    error: addAssessmentError
-  } = usePost<Assessment, Assessment>(
-    `${API.postAssessment}/662c8fc218556c7b26bf7971`
-  );
-
-  const handleAddAssessment = async () => {
-    const addedAssessment = await addAssessment(dummyAssessment2);
-    console.log(addedAssessment);
-  };
-
   if (isFetchingAssessment) {
     return <CircularProgress />;
   }
 
   return (
     <div className={styles.container}>
-      <Button onClick={() => handleAddAssessment()}>
-        Click me to add a dummy assessment
-      </Button>
       {!assessment || !orderedQuestionsArray ? (
         <div>Error retrieving assessment details</div>
       ) : (
         <>
           <div className={styles.questionsTabContainer}>
+            <h3>Questions</h3>
             {assessment.questions.map((question) => (
               <QuestionNumber
                 key={question.number}
