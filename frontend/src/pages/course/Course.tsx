@@ -5,14 +5,10 @@ import style from './Course.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddButton from '../../components/AddButton/AddButton';
-import { Course, PostCourse } from '../../types/types';
+import { Course } from '../../types/types';
 import useGet from '../../hooks/useGet';
-import usePost from '../../hooks/usePost';
 import API from '../../util/api';
-import {
-  mapGetCoursesData,
-  mapGetCourseData
-} from '../../mappers/courseMapper';
+import { mapGetCoursesData } from '../../mappers/courseMapper';
 import {
   CircularProgress,
   FormControl,

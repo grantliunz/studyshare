@@ -15,7 +15,7 @@ import { UserDisplayDTO } from '../../types/user';
 
 type AnswerCardProps = {
   answer: Answer;
-  onCreateComment?: Function;
+  onCreateComment?: () => void;
 };
 
 const AnswerCard = ({

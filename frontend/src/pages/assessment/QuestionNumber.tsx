@@ -12,7 +12,7 @@ type QuestionNumberProps = {
   questionNode: QuestionNode;
   currentQuestion: Question | undefined;
   setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
-  handleAddQuestion: (hierarchy: string[]) => any;
+  handleAddQuestion: (hierarchy: string[]) => void;
 };
 
 const QuestionNumber = ({

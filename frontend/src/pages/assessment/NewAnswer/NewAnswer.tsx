@@ -9,7 +9,7 @@ import { AxiosError } from 'axios';
 
 type NewAnswerProps = {
   questionId: string;
-  onSubmitAnswer?: Function;
+  onSubmitAnswer?: () => void;
 };
 
 const NewAnswer = ({
@@ -31,7 +31,7 @@ const NewAnswer = ({
     error: postAnswerError
   } = usePost(`${API.createAnswer}/${questionId}`);
 
-  const handleSubmitAnswer = async (text: string) => {
+  const handleSubmitAnswer = async () => {
     const newAnswer: Omit<Answer, '_id'> = {
       text: answer,
       author: users[0]._id,
@@ -65,7 +65,7 @@ const NewAnswer = ({
       <Editor value={answer} setValue={setAnswer} />
       <Button
         variant="contained"
-        onClick={() => handleSubmitAnswer(answer)}
+        onClick={handleSubmitAnswer}
         style={{ marginTop: '12px', width: 'fit-content' }}
       >
         Submit Answer

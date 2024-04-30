@@ -1,22 +1,21 @@
 .yearText {
-    font-size: 20px;
-    font-weight: normal;
-    padding: 0px;
-    margin: 0px;
-    text-align: left;
-
+  font-size: 20px;
+  font-weight: normal;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
 }
 
 .semesterText {
-    font-size: 13px;
-    padding: 0px;
-    margin: 0px;
-    text-align: left;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
 }
 
 .otherYearText {
-    font-size: 13px;
-    padding: 0px;
-    margin: 0px;
-    text-align: left;
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
 }

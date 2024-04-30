@@ -14,7 +14,7 @@ type newQuestionProps = {
   open: boolean;
   handleClose: () => void;
   parentNumber: string[];
-  onAddQuestion?: Function;
+  onAddQuestion?: () => void;
 };
 
 export default function NewQuestion({

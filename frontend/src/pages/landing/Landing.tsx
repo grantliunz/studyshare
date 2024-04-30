@@ -25,7 +25,7 @@ export default function Landing() {
       <Paper className={styles.description}>
         The collaborative platform where students come together to share,
         <br />
-        review, and elevate their exam preparation.
+        review, and elevate their learning.
       </Paper>
       <Button
         onClick={onClick}

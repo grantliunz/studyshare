@@ -19,7 +19,7 @@ type QuestionPanelProps = {
   prevQuestion: Question | undefined;
   nextQuestion: Question | undefined;
   setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
-  refreshAssessment: Function;
+  refreshAssessment: () => void;
 };
 
 const QuestionPanel = ({

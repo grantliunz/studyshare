@@ -7,7 +7,6 @@
   row-gap: 30px;
 }
 
-
 .form-overlay {
   position: fixed;
   top: 0;
@@ -71,7 +70,6 @@
 .title {
   align-self: center;
   margin-bottom: 10px;
-
 }
 .container {
   display: flex;

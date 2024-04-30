@@ -2,21 +2,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
 import useGet from '../../hooks/useGet';
-import usePost from '../../hooks/usePost';
-import {
-  mapGetUniversitiesData,
-  mapGetUniversityData
-} from '../../mappers/universityMapper';
+import { mapGetUniversitiesData } from '../../mappers/universityMapper';
 import styles from './University.module.css';
 import UniversityCard from './UniversityCard';
 import AddButton from '../../components/AddButton/AddButton';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import type { University, PostUniversity } from '../../types/types';
+import type { University } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
-import { AxiosError } from 'axios';
 
 export default function University() {
   const { user, logout } = useAuth();
