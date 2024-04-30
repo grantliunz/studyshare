@@ -43,27 +43,20 @@ export default function CoursePage() {
     refresh: refreshCourses,
     error: errorString = null
   } = useGet<Course[]>(`${API.getCourses}/${id}`, [], mapGetCoursesData);
-
-  const {
-    postData: addCourse,
-    isLoading: isAddingCourse,
-    error: addCourseError
-  } = usePost<PostCourse, Course>(`${API.postCourse}/${id}`, mapGetCourseData);
-
   useEffect(() => {
     if (!query.trim() && yearLevels.length === 0) {
       setDisplayedData(courseData);
     } else {
       const filtered = courseData?.filter((course) => {
-        const codeNumber = course.code.match(/\d+/)?.[0];
-        const yearLevel = codeNumber?.charAt(0);
-        if (!yearLevel) return false;
+        const codeNumberMatch = course.code.match(/[^\d]*(\d|$)/);
+        const yearLevel = codeNumberMatch ? codeNumberMatch[1] : null;
         const matchesQuery =
           course.name.toLowerCase().includes(query.toLowerCase()) ||
           course.code.toLowerCase().includes(query.toLowerCase());
 
         const meetsYearLevelCriteria =
           yearLevels.length === 0 ||
+          (!yearLevel && yearLevels.includes('')) || // Include courses with no numbers in the code
           (yearLevel && yearLevels.includes(yearLevel));
 
         return matchesQuery && meetsYearLevelCriteria;
@@ -71,23 +64,6 @@ export default function CoursePage() {
       setDisplayedData(filtered);
     }
   }, [query, courseData, yearLevels]);
-
-  const handleAddCourse = async (courseName: string, courseCode: string) => {
-    if (!courseName.trim() || !courseCode.trim()) {
-      return;
-    }
-
-    const newCourseData: PostCourse = {
-      code: courseCode,
-      name: courseName
-    };
-
-    const addedCourse = await addCourse(newCourseData);
-    if (addedCourse) {
-      setShowForm(false);
-      refreshCourses();
-    }
-  };
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -121,7 +97,7 @@ export default function CoursePage() {
                 labelId="year-level-select-label"
                 id="year-level-select"
                 multiple
-                value={yearLevels}
+                value={yearLevels.sort((a, b) => a.localeCompare(b))}
                 onChange={onYearLevelChange}
                 input={<OutlinedInput label="Select Year" />}
                 renderValue={(selected) =>
@@ -156,12 +132,15 @@ export default function CoursePage() {
             onClick={() => navigate(`/${id}/${course.id}/assessments`)}
           />
         ))}
+      {displayedData?.length === 0 && !isLoadingCourses && !errorString && (
+        <p>No courses found</p>
+      )}
       <AddCourseForm
         open={showForm}
-        onAddCourse={handleAddCourse}
         onClose={handleCloseForm}
+        universityId={id!}
+        refreshCourses={refreshCourses}
       />
-      {isAddingCourse && <CircularProgress />}
       <AddButton handleOpenForm={handleOpenForm} />
     </div>
   );

@@ -22,17 +22,16 @@ export const createCourse = async (
     if (!university) {
       return res.status(404).json({ message: 'University not found' });
     }
-
     // check if course with the same name already exists
     const existingCourse = await Course.findOne({
       name,
       code,
-      University: req.params.universityId
+      university: req.params.universityId
     });
-
     if (existingCourse) {
       return res.status(400).json({
-        error: 'Course with the same name already exists in this university'
+        error:
+          'Course with the same name and code already exists in this university'
       });
     }
 

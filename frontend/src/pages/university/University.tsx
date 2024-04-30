@@ -30,7 +30,8 @@ export default function University() {
   const {
     data: universitiesData,
     isLoading: isLoadingUniversities,
-    refresh: refreshUniversities
+    refresh: refreshUniversities,
+    error: errorString = null
   } = useGet<University[]>(API.getUniversities, [], mapGetUniversitiesData);
 
   useEffect(() => {
@@ -63,28 +64,34 @@ export default function University() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>University Page</h1>
-      <SearchBar
-        title={'Search for a university'}
-        onQueryChange={onQueryChange}
-      />
-      <div className={styles.universitiesGrid}>
-        {isLoadingUniversities && <CircularProgress />}
-        {displayedData &&
-          displayedData.map((university) => (
-            <UniversityCard key={university.id} university={university} />
-          ))}
-        {displayedData?.length === 0 && !isLoadingUniversities && (
-          <p>No universities found</p>
-        )}
-      </div>
-      <AddUniversityForm
-        open={showForm}
-        onClose={handleCloseForm}
-        refreshUniversities={refreshUniversities}
-      />
-      <AddButton handleOpenForm={handleOpenForm} />
-      {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+      {errorString ? (
+        <div>{errorString}</div>
+      ) : (
+        <>
+          <h1 className={styles.title}>University Page</h1>
+          <SearchBar
+            title={'Search for a university'}
+            onQueryChange={onQueryChange}
+          />
+          <div className={styles.universitiesGrid}>
+            {isLoadingUniversities && <CircularProgress />}
+            {displayedData &&
+              displayedData.map((university) => (
+                <UniversityCard key={university.id} university={university} />
+              ))}
+            {!isLoadingUniversities &&
+              displayedData?.length === 0 &&
+              !errorString && <p>No universities found</p>}
+          </div>
+          <AddUniversityForm
+            open={showForm}
+            onClose={handleCloseForm}
+            refreshUniversities={refreshUniversities}
+          />
+          <AddButton handleOpenForm={handleOpenForm} />
+          {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+        </>
+      )}
     </div>
   );
 }

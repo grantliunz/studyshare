@@ -4,6 +4,8 @@ import notificationIcon from '../../assets/icons/notification.svg';
 import { useAuth } from '../../contexts/UserContext';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 export default function Header() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -11,9 +13,22 @@ export default function Header() {
   const onClick = () => {
     navigate('/login');
   };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>StudyShare</h1>
+      <Link
+        to="/"
+        className={styles.title}
+        style={{
+          textDecoration: 'none',
+          display: 'inline-block',
+          lineHeight: 'normal',
+          marginTop: '1rem',
+          marginBottom: '1rem'
+        }}
+      >
+        StudyShare
+      </Link>
       <div className={styles.rightContainer}>
         {user ? (
           <>

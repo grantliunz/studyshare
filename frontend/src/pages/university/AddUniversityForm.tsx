@@ -90,16 +90,18 @@ export default function AddUniversityForm({
               error={!!error}
               helperText={error}
             />
-            {isAddingUniversity && <CircularProgress />}
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
-            >
-              Add
-            </Button>
+            {isAddingUniversity ? (
+              <CircularProgress style={{ marginTop: '1rem' }} />
+            ) : (
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
+              >
+                Add Course
+              </Button>
+            )}
           </form>
         </div>
       </Fade>
