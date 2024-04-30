@@ -163,17 +163,20 @@ const AssessmentPage = () => {
               Click a question to get started!
             </p>
           )}
-          {assessment.questions.length > 0 && (
-            <NewQuestion
-              open={newQuestionOpen}
-              handleClose={handleNewQuestionClose}
-              parent={newQuestionParentHierarchy}
-              defaultQuestionNumber={findNextQuestionNumber(
-                newQuestionParentHierarchy,
-                assessment.questions
-              )}
-            />
-          )}
+
+          <NewQuestion
+            open={newQuestionOpen}
+            handleClose={handleNewQuestionClose}
+            parent={newQuestionParentHierarchy}
+            defaultQuestionNumber={
+              assessment.questions.length > 0
+                ? findNextQuestionNumber(
+                    newQuestionParentHierarchy,
+                    assessment.questions
+                  )
+                : '1'
+            }
+          />
         </>
       )}
     </div>

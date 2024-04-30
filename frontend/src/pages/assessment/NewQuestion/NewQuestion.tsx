@@ -37,13 +37,13 @@ export default function NewQuestion({
     >
       <Box
         style={{
+          alignItems: 'start',
           backgroundColor: '#fff',
-          padding: '20px',
           borderRadius: '5px',
+          boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'start',
-          boxSizing: 'border-box'
+          padding: '20px'
         }}
       >
         <div
@@ -90,17 +90,16 @@ export default function NewQuestion({
           }}
         >
           <Editor value={value} setValue={setValue} />
-
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            style={{
-              width: 'fit-content'
-            }}
-          >
-            Submit
-          </Button>
         </div>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          style={{
+            width: 'fit-content'
+          }}
+        >
+          Submit
+        </Button>
       </Box>
     </Modal>
   );
