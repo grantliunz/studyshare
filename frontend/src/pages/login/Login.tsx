@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFirebaseErrorMessage } from '../../util/firebase';
@@ -42,7 +41,7 @@ export default function Login() {
 
   const submitGoogle = async () => {
     await loginWithGoogle();
-    navigate('/');
+    navigate('/universities');
   };
 
   return (
@@ -52,17 +51,20 @@ export default function Login() {
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        sx={{ mt: 1 }}
         style={{
-          minWidth: '60vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           margin: '0 auto',
           backgroundColor: 'white',
-          padding: '20px'
+          padding: '20px',
+          alignItems: 'center'
         }}
       >
+        <h1 className={styles.logo} onClick={() => navigate('/')}>
+          StudyShare
+        </h1>
+        <h2 className={styles.title}>Log in</h2>
         <TextField
           margin="normal"
           required
@@ -91,24 +93,22 @@ export default function Login() {
           fullWidth
           variant="contained"
           color="secondary"
-          sx={{ mt: 3, mb: 2 }}
           disabled={loading}
           endIcon={loading && <CircularProgress size={20} />}
+          style={{
+            marginTop: '20px',
+            padding: '10px 50px'
+          }}
         >
-          {!loading ? 'Log In' : ''}
+          {!loading ? 'Log in' : ''}
         </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link href="/signup" variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link>
-          </Grid>
-        </Grid>
+        <div className={styles.linksWrapper}>
+          <div>
+            Don't have an account?&nbsp;
+            <Link href="/signup">Sign up</Link>
+          </div>
+          <Link href="#">Forgot password?</Link>
+        </div>
         <Button onClick={submitGoogle}>Log In with Google</Button>
       </Paper>
     </div>

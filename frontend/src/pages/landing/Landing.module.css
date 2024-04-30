@@ -1,4 +1,4 @@
-.container {
+.pageWrapper {
   position: relative;
   z-index: 100;
   display: flex;
@@ -8,7 +8,18 @@
   height: 100vh;
   width: 100vw;
   padding-top: 20vh;
-  padding-left: 20vw;
+  padding-left: 15vw;
+}
+
+.container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  background-color: #fff;
+  padding: 0 100px 20px 50px;
+  border-radius: 20px;
 }
 
 .title {
@@ -16,17 +27,22 @@
   font-size: 16rem;
   color: rgba(65, 112, 155, 1);
   margin: 0;
-  height: 260px;
   user-select: none;
-}
-
-.button {
-  font-size: 1.5rem;
-  /* Adjust button font size as needed */
+  line-height: 230px;
+  height: 200px;
 }
 
 .description {
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  text-align: start;
+}
+.startButton {
+  font-size: 1.5rem;
+}
+
+.loginButton {
+  margin-top: 20px;
+}
+.loginButton > a {
+  color: #000;
 }
