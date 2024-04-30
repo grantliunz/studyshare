@@ -102,6 +102,22 @@ const buildQuestionsTree = (questions: Question[]) => {
   return root;
 };
 
+// builds a sorted array of questions
+const buildOrderedQuestionsArray = (root: QuestionNode) => {
+  const arr: Question[] = [];
+
+  const traverseNode = (node: QuestionNode) => {
+    if (node.subquestions) {
+      node.subquestions.forEach((subQn) => traverseNode(subQn));
+    } else if (node.question) {
+      arr.push(node.question);
+    }
+  };
+
+  traverseNode(root);
+  return arr;
+};
+
 const AssessmentPage = () => {
   const { user } = useAuth();
   const { id } = useParams();
@@ -118,10 +134,15 @@ const AssessmentPage = () => {
     string[]
   >([]);
   const [rootNode, setRootNode] = useState<QuestionNode>({ number: [] });
+  const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
+    Question[]
+  >([]);
 
   useEffect(() => {
     if (assessment) {
-      setRootNode(buildQuestionsTree(assessment.questions));
+      const root = buildQuestionsTree(assessment.questions);
+      setRootNode(root);
+      setOrderedQuestionsArray(buildOrderedQuestionsArray(root));
     }
   }, [assessment]);
 
@@ -188,17 +209,17 @@ const AssessmentPage = () => {
             </IconButton>
           </div>
           {currentQuestion ? (
-            assessment.questions.map((question, index) => (
+            orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
                 key={question.number.join()}
                 currentQuestion={currentQuestion}
                 question={question}
                 prevQuestion={
-                  index > 0 ? assessment.questions[index - 1] : undefined
+                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
                 }
                 nextQuestion={
-                  index < assessment.questions.length - 1
-                    ? assessment.questions[index + 1]
+                  index < orderedQuestionsArray.length - 1
+                    ? orderedQuestionsArray[index + 1]
                     : undefined
                 }
                 setQuestion={setCurrentQuestion}
