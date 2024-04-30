@@ -158,7 +158,6 @@ const AssessmentPage = () => {
     return <CircularProgress />;
   }
 
-  console.log(assessment);
   return (
     <div className={styles.container}>
       {!assessment || !rootNode ? (
