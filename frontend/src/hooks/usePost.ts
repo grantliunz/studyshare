@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Mapper } from '../mappers/mapper';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
@@ -18,10 +18,13 @@ export default function usePost<T, R>(
       const response = await axios.post(`${BACKEND_URL}${url}`, data);
       const mappedData = mappingDTO(response.data);
       return mappedData;
-    } catch (error) {
-      console.error('Error posting data:', error);
-      setError('Error posting data');
-      return null;
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || 'An error occurred');
+      } else {
+        setError('An error occurred');
+      }
+      return error;
     } finally {
       setLoading(false);
     }

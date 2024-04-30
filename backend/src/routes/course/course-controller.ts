@@ -54,19 +54,7 @@ export const createCourse = async (
 
     res.status(201).json(createdCourse); // respond with the created course
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
-  }
-};
-
-// controller function to get all courses
-export const getAllCourses = async (req: Request, res: Response) => {
-  try {
-    // fetch all courses from the database
-    const courses = await Course.find();
-
-    res.status(200).json(courses); // respond with all courses
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -78,21 +66,25 @@ export const getAllCoursesInUniversity = async (
   try {
     // Validate universityId
     if (!isValidObjectId(req.params.universityId)) {
-      return res.status(404).json({ message: 'University not Found' });
+      return res.status(404).json({ error: 'University not Found' });
     }
     // get the university by its ID
     const university = await University.findById(req.params.universityId);
     if (!university) {
-      return res.status(404).json({ message: 'University not found' });
+      return res.status(404).json({ error: 'University not found' });
     }
 
     // fetch all courses in the university
     const courses = await Course.find({ _id: { $in: university.courses } });
-
+    if (!courses || courses.length === 0) {
+      return res
+        .status(404)
+        .json({ error: 'No courses found in this university' });
+    }
     res.status(200).json(courses); // respond with all courses in the university
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -103,12 +95,12 @@ export const getCourse = async (req: Request, res: Response) => {
     const course = await Course.findById(req.params.id);
 
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ error: 'Course not found' });
     }
 
     res.status(200).json(course); // respond with the course
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -132,12 +124,12 @@ export const updateCourse = async (
     );
 
     if (!updatedCourse) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ error: 'Course not found' });
     }
 
     res.status(200).json(updatedCourse); // respond with the updated course
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -148,11 +140,11 @@ export const deleteCourse = async (req: Request, res: Response) => {
     const deletedCourse = await Course.findByIdAndDelete(req.params.id);
 
     if (!deletedCourse) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({ error: 'Course not found' });
     }
 
     return res.status(200).json(deletedCourse); // respond with the deleted course
   } catch (error) {
-    return res.status(500).json({ message: `Internal server error: ${error}` });
+    return res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };

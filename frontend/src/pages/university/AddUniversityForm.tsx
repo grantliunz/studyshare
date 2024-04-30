@@ -1,32 +1,60 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Modal, Backdrop, Fade, TextField, Button } from '@mui/material';
+import {
+  Modal,
+  Backdrop,
+  Fade,
+  TextField,
+  Button,
+  CircularProgress
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddUniversityForm.module.css';
+import { PostUniversity, University } from '../../types/types';
+import { AxiosError } from 'axios';
+import usePost from '../../hooks/usePost';
+import API from '../../util/api';
+import { mapGetUniversityData } from '../../mappers/universityMapper';
 
 interface AddUniversityFormProps {
   open: boolean;
-  onAddUniversity: (name: string) => void;
   onClose: () => void;
+  refreshUniversities: () => void;
 }
 
 export default function AddUniversityForm({
   open,
-  onAddUniversity,
-  onClose
+  onClose,
+  refreshUniversities
 }: AddUniversityFormProps) {
   const [name, setName] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const {
+    postData: addUniversity,
+    isLoading: isAddingUniversity,
+    error: addUniversityError
+  } = usePost<PostUniversity, University>(
+    API.postUniversity,
+    mapGetUniversityData
+  );
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
       setError('Please enter a valid university name.');
       return;
     }
-    onAddUniversity(name);
+
+    const newUniversityData: PostUniversity = { name };
+    const addedUniversity = await addUniversity(newUniversityData);
+    if (addedUniversity instanceof AxiosError) {
+      setError(addedUniversity.response?.data.error || 'An error occurred');
+      return addedUniversity;
+    }
+
     setName(''); // Clear input after submitting
     setError(''); // Clear error message
-    onClose(); // Close the form
+    refreshUniversities();
+    onClose();
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +90,8 @@ export default function AddUniversityForm({
               error={!!error}
               helperText={error}
             />
+            {isAddingUniversity && <CircularProgress />}
+
             <Button
               type="submit"
               variant="contained"
