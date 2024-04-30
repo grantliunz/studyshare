@@ -11,7 +11,7 @@ export default function usePost<T, R>(
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function postData(data: T): Promise<R | null> {
+  async function postData(data: T): Promise<R | null | AxiosError> {
     setLoading(true);
     setError(null);
     try {

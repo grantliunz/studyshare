@@ -6,12 +6,13 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import { QuestionNode } from './AssessmentPage';
+import { arrayEquals } from '../../util/arrays';
 
 type QuestionNumberProps = {
   questionNode: QuestionNode;
   currentQuestion: Question | undefined;
   setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
-  handleAddQuestion: (parentHierarchy: string[]) => any;
+  handleAddQuestion: (hierarchy: string[]) => any;
 };
 
 const QuestionNumber = ({
@@ -45,10 +46,10 @@ const QuestionNumber = ({
                 <KeyboardArrowRightRoundedIcon />
               )}
             </IconButton>
-            {questionNode.number}
+            {questionNode.number.at(-1)}
             <IconButton
               style={{ padding: '4px', marginLeft: 'auto' }}
-              // onClick={() => handleAddQuestion(parentNumbers)}
+              onClick={() => handleAddQuestion(questionNode.number)}
             >
               <AddIcon fontSize="small" />
             </IconButton>
@@ -65,7 +66,7 @@ const QuestionNumber = ({
           >
             {questionNode.subquestions.map((q) => (
               <QuestionNumber
-                key={questionNode.number + q.number}
+                key={q.number.join(',')}
                 questionNode={q}
                 setQuestion={setQuestion}
                 currentQuestion={currentQuestion}
@@ -80,15 +81,23 @@ const QuestionNumber = ({
           onClick={() => setQuestion(questionNode.question)}
           style={{
             textTransform: 'none',
-            backgroundColor:
-              currentQuestion === questionNode.question ? '#41403E' : '#E8E9EC',
-            color:
-              currentQuestion === questionNode.question ? 'white' : 'black',
+            backgroundColor: arrayEquals(
+              currentQuestion?.number || [],
+              questionNode.number
+            )
+              ? '#41403E'
+              : '#E8E9EC',
+            color: arrayEquals(
+              currentQuestion?.number || [],
+              questionNode.number
+            )
+              ? 'white'
+              : 'black',
             border: '1px solid black',
             padding: '0px'
           }}
         >
-          {questionNode.number}
+          {questionNode.number.at(-1)}
         </Button>
       )}
     </div>

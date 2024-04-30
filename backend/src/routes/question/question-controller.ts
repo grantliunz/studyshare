@@ -14,20 +14,41 @@ export const createQuestion = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { number, text, author } = req.body; // assuming request body contains question data
+    const {
+      number,
+      text,
+      author,
+      answers = [],
+      watchers = [],
+      comments = []
+    } = req.body; // assuming request body contains question data
 
     // Get the assessment by its ID
     const assessment = await Assessment.findById(req.params.assessmentId);
 
     if (!assessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
+      return res.status(404).json({ error: 'Assessment not found' });
+    }
+
+    // check if question already exists
+    const matchingQuestion = await Question.findOne({
+      assessment: req.params.assessmentId,
+      number
+    });
+
+    if (matchingQuestion) {
+      return res.status(400).json({ error: 'Question already exists' });
     }
 
     // create a new question instance
     const question = new Question({
+      assessment: req.params.assessmentId,
       number,
       text,
-      author
+      author,
+      answers,
+      watchers,
+      comments
     });
     // save the question to the database
     const createdQuestion = await question.save();
@@ -40,7 +61,7 @@ export const createQuestion = async (
 
     res.status(201).json(createdQuestion); // respond with the created question
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -51,7 +72,7 @@ export const getAllQuestions = async (req: Request, res: Response) => {
     const assessment = await Assessment.findById(req.params.assessmentId);
 
     if (!assessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
+      return res.status(404).json({ error: 'Assessment not found' });
     }
 
     // fetch all questions from the database
@@ -61,7 +82,7 @@ export const getAllQuestions = async (req: Request, res: Response) => {
 
     res.status(200).json(questions); // respond with all questions
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -75,12 +96,12 @@ export const getQuestion = async (
     const question = await Question.findById(req.params.id);
 
     if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
+      return res.status(404).json({ error: 'Question not found' });
     }
 
     res.status(200).json(question); // respond with the question
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -96,7 +117,7 @@ export const updateQuestion = async (
     const question = await Question.findById(req.params.id);
 
     if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
+      return res.status(404).json({ error: 'Question not found' });
     }
 
     // update the question with the new data
@@ -112,7 +133,7 @@ export const updateQuestion = async (
 
     res.status(200).json(updatedQuestion); // respond with the updated question
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -126,11 +147,11 @@ export const deleteQuestion = async (
     const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
 
     if (!deletedQuestion) {
-      return res.status(404).json({ message: 'Question not found' });
+      return res.status(404).json({ error: 'Question not found' });
     }
 
     return res.status(200).json(deletedQuestion); // respond with the deleted question
   } catch (error) {
-    return res.status(500).json({ message: `Internal server error: ${error}` });
+    return res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };

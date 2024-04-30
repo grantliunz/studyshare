@@ -6,37 +6,90 @@ import QuestionNumber from './QuestionNumber';
 import { CircularProgress, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewQuestion from './NewQuestion/NewQuestion';
-import { findNextQuestionNumber } from '../../util/questionNumber';
+import {
+  convertRomanToNumber,
+  isRomanNumeral
+} from '../../util/questionNumber';
 import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
 import { Assessment, Question } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
+import { arrayEquals } from '../../util/arrays';
 
 export type QuestionNode = {
-  number: string;
+  number: string[];
   subquestions?: QuestionNode[];
   question?: Question;
 };
 
+// Helper function to determine the type of a value (number, letter, or roman numeral)
+const getValueType = (value: any) => {
+  if (!Number.isNaN(Number(value))) {
+    return 'number';
+  } else if (typeof value === 'string') {
+    if (isRomanNumeral(value)) {
+      return 'roman';
+    } else if (/^[a-zA-Z]$/.test(value)) {
+      return 'letter';
+    }
+  }
+  return 'unknown'; // Default to 'unknown' for unrecognized types
+};
+
+const compareLastValues = (a: QuestionNode, b: QuestionNode) => {
+  const lastValueA = a.number.at(-1);
+  const lastValueB = b.number.at(-1);
+
+  // Determine the type of lastValueA and lastValueB
+  const typeA = getValueType(lastValueA);
+  const typeB = getValueType(lastValueB);
+
+  if (typeA === 'number' && typeB === 'number') {
+    return compareValues(lastValueA, lastValueB, 'number');
+  } else if (typeA === 'roman' && typeB === 'roman') {
+    return compareValues(lastValueA, lastValueB, 'roman');
+  } else {
+    return compareValues(lastValueA, lastValueB, 'letter');
+  }
+};
+
+// Helper function to compare values of the same type (number, letter, or roman numeral)
+const compareValues = (valueA: any, valueB: any, type: string) => {
+  if (type === 'number') {
+    return valueA - valueB;
+  } else if (type === 'roman') {
+    // Compare Roman numerals using their numerical values
+    const numericValueA = convertRomanToNumber(valueA);
+    const numericValueB = convertRomanToNumber(valueB);
+    return numericValueA - numericValueB;
+  } else {
+    // Compare letters based on their ASCII codes
+    return valueA.localeCompare(valueB);
+  }
+};
+
 const buildQuestionsTree = (questions: Question[]) => {
   // could use a map of visited for efficiency
-  const root: QuestionNode = { number: 'root' };
+  const root: QuestionNode = { number: [] };
   questions.forEach((question) => {
     let currentRoot = root;
     const hierarchy = question.number;
-    for (const [index, level] of hierarchy.entries()) {
+    for (let i = 0; i < hierarchy.length; i++) {
+      const currHierarchy = hierarchy.slice(0, i + 1);
       const node = currentRoot.subquestions
-        ? currentRoot.subquestions.find(
-            (questionNode) => questionNode.number === level
+        ? currentRoot.subquestions.find((questionNode) =>
+            arrayEquals(questionNode.number, currHierarchy)
           )
         : undefined;
       if (!node) {
         const newNode =
-          index === hierarchy.length - 1
-            ? { number: level, question }
-            : { number: level };
+          i === hierarchy.length - 1
+            ? { number: currHierarchy, question }
+            : { number: currHierarchy };
         if (currentRoot.subquestions) {
           currentRoot.subquestions.push(newNode);
+          currentRoot.subquestions =
+            currentRoot.subquestions.sort(compareLastValues);
         } else {
           currentRoot.subquestions = [newNode];
         }
@@ -46,7 +99,6 @@ const buildQuestionsTree = (questions: Question[]) => {
       }
     }
   });
-
   return root;
 };
 
@@ -61,14 +113,11 @@ const AssessmentPage = () => {
   } = useGet<Assessment>(`${API.getAssessment}/${id}`);
 
   const [currentQuestion, setCurrentQuestion] = useState<Question>();
-  // const [orderedQuestionsArray, setOrderedQuestionsArray] =
-  //   useState<Question[]>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
-  const [newQuestionParentHierarchy, setNewQuestionParentHierarchy] = useState<
+  const [newQuestionParentNumber, setNewQuestionParentNumber] = useState<
     string[]
   >([]);
-
-  const [rootNode, setRootNode] = useState<QuestionNode>({ number: 'root' });
+  const [rootNode, setRootNode] = useState<QuestionNode>({ number: [] });
 
   useEffect(() => {
     if (assessment) {
@@ -76,14 +125,14 @@ const AssessmentPage = () => {
     }
   }, [assessment]);
 
-  const handleAddQuestion = (parentHierarchy: string[]) => {
-    setNewQuestionParentHierarchy(parentHierarchy);
+  const handleAddQuestion = (parentNumber: string[]) => {
+    setNewQuestionParentNumber(parentNumber);
     setNewQuestionOpen(true);
   };
 
   const handleNewQuestionClose = () => {
     setNewQuestionOpen(false);
-    setNewQuestionParentHierarchy([]);
+    setNewQuestionParentNumber([]);
   };
 
   const handleSubmitAnswer = (questionWithFullNumber: any, answer: string) => {
@@ -100,9 +149,6 @@ const AssessmentPage = () => {
         timestamp: new Date().toISOString()
       };
       questionWithFullNumber.question.content?.answers.push(newAnswer);
-      // setAssessment({
-      //   ...polledAssessment
-      // });
     }
   };
 
@@ -121,7 +167,7 @@ const AssessmentPage = () => {
             {rootNode.subquestions &&
               rootNode.subquestions.map((question) => (
                 <QuestionNumber
-                  key={question.number}
+                  key={question.number.join(',')}
                   questionNode={question}
                   setQuestion={setCurrentQuestion}
                   currentQuestion={currentQuestion}
@@ -171,19 +217,15 @@ const AssessmentPage = () => {
             </p>
           )}
 
-          {/* <NewQuestion
+          <NewQuestion
             open={newQuestionOpen}
             handleClose={handleNewQuestionClose}
-            parent={newQuestionParentHierarchy}
-            defaultQuestionNumber={
-              assessment.questions.length > 0
-                ? findNextQuestionNumber(
-                    newQuestionParentHierarchy,
-                    assessment.questions
-                  )
-                : '1'
-            }
-          /> */}
+            parentNumber={newQuestionParentNumber}
+            onAddQuestion={() => {
+              refreshAssessment();
+              handleNewQuestionClose();
+            }}
+          />
         </>
       )}
     </div>

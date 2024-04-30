@@ -1,24 +1,3 @@
-import { Question } from '../types/assessment';
-
-export function findNextQuestionNumber(
-  parentHierarchy: string[],
-  questions: Question[]
-): string {
-  let subquestions: any = questions;
-  let depth = 0;
-  for (let i = 0; i < parentHierarchy.length; i++) {
-    subquestions = subquestions.find(
-      (question: Question) => question.number === parentHierarchy[i]
-    )?.subquestions;
-    depth += 1;
-  }
-  const lastSubquestion = subquestions[subquestions.length - 1].number;
-
-  return depth == 2
-    ? incrementRomanNumeral(lastSubquestion)
-    : String.fromCharCode(lastSubquestion.charCodeAt(0) + 1);
-}
-
 function incrementRomanNumeral(roman: string): string {
   const romanValues: [number, string][] = [
     [50, 'l'],
@@ -43,7 +22,14 @@ function incrementRomanNumeral(roman: string): string {
   return result;
 }
 
-function convertRomanToNumber(roman: string): number {
+// check if a string is a valid Roman numeral
+export const isRomanNumeral = (str: string) => {
+  const romanNumeralPattern =
+    /^(m{0,3})(cm|cd|d?c{0,3})(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})$/i;
+  return romanNumeralPattern.test(str);
+};
+
+export const convertRomanToNumber = (roman: string): number => {
   const romanValues: Record<string, number> = {
     i: 1,
     v: 5,
@@ -53,11 +39,8 @@ function convertRomanToNumber(roman: string): number {
 
   let total = 0;
   let prevValue = 0;
-
-  console.log('roman: ' + roman);
   for (const char of roman.split('').reverse()) {
     const value = romanValues[char];
-    console.log('value: ' + value);
     if (value < prevValue) {
       total -= value;
     } else {
@@ -67,4 +50,4 @@ function convertRomanToNumber(roman: string): number {
   }
 
   return total;
-}
+};
