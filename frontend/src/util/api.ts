@@ -8,7 +8,10 @@ const API = {
   getAssessment: '/assessment',
   getCourseAssessments: '/assessment/getAllAssessments',
   createQuestion: '/question/createQuestion',
-  getAllUsers: '/user/getAllUsers'
+  getAllUsers: '/user/getAllUsers',
+  createAnswer: '/answer/createAnswer',
+  createComment: '/comment/createComment',
+  getUser: '/user/getUser'
 };
 
 export default API;

@@ -40,7 +40,7 @@ export default function NewQuestion({
     postData: createQuestion,
     isLoading: isCreatingQuestion,
     error: createQuestionBackendError
-  } = usePost<Omit<Question, 'assessment'>, Question>(
+  } = usePost<Omit<Question, 'assessment' | '_id'>, Question>(
     `${API.createQuestion}/${id}`
   );
 

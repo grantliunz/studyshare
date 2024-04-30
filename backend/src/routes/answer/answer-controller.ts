@@ -3,7 +3,6 @@ import Answer from './answer-model';
 import Question from '../question/question-model';
 import { CreateAnswerDTO } from './answer-dto';
 import { validationResult } from 'express-validator';
-import Rating from '../rating/rating-model';
 
 // Controller function to create a new answer
 export const createAnswer = async (
@@ -15,27 +14,21 @@ export const createAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { answerText, answerImage, author } = req.body; // assuming request body contains answer data
+    const { text, author, rating, comments } = req.body; // assuming request body contains answer data
 
     // Get the question by its ID
     const question = await Question.findById(req.params.questionId);
 
     if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
+      return res.status(404).json({ error: 'Question not found' });
     }
-
-    // create a new Rating instance
-    const rating = new Rating({ upvotes: 0, downvotes: 0 });
-
-    // save the rating to the database
-    const createdRating = await rating.save();
 
     // create a new answer instance
     const answer = new Answer({
-      answerText,
-      answerImage,
+      text,
       author,
-      rating: createdRating._id
+      rating,
+      comments
     });
     // save the answer to the database
     const createdAnswer = await answer.save();
@@ -48,7 +41,7 @@ export const createAnswer = async (
 
     res.status(201).json(createdAnswer); // respond with the created answer
   } catch (error) {
-    res.status(500).json({ message: `Internal server error: ${error}` });
+    res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
@@ -62,7 +55,7 @@ export const getAllAnswers = async (
     const question = await Question.findById(req.params.questionId);
 
     if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
+      return res.status(404).json({ error: 'Question not found' });
     }
 
     // fetch all answers from the database
@@ -72,7 +65,7 @@ export const getAllAnswers = async (
 
     res.status(200).json(answers); // respond with all answers
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -86,12 +79,12 @@ export const getAnswer = async (
     const answer = await Answer.findById(req.params.answerId);
 
     if (!answer) {
-      return res.status(404).json({ message: 'Answer not found' });
+      return res.status(404).json({ error: 'Answer not found' });
     }
 
     res.status(200).json(answer); // respond with the answer
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -105,25 +98,27 @@ export const updateAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { answerText, answerImage } = req.body; // assuming request body contains answer data
+    const { text, author, rating, comments } = req.body; // assuming request body contains answer data
 
     // Get the answer by its ID
     const answer = await Answer.findById(req.params.answerId);
 
     if (!answer) {
-      return res.status(404).json({ message: 'Answer not found' });
+      return res.status(404).json({ error: 'Answer not found' });
     }
 
     // update the answer properties
-    answer.answerText = answerText;
-    answer.answerImage = answerImage ?? '';
+    answer.text = text;
+    answer.author = author;
+    answer.rating = rating;
+    answer.comments = comments;
 
     // save the updated answer
     const updatedAnswer = await answer.save();
 
     res.status(200).json(updatedAnswer); // respond with the updated answer
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -137,14 +132,14 @@ export const deleteAnswer = async (
     const answer = await Answer.findById(req.params.answerId);
 
     if (!answer) {
-      return res.status(404).json({ message: 'Answer not found' });
+      return res.status(404).json({ error: 'Answer not found' });
     }
 
     // delete the answer
     await Answer.deleteOne({ _id: answer._id });
 
-    res.status(204).json({ message: 'Answer deleted successfully' });
+    res.status(204).json({ error: 'Answer deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

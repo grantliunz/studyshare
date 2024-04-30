@@ -10,7 +10,6 @@ import {
   convertRomanToNumber,
   isRomanNumeral
 } from '../../util/questionNumber';
-import { useAuth } from '../../contexts/UserContext';
 import API from '../../util/api';
 import { Assessment, Question } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
@@ -119,7 +118,6 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 };
 
 const AssessmentPage = () => {
-  const { user } = useAuth();
   const { id } = useParams();
 
   const {
@@ -156,27 +154,11 @@ const AssessmentPage = () => {
     setNewQuestionParentNumber([]);
   };
 
-  const handleSubmitAnswer = (questionWithFullNumber: any, answer: string) => {
-    if (assessment) {
-      const newAnswer = {
-        text: answer,
-        author: user?.email || 'Anonymous',
-        rating: {
-          id: '1',
-          upvotes: 0,
-          downvotes: 0
-        },
-        comments: [],
-        timestamp: new Date().toISOString()
-      };
-      questionWithFullNumber.question.content?.answers.push(newAnswer);
-    }
-  };
-
   if (isFetchingAssessment) {
     return <CircularProgress />;
   }
 
+  console.log(assessment);
   return (
     <div className={styles.container}>
       {!assessment || !rootNode ? (
@@ -211,6 +193,7 @@ const AssessmentPage = () => {
           {currentQuestion ? (
             orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
+                refreshAssessment={refreshAssessment}
                 key={question.number.join()}
                 currentQuestion={currentQuestion}
                 question={question}
@@ -223,7 +206,6 @@ const AssessmentPage = () => {
                     : undefined
                 }
                 setQuestion={setCurrentQuestion}
-                handleSubmitAnswer={handleSubmitAnswer}
               />
             ))
           ) : (

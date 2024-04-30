@@ -19,7 +19,7 @@ type QuestionPanelProps = {
   prevQuestion: Question | undefined;
   nextQuestion: Question | undefined;
   setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
-  handleSubmitAnswer: (question: Question, answer: string) => any;
+  refreshAssessment: Function;
 };
 
 const QuestionPanel = ({
@@ -28,7 +28,7 @@ const QuestionPanel = ({
   prevQuestion,
   nextQuestion,
   setQuestion,
-  handleSubmitAnswer
+  refreshAssessment
 }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
@@ -116,16 +116,19 @@ const QuestionPanel = ({
       </div>
       <div style={{ margin: '20px' }}>
         {question.answers.map((answer, index) => (
-          <AnswerCard key={index} answer={answer} />
+          <AnswerCard
+            key={index}
+            answer={answer}
+            onCreateComment={refreshAssessment}
+          />
         ))}
       </div>
       <div
         style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
       >
         <NewAnswer
-          handleSubmitAnswer={(answer: string) =>
-            handleSubmitAnswer(question, answer)
-          }
+          questionId={question._id}
+          onSubmitAnswer={refreshAssessment}
         />
       </div>
     </div>

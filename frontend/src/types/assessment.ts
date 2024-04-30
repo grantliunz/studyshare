@@ -1,4 +1,5 @@
 export type Question = {
+  _id: string;
   assessment: string;
   number: string[];
   text: string;
@@ -9,21 +10,20 @@ export type Question = {
 };
 
 export type Answer = {
-  text?: string;
+  _id: string;
+  text: string;
   author: string;
   rating: Rating;
   comments: Comment[];
-  timestamp: string;
 };
 
 export type Comment = {
-  text?: string;
+  text: string;
   author: string;
   rating: Rating;
 };
 
 export type Rating = {
-  id: string;
   upvotes: number;
   downvotes: number;
 };
