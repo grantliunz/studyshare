@@ -95,7 +95,7 @@ const buildQuestionsTree = (questions: Question[]) => {
         currentRoot = newNode;
       } else {
         if (i === hierarchy.length - 1) {
-          currentRoot.question = question;
+          node.question = question;
         }
         currentRoot = node;
       }
