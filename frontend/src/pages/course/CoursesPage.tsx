@@ -22,9 +22,9 @@ import {
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 
-export default function CoursePage() {
+export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
-  const { id } = useParams();
+  const { universityId } = useParams();
   const navigate = useNavigate();
 
   const [query, setQuery] = useState<string>('');
@@ -39,10 +39,14 @@ export default function CoursePage() {
     isLoading: isLoadingCourses,
     refresh: refreshCourses,
     error: errorString = null
-  } = useGet<Course[]>(`${API.getCourses}/${id}`, [], mapGetCoursesData);
+  } = useGet<Course[]>(
+    `${API.getCourses}/${universityId}`,
+    [],
+    mapGetCoursesData
+  );
 
   const { data: universityData } = useGet<University>(
-    `${API.getUniversityById}/${id}`,
+    `${API.getUniversityById}/${universityId}`,
     null,
     mapGetUniversityData
   );
@@ -136,7 +140,7 @@ export default function CoursePage() {
             key={index}
             courseCode={course.code}
             courseName={course.name}
-            onClick={() => navigate(`/${id}/${course.id}/assessments`)}
+            onClick={() => navigate(`/${universityId}/${course.id}`)}
           />
         ))}
       {displayedData?.length === 0 && !isLoadingCourses && !errorString && (
@@ -145,7 +149,7 @@ export default function CoursePage() {
       <AddCourseForm
         open={showForm}
         onClose={handleCloseForm}
-        universityId={id!}
+        universityId={universityId!}
         refreshCourses={refreshCourses}
       />
       <AddButton handleOpenForm={handleOpenForm} />

@@ -1,7 +1,6 @@
 import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
 import { AssessmentType, SemesterType } from '../../types/assessment';
-import { useNavigate } from 'react-router-dom';
 
 type AssessmentCardProps = {
   assessment: {
@@ -11,6 +10,7 @@ type AssessmentCardProps = {
     year: number;
     semester: SemesterType;
   };
+  onClick: () => void;
 };
 // interface AssessmentCardProps {
 //     AssessmentType: string;
@@ -19,7 +19,10 @@ type AssessmentCardProps = {
 //     Semester: string;
 // }
 
-export default function AssessmentCard({ assessment }: AssessmentCardProps) {
+export default function AssessmentCard({
+  assessment,
+  onClick
+}: AssessmentCardProps) {
   function mapSemesterToString(semester: string) {
     switch (semester) {
       case 'First':
@@ -35,11 +38,9 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
     }
   }
 
-  const navigate = useNavigate();
-
   return (
     <Button
-      onClick={() => navigate(`/assessment/${assessment._id}`)}
+      onClick={onClick}
       variant="contained"
       sx={{
         borderRadius: '10px',

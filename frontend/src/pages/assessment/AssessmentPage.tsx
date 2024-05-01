@@ -123,14 +123,14 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 };
 
 const AssessmentPage = () => {
-  const { id } = useParams();
+  const { universityId, courseId, assessmentId } = useParams();
   const { user: currentUser } = useAuth();
 
   const {
     data: assessment,
     isLoading: isFetchingAssessment,
     refresh: refreshAssessment
-  } = useGet<AssessmentGET>(`${API.getAssessment}/${id}`);
+  } = useGet<AssessmentGET>(`${API.getAssessment}/${assessmentId}`);
 
   const [currentQuestion, setCurrentQuestion] = useState<QuestionGET>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
@@ -169,76 +169,82 @@ const AssessmentPage = () => {
   }
 
   return (
-    <div className={styles.container}>
-      {!assessment || !rootNode ? (
-        <div>Error retrieving assessment details</div>
-      ) : (
-        <>
-          <div className={styles.questionsTabContainer}>
-            <h3 style={{ margin: '0px' }}>Questions</h3>
-            {rootNode.subquestions &&
-              rootNode.subquestions.map((question) => (
-                <QuestionNumber
-                  key={question.number.join(',')}
-                  questionNode={question}
-                  setQuestion={setCurrentQuestion}
+    <>
+      <div>
+        <h2>test</h2>
+      </div>
+
+      <div className={styles.container}>
+        {!assessment || !rootNode ? (
+          <div>Error retrieving assessment details</div>
+        ) : (
+          <>
+            <div className={styles.questionsTabContainer}>
+              <h3 style={{ margin: '0px' }}>Questions</h3>
+              {rootNode.subquestions &&
+                rootNode.subquestions.map((question) => (
+                  <QuestionNumber
+                    key={question.number.join(',')}
+                    questionNode={question}
+                    setQuestion={setCurrentQuestion}
+                    currentQuestion={currentQuestion}
+                    handleAddQuestion={handleAddQuestion}
+                  />
+                ))}
+              <IconButton
+                size="small"
+                style={{
+                  alignSelf: 'center',
+
+                  marginTop: '8px'
+                }}
+                onClick={() => handleAddQuestion([])}
+              >
+                <AddIcon fontSize="small" />
+              </IconButton>
+            </div>
+            {currentQuestion ? (
+              orderedQuestionsArray.map((question, index) => (
+                <QuestionPanel
+                  key={question.number.join()}
                   currentQuestion={currentQuestion}
-                  handleAddQuestion={handleAddQuestion}
+                  question={question}
+                  prevQuestion={
+                    index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                  }
+                  nextQuestion={
+                    index < orderedQuestionsArray.length - 1
+                      ? orderedQuestionsArray[index + 1]
+                      : undefined
+                  }
+                  setQuestion={setCurrentQuestion}
                 />
-              ))}
-            <IconButton
-              size="small"
-              style={{
-                alignSelf: 'center',
+              ))
+            ) : (
+              <p
+                style={{
+                  alignSelf: 'center',
+                  placeSelf: 'center',
+                  width: '100%'
+                }}
+              >
+                Click a question to get started!
+              </p>
+            )}
 
-                marginTop: '8px'
+            <NewQuestion
+              open={newQuestionOpen}
+              handleClose={handleNewQuestionClose}
+              parentNumber={newQuestionParentNumber}
+              onAddQuestion={() => {
+                refreshAssessment();
+                handleNewQuestionClose();
               }}
-              onClick={() => handleAddQuestion([])}
-            >
-              <AddIcon fontSize="small" />
-            </IconButton>
-          </div>
-          {currentQuestion ? (
-            orderedQuestionsArray.map((question, index) => (
-              <QuestionPanel
-                key={question.number.join()}
-                currentQuestion={currentQuestion}
-                question={question}
-                prevQuestion={
-                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
-                }
-                nextQuestion={
-                  index < orderedQuestionsArray.length - 1
-                    ? orderedQuestionsArray[index + 1]
-                    : undefined
-                }
-                setQuestion={setCurrentQuestion}
-              />
-            ))
-          ) : (
-            <p
-              style={{
-                alignSelf: 'center',
-                placeSelf: 'center',
-                width: '100%'
-              }}
-            >
-              Click a question to get started!
-            </p>
-          )}
-
-          <NewQuestion
-            open={newQuestionOpen}
-            handleClose={handleNewQuestionClose}
-            parentNumber={newQuestionParentNumber}
-            onAddQuestion={() => {
-              refreshAssessment();
-              handleNewQuestionClose();
-            }}
-          />
-        </>
-      )}
-    </div>
+            />
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

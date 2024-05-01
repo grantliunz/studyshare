@@ -13,6 +13,7 @@ import { CircularProgress } from '@mui/material';
 import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
 import { useAuth } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function mapSemesterToString(semester: string) {
   switch (semester) {
@@ -42,7 +43,7 @@ function matchString(assessment: Assessment, searchText: string) {
 }
 
 const Assessments = () => {
-  const { courseId } = useParams();
+  const { universityId, courseId } = useParams();
   const { user: currentUser } = useAuth();
   const { data: course, isLoading: isFetchingCourse } = useGet<Course>(
     `${API.getCourse}/${courseId}`
@@ -62,6 +63,7 @@ const Assessments = () => {
     useState<AssessmentType>(AssessmentType.EXAM);
   const [showForm, setShowForm] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
+  const navigate = useNavigate();
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
@@ -102,6 +104,10 @@ const Assessments = () => {
     setShowForm(false);
   };
 
+  const handleCardClicked = (assessmentId: string | undefined) => {
+    navigate(`/${universityId}/${courseId}/${assessmentId}`);
+  };
+
   if (isFetchingAssessments || isFetchingCourse) {
     return <CircularProgress />;
   }
@@ -128,6 +134,7 @@ const Assessments = () => {
                   <AssessmentCard
                     key={assessment._id}
                     assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
                   />
                 ) : null
               )}
@@ -141,7 +148,11 @@ const Assessments = () => {
           {assessments &&
             assessments.map((assessment) =>
               assessment.type === 'Test' ? (
-                <AssessmentCard key={assessment._id} assessment={assessment} />
+                <AssessmentCard
+                  key={assessment._id}
+                  assessment={assessment}
+                  onClick={() => handleCardClicked(assessment._id)}
+                />
               ) : null
             )}
           <AddAssessmentButton
