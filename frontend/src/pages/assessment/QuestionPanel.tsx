@@ -1,6 +1,6 @@
 import { Button, CircularProgress, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
@@ -13,6 +13,9 @@ import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import { Question, QuestionGET } from '../../types/assessment';
+import { User, UserDTO } from '../../types/user';
+import usePut from '../../hooks/usePut';
+import { AxiosError } from 'axios';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionGET;
@@ -35,6 +38,37 @@ const QuestionPanel = ({
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
     `${API.getQuestion}/${question._id}`
   );
+
+  const { data: users } = useGet<UserDTO[]>(`${API.getAllUsers}`); // temp to get a user
+  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
+    `${API.updateUser}/${users && users[0]._id}`
+  );
+
+  useEffect(() => {
+    if (users) {
+      setIsStarred(
+        users[0].watchList.find((id) => id === question._id) !== undefined
+      );
+    }
+  }, [users]);
+
+  const handleIsStarredChange = async (newValue: boolean) => {
+    if (users) {
+      if (newValue) {
+        users[0].watchList.push(question._id);
+      } else {
+        users[0].watchList = users[0].watchList.filter(
+          (id) => id !== question._id
+        );
+      }
+      const res = await putUser({ watchList: users[0].watchList });
+      if (res instanceof AxiosError) {
+        console.log((res.response?.data as { error: string }).error);
+        return;
+      }
+      setIsStarred(newValue);
+    }
+  };
 
   if (!polledQuestion) {
     return (
@@ -81,7 +115,7 @@ const QuestionPanel = ({
           justifyContent: 'space-between'
         }}
       >
-        <IconButton onClick={() => setIsStarred(!isStarred)}>
+        <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
         <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>

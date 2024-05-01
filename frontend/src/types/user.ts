@@ -1,4 +1,4 @@
-import { Answer, Question, Comment } from './assessment';
+import { Answer, Comment, ObjectId, Question } from './assessment';
 
 export type UserDisplayDTO = {
   name: string;
@@ -18,4 +18,15 @@ export type UserDB = {
   upvotedComments: Comment[];
   downvotedComments: Comment[];
   createdAt: Date;
+};
+
+// temporary type until we finalise the user type
+export type UserDTO = {
+  _id: ObjectId;
+  name: string;
+  email: string;
+  questions: ObjectId[];
+  answers: ObjectId[];
+  watchList: ObjectId[];
+  rewards: ObjectId[];
 };
