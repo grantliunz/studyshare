@@ -147,8 +147,9 @@ export default function NewQuestion({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '350px',
             marginBottom: '10px',
+            height: '80%',
+            flexGrow: 1,
             width: '100%'
           }}
         >
