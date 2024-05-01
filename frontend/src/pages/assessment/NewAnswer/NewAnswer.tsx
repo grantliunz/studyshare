@@ -6,6 +6,7 @@ import usePost from '../../../hooks/usePost';
 import API from '../../../util/api';
 import { Answer } from '../../../types/assessment';
 import { AxiosError } from 'axios';
+import { useAuth } from '../../../contexts/UserContext';
 
 type NewAnswerProps = {
   questionId: string;
@@ -19,20 +20,17 @@ const NewAnswer = ({
   const [text, setText] = useState<string>('');
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
 
-  // temp to add an author to new answer
-  const {
-    data: users,
-    isLoading: isFetchingUsers,
-    error: fetchUsersError
-  } = useGet<any>(`${API.getAllUsers}`);
+  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new answer
 
-  const {
-    postData: postAnswer,
-    isLoading: isPostingAnswer,
-    error: postAnswerError
-  } = usePost(`${API.createAnswer}/${questionId}`);
+  const { postData: postAnswer } = usePost(`${API.createAnswer}/${questionId}`);
+
+  const { user: currentUser } = useAuth();
 
   const handleSubmitAnswer = async (text: string) => {
+    if (!currentUser) {
+      alert('You must be logged in to make a comment!');
+      return;
+    }
     const newAnswer: Omit<Answer, '_id'> = {
       text,
       author: users[0]._id,
