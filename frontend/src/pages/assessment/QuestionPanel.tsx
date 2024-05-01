@@ -84,7 +84,9 @@ const QuestionPanel = ({
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        <h2 style={{ margin: '0px' }}>{polledQuestion.number}</h2>
+        <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
+          {polledQuestion.number}
+        </h2>
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>
@@ -94,7 +96,7 @@ const QuestionPanel = ({
           overflow: 'hidden',
           height: 'fit-content',
           border: '1px solid #B0B0B0',
-          borderRadius: '10px',
+          borderRadius: '5px',
           margin: '10px',
           minHeight: '100px'
         }}

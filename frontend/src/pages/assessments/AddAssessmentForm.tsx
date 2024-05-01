@@ -133,7 +133,9 @@ export default function AddAssessmentForm({
       <Fade in={show}>
         <div className={styles.modal}>
           <div className={styles.header}>
-            <h2>Add {state + (state === 'Other' ? ' Assessment' : '')}</h2>
+            <h2 className={styles.headerText}>
+              Add {state + (state === 'Other' ? ' Assessment' : '')}
+            </h2>
             <button className={styles.closeButton} onClick={onClose}>
               <CloseIcon />
             </button>
@@ -202,7 +204,12 @@ export default function AddAssessmentForm({
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 3rem',
+                textTransform: 'none',
+                backgroundColor: '#41709b'
+              }}
             >
               Add
             </Button>

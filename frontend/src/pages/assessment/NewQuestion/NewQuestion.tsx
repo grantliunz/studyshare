@@ -143,7 +143,7 @@ export default function NewQuestion({
           <p>Question Number: &nbsp;</p>
           <p>{parentNumber.length == 0 ? '' : parentNumber.join('.') + '.'}</p>
           <input
-            style={{ width: '80px' }}
+            style={{ width: '40px', paddingTop: '6px' }}
             className={styles.questionNumberInput}
             onChange={(event) => setQuestionNumber(event.target.value)}
           />
@@ -168,10 +168,12 @@ export default function NewQuestion({
           variant="contained"
           onClick={handleSubmit}
           style={{
-            width: 'fit-content'
+            width: 'fit-content',
+            textTransform: 'none',
+            backgroundColor: '#41709b'
           }}
         >
-          Submit
+          Create Question
         </Button>
       </Box>
     </Modal>

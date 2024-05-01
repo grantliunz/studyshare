@@ -18,6 +18,10 @@
   margin-bottom: 20px;
 }
 
+.headerText {
+  margin: 0px;
+}
+
 .closeButton {
   background: none;
   border: none;

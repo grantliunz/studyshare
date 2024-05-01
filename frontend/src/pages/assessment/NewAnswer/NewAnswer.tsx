@@ -66,7 +66,12 @@ const NewAnswer = ({
       <Button
         variant="contained"
         onClick={handleSubmitAnswer}
-        style={{ marginTop: '12px', width: 'fit-content' }}
+        style={{
+          marginTop: '12px',
+          width: 'fit-content',
+          textTransform: 'none',
+          backgroundColor: '#41709b'
+        }}
       >
         Submit Answer
       </Button>

@@ -33,7 +33,8 @@ export default function Landing() {
           color="secondary"
           className={styles.startButton}
           style={{
-            fontSize: '1.5rem'
+            fontSize: '1.5rem',
+            textTransform: 'none'
           }}
         >
           Get Started

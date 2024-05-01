@@ -89,7 +89,7 @@ const AddCourseForm: React.FC<AddCourseFormProps> = ({
       <Fade in={open}>
         <div className={styles.modal}>
           <div className={styles.header}>
-            <h2>Add Course</h2>
+            <h2 className={styles.headerText}>Add Course</h2>
             <button className={styles.closeButton} onClick={onClose}>
               <CloseIcon />
             </button>
@@ -125,7 +125,12 @@ const AddCourseForm: React.FC<AddCourseFormProps> = ({
                 type="submit"
                 variant="contained"
                 color="primary"
-                style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.5rem 3rem',
+                  textTransform: 'none',
+                  backgroundColor: '#41709b'
+                }}
               >
                 Add Course
               </Button>
