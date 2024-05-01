@@ -1,7 +1,7 @@
 import mongoose, { Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-  firebaseId : string;
+  authId : string;
   name: string;
   email: string;
   questions: Schema.Types.ObjectId[];
@@ -14,7 +14,7 @@ export interface IUser extends Document {
 }
 
 const userSchema: Schema<IUser> = new Schema({
-    firebaseId: {
+    authId: {
       type: String,
       required: true
     },

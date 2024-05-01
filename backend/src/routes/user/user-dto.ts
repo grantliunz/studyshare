@@ -4,7 +4,7 @@ import { CreateAnswerDTO } from '../answer/answer-dto';
 import { CreateCommentDTO } from '../comment/comment-dto';
 
 export interface CreateUserDTO extends Document {
-  firebaseId: string;
+  authId: string;
   name: string;
   email: string;
   questions: CreateQuestionDTO[] | Types.ObjectId[];
