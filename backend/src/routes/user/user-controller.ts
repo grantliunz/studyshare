@@ -14,11 +14,11 @@ export const createUser = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { firebaseId, name, email, questions = [], answers = [], watchList = [], upvotedAnswers = [], downvotedAnswers = [], upvotedComments = [], downvotedComments = [] } = req.body; // assuming request body contains user data
+    const { authId, name, email, questions = [], answers = [], watchList = [], upvotedAnswers = [], downvotedAnswers = [], upvotedComments = [], downvotedComments = [] } = req.body; // assuming request body contains user data
 
     // Create a new user with the data
     const newUser = new User({
-      firebaseId,
+      authId,
       name,
       email,
       questions,
@@ -59,7 +59,7 @@ export const getUser = async (
   try {
     
     // Get the user by its firebase ID
-    let user = await User.findOne({ firebaseId: req.params.userId });
+    let user = await User.findOne({ authId: req.params.userId });
 
     // If the user is not found by firebase ID, try to find by ID
     user = user ?? await User.findOne({ _id: req.params.userId });
