@@ -5,14 +5,26 @@ import { useAuth } from '../../contexts/UserContext';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
 
 export default function Header() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [openNotifications, setOpenNotifications] = useState(false);
+
   const onClick = () => {
     navigate('/login');
   };
+
+  const openNotificationsWindow = () => {
+    setOpenNotifications(true);
+  }
+
+  const closeNotificationsWindow = () => { 
+    setOpenNotifications(false);
+  }
 
   return (
     <div className={styles.container}>
@@ -20,10 +32,16 @@ export default function Header() {
         StudyShare
       </h1>
       <div className={styles.rightContainer}>
-        {user ? (
+        {!user ? (
           <>
-            <img src={notificationIcon} alt="Notification" />
+            <img onClick={openNotificationsWindow} src={notificationIcon} alt="Notification" />
+            <NotificationsWindow 
+            open={openNotifications}
+            onClose={closeNotificationsWindow}
+            />
             <img src={profileIcon} alt="Profile" />
+
+            
           </>
         ) : (
           <div>
