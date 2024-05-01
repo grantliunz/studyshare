@@ -184,8 +184,7 @@ const AssessmentPage = () => {
               size="small"
               style={{
                 alignSelf: 'center',
-                border: '1px solid black',
-                borderRadius: '5px',
+
                 marginTop: '8px'
               }}
               onClick={() => handleAddQuestion([])}

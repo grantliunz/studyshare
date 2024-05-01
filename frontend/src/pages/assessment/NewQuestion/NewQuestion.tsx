@@ -45,6 +45,10 @@ export default function NewQuestion({
   );
 
   const handleSubmit = async () => {
+    if (value.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+      setCreateQuestionError('Please enter a question!');
+      return;
+    }
     if (questionNumber.trim() === '') {
       setCreateQuestionError('Please enter a question number!');
       return;
@@ -143,11 +147,11 @@ export default function NewQuestion({
             className={styles.questionNumberInput}
             onChange={(event) => setQuestionNumber(event.target.value)}
           />
-          <p style={{ marginLeft: '2  %' }}>
-            (Enter the question with a '.' to denote subquestions, e.g. 1aii
-            would be entered as 1.a.ii)
-          </p>
         </div>
+        <p style={{ fontWeight: '100', fontStyle: 'italic' }}>
+          Enter the question with a '.' to denote subquestions, e.g. 1aii would
+          be entered as 1.a.ii
+        </p>
         <div
           style={{
             display: 'flex',
