@@ -5,9 +5,10 @@ import Landing from './pages/landing/Landing.tsx';
 import Signup from './pages/signup/Signup.tsx';
 import University from './pages/university/University.tsx';
 import Assessments from './pages/assessments/Assessments.tsx';
-import CoursePage from './pages/course/Course.tsx';
+import CoursesPage from './pages/course/CoursesPage.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header/Header.tsx';
+import AssessmentPage from './pages/assessment/AssessmentPage.tsx';
 
 const theme = createTheme({
   palette: {
@@ -19,7 +20,6 @@ const theme = createTheme({
     }
   }
 });
-import AssessmentPage from './pages/assessment/AssessmentPage.tsx';
 
 function App() {
   const location = useLocation();
@@ -37,13 +37,14 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/:universityId/:courseId/assessments"
-          element={<Assessments />}
-        />
-        <Route path="/:id" element={<CoursePage />} />
+
         <Route path="/universities" element={<University />} />
-        <Route path="/assessment/:id" element={<AssessmentPage />} />
+        <Route path="/:universityId" element={<CoursesPage />} />
+        <Route path="/:universityId/:courseId" element={<Assessments />} />
+        <Route
+          path="/:universityId/:courseId/:assessmentId"
+          element={<AssessmentPage />}
+        />
       </Routes>
     </ThemeProvider>
   );

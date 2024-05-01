@@ -13,6 +13,8 @@ import { CircularProgress } from '@mui/material';
 import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
 import { useAuth } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 function mapSemesterToString(semester: string) {
   switch (semester) {
@@ -42,7 +44,7 @@ function matchString(assessment: Assessment, searchText: string) {
 }
 
 const Assessments = () => {
-  const { courseId } = useParams();
+  const { universityId, courseId } = useParams();
   const { user: currentUser } = useAuth();
   const { data: course, isLoading: isFetchingCourse } = useGet<Course>(
     `${API.getCourse}/${courseId}`
@@ -62,6 +64,7 @@ const Assessments = () => {
     useState<AssessmentType>(AssessmentType.EXAM);
   const [showForm, setShowForm] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
+  const navigate = useNavigate();
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
@@ -102,78 +105,91 @@ const Assessments = () => {
     setShowForm(false);
   };
 
+  const handleCardClicked = (assessmentId: string | undefined) => {
+    navigate(`/${universityId}/${courseId}/${assessmentId}`);
+  };
+
   if (isFetchingAssessments || isFetchingCourse) {
     return <CircularProgress />;
   }
 
   return (
-    <div className={styles.container}>
-      <h1>{course?.code}</h1>
-      <h2>{course?.name}</h2>
-      <div className={styles.searchWrapper}>
-        <SearchBar
-          title="Search for a past paper"
-          onQueryChange={searchAssessments}
-        />
-      </div>
+    <>
+      <BreadCrumbs />
+      <div className={styles.container}>
+        <h1>{course?.code}</h1>
+        <h2>{course?.name}</h2>
+        <div className={styles.searchWrapper}>
+          <SearchBar
+            title="Search for a past paper"
+            onQueryChange={searchAssessments}
+          />
+        </div>
 
-      <div className={styles.assessmentsWrapper}>
-        <h2 className={styles.typeHeader}>Exams</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments
-              .filter((assessment) => matchString(assessment, searchText))
-              .map((assessment) =>
-                assessment.type === 'Exam' ? (
+        <div className={styles.assessmentsWrapper}>
+          <h2 className={styles.typeHeader}>Exams</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments
+                .filter((assessment) => matchString(assessment, searchText))
+                .map((assessment) =>
+                  assessment.type === 'Exam' ? (
+                    <AssessmentCard
+                      key={assessment._id}
+                      assessment={assessment}
+                      onClick={() => handleCardClicked(assessment._id)}
+                    />
+                  ) : null
+                )}
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
+            />
+          </div>
+
+          <h2 className={styles.typeHeader}>Tests</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments.map((assessment) =>
+                assessment.type === 'Test' ? (
                   <AssessmentCard
                     key={assessment._id}
                     assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
                   />
                 ) : null
               )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
-          />
-        </div>
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
+            />
+          </div>
 
-        <h2 className={styles.typeHeader}>Tests</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Test' ? (
-                <AssessmentCard key={assessment._id} assessment={assessment} />
-              ) : null
-            )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
-          />
-        </div>
+          <h2 className={styles.typeHeader}>Other</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments.map((assessment) =>
+                assessment.type === 'Other' ? (
+                  <AssessmentCardOther
+                    key={assessment._id}
+                    assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
+                  />
+                ) : null
+              )}
 
-        <h2 className={styles.typeHeader}>Other</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Other' ? (
-                <AssessmentCardOther
-                  key={assessment._id}
-                  assessment={assessment}
-                />
-              ) : null
-            )}
+            <AddAssessmentForm
+              state={assessmentTypeState}
+              show={showForm}
+              onAddAssessment={handleAddAssessment}
+              onClose={handleCloseForm}
+            />
 
-          <AddAssessmentForm
-            state={assessmentTypeState}
-            show={showForm}
-            onAddAssessment={handleAddAssessment}
-            onClose={handleCloseForm}
-          />
-
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
-          />
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -24,7 +24,7 @@ export default function NewQuestion({
   parentNumber,
   onAddQuestion = () => {}
 }: newQuestionProps) {
-  const { id } = useParams();
+  const { assessmentId } = useParams();
   const { user: currentUser } = useAuth();
   const [questionContent, setQuestionContent] = useState('');
   const [questionNumber, setQuestionNumber] = useState<string>('');
@@ -37,7 +37,7 @@ export default function NewQuestion({
     isLoading: isCreatingQuestion,
     error: createQuestionBackendError
   } = usePost<Omit<Question, 'assessment' | '_id'>, Question>(
-    `${API.createQuestion}/${id}`
+    `${API.createQuestion}/${assessmentId}`
   );
 
   const handleSubmit = async () => {
