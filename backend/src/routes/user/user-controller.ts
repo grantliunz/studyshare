@@ -14,13 +14,24 @@ export const createUser = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email } = req.body; // assuming request body contains user data
+    const { firebaseId, name, email, questions = [], answers = [], watchList = [], upvotedAnswers = [], downvotedAnswers = [], upvotedComments = [], downvotedComments = [] } = req.body; // assuming request body contains user data
 
-    // create a new user instance
-    const user = new User({ name, email });
+    // Create a new user with the data
+    const newUser = new User({
+      firebaseId,
+      name,
+      email,
+      questions,
+      answers,
+      watchList,
+      upvotedAnswers,
+      downvotedAnswers,
+      upvotedComments,
+      downvotedComments,
+    });
 
     // save the user to the database
-    const createdUser = await user.save();
+    const createdUser = await newUser.save();
 
     res.status(201).json(createdUser); // respond with the created user
   } catch (error) {
@@ -46,8 +57,12 @@ export const getUser = async (
   res: Response
 ) => {
   try {
-    // Get the user by its ID
-    const user = await User.findById(req.params.userId);
+    
+    // Get the user by its firebase ID
+    let user = await User.findOne({ firebaseId: req.params.userId });
+
+    // If the user is not found by firebase ID, try to find by ID
+    user = user ?? await User.findOne({ _id: req.params.userId });
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -79,7 +94,7 @@ export const updateUser = async (
 
     // Update the user with the new data
     user.name = req.body.name;
-    user.email = req.body.email;
+    user.email = req.body.email ?? '';
 
     // save the updated user
     await user.save();

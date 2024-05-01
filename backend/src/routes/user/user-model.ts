@@ -1,15 +1,23 @@
 import mongoose, { Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
+  firebaseId : string;
   name: string;
-  email?: string;
+  email: string;
   questions: Schema.Types.ObjectId[];
   answers: Schema.Types.ObjectId[];
   watchList: Schema.Types.ObjectId[];
+  upvotedAnswers: Schema.Types.ObjectId[];
+  downvotedAnswers: Schema.Types.ObjectId[];
+  upvotedComments: Schema.Types.ObjectId[];
+  downvotedComments: Schema.Types.ObjectId[];
 }
 
-const userSchema: Schema<IUser> = new Schema(
-  {
+const userSchema: Schema<IUser> = new Schema({
+    firebaseId: {
+      type: String,
+      required: true
+    },
     name: {
       type: String,
       required: true
@@ -29,7 +37,24 @@ const userSchema: Schema<IUser> = new Schema(
     watchList: {
       type: [Schema.Types.ObjectId],
       ref: 'Question'
+    },
+    upvotedAnswers: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Answer'
+    },
+    downvotedAnswers: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Answer'
+    },
+    upvotedComments: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Comment'
+    },
+    downvotedComments: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Comment'
     }
+
   },
   {
     timestamps: {}
