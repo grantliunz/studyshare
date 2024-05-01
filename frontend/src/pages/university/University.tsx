@@ -63,7 +63,7 @@ export default function University() {
         <div>{errorString}</div>
       ) : (
         <>
-          <h1 className={styles.title}>University Page</h1>
+          <h1 className={styles.title}>Universities</h1>
           <SearchBar
             title={'Search for a university'}
             onQueryChange={onQueryChange}

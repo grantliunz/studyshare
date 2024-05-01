@@ -5,7 +5,7 @@ import style from './Course.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddButton from '../../components/AddButton/AddButton';
-import { Course } from '../../types/types';
+import { Course, University } from '../../types/types';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import { mapGetCoursesData } from '../../mappers/courseMapper';
@@ -20,6 +20,7 @@ import {
   SelectChangeEvent,
   OutlinedInput
 } from '@mui/material';
+import { mapGetUniversityData } from '../../mappers/universityMapper';
 
 export default function CoursePage() {
   const [showForm, setShowForm] = useState(false);
@@ -39,6 +40,13 @@ export default function CoursePage() {
     refresh: refreshCourses,
     error: errorString = null
   } = useGet<Course[]>(`${API.getCourses}/${id}`, [], mapGetCoursesData);
+
+  const { data: universityData } = useGet<University>(
+    `${API.getUniversityById}/${id}`,
+    null,
+    mapGetUniversityData
+  );
+
   useEffect(() => {
     if (!query.trim() && yearLevels.length === 0) {
       setDisplayedData(courseData);
@@ -78,6 +86,9 @@ export default function CoursePage() {
   };
   return (
     <div className={style.container}>
+      {universityData && (
+        <h1 className={style.uniName}>{universityData.name}</h1>
+      )}
       {errorString ? (
         <div>{errorString}</div>
       ) : (
