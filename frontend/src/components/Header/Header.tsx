@@ -2,7 +2,7 @@ import styles from './Header.module.css';
 import profileIcon from '../../assets/icons/profile.svg';
 import notificationIcon from '../../assets/icons/notification.svg';
 import { useAuth } from '../../contexts/UserContext';
-import { Button } from '@mui/material';
+import { Badge, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const [openNotifications, setOpenNotifications] = useState(false);
+  const [noNotifications, setNoNotifications] = useState(0);
 
   const onClick = () => {
     navigate('/login');
@@ -26,6 +27,8 @@ export default function Header() {
     setOpenNotifications(false);
   }
 
+
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title} onClick={() => navigate('/')}>
@@ -34,11 +37,20 @@ export default function Header() {
       <div className={styles.rightContainer}>
         {!user ? (
           <>
-            <img onClick={openNotificationsWindow} src={notificationIcon} alt="Notification" />
-            <NotificationsWindow 
-            open={openNotifications}
-            onClose={closeNotificationsWindow}
-            />
+            <Badge badgeContent={noNotifications} 
+            sx={{
+              "& .MuiBadge-badge": {
+                color: "white",
+                backgroundColor: "red"
+              }
+            }}>
+              <img onClick={openNotificationsWindow} src={notificationIcon} alt="Notification" />
+                <NotificationsWindow 
+                open={openNotifications}
+                onClose={closeNotificationsWindow}
+                updateNumberOfNotifications={setNoNotifications}
+              />
+            </Badge>
             <img src={profileIcon} alt="Profile" />
 
             
