@@ -93,7 +93,11 @@ export const getQuestion = async (
 ) => {
   try {
     // Get the question by its ID
-    const question = await Question.findById(req.params.id);
+    const question = await Question.findById(req.params.id).populate([
+      { path: 'answers' },
+      { path: 'comments' },
+      { path: 'author' }
+    ]);
 
     if (!question) {
       return res.status(404).json({ error: 'Question not found' });

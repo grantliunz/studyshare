@@ -76,7 +76,10 @@ export const getAnswer = async (
 ) => {
   try {
     // Get the answer by its ID
-    const answer = await Answer.findById(req.params.answerId);
+    const answer = await Answer.findById(req.params.answerId).populate([
+      { path: 'author' },
+      { path: 'comments' }
+    ]);
 
     if (!answer) {
       return res.status(404).json({ error: 'Answer not found' });

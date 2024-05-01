@@ -12,7 +12,6 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddAssessmentForm.module.css';
 import { AssessmentType, SemesterType } from '../../types/assessment';
-
 interface AddAssessmentFormProps {
   state: AssessmentType;
   show: boolean;

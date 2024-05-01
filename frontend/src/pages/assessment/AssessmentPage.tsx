@@ -11,14 +11,14 @@ import {
   isRomanNumeral
 } from '../../util/questionNumber';
 import API from '../../util/api';
-import { Assessment, Question } from '../../types/assessment';
+import { AssessmentGET, QuestionGET } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 
 export type QuestionNode = {
   number: string[];
   subquestions?: QuestionNode[];
-  question?: Question;
+  question?: QuestionGET;
 };
 
 // Helper function to determine the type of a value (number, letter, or roman numeral)
@@ -67,7 +67,7 @@ const compareValues = (valueA: any, valueB: any, type: string) => {
   }
 };
 
-const buildQuestionsTree = (questions: Question[]) => {
+const buildQuestionsTree = (questions: QuestionGET[]) => {
   // could use a map of visited for efficiency
   const root: QuestionNode = { number: [] };
   questions.forEach((question) => {
@@ -94,6 +94,9 @@ const buildQuestionsTree = (questions: Question[]) => {
         }
         currentRoot = newNode;
       } else {
+        if (i === hierarchy.length - 1) {
+          node.question = question;
+        }
         currentRoot = node;
       }
     }
@@ -103,13 +106,14 @@ const buildQuestionsTree = (questions: Question[]) => {
 
 // builds a sorted array of questions
 const buildOrderedQuestionsArray = (root: QuestionNode) => {
-  const arr: Question[] = [];
+  const arr: QuestionGET[] = [];
 
   const traverseNode = (node: QuestionNode) => {
+    if (node.question) {
+      arr.push(node.question);
+    }
     if (node.subquestions) {
       node.subquestions.forEach((subQn) => traverseNode(subQn));
-    } else if (node.question) {
-      arr.push(node.question);
     }
   };
 
@@ -124,16 +128,16 @@ const AssessmentPage = () => {
     data: assessment,
     isLoading: isFetchingAssessment,
     refresh: refreshAssessment
-  } = useGet<Assessment>(`${API.getAssessment}/${id}`);
+  } = useGet<AssessmentGET>(`${API.getAssessment}/${id}`);
 
-  const [currentQuestion, setCurrentQuestion] = useState<Question>();
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionGET>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
   const [newQuestionParentNumber, setNewQuestionParentNumber] = useState<
     string[]
   >([]);
   const [rootNode, setRootNode] = useState<QuestionNode>({ number: [] });
   const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
-    Question[]
+    QuestionGET[]
   >([]);
 
   useEffect(() => {
@@ -155,7 +159,7 @@ const AssessmentPage = () => {
   };
 
   if (isFetchingAssessment) {
-    return <CircularProgress />;
+    return <CircularProgress style={{ margin: 'auto' }} />;
   }
 
   return (
@@ -192,7 +196,6 @@ const AssessmentPage = () => {
           {currentQuestion ? (
             orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
-                refreshAssessment={refreshAssessment}
                 key={question.number.join()}
                 currentQuestion={currentQuestion}
                 question={question}

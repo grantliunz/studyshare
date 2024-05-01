@@ -50,7 +50,7 @@ export default function NewQuestion({
       return;
     }
     const newQuestion = {
-      number: [...parentNumber, questionNumber],
+      number: [...parentNumber, ...questionNumber.split('.')],
       text: value,
       author: users[0]._id,
       answers: [],
@@ -135,13 +135,18 @@ export default function NewQuestion({
         >
           {createQuestionError}
         </p>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
           <p>Question Number: &nbsp;</p>
           <p>{parentNumber.length == 0 ? '' : parentNumber.join('.') + '.'}</p>
           <input
+            style={{ width: '80px' }}
             className={styles.questionNumberInput}
             onChange={(event) => setQuestionNumber(event.target.value)}
           />
+          <p style={{ marginLeft: '2  %' }}>
+            (Enter the question with a '.' to denote subquestions, e.g. 1aii
+            would be entered as 1.a.ii)
+          </p>
         </div>
         <div
           style={{
