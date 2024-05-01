@@ -1,11 +1,12 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, models } from 'mongoose';
+import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
 
 export interface IUser extends Document {
   name: string;
   email?: string;
   questions: Schema.Types.ObjectId[];
   answers: Schema.Types.ObjectId[];
-  watchList: Schema.Types.ObjectId[];
+  watchList: WatchlistEntry[];
   rewards: Schema.Types.ObjectId[];
 }
 
@@ -27,10 +28,18 @@ const userSchema: Schema<IUser> = new Schema(
       type: [Schema.Types.ObjectId],
       ref: 'Answer'
     },
-    watchList: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Question'
-    },
+    watchList: [
+      {
+        questionId: {
+          type: Schema.Types.ObjectId,
+          ref: 'Question'
+        },
+        lastViewed: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
     rewards: {
       type: [Schema.Types.ObjectId],
       ref: 'Reward'
