@@ -35,7 +35,7 @@ export default function Header() {
         StudyShare
       </h1>
       <div className={styles.rightContainer}>
-        {!user ? (
+        {user ? (
           <>
             <Badge badgeContent={noNotifications} 
             sx={{
