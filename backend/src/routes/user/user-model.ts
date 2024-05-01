@@ -6,8 +6,8 @@ export interface IUser extends Document {
   questions: Schema.Types.ObjectId[];
   answers: Schema.Types.ObjectId[];
   watchList: Schema.Types.ObjectId[];
-  rewards: Schema.Types.ObjectId[];
 }
+
 const userSchema: Schema<IUser> = new Schema(
   {
     name: {
@@ -29,10 +29,6 @@ const userSchema: Schema<IUser> = new Schema(
     watchList: {
       type: [Schema.Types.ObjectId],
       ref: 'Question'
-    },
-    rewards: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Reward'
     }
   },
   {
