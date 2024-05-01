@@ -8,6 +8,7 @@ export interface IAnswer extends Document {
   };
   comments: [Types.ObjectId];
   author: Types.ObjectId;
+  isAnonymous?: boolean;
 }
 
 const answerSchema: Schema<IAnswer> = new Schema(
@@ -32,6 +33,9 @@ const answerSchema: Schema<IAnswer> = new Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User'
+    },
+    isAnonymous: {
+      type: Boolean
     }
   },
   {
