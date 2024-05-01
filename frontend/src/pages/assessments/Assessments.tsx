@@ -171,6 +171,7 @@ const Assessments = () => {
                   <AssessmentCardOther
                     key={assessment._id}
                     assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
                   />
                 ) : null
               )}

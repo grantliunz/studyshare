@@ -12,16 +12,16 @@ type AssessmentCardOtherProps = {
     semester: SemesterType;
     name?: string;
   };
+  onClick: () => void;
 };
 
 export default function AssessmentCardOther({
-  assessment
+  assessment,
+  onClick
 }: AssessmentCardOtherProps) {
-  const navigate = useNavigate();
-
   return (
     <Button
-      onClick={() => navigate(`/assessment/${assessment._id}`)}
+      onClick={onClick}
       variant="contained"
       sx={{
         borderRadius: '10px',

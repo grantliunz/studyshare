@@ -85,6 +85,39 @@ const BreadCrumbs = () => {
     }
   }, []);
 
+  function createAssessmentString(assessment: AssessmentGET): React.ReactNode {
+    const semesterMap: { [key: string]: string } = {
+      First: '1',
+      Second: '2',
+      Third: '3',
+      Other: 'Other'
+    };
+
+    const typeMap: { [key: string]: string } = {
+      Exam: 'Exam',
+      Test: 'Test',
+      Lab: 'Lab',
+      Assignment: 'Assignment',
+      Other: 'Other'
+    };
+
+    const semesterText = semesterMap[assessment.semester];
+    const typeText = typeMap[assessment.type];
+
+    let assessmentText = '';
+    if (typeText !== 'Other') {
+      assessmentText = ` ${typeText}`;
+    } else {
+      assessmentText = ` ${assessment.name}`;
+    }
+
+    if (assessment.type === 'Test') {
+      assessmentText += ` ${assessment.number}`;
+    }
+
+    return `${assessment.year} Semester ${semesterText}${assessmentText}`;
+  }
+
   return (
     <div className={style.breadCrumbs}>
       <Breadcrumbs className={style.slashes}>
@@ -103,7 +136,7 @@ const BreadCrumbs = () => {
         )}
         {assessment && (
           <Typography className={style.link}>
-            {assessment.year} {assessment.type}
+            {createAssessmentString(assessment)}
           </Typography>
         )}
       </Breadcrumbs>
