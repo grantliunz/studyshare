@@ -15,7 +15,7 @@ export const getRatingByAnswer = async (
     const answer = await Answer.findById(req.params.answerId);
 
     if (!answer) {
-      return res.status(404).json({ message: 'Answer not found' });
+      return res.status(404).json({ error: 'Answer not found' });
     }
 
     // fetch the rating of the answer
@@ -23,7 +23,7 @@ export const getRatingByAnswer = async (
 
     res.status(200).json(rating); // respond with the rating
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -37,7 +37,7 @@ export const getRatingByComment = async (
     const comment = await Comment.findById(req.params.commentId);
 
     if (!comment) {
-      return res.status(404).json({ message: 'Comment not found' });
+      return res.status(404).json({ error: 'Comment not found' });
     }
 
     // fetch the rating of the comment
@@ -45,7 +45,7 @@ export const getRatingByComment = async (
 
     res.status(200).json(rating); // respond with the rating
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -59,12 +59,12 @@ export const getRating = async (
     const rating = await Rating.findById(req.params.ratingId);
 
     if (!rating) {
-      return res.status(404).json({ message: 'Rating not found' });
+      return res.status(404).json({ error: 'Rating not found' });
     }
 
     res.status(200).json(rating); // respond with the rating
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -84,7 +84,7 @@ export const updateRating = async (
     const rating = await Rating.findById(req.params.ratingId);
 
     if (!rating) {
-      return res.status(404).json({ message: 'Rating not found' });
+      return res.status(404).json({ error: 'Rating not found' });
     }
 
     // Update the rating
@@ -97,7 +97,7 @@ export const updateRating = async (
 
     res.status(200).json(updatedRating); // respond with the updated rating
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -111,14 +111,14 @@ export const deleteRating = async (
     const rating = await Rating.findById(req.params.ratingId);
 
     if (!rating) {
-      return res.status(404).json({ message: 'Rating not found' });
+      return res.status(404).json({ error: 'Rating not found' });
     }
 
     // Delete the rating
     await rating.deleteOne({ _id: rating._id });
 
-    res.status(200).json({ message: 'Rating deleted successfully' });
+    res.status(200).json({ error: 'Rating deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

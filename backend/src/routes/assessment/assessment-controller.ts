@@ -97,13 +97,7 @@ export const getAssessment = async (
   try {
     // fetch the assessment by its ID
     const assessment = await Assessment.findById(req.params.id).populate({
-      path: 'questions',
-      populate: {
-        path: 'answers',
-        populate: {
-          path: 'comments'
-        }
-      }
+      path: 'questions'
     });
 
     if (!assessment) {
