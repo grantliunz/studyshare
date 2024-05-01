@@ -4,6 +4,7 @@ import User from './user-model';
 import { CreateUserDTO, UpdateUserDTO } from './user-dto';
 import Question from '../question/question-model';
 import mongoose from 'mongoose';
+import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 
 // Controller function to create a new user
 export const createUser = async (
@@ -49,15 +50,68 @@ export const getNotifications = async (
   try {
     // Get the user by its ID
     const user = await User.findById(req.params.userId);
-    // get Questions
-    const questions = await Question.find({ _id: { $in: user?.questions } });
-
-    const userAndQuestions = { user, questions };
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    return res.status(200).json(userAndQuestions);
+
+    // Aggregation pipeline to compare lastViewed with the last update of a question
+    const watchedQuestions = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$watchList'
+      },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'watchList.questionId',
+          foreignField: '_id',
+          as: 'question'
+        }
+      },
+      {
+        $unwind: '$question'
+      },
+      {
+        $lookup: {
+          from: 'users', // Name of the users collection
+          localField: 'question.author', // Field in the questions collection
+          foreignField: '_id', // Field in the users collection
+          as: 'author'
+        }
+      },
+      {
+        $unwind: '$author'
+      },
+      {
+        $project: {
+          questionId: '$question._id',
+          questionSummary: '$question.text',
+          authorName: '$author.name', // Get the author's name
+          lastViewed: '$watchList.lastViewed',
+          updatedAt: '$question.updatedAt',
+          timeDifference: {
+            $subtract: ['$watchList.lastViewed', '$question.updatedAt']
+          }
+        }
+      }
+    ]);
+
+    // Convert the results to match the NotificationDTO interface
+    const notifications: NotificationDTO[] = watchedQuestions.map(
+      (watchedQuestion: any) => ({
+        questionID: watchedQuestion.questionId,
+        commenterName: watchedQuestion.authorName,
+        questionSummary: watchedQuestion.questionSummary,
+        timestamp: watchedQuestion.updatedAt
+      })
+    );
+
+    return res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
   }
@@ -99,8 +153,6 @@ export const updateUser = async (
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
-    // Update the user with the request body
 
     // Update the user with the request body
     Object.assign(user, req.body);
