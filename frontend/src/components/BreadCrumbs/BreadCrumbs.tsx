@@ -87,7 +87,7 @@ const BreadCrumbs = () => {
 
   return (
     <div className={style.breadCrumbs}>
-      <Breadcrumbs className={style.link}>
+      <Breadcrumbs className={style.slashes}>
         <Link className={style.link} href="/universities">
           Universities
         </Link>

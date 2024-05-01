@@ -7,6 +7,12 @@
   margin-top: 10px;
 }
 
+.slashes {
+  color: #00186b !important;
+  font-size: 1.4rem !important;
+  font-weight: bold !important;
+}
+
 .link {
   color: #00186b !important;
   font-size: 1.4rem !important;
