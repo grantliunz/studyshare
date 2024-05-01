@@ -1,6 +1,7 @@
 import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import CommentCard from './CommentCard';
 import { CircularProgress, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
@@ -15,14 +16,11 @@ import { UserDisplayDTO } from '../../types/user';
 
 type AnswerCardProps = {
   answer: Answer;
-  onCreateComment?: Function;
 };
 
-const AnswerCard = ({
-  answer,
-  onCreateComment = () => {}
-}: AnswerCardProps) => {
+const AnswerCard = ({ answer }: AnswerCardProps) => {
   const [newComment, setNewComment] = useState<string>('');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
     `${API.getAnswer}/${answer._id}`
@@ -32,10 +30,14 @@ const AnswerCard = ({
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
-    // oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
-    // oldVoteDirection === VoteDirection.DOWN && polledAnswer.rating.downvotes--;
-    // newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
-    // newVoteDirection === VoteDirection.DOWN && polledAnswer.rating.downvotes++;
+    if (polledAnswer) {
+      oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
+      oldVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes--;
+      newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
+      newVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes++;
+    }
   };
 
   const handleAddCommentChange = (text: string) => {
@@ -67,6 +69,7 @@ const AnswerCard = ({
       console.log((res.response?.data as { error: string }).error);
       return;
     }
+    setNewComment('');
     refreshAnswer();
   };
 
@@ -107,7 +110,7 @@ const AnswerCard = ({
           <PersonCard
             name={author?.name || 'Anonymous'}
             avatarSize="32px"
-            style={{ alignItems: 'center', fontSize: '0.8rem' }}
+            style={{ alignItems: 'center', iconSize: '0.8rem' }}
           />
           <ReactQuill
             style={{ overflow: 'hidden', height: 'fit-content' }}
@@ -121,14 +124,25 @@ const AnswerCard = ({
         {polledAnswer.comments.length > 0 && (
           <>
             <div style={{ display: 'flex' }}>
-              <KeyboardArrowDownOutlinedIcon /> Comments{' '}
-              {polledAnswer.comments.length}
+              <IconButton
+                onClick={() => setIsExpanded(!isExpanded)}
+                style={{
+                  padding: '0px'
+                }}
+              >
+                {isExpanded ? (
+                  <ExpandMoreRoundedIcon />
+                ) : (
+                  <KeyboardArrowRightRoundedIcon />
+                )}
+              </IconButton>{' '}
+              Comments {polledAnswer.comments.length}
             </div>
             <div
               style={{
-                display: 'flex',
-                columnGap: '20px',
-                padding: '10px 0px'
+                display: isExpanded ? 'flex' : 'none',
+                columnGap: '16px',
+                padding: '4px 0px'
               }}
             >
               <div
@@ -142,7 +156,7 @@ const AnswerCard = ({
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  rowGap: '12px'
+                  rowGap: '4px'
                 }}
               >
                 {polledAnswer.comments.map((comment, i) => (
@@ -184,6 +198,7 @@ const AnswerCard = ({
               justifySelf: 'start',
               margin: '4px'
             }}
+            value={newComment}
           />
         </form>
       </div>

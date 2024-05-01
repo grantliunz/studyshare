@@ -1,5 +1,4 @@
 import { Button, IconButton } from '@mui/material';
-import { Question } from '../../types/assessment';
 import { useState } from 'react';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
@@ -7,11 +6,12 @@ import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import { QuestionNode } from './AssessmentPage';
 import { arrayEquals } from '../../util/arrays';
+import { QuestionGET } from '../../types/assessment';
 
 type QuestionNumberProps = {
   questionNode: QuestionNode;
-  currentQuestion: Question | undefined;
-  setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
+  currentQuestion: QuestionGET | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<QuestionGET | undefined>>;
   handleAddQuestion: (hierarchy: string[]) => any;
 };
 
@@ -128,30 +128,6 @@ const QuestionNumber = ({
           </div>
         </>
       }
-      {/* {!questionNode.subquestions && questionNode.question && (
-        <Button
-          onClick={() => setQuestion(questionNode.question)}
-          style={{
-            textTransform: 'none',
-            backgroundColor: arrayEquals(
-              currentQuestion?.number || [],
-              questionNode.number
-            )
-              ? '#41403E'
-              : '#E8E9EC',
-            color: arrayEquals(
-              currentQuestion?.number || [],
-              questionNode.number
-            )
-              ? 'white'
-              : 'black',
-            border: '1px solid black',
-            padding: '0px'
-          }}
-        >
-          {questionNode.number.at(-1)}
-        </Button>
-      )} */}
     </div>
   );
 };

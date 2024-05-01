@@ -27,7 +27,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
     <div
       style={{
         alignItems: 'center',
-        columnGap: '20px',
+        columnGap: '8px',
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
@@ -38,6 +38,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
         rating={comment.rating}
         style={{ display: 'flex', flexDirection: 'column' }}
         onChange={handleVoteChange}
+        iconSize="1.1rem"
       />
       <PersonCard
         avatarPos="top"

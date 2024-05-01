@@ -9,20 +9,17 @@ import AnswerCard from './AnswerCard';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import NewAnswer from './NewAnswer/NewAnswer';
-import { arrayEquals } from '../../util/arrays';
-import { Question } from '../../types/assessment';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { UserDisplayDTO } from '../../types/user';
+import { Question, QuestionGET } from '../../types/assessment';
 
 type QuestionPanelProps = {
-  currentQuestion: Question;
-  question: Question;
-  prevQuestion: Question | undefined;
-  nextQuestion: Question | undefined;
-  setQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
-  refreshAssessment: Function;
+  currentQuestion: QuestionGET;
+  question: QuestionGET;
+  prevQuestion: QuestionGET | undefined;
+  nextQuestion: QuestionGET | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<QuestionGET | undefined>>;
 };
 
 const QuestionPanel = ({
@@ -30,8 +27,7 @@ const QuestionPanel = ({
   question,
   prevQuestion,
   nextQuestion,
-  setQuestion,
-  refreshAssessment
+  setQuestion
 }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
@@ -43,8 +39,8 @@ const QuestionPanel = ({
   if (!polledQuestion) {
     return (
       <div
-        hidden={!arrayEquals(currentQuestion.number, question.number)}
-        style={{ overflow: 'hidden', width: '100%' }}
+        hidden={currentQuestion._id !== question._id}
+        style={{ width: '100%', placeSelf: 'center' }}
       >
         <CircularProgress />
       </div>
@@ -53,7 +49,7 @@ const QuestionPanel = ({
 
   return (
     <div
-      hidden={!arrayEquals(currentQuestion.number, question.number)}
+      hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
       <div style={{ paddingTop: '10px', display: 'flex' }}>
@@ -137,11 +133,7 @@ const QuestionPanel = ({
       </div>
       <div style={{ margin: '20px' }}>
         {polledQuestion.answers.map((answer, index) => (
-          <AnswerCard
-            key={index}
-            answer={answer}
-            onCreateComment={refreshAssessment}
-          />
+          <AnswerCard key={index} answer={answer} />
         ))}
       </div>
       <div

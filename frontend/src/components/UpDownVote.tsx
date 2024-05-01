@@ -4,7 +4,7 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
-import { Rating } from '../pages/assessment/AssessmentPage';
+import { Rating } from '../types/assessment';
 
 type UpDownVoteProps = {
   rating: Rating;
@@ -13,6 +13,7 @@ type UpDownVoteProps = {
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => any;
+  iconSize?: string;
 };
 
 export enum VoteDirection {
@@ -24,7 +25,8 @@ export enum VoteDirection {
 const UpDownVote = ({
   rating,
   style,
-  onChange = () => {}
+  onChange = () => {},
+  iconSize = '1.5rem'
 }: UpDownVoteProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(
     VoteDirection.NEUTRAL
@@ -51,9 +53,9 @@ const UpDownVote = ({
         }
       >
         {voteState === VoteDirection.UP ? (
-          <ThumbUpIcon />
+          <ThumbUpIcon style={{ fontSize: iconSize }} />
         ) : (
-          <ThumbUpOutlinedIcon />
+          <ThumbUpOutlinedIcon style={{ fontSize: iconSize }} />
         )}
       </IconButton>
       {rating.upvotes - rating.downvotes}
@@ -68,9 +70,9 @@ const UpDownVote = ({
         }
       >
         {voteState === VoteDirection.DOWN ? (
-          <ThumbDownIcon />
+          <ThumbDownIcon style={{ fontSize: iconSize }} />
         ) : (
-          <ThumbDownOutlinedIcon />
+          <ThumbDownOutlinedIcon style={{ fontSize: iconSize }} />
         )}
       </IconButton>
     </div>
