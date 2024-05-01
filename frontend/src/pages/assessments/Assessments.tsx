@@ -102,15 +102,17 @@ export default function Assessments() {
   }
 
   return (
-    <div style={{ paddingLeft: '7%', paddingRight: '7%' }}>
+    <div className={styles.container}>
       <h1>{course?.code}</h1>
       <h2>{course?.name}</h2>
-      <SearchBar
-        title="Search for a past paper"
-        onQueryChange={searchAssessments}
-      />
+      <div className={styles.searchWrapper}>
+        <SearchBar
+          title="Search for a past paper"
+          onQueryChange={searchAssessments}
+        />
+      </div>
 
-      <div>
+      <div className={styles.assessmentsWrapper}>
         <h2 className={styles.typeHeader}>Exams</h2>
         <div className={styles.assessmentType}>
           {assessments &&

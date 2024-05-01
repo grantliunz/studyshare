@@ -1,3 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.searchWrapper {
+  margin-bottom: 20px;
+  width: 800px;
+}
+
+.assessmentsWrapper {
+  width: 90vw;
+}
+
 .typeHeader {
   text-align: left;
   font-size: 30px;
