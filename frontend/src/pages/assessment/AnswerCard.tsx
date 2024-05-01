@@ -13,6 +13,7 @@ import API from '../../util/api';
 import { AxiosError } from 'axios';
 import useGet from '../../hooks/useGet';
 import { UserDisplayDTO } from '../../types/user';
+import { useAuth } from '../../contexts/UserContext';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -54,8 +55,13 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
 
   // temp to add an author to new answer
   const { data: users } = useGet<any>(`${API.getAllUsers}`);
+  const { user: currentUser } = useAuth();
 
   const handleCreateNewComment = async () => {
+    if (!currentUser) {
+      alert('You must be logged in to make a comment!');
+      return;
+    }
     const comment: Omit<Comment, '_id'> = {
       text: newComment,
       author: users[Math.floor(Math.random() * users.length)]._id,
@@ -181,7 +187,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             fullWidth
             InputProps={{
               endAdornment: (
-                <IconButton type="submit">
+                <IconButton disabled={newComment.trim() === ''} type="submit">
                   <SendOutlinedIcon />
                 </IconButton>
               )
