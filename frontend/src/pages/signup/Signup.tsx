@@ -26,6 +26,7 @@ export default function Signup() {
     setLoading(true); // Set loading state to true
 
     const data = new FormData(event.currentTarget);
+    const name = data.get('name') as string;
     const email = data.get('email') as string;
     const password = data.get('password') as string;
     const confirmPassword = data.get('confirmPassword') as string;
@@ -36,7 +37,7 @@ export default function Signup() {
       return;
     }
 
-    createUser(email, password)
+    createUser(name, email, password)
       .then(() => {
         navigate('/universities');
       })
@@ -71,6 +72,16 @@ export default function Signup() {
           StudyShare
         </h1>
         <h2 className={styles.title}>Sign up</h2>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="name"
+          label="Full Name"
+          name="name"
+          autoComplete="name"
+          autoFocus
+        />
         <TextField
           margin="normal"
           required
