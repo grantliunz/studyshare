@@ -8,4 +8,5 @@ export interface CreateAnswerDTO {
   };
   comments: [Types.ObjectId];
   author: Types.ObjectId;
+  isAnonymous?: boolean;
 }

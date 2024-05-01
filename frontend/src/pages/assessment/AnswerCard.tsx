@@ -114,7 +114,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           }}
         >
           <PersonCard
-            name={author?.name || 'Anonymous'}
+            name={(!answer.isAnonymous && author?.name) || 'Anonymous'}
             avatarSize="32px"
             style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />

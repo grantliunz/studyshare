@@ -19,6 +19,7 @@ export type Answer = {
   author: string;
   rating: Rating;
   comments: Comment[];
+  isAnonymous?: boolean;
 };
 
 export type Comment = {

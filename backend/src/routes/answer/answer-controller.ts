@@ -14,7 +14,7 @@ export const createAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { text, author, rating, comments } = req.body; // assuming request body contains answer data
+    const { text, author, rating, comments, isAnonymous } = req.body; // assuming request body contains answer data
 
     // Get the question by its ID
     const question = await Question.findById(req.params.questionId);
@@ -28,7 +28,8 @@ export const createAnswer = async (
       text,
       author,
       rating,
-      comments
+      comments,
+      isAnonymous
     });
     // save the answer to the database
     const createdAnswer = await answer.save();

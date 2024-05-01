@@ -133,7 +133,14 @@ const QuestionPanel = ({
           />
         </div>
       </div>
-      <div style={{ margin: '20px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '20px',
+          alignItems: 'center'
+        }}
+      >
         {polledQuestion.answers.map((answer, index) => (
           <AnswerCard key={index} answer={answer} />
         ))}

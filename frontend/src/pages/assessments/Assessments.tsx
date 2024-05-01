@@ -12,65 +12,66 @@ import API from '../../util/api';
 import { CircularProgress } from '@mui/material';
 import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
+import { useAuth } from '../../contexts/UserContext';
 
-export default function Assessments() {
+function mapSemesterToString(semester: string) {
+  switch (semester) {
+    case 'First':
+      return 'Semester 1';
+    case 'Second':
+      return 'Semester 2';
+    case 'Third':
+      return 'Semester 3';
+    case 'Other':
+      return 'Other Semester';
+    default:
+      return semester;
+  }
+}
+
+function matchString(assessment: Assessment, searchText: string) {
+  const str =
+    assessment.year.toString() +
+    ' ' +
+    mapSemesterToString(assessment.semester) +
+    ' ' +
+    assessment.number?.toString() +
+    ' ' +
+    assessment.name;
+  return str.toLowerCase().includes(searchText.toLowerCase());
+}
+
+const Assessments = () => {
   const { courseId } = useParams();
-
-  const {
-    data: course,
-    isLoading: isFetchingCourse,
-    error: getCourseError
-  } = useGet<Course>(`${API.getCourse}/${courseId}`, undefined);
+  const { user: currentUser } = useAuth();
+  const { data: course, isLoading: isFetchingCourse } = useGet<Course>(
+    `${API.getCourse}/${courseId}`
+  );
 
   const {
     data: assessments,
     isLoading: isFetchingAssessments,
-    refresh: refreshAssessments,
-    error: getAssessmentsError
+    refresh: refreshAssessments
   } = useGet<Assessment[]>(`${API.getCourseAssessments}/${courseId}`, []);
 
-  const {
-    postData: createAssessment,
-    isLoading: isCreatingAssessment,
-    error: createAssessmentError
-  } = usePost<Assessment, Assessment>(`${API.postAssessment}/${courseId}`);
+  const { postData: createAssessment } = usePost<Assessment, Assessment>(
+    `${API.postAssessment}/${courseId}`
+  );
 
   const [assessmentTypeState, setAssessmentTypeState] =
     useState<AssessmentType>(AssessmentType.EXAM);
   const [showForm, setShowForm] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
-  function matchString(assessment: Assessment, searchText: string) {
-    const str =
-      assessment.year.toString() +
-      ' ' +
-      mapSemesterToString(assessment.semester) +
-      ' ' +
-      assessment.number?.toString() +
-      ' ' +
-      assessment.name;
-    return str.toLowerCase().includes(searchText.toLowerCase());
-  }
-
-  function mapSemesterToString(semester: string) {
-    switch (semester) {
-      case 'First':
-        return 'Semester 1';
-      case 'Second':
-        return 'Semester 2';
-      case 'Third':
-        return 'Semester 3';
-      case 'Other':
-        return 'Other Semester';
-      default:
-        return semester;
-    }
-  }
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
   }
 
   const handleOpenForm = (type: AssessmentType) => {
+    if (!currentUser) {
+      alert('You must be logged in to make an assessment!');
+      return;
+    }
     console.log(type);
     setShowForm(true);
     setAssessmentTypeState(type);
@@ -80,11 +81,15 @@ export default function Assessments() {
     formInputs: FormInputs,
     type: AssessmentType
   ) => {
+    if (!currentUser) {
+      alert('You must be logged in to make an assessment!');
+      return;
+    }
     if (!courseId) {
       console.log('no course id');
       return;
     }
-    const newAssessment = await createAssessment({
+    const res = await createAssessment({
       courseId,
       type,
       questions: [],
@@ -170,4 +175,6 @@ export default function Assessments() {
       </div>
     </div>
   );
-}
+};
+
+export default Assessments;

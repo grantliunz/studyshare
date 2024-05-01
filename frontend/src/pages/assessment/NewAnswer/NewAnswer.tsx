@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Editor from '../../../components/Editor/Editor';
-import { Button } from '@mui/material';
+import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import useGet from '../../../hooks/useGet';
 import usePost from '../../../hooks/usePost';
 import API from '../../../util/api';
 import { Answer } from '../../../types/assessment';
 import { AxiosError } from 'axios';
+import { useAuth } from '../../../contexts/UserContext';
 
 type NewAnswerProps = {
   questionId: string;
@@ -16,37 +17,38 @@ const NewAnswer = ({
   questionId,
   onSubmitAnswer = () => {}
 }: NewAnswerProps) => {
-  const [answer, setAnswer] = useState<string>('');
+  const [text, setText] = useState<string>('');
+  const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
+  const { user: currentUser } = useAuth();
+  const { postData: postAnswer } = usePost(`${API.createAnswer}/${questionId}`);
 
-  // temp to add an author to new answer
-  const {
-    data: users,
-    isLoading: isFetchingUsers,
-    error: fetchUsersError
-  } = useGet<any>(`${API.getAllUsers}`);
+  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new answer
 
-  const {
-    postData: postAnswer,
-    isLoading: isPostingAnswer,
-    error: postAnswerError
-  } = usePost(`${API.createAnswer}/${questionId}`);
-
-  const handleSubmitAnswer = async () => {
+  const handleSubmitAnswer = async (text: string) => {
+    if (!currentUser) {
+      alert('You must be logged in to submit an answer!');
+      return;
+    }
+    if (text.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+      alert('Please enter an answer!');
+      return;
+    }
     const newAnswer: Omit<Answer, '_id'> = {
-      text: answer,
+      text,
       author: users[0]._id,
       rating: {
         upvotes: 0,
         downvotes: 0
       },
-      comments: []
+      comments: [],
+      isAnonymous
     };
     const res = await postAnswer(newAnswer);
     if (res instanceof AxiosError) {
       console.log(res.response?.data.error);
       return;
     }
-    setAnswer('');
+    setText('');
     onSubmitAnswer();
   };
 
@@ -62,19 +64,36 @@ const NewAnswer = ({
       <p style={{ margin: '0px', fontWeight: '500', fontSize: '1.3rem' }}>
         Your Answer
       </p>
-      <Editor value={answer} setValue={setAnswer} />
-      <Button
-        variant="contained"
-        onClick={handleSubmitAnswer}
+      <Editor value={text} setValue={setText} />
+      <div
         style={{
-          marginTop: '12px',
-          width: 'fit-content',
-          textTransform: 'none',
-          backgroundColor: '#41709b'
+          alignItems: 'center',
+          columnGap: '16px',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '12px'
         }}
       >
-        Submit Answer
-      </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleSubmitAnswer(text)}
+          style={{
+            width: 'fit-content',
+            textTransform: 'none',
+            backgroundColor: '#41709b'
+          }}
+        >
+          Submit Answer
+        </Button>
+        <FormControlLabel
+          control={
+            <Checkbox
+              onChange={(event) => setIsAnonymous(event.target.checked)}
+            />
+          }
+          label="Send Anonymously"
+        />
+      </div>
     </div>
   );
 };
