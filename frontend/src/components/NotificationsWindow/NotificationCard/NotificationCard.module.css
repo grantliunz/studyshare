@@ -1,0 +1,19 @@
+.avatar {
+    margin: 0px 10px;
+}
+
+.notificationText {
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.timestampText {
+    text-align: left;
+    color: blue;
+    font-weight: 700;
+    font-size: smaller;
+}
