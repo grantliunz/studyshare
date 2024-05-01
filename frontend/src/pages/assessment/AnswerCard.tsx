@@ -116,7 +116,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           <PersonCard
             name={author?.name || 'Anonymous'}
             avatarSize="32px"
-            style={{ alignItems: 'center', iconSize: '0.8rem' }}
+            style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />
           <ReactQuill
             style={{ overflow: 'hidden', height: 'fit-content' }}
