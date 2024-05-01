@@ -94,10 +94,14 @@ const buildQuestionsTree = (questions: Question[]) => {
         }
         currentRoot = newNode;
       } else {
+        if (i === hierarchy.length - 1) {
+          currentRoot.question = question;
+        }
         currentRoot = node;
       }
     }
   });
+  console.log(root);
   return root;
 };
 
@@ -106,10 +110,11 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
   const arr: Question[] = [];
 
   const traverseNode = (node: QuestionNode) => {
+    if (node.question) {
+      arr.push(node.question);
+    }
     if (node.subquestions) {
       node.subquestions.forEach((subQn) => traverseNode(subQn));
-    } else if (node.question) {
-      arr.push(node.question);
     }
   };
 
