@@ -87,7 +87,7 @@ const BreadCrumbs = () => {
 
   return (
     <div className={style.breadCrumbs}>
-      <Breadcrumbs aria-label="breadcrumb">
+      <Breadcrumbs className={style.link}>
         <Link className={style.link} href="/universities">
           Universities
         </Link>
