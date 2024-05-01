@@ -9,6 +9,7 @@ import API from '../../../util/api';
 import { useParams } from 'react-router-dom';
 import useGet from '../../../hooks/useGet';
 import { AxiosError } from 'axios';
+import { useAuth } from '../../../contexts/UserContext';
 
 type newQuestionProps = {
   open: boolean;
@@ -23,18 +24,13 @@ export default function NewQuestion({
   parentNumber,
   onAddQuestion = () => {}
 }: newQuestionProps) {
+  const { id } = useParams();
+  const { user: currentUser } = useAuth();
+  const [questionContent, setQuestionContent] = useState('');
   const [questionNumber, setQuestionNumber] = useState<string>('');
-  const [value, setValue] = useState('');
   const [createQuestionError, setCreateQuestionError] = useState<string>(' ');
 
-  const { id } = useParams();
-
-  // temp to add an author to new question
-  const {
-    data: users,
-    isLoading: isFetchingUsers,
-    error: fetchUsersError
-  } = useGet<any>(`${API.getAllUsers}`);
+  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new question
 
   const {
     postData: createQuestion,
@@ -45,13 +41,19 @@ export default function NewQuestion({
   );
 
   const handleSubmit = async () => {
+    if (!currentUser) {
+      alert('You must be logged in to make a comment!');
+      return;
+    }
+
     if (questionNumber.trim() === '') {
       setCreateQuestionError('Please enter a question number!');
       return;
     }
+
     const newQuestion = {
       number: [...parentNumber, ...questionNumber.split('.')],
-      text: value,
+      text: questionContent,
       author: users[0]._id,
       answers: [],
       watchers: [],
@@ -59,7 +61,6 @@ export default function NewQuestion({
     };
 
     const res = await createQuestion(newQuestion);
-
     if (res instanceof AxiosError) {
       setCreateQuestionError((res.response?.data as { error: string }).error);
       return;
@@ -157,7 +158,7 @@ export default function NewQuestion({
             width: '100%'
           }}
         >
-          <Editor value={value} setValue={setValue} />
+          <Editor value={questionContent} setValue={setQuestionContent} />
         </div>
         <Button
           variant="contained"

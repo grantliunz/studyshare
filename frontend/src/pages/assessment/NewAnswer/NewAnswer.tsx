@@ -19,12 +19,10 @@ const NewAnswer = ({
 }: NewAnswerProps) => {
   const [text, setText] = useState<string>('');
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
-
-  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new answer
-
+  const { user: currentUser } = useAuth();
   const { postData: postAnswer } = usePost(`${API.createAnswer}/${questionId}`);
 
-  const { user: currentUser } = useAuth();
+  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new answer
 
   const handleSubmitAnswer = async (text: string) => {
     if (!currentUser) {
