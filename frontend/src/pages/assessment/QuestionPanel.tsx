@@ -13,7 +13,7 @@ import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import { Question, QuestionGET } from '../../types/assessment';
-import { User, UserDTO } from '../../types/user';
+import { UserDTO } from '../../types/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 

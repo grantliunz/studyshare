@@ -22,11 +22,11 @@ export type UserDB = {
 
 // temporary type until we finalise the user type
 export type UserDTO = {
+  authId: string;
   _id: ObjectId;
   name: string;
   email: string;
   questions: ObjectId[];
   answers: ObjectId[];
   watchList: ObjectId[];
-  rewards: ObjectId[];
 };

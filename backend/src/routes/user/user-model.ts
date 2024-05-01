@@ -1,7 +1,7 @@
 import mongoose, { Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-  authId : string;
+  authId: string;
   name: string;
   email: string;
   questions: Schema.Types.ObjectId[];
@@ -13,7 +13,8 @@ export interface IUser extends Document {
   downvotedComments: Schema.Types.ObjectId[];
 }
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema: Schema<IUser> = new Schema(
+  {
     authId: {
       type: String,
       required: true
@@ -54,7 +55,6 @@ const userSchema: Schema<IUser> = new Schema({
       type: [Schema.Types.ObjectId],
       ref: 'Comment'
     }
-
   },
   {
     timestamps: {}
