@@ -14,6 +14,7 @@ import API from '../../util/api';
 import { AssessmentGET, QuestionGET } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
+import { useAuth } from '../../contexts/UserContext';
 
 export type QuestionNode = {
   number: string[];
@@ -123,6 +124,7 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 
 const AssessmentPage = () => {
   const { id } = useParams();
+  const { user: currentUser } = useAuth();
 
   const {
     data: assessment,
@@ -149,6 +151,10 @@ const AssessmentPage = () => {
   }, [assessment]);
 
   const handleAddQuestion = (parentNumber: string[]) => {
+    if (!currentUser) {
+      alert('You must be logged in to make a question!');
+      return;
+    }
     setNewQuestionParentNumber(parentNumber);
     setNewQuestionOpen(true);
   };

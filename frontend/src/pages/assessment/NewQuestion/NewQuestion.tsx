@@ -42,7 +42,7 @@ export default function NewQuestion({
 
   const handleSubmit = async () => {
     if (!currentUser) {
-      alert('You must be logged in to make a comment!');
+      alert('You must be logged in to make a question!');
       return;
     }
 

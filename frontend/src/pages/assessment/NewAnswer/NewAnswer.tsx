@@ -26,7 +26,7 @@ const NewAnswer = ({
 
   const handleSubmitAnswer = async (text: string) => {
     if (!currentUser) {
-      alert('You must be logged in to make a comment!');
+      alert('You must be logged in to submit an answer!');
       return;
     }
     const newAnswer: Omit<Answer, '_id'> = {
