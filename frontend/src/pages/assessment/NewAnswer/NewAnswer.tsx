@@ -80,7 +80,6 @@ const NewAnswer = ({
         <FormControlLabel
           control={
             <Checkbox
-              defaultChecked
               onChange={(event) => setIsAnonymous(event.target.checked)}
             />
           }
