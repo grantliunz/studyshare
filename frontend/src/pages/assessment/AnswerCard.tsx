@@ -2,7 +2,7 @@ import PersonCard from '../../components/PersonCard';
 import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import CommentCard from './CommentCard';
-import { IconButton, TextField } from '@mui/material';
+import { CircularProgress, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
@@ -24,14 +24,18 @@ const AnswerCard = ({
 }: AnswerCardProps) => {
   const [newComment, setNewComment] = useState<string>('');
 
+  const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
+    `${API.getAnswer}/${answer._id}`
+  );
+
   const handleVoteChange = (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
-    oldVoteDirection === VoteDirection.UP && answer.rating.upvotes--;
-    oldVoteDirection === VoteDirection.DOWN && answer.rating.downvotes--;
-    newVoteDirection === VoteDirection.UP && answer.rating.upvotes++;
-    newVoteDirection === VoteDirection.DOWN && answer.rating.downvotes++;
+    // oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
+    // oldVoteDirection === VoteDirection.DOWN && polledAnswer.rating.downvotes--;
+    // newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
+    // newVoteDirection === VoteDirection.DOWN && polledAnswer.rating.downvotes++;
   };
 
   const handleAddCommentChange = (text: string) => {
@@ -46,10 +50,13 @@ const AnswerCard = ({
     `${API.createComment}/${answer._id}`
   );
 
+  // temp to add an author to new answer
+  const { data: users } = useGet<any>(`${API.getAllUsers}`);
+
   const handleCreateNewComment = async () => {
     const comment: Omit<Comment, '_id'> = {
       text: newComment,
-      author: '6630fe9ebc4d2bf4142c8dd8',
+      author: users[Math.floor(Math.random() * users.length)]._id,
       rating: {
         upvotes: 0,
         downvotes: 0
@@ -60,8 +67,12 @@ const AnswerCard = ({
       console.log((res.response?.data as { error: string }).error);
       return;
     }
-    onCreateComment();
+    refreshAnswer();
   };
+
+  if (!polledAnswer) {
+    return <CircularProgress />;
+  }
 
   return (
     <div style={{ overflow: 'hidden', width: '100%' }}>
@@ -73,7 +84,7 @@ const AnswerCard = ({
         }}
       >
         <UpDownVote
-          rating={answer.rating}
+          rating={polledAnswer.rating}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -100,18 +111,18 @@ const AnswerCard = ({
           />
           <ReactQuill
             style={{ overflow: 'hidden', height: 'fit-content' }}
-            value={answer.text}
+            value={polledAnswer.text}
             readOnly={true}
             theme={'bubble'}
           />
         </div>
       </div>
       <div style={{ marginLeft: '46px' }}>
-        {answer.comments.length > 0 && (
+        {polledAnswer.comments.length > 0 && (
           <>
             <div style={{ display: 'flex' }}>
               <KeyboardArrowDownOutlinedIcon /> Comments{' '}
-              {answer.comments.length}
+              {polledAnswer.comments.length}
             </div>
             <div
               style={{
@@ -134,7 +145,7 @@ const AnswerCard = ({
                   rowGap: '12px'
                 }}
               >
-                {answer.comments.map((comment, i) => (
+                {polledAnswer.comments.map((comment, i) => (
                   <CommentCard key={i} comment={comment} />
                 ))}
               </div>

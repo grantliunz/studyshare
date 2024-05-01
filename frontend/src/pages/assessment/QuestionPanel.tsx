@@ -1,4 +1,4 @@
-import { Button, IconButton } from '@mui/material';
+import { Button, CircularProgress, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
 import { useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
@@ -12,6 +12,9 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import { arrayEquals } from '../../util/arrays';
 import { Question } from '../../types/assessment';
 import ReactQuill from 'react-quill';
+import useGet from '../../hooks/useGet';
+import API from '../../util/api';
+import { UserDisplayDTO } from '../../types/user';
 
 type QuestionPanelProps = {
   currentQuestion: Question;
@@ -32,6 +35,21 @@ const QuestionPanel = ({
 }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
+
+  const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
+    `${API.getQuestion}/${question._id}`
+  );
+
+  if (!polledQuestion) {
+    return (
+      <div
+        hidden={!arrayEquals(currentQuestion.number, question.number)}
+        style={{ overflow: 'hidden', width: '100%' }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -70,7 +88,7 @@ const QuestionPanel = ({
         <IconButton onClick={() => setIsStarred(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
-        <h2 style={{ margin: '0px' }}>{question.number}</h2>
+        <h2 style={{ margin: '0px' }}>{polledQuestion.number}</h2>
         <IconButton onClick={() => setIsFlagged(!isFlagged)}>
           {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
         </IconButton>
@@ -84,7 +102,7 @@ const QuestionPanel = ({
           margin: '10px',
           minHeight: '100px'
         }}
-        value={question.text}
+        value={polledQuestion.text}
         readOnly={true}
         theme={'bubble'}
       />
@@ -97,8 +115,11 @@ const QuestionPanel = ({
           padding: '0px 20px'
         }}
       >
-        {question.answers.length === 0 ? 'No' : question.answers.length} Answer
-        {question.answers.length === 1 ? '' : 's'}
+        {polledQuestion.answers.length === 0
+          ? 'No'
+          : polledQuestion.answers.length}{' '}
+        Answer
+        {polledQuestion.answers.length === 1 ? '' : 's'}
         <div
           style={{
             display: 'flex',
@@ -108,14 +129,14 @@ const QuestionPanel = ({
         >
           Created by
           <PersonCard
-            name={question.author}
+            name={polledQuestion.author.name}
             avatarPos="left"
             style={{ columnGap: '8px' }}
           />
         </div>
       </div>
       <div style={{ margin: '20px' }}>
-        {question.answers.map((answer, index) => (
+        {polledQuestion.answers.map((answer, index) => (
           <AnswerCard
             key={index}
             answer={answer}
@@ -127,8 +148,8 @@ const QuestionPanel = ({
         style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
       >
         <NewAnswer
-          questionId={question._id}
-          onSubmitAnswer={refreshAssessment}
+          questionId={polledQuestion._id}
+          onSubmitAnswer={refreshQuestion}
         />
       </div>
     </div>

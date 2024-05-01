@@ -1,9 +1,11 @@
+import { User } from './user';
+
 export type Question = {
   _id: string;
   assessment: string;
   number: string[];
   text: string;
-  author: string;
+  author: User;
   answers: Answer[];
   watchers: string[]; // might need to change to a user object
   comments: Comment[];
