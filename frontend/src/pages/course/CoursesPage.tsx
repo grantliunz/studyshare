@@ -21,6 +21,7 @@ import {
   OutlinedInput
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
@@ -90,6 +91,7 @@ export default function CoursesPage() {
   };
   return (
     <div className={style.container}>
+      <BreadCrumbs />
       {universityData && (
         <h1 className={style.uniName}>{universityData.name}</h1>
       )}

@@ -14,6 +14,7 @@ import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
 import { useAuth } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 function mapSemesterToString(semester: string) {
   switch (semester) {
@@ -114,6 +115,7 @@ const Assessments = () => {
 
   return (
     <div className={styles.container}>
+      <BreadCrumbs />
       <h1>{course?.code}</h1>
       <h2>{course?.name}</h2>
       <div className={styles.searchWrapper}>

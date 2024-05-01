@@ -15,6 +15,7 @@ import { AssessmentGET, QuestionGET } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 export type QuestionNode = {
   number: string[];
@@ -123,7 +124,7 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 };
 
 const AssessmentPage = () => {
-  const { universityId, courseId, assessmentId } = useParams();
+  const { assessmentId } = useParams();
   const { user: currentUser } = useAuth();
 
   const {
@@ -171,7 +172,7 @@ const AssessmentPage = () => {
   return (
     <>
       <div>
-        <h2>test</h2>
+        <BreadCrumbs />
       </div>
 
       <div className={styles.container}>
