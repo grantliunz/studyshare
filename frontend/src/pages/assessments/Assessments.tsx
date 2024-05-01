@@ -114,25 +114,43 @@ const Assessments = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <BreadCrumbs />
-      <h1>{course?.code}</h1>
-      <h2>{course?.name}</h2>
-      <div className={styles.searchWrapper}>
-        <SearchBar
-          title="Search for a past paper"
-          onQueryChange={searchAssessments}
-        />
-      </div>
+      <div className={styles.container}>
+        <h1>{course?.code}</h1>
+        <h2>{course?.name}</h2>
+        <div className={styles.searchWrapper}>
+          <SearchBar
+            title="Search for a past paper"
+            onQueryChange={searchAssessments}
+          />
+        </div>
 
-      <div className={styles.assessmentsWrapper}>
-        <h2 className={styles.typeHeader}>Exams</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments
-              .filter((assessment) => matchString(assessment, searchText))
-              .map((assessment) =>
-                assessment.type === 'Exam' ? (
+        <div className={styles.assessmentsWrapper}>
+          <h2 className={styles.typeHeader}>Exams</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments
+                .filter((assessment) => matchString(assessment, searchText))
+                .map((assessment) =>
+                  assessment.type === 'Exam' ? (
+                    <AssessmentCard
+                      key={assessment._id}
+                      assessment={assessment}
+                      onClick={() => handleCardClicked(assessment._id)}
+                    />
+                  ) : null
+                )}
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
+            />
+          </div>
+
+          <h2 className={styles.typeHeader}>Tests</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments.map((assessment) =>
+                assessment.type === 'Test' ? (
                   <AssessmentCard
                     key={assessment._id}
                     assessment={assessment}
@@ -140,53 +158,37 @@ const Assessments = () => {
                   />
                 ) : null
               )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
-          />
-        </div>
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
+            />
+          </div>
 
-        <h2 className={styles.typeHeader}>Tests</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Test' ? (
-                <AssessmentCard
-                  key={assessment._id}
-                  assessment={assessment}
-                  onClick={() => handleCardClicked(assessment._id)}
-                />
-              ) : null
-            )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
-          />
-        </div>
+          <h2 className={styles.typeHeader}>Other</h2>
+          <div className={styles.assessmentType}>
+            {assessments &&
+              assessments.map((assessment) =>
+                assessment.type === 'Other' ? (
+                  <AssessmentCardOther
+                    key={assessment._id}
+                    assessment={assessment}
+                  />
+                ) : null
+              )}
 
-        <h2 className={styles.typeHeader}>Other</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Other' ? (
-                <AssessmentCardOther
-                  key={assessment._id}
-                  assessment={assessment}
-                />
-              ) : null
-            )}
+            <AddAssessmentForm
+              state={assessmentTypeState}
+              show={showForm}
+              onAddAssessment={handleAddAssessment}
+              onClose={handleCloseForm}
+            />
 
-          <AddAssessmentForm
-            state={assessmentTypeState}
-            show={showForm}
-            onAddAssessment={handleAddAssessment}
-            onClose={handleCloseForm}
-          />
-
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
-          />
+            <AddAssessmentButton
+              handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ import { AssessmentGET } from '../../types/assessment';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { mapGetCourseData } from '../../mappers/courseMapper';
 import axios from 'axios';
+import style from './BreadCrumbs.module.css';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -74,34 +75,39 @@ const BreadCrumbs = () => {
       const universityId = pathnames[0];
       fetchUniversity(universityId);
     }
+    if (pathnames.length >= 2) {
+      const courseId = pathnames[1];
+      fetchCourse(courseId);
+    }
+    if (pathnames.length >= 3) {
+      const assessmentId = pathnames[2];
+      fetchAssignment(assessmentId);
+    }
   }, []);
-  if (pathnames.length >= 2) {
-    const courseId = pathnames[1];
-    fetchCourse(courseId);
-  }
-  if (pathnames.length >= 3) {
-    const assessmentId = pathnames[2];
-    fetchAssignment(assessmentId);
-  }
 
   return (
-    <Breadcrumbs aria-label="breadcrumb">
-      {university && (
-        <Link color="inherit" href={`/${university.id}`}>
-          {university.name}
+    <div className={style.breadCrumbs}>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link className={style.link} href="/universities">
+          Universities
         </Link>
-      )}
-      {course && (
-        <Link color="inherit" href={`/${university?.id}/${course.id}`}>
-          {course.code}
-        </Link>
-      )}
-      {assessment && (
-        <Typography color="textPrimary">
-          {assessment.year} {assessment.type}
-        </Typography>
-      )}
-    </Breadcrumbs>
+        {university && (
+          <Link className={style.link} href={`/${university.id}`}>
+            {university.name}
+          </Link>
+        )}
+        {course && (
+          <Link className={style.link} href={`/${university?.id}/${course.id}`}>
+            {course.code}
+          </Link>
+        )}
+        {assessment && (
+          <Typography className={style.link}>
+            {assessment.year} {assessment.type}
+          </Typography>
+        )}
+      </Breadcrumbs>
+    </div>
   );
 };
 
