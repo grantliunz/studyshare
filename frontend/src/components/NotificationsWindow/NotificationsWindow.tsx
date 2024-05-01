@@ -1,26 +1,37 @@
+import React, { useEffect } from 'react';
 import { Button, Fade, Modal } from '@mui/material';
 import styles from './NotificationsWindow.module.css';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 import NotificationCard from './NotificationCard/NotificationCard';
-import { update } from 'firebase/database';
-
+import useGet from '../../hooks/useGet';
+import API from '../../util/api';
+import { mapGetNotifications } from '../../mappers/notificationMapper';
 interface NotificationsWindowProps {
   open: boolean;
   onClose: () => void;
   updateNumberOfNotifications: (num: number) => void;
 }
-
 export default function NotificationsWindow({
   open,
   onClose,
   updateNumberOfNotifications
 }: NotificationsWindowProps) {
-  var notifications = fakeNotificationData();
-  notifications = notifications.sort(
-    (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+  const { data: notifications } = useGet<NotificationDTO[]>(
+    API.getNotifications + '/66324cae9cbb1e945fe6b944',
+    null,
+    mapGetNotifications
   );
 
-  updateNumberOfNotifications(notifications.length);
+  useEffect(() => {
+    if (notifications) {
+      updateNumberOfNotifications(notifications.length);
+    }
+  }, [notifications, updateNumberOfNotifications]);
+
+  if (!notifications) {
+    return null;
+  }
+
   function navigateToProfilePage() {
     //TODO: navigate to profile page
   }
@@ -29,13 +40,14 @@ export default function NotificationsWindow({
     <Modal open={open} onClose={onClose}>
       <div className={styles.modal}>
         {notifications.slice(0, 8).map((notificationObj) => (
-          <NotificationCard notification={notificationObj} />
+          <NotificationCard
+            key={notificationObj.questionID} // notificationObj.id is somehow not unique?
+            notification={notificationObj}
+          />
         ))}
         {notifications.length > 8 && (
           <Button
-            onClick={() => {
-              navigateToProfilePage;
-            }}
+            onClick={navigateToProfilePage} // You missed the function invocation here
             variant="contained"
             sx={{
               borderRadius: '5px',
@@ -56,16 +68,4 @@ export default function NotificationsWindow({
       </div>
     </Modal>
   );
-}
-
-function fakeNotificationData(): NotificationDTO[] {
-  // remove when backend is connected
-  return [
-    {
-      questionID: '123456',
-      commenterName: 'John Doe',
-      questionSummary: 'How to create a JavaScript object?',
-      timestamp: new Date()
-    }
-  ];
 }

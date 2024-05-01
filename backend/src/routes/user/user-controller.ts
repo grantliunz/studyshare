@@ -101,15 +101,30 @@ export const getNotifications = async (
       }
     ]);
 
-    // Convert the results to match the NotificationDTO interface
-    const notifications: NotificationDTO[] = watchedQuestions.map(
-      (watchedQuestion: any) => ({
+    // Sort watchedQuestions array
+    watchedQuestions.sort(
+      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+    );
+
+    // Declare notifications array
+    const notifications: NotificationDTO[] = [];
+
+    // Counter variable for generating IDs
+    let idCounter = 1;
+
+    // Map through watchedQuestions and populate notifications array
+    watchedQuestions.forEach((watchedQuestion: any) => {
+      notifications.push({
+        id: String(idCounter++),
         questionID: watchedQuestion.questionId,
         commenterName: watchedQuestion.authorName,
-        questionSummary: watchedQuestion.questionSummary,
+        questionSummary: watchedQuestion.questionSummary.replace(
+          /<[^>]*>?/gm,
+          ''
+        ), // strips html tags
         timestamp: watchedQuestion.updatedAt
-      })
-    );
+      });
+    });
 
     return res.status(200).json(notifications);
   } catch (error) {
