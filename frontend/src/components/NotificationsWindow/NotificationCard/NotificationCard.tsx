@@ -13,7 +13,7 @@ function navigateToQuestion(questionID : string){
 
 function getTimeDifference(timestamp: Date) {
     const currentTime = new Date();
-    const timeDifference = Math.abs(currentTime.getTime() - timestamp.getTime());
+    const timeDifference = currentTime.getTime() - timestamp.getTime();
 
     const seconds = Math.floor(timeDifference / 1000);
     const minutes = Math.floor(seconds / 60);
