@@ -133,7 +133,9 @@ export default function AddAssessmentForm({
       <Fade in={show}>
         <div className={styles.modal}>
           <div className={styles.header}>
-            <h2>Add {state + (state === 'Other' ? ' Assessment' : '')}</h2>
+            <h2 className={styles.headerText}>
+              Add {state + (state === 'Other' ? ' Assessment' : '')}
+            </h2>
             <button className={styles.closeButton} onClick={onClose}>
               <CloseIcon />
             </button>
@@ -152,52 +154,62 @@ export default function AddAssessmentForm({
               helperText={currentInputErrors.year}
             />
 
-            <TextField
-              disabled={state === 'Other' || state === 'Exam'}
-              style={{ marginBottom: '10px' }}
-              label="Assessment Number"
-              variant="outlined"
-              onChange={(e) => updateInput('number', e.target.value)}
-              type="number"
-              required
-              fullWidth
-              className={styles.inputField}
-              helperText={currentInputErrors.number}
-            />
-
-            <FormControl fullWidth disabled={state === 'Other'}>
-              <InputLabel id="select-semester-label">Semester</InputLabel>
-              <Select
-                labelId="select-semester-label"
-                id="asdasd"
-                value={currentInput.semester}
-                onChange={(e) => updateInput('semester', e.target.value)}
+            {!(state === 'Other' || state === 'Exam') && (
+              <TextField
+                style={{ marginBottom: '10px' }}
+                label="Assessment Number"
+                variant="outlined"
+                onChange={(e) => updateInput('number', e.target.value)}
+                type="number"
                 required
+                fullWidth
                 className={styles.inputField}
-              >
-                <MenuItem value="First">First</MenuItem>
-                <MenuItem value="Second">Second</MenuItem>
-                <MenuItem value="Third">Third</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </Select>
-            </FormControl>
+                helperText={currentInputErrors.number}
+              />
+            )}
 
-            <TextField
-              label="Name"
-              variant="outlined"
-              onChange={(e) => updateInput('name', e.target.value)}
-              required
-              fullWidth
-              className={styles.inputField}
-              helperText={currentInputErrors.name}
-              disabled={state !== 'Other'}
-            />
+            {!(state === 'Other') && (
+              <FormControl fullWidth>
+                <InputLabel id="select-semester-label">Semester</InputLabel>
+                <Select
+                  labelId="select-semester-label"
+                  id="asdasd"
+                  value={currentInput.semester}
+                  onChange={(e) => updateInput('semester', e.target.value)}
+                  required
+                  className={styles.inputField}
+                  label="Semester"
+                >
+                  <MenuItem value="First">First</MenuItem>
+                  <MenuItem value="Second">Second</MenuItem>
+                  <MenuItem value="Third">Third</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+
+            {state === 'Other' && (
+              <TextField
+                label="Name"
+                variant="outlined"
+                onChange={(e) => updateInput('name', e.target.value)}
+                required
+                fullWidth
+                className={styles.inputField}
+                helperText={currentInputErrors.name}
+              />
+            )}
 
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 3rem',
+                textTransform: 'none',
+                backgroundColor: '#41709b'
+              }}
             >
               Add
             </Button>

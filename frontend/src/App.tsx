@@ -2,7 +2,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
-import CssBaseline from '@mui/material/CssBaseline';
 import Signup from './pages/signup/Signup.tsx';
 import University from './pages/university/University.tsx';
 import Assessments from './pages/assessments/Assessments.tsx';
@@ -32,7 +31,7 @@ function App() {
       : false;
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       {!hideHeader && <Header />}
       <Routes>
         <Route path="/" element={<Landing />} />

@@ -16,19 +16,9 @@ export default function Header() {
 
   return (
     <div className={styles.container}>
-      <Link
-        to="/"
-        className={styles.title}
-        style={{
-          textDecoration: 'none',
-          display: 'inline-block',
-          lineHeight: 'normal',
-          marginTop: '1rem',
-          marginBottom: '1rem'
-        }}
-      >
+      <h1 className={styles.title} onClick={() => navigate('/')}>
         StudyShare
-      </Link>
+      </h1>
       <div className={styles.rightContainer}>
         {user ? (
           <>

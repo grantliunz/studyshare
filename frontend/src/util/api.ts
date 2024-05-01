@@ -1,6 +1,7 @@
 const API = {
   getUniversities: '/university/getAllUniversities',
   postUniversity: '/university/createUniversity',
+  getUniversityById: '/university',
   getCourses: '/course/getAllCourses',
   getCourse: '/course/getCourse',
   postCourse: '/course/createCourse',

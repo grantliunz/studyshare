@@ -61,7 +61,7 @@ const QuestionNumber = ({
                         currentQuestion?.number || [],
                         questionNode.number
                       )
-                      ? '#41403E'
+                      ? '#41709b'
                       : 'rgba(0, 0, 0, 0.04)'
                     : 'transparent'
                 },
@@ -70,7 +70,7 @@ const QuestionNumber = ({
                     currentQuestion?.number || [],
                     questionNode.number
                   )
-                    ? '#41403E'
+                    ? '#41709b'
                     : '#E8E9EC'
                 }
               }}

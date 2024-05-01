@@ -15,7 +15,7 @@ type newQuestionProps = {
   open: boolean;
   handleClose: () => void;
   parentNumber: string[];
-  onAddQuestion?: Function;
+  onAddQuestion?: () => void;
 };
 
 export default function NewQuestion({
@@ -41,6 +41,10 @@ export default function NewQuestion({
   );
 
   const handleSubmit = async () => {
+    if (questionContent.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+      setCreateQuestionError('Please enter a question!');
+      return;
+    }
     if (!currentUser) {
       alert('You must be logged in to make a question!');
       return;
@@ -140,21 +144,22 @@ export default function NewQuestion({
           <p>Question Number: &nbsp;</p>
           <p>{parentNumber.length == 0 ? '' : parentNumber.join('.') + '.'}</p>
           <input
-            style={{ width: '80px' }}
+            style={{ width: '40px', paddingTop: '6px' }}
             className={styles.questionNumberInput}
             onChange={(event) => setQuestionNumber(event.target.value)}
           />
-          <p style={{ marginLeft: '2  %' }}>
-            (Enter the question with a '.' to denote subquestions, e.g. 1aii
-            would be entered as 1.a.ii)
-          </p>
         </div>
+        <p style={{ fontWeight: '100', fontStyle: 'italic' }}>
+          Enter the question with a '.' to denote subquestions, e.g. 1aii would
+          be entered as 1.a.ii
+        </p>
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '350px',
             marginBottom: '10px',
+            height: '80%',
+            flexGrow: 1,
             width: '100%'
           }}
         >
@@ -164,10 +169,12 @@ export default function NewQuestion({
           variant="contained"
           onClick={handleSubmit}
           style={{
-            width: 'fit-content'
+            width: 'fit-content',
+            textTransform: 'none',
+            backgroundColor: '#41709b'
           }}
         >
-          Submit
+          Create Question
         </Button>
       </Box>
     </Modal>

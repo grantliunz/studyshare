@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFirebaseErrorMessage } from '../../util/firebase';
@@ -14,7 +13,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false); // State to track loading state
-  const { user, createUser } = useAuth();
+  const { user, createUser, loginWithGoogle } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -46,6 +45,10 @@ export default function Signup() {
         setLoading(false); // Set loading state to false
       });
   };
+  const submitGoogle = async () => {
+    await loginWithGoogle();
+    navigate('/universities');
+  };
 
   return (
     <div className={styles.container}>
@@ -54,17 +57,20 @@ export default function Signup() {
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        sx={{ mt: 1 }}
         style={{
-          minWidth: '60vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           margin: '0 auto',
           backgroundColor: 'white',
-          padding: '20px'
+          padding: '20px',
+          alignItems: 'center'
         }}
       >
+        <h1 className={styles.logo} onClick={() => navigate('/')}>
+          StudyShare
+        </h1>
+        <h2 className={styles.title}>Sign up</h2>
         <TextField
           margin="normal"
           required
@@ -104,19 +110,18 @@ export default function Signup() {
           fullWidth
           variant="contained"
           color="secondary"
-          sx={{ mt: 3, mb: 2 }}
           disabled={loading}
           endIcon={loading && <CircularProgress size={20} />}
         >
           {!loading ? 'Sign Up' : ''}
         </Button>
-        <Grid container>
-          <Grid item>
-            <Link href="/login" variant="body2">
-              {'Already have an account? Log in'}
-            </Link>
-          </Grid>
-        </Grid>
+        <div className={styles.linksWrapper}>
+          <p>
+            Already have an account? &nbsp;
+            <Link href="/login">Log in</Link>
+          </p>
+        </div>
+        <Button onClick={submitGoogle}>Log In with Google</Button>
       </Paper>
     </div>
   );

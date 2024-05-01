@@ -1,16 +1,18 @@
 .addButtonContainer {
-    display: flex;
-    align-items: center;
-    margin:10px
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
 }
 
-
 .addButton {
-    padding: 6px;
-    background-color: #AFAFAF;
-    border: none;
-    color: black;
-    border-radius: 10px;
-    cursor: pointer;
+  padding: 6px;
+  background-color: #afafaf;
+  border: none;
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

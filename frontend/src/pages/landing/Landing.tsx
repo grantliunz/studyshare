@@ -1,8 +1,7 @@
 import Button from '@mui/material/Button';
 import styles from './Landing.module.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
-import { Paper } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function Landing() {
@@ -19,25 +18,32 @@ export default function Landing() {
   }, [user]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <div className="grid" />
-      <h1 className={styles.title}>StudyShare</h1>
-      <Paper className={styles.description}>
-        The collaborative platform where students come together to share,
-        <br />
-        review, and elevate their exam preparation.
-      </Paper>
-      <Button
-        onClick={onClick}
-        variant="contained"
-        color="secondary"
-        className={styles.button}
-        style={{
-          fontSize: '1.5rem'
-        }}
-      >
-        Get Started
-      </Button>
+      <div className={styles.container}>
+        <h1 className={styles.title}>StudyShare</h1>
+        <p className={styles.description}>
+          The collaborative platform where students come together to share,
+          <br />
+          review, and elevate their learning.
+        </p>
+        <Button
+          onClick={onClick}
+          variant="contained"
+          color="secondary"
+          className={styles.startButton}
+          style={{
+            fontSize: '1.5rem',
+            textTransform: 'none'
+          }}
+        >
+          Get Started
+        </Button>
+        <p className={styles.loginButton}>
+          Already have an account? &nbsp;
+          <Link to="/login">Log in</Link>
+        </p>
+      </div>
     </div>
   );
 }

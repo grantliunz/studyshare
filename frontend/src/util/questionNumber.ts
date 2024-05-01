@@ -1,27 +1,3 @@
-function incrementRomanNumeral(roman: string): string {
-  const romanValues: [number, string][] = [
-    [50, 'l'],
-    [40, 'xl'],
-    [10, 'x'],
-    [9, 'ix'],
-    [5, 'v'],
-    [4, 'iv'],
-    [1, 'i']
-  ];
-
-  let total = 0;
-  let result = '';
-
-  for (const [value, numeral] of romanValues) {
-    while (total + value <= convertRomanToNumber(roman) + 1) {
-      result += numeral;
-      total += value;
-    }
-  }
-
-  return result;
-}
-
 // check if a string is a valid Roman numeral
 export const isRomanNumeral = (str: string) => {
   const romanNumeralPattern =

@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import {
   Modal,
-  Backdrop,
   Fade,
   TextField,
   Button,
@@ -73,7 +72,7 @@ export default function AddUniversityForm({
       <Fade in={open}>
         <div className={styles.modal}>
           <div className={styles.header}>
-            <h2>Add University</h2>
+            <h2 className={styles.headerText}>Add University</h2>
             <button className={styles.closeButton} onClick={onClose}>
               <CloseIcon />
             </button>
@@ -96,10 +95,14 @@ export default function AddUniversityForm({
               <Button
                 type="submit"
                 variant="contained"
-                color="primary"
-                style={{ marginTop: '1rem', padding: '0.5rem 3rem' }}
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.5rem 3rem',
+                  textTransform: 'none',
+                  backgroundColor: '#41709b'
+                }}
               >
-                Add Course
+                Add University
               </Button>
             )}
           </form>

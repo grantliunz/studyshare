@@ -7,15 +7,19 @@
   align-items: center;
   justify-content: space-between;
   z-index: 100;
+  box-sizing: border-box;
 }
 
 .title {
   font-family: Jomhuria;
-  font-size: 4rem;
+  font-size: 5rem;
   background-color: rgba(65, 112, 155, 1);
   color: white;
   margin: 0;
   padding: 0;
+  line-height: 80px;
+  height: 70px;
+  cursor: pointer;
 }
 
 .rightContainer {

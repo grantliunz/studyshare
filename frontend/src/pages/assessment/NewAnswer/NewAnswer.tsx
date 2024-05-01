@@ -10,7 +10,7 @@ import { useAuth } from '../../../contexts/UserContext';
 
 type NewAnswerProps = {
   questionId: string;
-  onSubmitAnswer?: Function;
+  onSubmitAnswer?: () => void;
 };
 
 const NewAnswer = ({
@@ -27,6 +27,10 @@ const NewAnswer = ({
   const handleSubmitAnswer = async (text: string) => {
     if (!currentUser) {
       alert('You must be logged in to submit an answer!');
+      return;
+    }
+    if (text.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+      alert('Please enter an answer!');
       return;
     }
     const newAnswer: Omit<Answer, '_id'> = {
@@ -73,7 +77,11 @@ const NewAnswer = ({
         <Button
           variant="contained"
           onClick={() => handleSubmitAnswer(text)}
-          style={{ width: 'fit-content' }}
+          style={{
+            width: 'fit-content',
+            textTransform: 'none',
+            backgroundColor: '#41709b'
+          }}
         >
           Submit Answer
         </Button>
