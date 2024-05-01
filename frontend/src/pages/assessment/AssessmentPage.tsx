@@ -101,7 +101,6 @@ const buildQuestionsTree = (questions: QuestionGET[]) => {
       }
     }
   });
-  console.log(root);
   return root;
 };
 
