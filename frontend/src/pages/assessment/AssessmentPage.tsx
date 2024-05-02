@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
 import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
@@ -126,6 +126,8 @@ const AssessmentPage = () => {
   const { assessmentId } = useParams();
   const { user: currentUser } = useAuth();
 
+  const location = useLocation();
+  const { questionID } = location.state ?? {};
   const {
     data: assessment,
     isLoading: isFetchingAssessment,
@@ -146,9 +148,16 @@ const AssessmentPage = () => {
     if (assessment) {
       const root = buildQuestionsTree(assessment.questions);
       setRootNode(root);
-      setOrderedQuestionsArray(buildOrderedQuestionsArray(root));
+      const arr = buildOrderedQuestionsArray(root);
+      setOrderedQuestionsArray(arr);
+      if (questionID) {
+        const question = arr.find((qn) => qn._id === questionID);
+        setCurrentQuestion(question);
+      } else {
+        setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
+      }
     }
-  }, [assessment]);
+  }, [assessment, questionID]);
 
   const handleAddQuestion = (parentNumber: string[]) => {
     if (!currentUser) {
@@ -176,7 +185,7 @@ const AssessmentPage = () => {
         <>
           <div className={styles.questionsTabContainer}>
             <h3 style={{ margin: '0px' }}>Questions</h3>
-            {rootNode.subquestions &&
+            {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
               rootNode.subquestions.map((question) => (
                 <QuestionNumber
                   key={question.number.join(',')}
@@ -185,12 +194,22 @@ const AssessmentPage = () => {
                   currentQuestion={currentQuestion}
                   handleAddQuestion={handleAddQuestion}
                 />
-              ))}
+              ))
+            ) : (
+              <p
+                style={{
+                  alignSelf: 'center',
+                  placeSelf: 'center',
+                  width: '100%'
+                }}
+              >
+                Create a question to get started!
+              </p>
+            )}
             <IconButton
               size="small"
               style={{
                 alignSelf: 'center',
-
                 marginTop: '8px'
               }}
               onClick={() => handleAddQuestion([])}
@@ -223,10 +242,9 @@ const AssessmentPage = () => {
                 width: '100%'
               }}
             >
-              Click a question to get started!
+              Create a question to get started!
             </p>
           )}
-
           <NewQuestion
             open={newQuestionOpen}
             handleClose={handleNewQuestionClose}

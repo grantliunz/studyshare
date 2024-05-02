@@ -9,7 +9,7 @@ import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, userDb } = useAuth();
   const navigate = useNavigate();
 
   const [openNotifications, setOpenNotifications] = useState(false);
@@ -51,12 +51,15 @@ export default function Header() {
                 onClick={openNotificationsWindow}
                 src={notificationIcon}
                 alt="Notification"
+                style={{ cursor: 'pointer' }}
               />
-              <NotificationsWindow
-                open={openNotifications}
-                onClose={closeNotificationsWindow}
-                updateNumberOfNotifications={setNoNotifications}
-              />
+              {userDb && (
+                <NotificationsWindow
+                  open={openNotifications}
+                  onClose={closeNotificationsWindow}
+                  updateNumberOfNotifications={setNoNotifications}
+                />
+              )}
             </Badge>
             <img src={profileIcon} alt="Profile" />
           </>

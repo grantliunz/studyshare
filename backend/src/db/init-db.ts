@@ -152,42 +152,48 @@ const questions = [
     text: '<p>How can I be like Penqor</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[0]._id
   }),
   new Question({
     number: ['1', 'a', 'ii'],
     text: '<p>How long did Penqor spend at green place?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[1]._id
   }),
   new Question({
     number: ['1', 'a', 'iii'],
     text: '<p>What is green place?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[2]._id
   }),
   new Question({
     number: ['1', 'b', 'i'],
     text: '<p>Friend help?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[0]._id
   }),
   new Question({
     number: ['1', 'b', 'ii'],
     text: '<p>What sound does a monkey make?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[1]._id
   }),
   new Question({
     number: ['1', 'b', 'iii'],
     text: '<p>How much can a gorilla deadlift?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[2]._id
   }),
   new Question({
     number: ['2', 'a'],
@@ -201,14 +207,16 @@ const questions = [
     text: '<p>How much can you deadlift?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[1]._id
   }),
   new Question({
     number: ['3'],
     text: '<p>Where is ardo?</p>',
     answers: [],
     watchers: [],
-    comments: []
+    comments: [],
+    latestContributor: users[1]._id
   })
 ];
 

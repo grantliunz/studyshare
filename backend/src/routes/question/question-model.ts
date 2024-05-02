@@ -8,6 +8,7 @@ export interface IQuestion extends Document {
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
   comments: Types.ObjectId[];
+  latestContributor: Types.ObjectId;
 }
 
 const questionSchema: Schema<IQuestion> = new Schema(
@@ -36,6 +37,10 @@ const questionSchema: Schema<IQuestion> = new Schema(
       ref: 'Comment'
     },
     author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    latestContributor: {
       type: Schema.Types.ObjectId,
       ref: 'User'
     }

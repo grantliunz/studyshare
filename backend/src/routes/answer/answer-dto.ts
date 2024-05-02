@@ -9,4 +9,6 @@ export interface CreateAnswerDTO {
   comments: [Types.ObjectId];
   author: Types.ObjectId;
   isAnonymous?: boolean;
+  question: Types.ObjectId;
+  createdAt: Date;
 }

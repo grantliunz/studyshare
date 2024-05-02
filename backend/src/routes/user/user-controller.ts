@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import User from './user-model';
-import { CreateUserDTO } from './user-dto';
+import { CreateUserDTO, UpdateUserDTO } from './user-dto';
+import Question from '../question/question-model';
+import mongoose from 'mongoose';
+import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 
 // Controller function to create a new user
 export const createUser = async (
@@ -70,6 +73,161 @@ export const getAllUsers = async (req: Request<{}, {}, {}>, res: Response) => {
   }
 };
 
+export const getNotifications = async (
+  req: Request<{ userId: string }, {}, {}>,
+  res: Response
+) => {
+  try {
+    // Get the user by its ID
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Aggregation pipeline to compare lastViewed with the last update of a question
+    const watchedQuestions = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$watchList'
+      },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'watchList.questionId',
+          foreignField: '_id',
+          as: 'question'
+        }
+      },
+      {
+        $unwind: '$question'
+      },
+      {
+        $lookup: {
+          from: 'assessments',
+          localField: 'question.assessment',
+          foreignField: '_id',
+          as: 'assessment'
+        }
+      },
+      {
+        $unwind: '$assessment'
+      },
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'assessment.course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: '$course'
+      },
+      {
+        $lookup: {
+          from: 'universities',
+          localField: 'course.university',
+          foreignField: '_id',
+          as: 'university'
+        }
+      },
+      {
+        $unwind: '$university'
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'question.author',
+          foreignField: '_id',
+          as: 'author'
+        }
+      },
+      {
+        $unwind: '$author'
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'question.latestContributor',
+          foreignField: '_id',
+          as: 'latestContributor'
+        }
+      },
+      {
+        $unwind: {
+          path: '$latestContributor',
+          preserveNullAndEmptyArrays: true // Preserve documents if the latestContributor field is null
+        }
+      },
+      {
+        $project: {
+          questionId: '$question._id',
+          questionSummary: '$question.text',
+          authorName: {
+            $cond: {
+              if: { $eq: ['$question.latestContributor', null] }, // Check if latestContributor is null
+              then: 'Anonymous',
+              else: '$latestContributor.name'
+            }
+          },
+          lastViewed: '$watchList.lastViewed',
+          updatedAt: '$question.updatedAt',
+          timeDifference: {
+            $subtract: ['$question.updatedAt', '$watchList.lastViewed']
+          },
+          // Construct the URL by concatenating _id fields
+          questionUrl: {
+            $concat: [
+              { $toString: '$university._id' },
+              '/',
+              { $toString: '$course._id' },
+              '/',
+              { $toString: '$assessment._id' }
+            ]
+          }
+        }
+      }
+    ]);
+
+    // Sort watchedQuestions array
+    watchedQuestions.sort(
+      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+    );
+    // Declare notifications array
+    const notifications: NotificationDTO[] = [];
+
+    // Counter variable for generating IDs
+    let idCounter = 1;
+    // Map through watchedQuestions and populate notifications array
+    watchedQuestions.forEach((watchedQuestion: any) => {
+      if (watchedQuestion.timeDifference < 0) {
+        return;
+      }
+      notifications.push({
+        id: String(idCounter++),
+        questionID: watchedQuestion.questionId,
+        commenterName: watchedQuestion.authorName,
+        questionSummary: watchedQuestion.questionSummary.replace(
+          /<[^>]*>?/gm,
+          ''
+        ), // strips html tags
+        questionUrl: watchedQuestion.questionUrl,
+        timedifference: watchedQuestion.timeDifference,
+        timestamp: watchedQuestion.updatedAt
+      });
+    });
+
+    return res.status(200).json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+};
+
 // Controller function to get a single user
 export const getUser = async (
   req: Request<{ userId: string }, {}, {}>,
@@ -94,10 +252,11 @@ export const getUser = async (
 
 // Controller function to update a user
 export const updateUser = async (
-  req: Request<{ userId: string }, {}, CreateUserDTO>,
+  req: Request<{ userId: string }, {}, UpdateUserDTO>,
   res: Response
 ) => {
   try {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -105,18 +264,17 @@ export const updateUser = async (
 
     // Get the user by its ID
     const user = await User.findById(req.params.userId);
-
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const newDetails = { ...user, ...req.body };
+    // Update the user with the request body
+    Object.assign(user, req.body);
 
-    user.set(newDetails);
+    // Save the updated user
+    await user.save();
 
-    const updatedUser = await user.save();
-
-    res.status(200).json(updatedUser); // respond with the updated user
+    res.status(200).json(user); // Respond with the updated user
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
   }

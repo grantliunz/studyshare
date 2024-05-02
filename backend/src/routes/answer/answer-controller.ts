@@ -37,13 +37,18 @@ export const createAnswer = async (
       author,
       rating,
       comments,
-      isAnonymous
+      isAnonymous,
+      question
     });
     // save the answer to the database
     const createdAnswer = await answer.save();
 
     // add the answer ID to the question's answers
     question.answers.push(createdAnswer._id);
+
+    Object.assign(question, {
+      latestContributor: isAnonymous ? null : author
+    });
 
     // save the question with the updated answers array
     await question.save();

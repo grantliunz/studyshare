@@ -15,6 +15,7 @@ const API = {
   getUser: '/user/getUser',
   updateUser: '/user/updateUser',
   getAllUsers: '/user/getAllUsers',
+  getNotifications: '/user/getNotifications',
   createAnswer: '/answer/createAnswer',
   getAnswer: '/answer/getAnswer',
   createComment: '/comment/createComment'

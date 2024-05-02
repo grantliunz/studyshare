@@ -37,7 +37,8 @@ const NewAnswer = ({
         downvotes: 0
       },
       comments: [],
-      isAnonymous
+      isAnonymous,
+      question: questionId
     });
     if (res instanceof AxiosError) {
       console.log(res.response?.data.error);
@@ -45,6 +46,7 @@ const NewAnswer = ({
     }
     setText('');
     onSubmitAnswer();
+    setIsAnonymous(false);
     refreshUserDb();
   };
 
@@ -84,6 +86,7 @@ const NewAnswer = ({
         <FormControlLabel
           control={
             <Checkbox
+              checked={isAnonymous} // Pass the value of isAnonymous to the checked prop
               onChange={(event) => setIsAnonymous(event.target.checked)}
             />
           }

@@ -87,6 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addUserDB = async (authId: string, email: string, name: string) => {
+    // This will create a user and return user OR find the user in the db
+
     const newUser: PostUser = { authId, email, name };
     const userDbData = await addUser(newUser);
     if (userDbData instanceof Error) {

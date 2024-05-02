@@ -7,4 +7,5 @@ export interface CreateCommentDTO extends Document {
     upvotes: number;
     downvotes: number;
   };
+  createdAt: Date;
 }

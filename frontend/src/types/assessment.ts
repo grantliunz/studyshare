@@ -6,6 +6,7 @@ export type Comment = {
   text: string;
   author: ObjectId;
   rating: Rating;
+  createdAt: Date;
 };
 
 export type CreateCommentDTO = {
@@ -39,6 +40,7 @@ export type QuestionLazy = {
   answers: ObjectId[];
   watchers: ObjectId[];
   comments: ObjectId[];
+  latestContributor: ObjectId;
 };
 
 export type Assessment = {

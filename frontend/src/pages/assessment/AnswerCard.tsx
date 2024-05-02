@@ -15,6 +15,7 @@ import useGet from '../../hooks/useGet';
 import { UserDisplayDTO } from '../../types/user';
 import { useAuth } from '../../contexts/UserContext';
 import { Answer } from '../../types/answer';
+import { answerMapper } from '../../mappers/answerMapper';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -25,7 +26,9 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
-    `${API.getAnswer}/${answer._id}`
+    `${API.getAnswer}/${answer._id}`,
+    null,
+    answerMapper
   );
 
   const handleVoteChange = (
@@ -111,7 +114,9 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             display: 'flex',
             width: '100%',
             overflow: 'hidden',
-            padding: '0px 12px'
+
+            padding: '0px 12px',
+            position: 'relative' // Add position relative to the container
           }}
         >
           <PersonCard
@@ -125,6 +130,51 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             readOnly={true}
             theme={'bubble'}
           />
+          <div
+            style={{
+              borderRadius: '8px',
+              padding: '8px',
+              width: '100%',
+              display: 'flex',
+              position: 'relative', // Add position rel
+              flexDirection: 'column'
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end' // Align content to the end of the column
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '0.8rem',
+                  color: '#808080',
+                  height: 'fit-content'
+                }}
+              >
+                {polledAnswer.createdAt.toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </p>
+              <p
+                style={{
+                  fontSize: '0.8rem',
+                  color: '#808080',
+                  height: 'fit-content'
+                }}
+              >
+                {polledAnswer.createdAt.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div style={{ marginLeft: '46px' }}>
@@ -163,11 +213,20 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  rowGap: '4px'
+                  rowGap: '4px',
+                  width: '100%'
                 }}
               >
                 {polledAnswer.comments.map((comment, i) => (
-                  <CommentCard key={i} comment={comment} />
+                  <div
+                    key={i}
+                    style={{
+                      backgroundColor: i % 2 === 0 ? '#d9d9d9' : '#e0e0e0',
+                      padding: '8px'
+                    }}
+                  >
+                    <CommentCard comment={comment} />
+                  </div>
                 ))}
               </div>
             </div>

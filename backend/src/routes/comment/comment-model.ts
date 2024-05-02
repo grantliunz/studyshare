@@ -8,6 +8,7 @@ export interface IComment extends Document {
     upvotes: number;
     downvotes: number;
   };
+  createdAt: Date;
 }
 
 const commentSchema: Schema<IComment> = new Schema(
