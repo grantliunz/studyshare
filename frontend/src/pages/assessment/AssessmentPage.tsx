@@ -15,7 +15,6 @@ import { AssessmentGET, QuestionLazy } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
-import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 export type QuestionNode = {
   number: string[];
@@ -179,55 +178,21 @@ const AssessmentPage = () => {
   }
 
   return (
-    <>
-      <div>
-        <BreadCrumbs />
-      </div>
-
-      <div className={styles.container}>
-        {!assessment || !rootNode ? (
-          <div>Error retrieving assessment details</div>
-        ) : (
-          <>
-            <div className={styles.questionsTabContainer}>
-              <h3 style={{ margin: '0px' }}>Questions</h3>
-              {rootNode.subquestions &&
-                rootNode.subquestions.map((question) => (
-                  <QuestionNumber
-                    key={question.number.join(',')}
-                    questionNode={question}
-                    setQuestion={setCurrentQuestion}
-                    currentQuestion={currentQuestion}
-                    handleAddQuestion={handleAddQuestion}
-                  />
-                ))}
-              <IconButton
-                size="small"
-                style={{
-                  alignSelf: 'center',
-
-                  marginTop: '8px'
-                }}
-                onClick={() => handleAddQuestion([])}
-              >
-                <AddIcon fontSize="small" />
-              </IconButton>
-            </div>
-            {currentQuestion ? (
-              orderedQuestionsArray.map((question, index) => (
-                <QuestionPanel
-                  key={question.number.join()}
-                  currentQuestion={currentQuestion}
-                  question={question}
-                  prevQuestion={
-                    index > 0 ? orderedQuestionsArray[index - 1] : undefined
-                  }
-                  nextQuestion={
-                    index < orderedQuestionsArray.length - 1
-                      ? orderedQuestionsArray[index + 1]
-                      : undefined
-                  }
+    <div className={styles.container}>
+      {!assessment || !rootNode ? (
+        <div>Error retrieving assessment details</div>
+      ) : (
+        <>
+          <div className={styles.questionsTabContainer}>
+            <h3 style={{ margin: '0px' }}>Questions</h3>
+            {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
+              rootNode.subquestions.map((question) => (
+                <QuestionNumber
+                  key={question.number.join(',')}
+                  questionNode={question}
                   setQuestion={setCurrentQuestion}
+                  currentQuestion={currentQuestion}
+                  handleAddQuestion={handleAddQuestion}
                 />
               ))
             ) : (
@@ -241,20 +206,57 @@ const AssessmentPage = () => {
                 Create a question to get started!
               </p>
             )}
-
-            <NewQuestion
-              open={newQuestionOpen}
-              handleClose={handleNewQuestionClose}
-              parentNumber={newQuestionParentNumber}
-              onAddQuestion={() => {
-                refreshAssessment();
-                handleNewQuestionClose();
+            <IconButton
+              size="small"
+              style={{
+                alignSelf: 'center',
+                marginTop: '8px'
               }}
-            />
-          </>
-        )}
-      </div>
-    </>
+              onClick={() => handleAddQuestion([])}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </div>
+          {currentQuestion ? (
+            orderedQuestionsArray.map((question, index) => (
+              <QuestionPanel
+                key={question.number.join()}
+                currentQuestion={currentQuestion}
+                question={question}
+                prevQuestion={
+                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                }
+                nextQuestion={
+                  index < orderedQuestionsArray.length - 1
+                    ? orderedQuestionsArray[index + 1]
+                    : undefined
+                }
+                setQuestion={setCurrentQuestion}
+              />
+            ))
+          ) : (
+            <p
+              style={{
+                alignSelf: 'center',
+                placeSelf: 'center',
+                width: '100%'
+              }}
+            >
+              Create a question to get started!
+            </p>
+          )}
+          <NewQuestion
+            open={newQuestionOpen}
+            handleClose={handleNewQuestionClose}
+            parentNumber={newQuestionParentNumber}
+            onAddQuestion={() => {
+              refreshAssessment();
+              handleNewQuestionClose();
+            }}
+          />
+        </>
+      )}
+    </div>
   );
 };
 

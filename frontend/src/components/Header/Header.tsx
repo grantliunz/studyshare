@@ -6,6 +6,7 @@ import { Badge, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
+import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 
 export default function Header() {
   const { user, userDb } = useAuth();
@@ -31,6 +32,9 @@ export default function Header() {
       <h1 className={styles.title} onClick={() => navigate('/')}>
         StudyShare
       </h1>
+      <div className={styles.breadcrumbContainer}>
+        <BreadCrumbs />
+      </div>
       <div className={styles.rightContainer}>
         {user ? (
           <>

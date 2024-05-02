@@ -1,20 +1,16 @@
 .breadCrumbs {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
-  float: left;
-  margin-left: 20px;
-  margin-top: 10px;
 }
 
 .slashes {
-  color: #00186b !important;
+  color: #fff !important;
   font-size: 1.4rem !important;
   font-weight: bold !important;
 }
 
 .link {
-  color: #00186b !important;
+  color: #fff !important;
   font-size: 1.4rem !important;
   text-decoration: none !important;
   font-weight: bold !important;
