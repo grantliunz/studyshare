@@ -59,9 +59,10 @@ const QuestionPanel = ({
           undefined
       );
     }
-  }, [userDb]);
+  }, []);
 
   const handleIsStarredChange = async (newValue: boolean) => {
+    setIsStarred(newValue);
     if (userDb) {
       const questionRes = await putQuestion({
         watchers: newValue
