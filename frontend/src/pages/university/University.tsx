@@ -42,6 +42,10 @@ export default function University() {
   }, [query, universitiesData]);
 
   const handleOpenForm = () => {
+    if(!user) {
+      alert('You must be logged in to make an assessment!');
+      return;
+    }
     setShowForm(true);
   };
 
