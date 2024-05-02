@@ -13,7 +13,6 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
 const BreadCrumbs = () => {
   const { pathname } = useLocation();
-  const pathnames = pathname.split('/').filter((x) => x);
 
   const [course, setCourse] = useState<null | Course>(null);
   const [university, setUniversity] = useState<University | null>(null);
@@ -71,7 +70,11 @@ const BreadCrumbs = () => {
   };
 
   useEffect(() => {
-    if (pathnames[0] === 'universities') return;
+    const pathnames = pathname.split('/').filter((x) => x);
+    if (pathnames[0] === 'universities') {
+      setUniversity(null);
+      return;
+    }
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
@@ -81,12 +84,17 @@ const BreadCrumbs = () => {
     if (pathnames.length >= 2) {
       const courseId = pathnames[1];
       fetchCourse(courseId);
+    } else {
+      setCourse(null);
+      setAssessment(null);
     }
     if (pathnames.length >= 3) {
       const assessmentId = pathnames[2];
       fetchAssignment(assessmentId);
+    } else {
+      setAssessment(null);
     }
-  }, []);
+  }, [pathname]);
 
   function createAssessmentString(assessment: AssessmentGET): React.ReactNode {
     const semesterMap: { [key: string]: string } = {
