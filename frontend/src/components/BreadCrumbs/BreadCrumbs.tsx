@@ -73,7 +73,9 @@ const BreadCrumbs = () => {
   useEffect(() => {
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
-      fetchUniversity(universityId);
+      if(universityId !== 'universities') {
+          fetchUniversity(universityId);
+        }
     }
     if (pathnames.length >= 2) {
       const courseId = pathnames[1];
