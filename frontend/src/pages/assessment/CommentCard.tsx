@@ -22,7 +22,6 @@ const CommentCard = ({ comment }: CommentCardProps) => {
   const { data: author } = useGet<UserDisplayDTO>(
     `${API.getUser}/${comment.author}`
   );
-
   return (
     <div
       style={{
@@ -31,7 +30,8 @@ const CommentCard = ({ comment }: CommentCardProps) => {
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        fontSize: '0.7rem'
+        fontSize: '0.7rem',
+        position: 'relative' // Add position relative to the parent container
       }}
     >
       <UpDownVote
@@ -46,7 +46,51 @@ const CommentCard = ({ comment }: CommentCardProps) => {
         name={author?.name || 'Anonymous'}
         style={{ width: '80px' }}
       />
-      {comment.text}
+      <div
+        style={{
+          borderRadius: '8px',
+          padding: '8px',
+          width: '100%',
+          display: 'flex',
+          position: 'relative' // Add position relative to the parent container
+        }}
+      >
+        <div style={{ flex: 1, display: 'flex' }}>{comment.text}</div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end' // Align content to the end of the column
+          }}
+        >
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: '#808080',
+              height: 'fit-content'
+            }}
+          >
+            {comment.createdAt.toLocaleDateString('en-US', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            })}
+          </p>
+          <p
+            style={{
+              fontSize: '0.8rem',
+              color: '#808080',
+              height: 'fit-content'
+            }}
+          >
+            {comment.createdAt.toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

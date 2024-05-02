@@ -11,7 +11,8 @@ const mapGetNotifications: Mapper<NotificationDTO[]> = (
       commenterName: item.commenterName,
       questionSummary: item.questionSummary,
       questionUrl: item.questionUrl,
-      timestamp: new Date(item.timestamp)
+      timestamp: new Date(item.timestamp),
+      timedifference: item.timedifference
     })
   );
 };

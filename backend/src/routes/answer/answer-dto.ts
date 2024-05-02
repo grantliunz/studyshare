@@ -10,4 +10,5 @@ export interface CreateAnswerDTO {
   author: Types.ObjectId;
   isAnonymous?: boolean;
   question: Types.ObjectId;
+  createdAt: Date;
 }

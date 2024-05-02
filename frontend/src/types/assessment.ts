@@ -6,6 +6,7 @@ export type Comment = {
   text: string;
   author: ObjectId;
   rating: Rating;
+  createdAt: Date;
 };
 
 export type CreateCommentDTO = {

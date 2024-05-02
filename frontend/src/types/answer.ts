@@ -7,6 +7,7 @@ export type Answer = {
   rating: Rating;
   comments: Comment[];
   isAnonymous?: boolean;
+  createdAt: Date;
 };
 
 export type CreateAnswerDTO = {

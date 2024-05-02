@@ -10,6 +10,7 @@ export interface IAnswer extends Document {
   author: Types.ObjectId;
   isAnonymous?: boolean;
   question: Types.ObjectId;
+  createdAt: Date;
 }
 
 const answerSchema: Schema<IAnswer> = new Schema(
