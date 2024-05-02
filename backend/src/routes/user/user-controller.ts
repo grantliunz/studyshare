@@ -104,22 +104,19 @@ export const updateUser = async (
     }
 
     // Get the user by its ID
-    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
-      new: true
-    });
+    const user = await User.findById(req.params.userId);
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Update the user with the new data
-    user.name = req.body.name;
-    user.email = req.body.email ?? '';
+    const newDetails = { ...user, ...req.body };
 
-    // save the updated user
-    await user.save();
+    user.set(newDetails);
 
-    res.status(200).json(user); // respond with the updated user
+    const updatedUser = await user.save();
+
+    res.status(200).json(updatedUser); // respond with the updated user
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
   }

@@ -20,6 +20,22 @@ export type UserDb = {
   createdAt: Date;
 };
 
+// type that does not contain populated nested objects
+export type UserDbLazy = {
+  _id: string;
+  authId: string;
+  name: string;
+  email: string;
+  questions: ObjectId[];
+  answers: ObjectId[];
+  watchList: ObjectId[];
+  upvotedAnswers: ObjectId[];
+  downvotedAnswers: ObjectId[];
+  upvotedComments: ObjectId[];
+  downvotedComments: ObjectId[];
+  createdAt: Date;
+};
+
 // temporary type until we finalise the user type
 export type UserDTO = {
   authId: string;

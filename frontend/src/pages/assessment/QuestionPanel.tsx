@@ -16,6 +16,7 @@ import { Question, QuestionGET } from '../../types/assessment';
 import { UserDTO } from '../../types/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
+import { useAuth } from '../../contexts/UserContext';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionGET;
@@ -39,34 +40,46 @@ const QuestionPanel = ({
     `${API.getQuestion}/${question._id}`
   );
 
-  const { data: users } = useGet<UserDTO[]>(`${API.getAllUsers}`); // temp to get a user
+  const { userDb, refreshUserDb } = useAuth();
+
   const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
-    `${API.updateUser}/${users && users[0]._id}`
+    `${API.updateUser}/${userDb?._id}`
+  );
+
+  const { putData: putQuestion } = usePut<Partial<Question>, Question>(
+    `${API.updateQuestion}/${question._id}`
   );
 
   useEffect(() => {
-    if (users) {
+    if (userDb) {
       setIsStarred(
-        users[0].watchList.find((id) => id === question._id) !== undefined
+        userDb.watchList.find((id) => id === question._id) !== undefined
       );
     }
-  }, [users]);
+  }, [userDb]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
-    if (users) {
-      if (newValue) {
-        users[0].watchList.push(question._id);
-      } else {
-        users[0].watchList = users[0].watchList.filter(
-          (id) => id !== question._id
-        );
+    if (userDb) {
+      const questionRes = await putQuestion({
+        watchers: newValue
+          ? [...question.watchers, userDb._id]
+          : question.watchers.filter((user) => user !== userDb._id)
+      });
+      if (questionRes instanceof AxiosError) {
+        console.log((questionRes.response?.data as { error: string }).error);
+        return;
       }
-      const res = await putUser({ watchList: users[0].watchList });
+
+      const res = await putUser({
+        watchList: newValue
+          ? [...userDb.watchList, question._id]
+          : userDb.watchList.filter((id) => id !== question._id)
+      });
       if (res instanceof AxiosError) {
         console.log((res.response?.data as { error: string }).error);
         return;
       }
-      setIsStarred(newValue);
+      refreshUserDb();
     }
   };
 

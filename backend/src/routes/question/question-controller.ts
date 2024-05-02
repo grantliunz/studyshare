@@ -126,7 +126,10 @@ export const updateQuestion = async (
   res: Response
 ) => {
   try {
-    const { number, text, author, answers, watchers, comments } = req.body; // assuming request body contains question data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
     // Get the question by its ID
     const question = await Question.findById(req.params.id);
@@ -136,12 +139,9 @@ export const updateQuestion = async (
     }
 
     // update the question with the new data
-    question.number = number;
-    question.text = text;
-    question.author = author;
-    question.answers = answers;
-    question.watchers = watchers;
-    question.comments = comments;
+    const newDetails = { ...question, ...req.body };
+
+    question.set(newDetails);
 
     // save the updated question
     const updatedQuestion = await question.save();

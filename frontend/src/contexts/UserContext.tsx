@@ -15,12 +15,12 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from '../util/firebase';
 import usePost from '../hooks/usePost';
 import API from '../util/api';
-import { PostUser, UserDb } from '../types/user';
+import { PostUser, UserDbLazy } from '../types/user';
 import { mapGetUserData } from '../mappers/userMapper';
 
 interface AuthContextType {
   user: User | null;
-  userDb: UserDb | null;
+  userDb: UserDbLazy | null;
   refreshUserDb: () => void;
   createUser(name: string, email: string, password: string): Promise<void>;
   login(email: string, password: string): Promise<void>;
@@ -48,8 +48,8 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userDb, setUserDB] = useState<UserDb | null>(null);
-  const { postData: addUser } = usePost<PostUser, UserDb>(
+  const [userDb, setUserDB] = useState<UserDbLazy | null>(null);
+  const { postData: addUser } = usePost<PostUser, UserDbLazy>(
     API.createUser,
     mapGetUserData
   );

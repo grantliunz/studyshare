@@ -1,5 +1,5 @@
 import { Mapper } from '../mappers/mapper';
-import { UserDb } from '../types/user';
+import { UserDb, UserDbLazy } from '../types/user';
 
 const mapGetUsersData: Mapper<UserDb[]> = (data: any): UserDb[] => {
   return data.map((userData: any) => ({
@@ -18,7 +18,7 @@ const mapGetUsersData: Mapper<UserDb[]> = (data: any): UserDb[] => {
   }));
 };
 
-const mapGetUserData: Mapper<UserDb> = (data: any): UserDb => {
+const mapGetUserData: Mapper<UserDbLazy> = (data: any): UserDbLazy => {
   return {
     authId: data.authId,
     _id: data._id,

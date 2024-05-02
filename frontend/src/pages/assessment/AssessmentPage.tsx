@@ -125,8 +125,8 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 
 const AssessmentPage = () => {
   const { assessmentId } = useParams();
-  const { user: currentUser, userDb } = useAuth();
-  console.log(userDb);
+  const { user: currentUser } = useAuth();
+
   const {
     data: assessment,
     isLoading: isFetchingAssessment,
