@@ -12,7 +12,6 @@ import type { University } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
-import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 export default function University() {
   const { user, logout } = useAuth();
@@ -42,7 +41,7 @@ export default function University() {
   }, [query, universitiesData]);
 
   const handleOpenForm = () => {
-    if(!user) {
+    if (!user) {
       alert('You must be logged in to make an assessment!');
       return;
     }
@@ -63,38 +62,35 @@ export default function University() {
   };
 
   return (
-    <>
-      <BreadCrumbs />
-      <div className={styles.container}>
-        {errorString ? (
-          <div>{errorString}</div>
-        ) : (
-          <>
-            <h1 className={styles.title}>Universities</h1>
-            <SearchBar
-              title={'Search for a university'}
-              onQueryChange={onQueryChange}
-            />
-            <div className={styles.universitiesGrid}>
-              {isLoadingUniversities && <CircularProgress />}
-              {displayedData &&
-                displayedData.map((university) => (
-                  <UniversityCard key={university.id} university={university} />
-                ))}
-              {!isLoadingUniversities &&
-                displayedData?.length === 0 &&
-                !errorString && <p>No universities found</p>}
-            </div>
-            <AddUniversityForm
-              open={showForm}
-              onClose={handleCloseForm}
-              refreshUniversities={refreshUniversities}
-            />
-            <AddButton handleOpenForm={handleOpenForm} />
-            {user && <Button onClick={signOut}>Logout (temporary)</Button>}
-          </>
-        )}
-      </div>
-    </>
+    <div className={styles.container}>
+      {errorString ? (
+        <div>{errorString}</div>
+      ) : (
+        <>
+          <h1 className={styles.title}>Universities</h1>
+          <SearchBar
+            title={'Search for a university'}
+            onQueryChange={onQueryChange}
+          />
+          <div className={styles.universitiesGrid}>
+            {isLoadingUniversities && <CircularProgress />}
+            {displayedData &&
+              displayedData.map((university) => (
+                <UniversityCard key={university.id} university={university} />
+              ))}
+            {!isLoadingUniversities &&
+              displayedData?.length === 0 &&
+              !errorString && <p>No universities found</p>}
+          </div>
+          <AddUniversityForm
+            open={showForm}
+            onClose={handleCloseForm}
+            refreshUniversities={refreshUniversities}
+          />
+          <AddButton handleOpenForm={handleOpenForm} />
+          {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+        </>
+      )}
+    </div>
   );
 }

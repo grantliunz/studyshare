@@ -22,6 +22,12 @@
   cursor: pointer;
 }
 
+.breadcrumbContainer {
+  display: flex;
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
 .rightContainer {
   display: flex;
   align-items: center;
