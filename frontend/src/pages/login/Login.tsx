@@ -37,6 +37,8 @@ export default function Login() {
         setNotice(getFirebaseErrorMessage(error.code));
         setLoading(false); // Set loading state to false on error
       });
+
+    // Create a new
   };
 
   const submitGoogle = async () => {

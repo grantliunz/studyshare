@@ -26,6 +26,8 @@ export default function Signup() {
     setLoading(true); // Set loading state to true
 
     const data = new FormData(event.currentTarget);
+    const firstName = data.get('firstName') as string;
+    const lastName = data.get('lastName') as string;
     const email = data.get('email') as string;
     const password = data.get('password') as string;
     const confirmPassword = data.get('confirmPassword') as string;
@@ -36,7 +38,32 @@ export default function Signup() {
       return;
     }
 
-    createUser(email, password)
+    const nameRegex = /^[a-zA-Z ]*$/;
+
+    if (firstName === '') {
+      setNotice('First name cannot be empty');
+      setLoading(false); // Set loading state to false
+      return;
+    } else if (!nameRegex.test(firstName)) {
+      setNotice('First name can only contain letters');
+      setLoading(false); // Set loading state to false
+      return;
+    }
+
+    if (lastName === '') {
+      setNotice('Last name cannot be empty');
+      setLoading(false); // Set loading state to false
+      return;
+    } else if (!nameRegex.test(lastName)) {
+      setNotice('Last name can only contain letters');
+      setLoading(false); // Set loading state to false
+      return;
+    }
+
+    // Conmbine first and last name
+    const name = `${firstName} ${lastName}`;
+
+    createUser(name, email, password)
       .then(() => {
         navigate('/universities');
       })
@@ -71,6 +98,28 @@ export default function Signup() {
           StudyShare
         </h1>
         <h2 className={styles.title}>Sign up</h2>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <TextField
+            style={{ marginRight: '10px', flexGrow: 1 }}
+            margin="normal"
+            required
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoComplete="given-name"
+            autoFocus
+          />
+          <TextField
+            style={{ marginLeft: '10px', flexGrow: 1 }}
+            margin="normal"
+            required
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoComplete="family-name"
+          />
+        </div>
+
         <TextField
           margin="normal"
           required
@@ -79,7 +128,6 @@ export default function Signup() {
           label="Email Address"
           name="email"
           autoComplete="email"
-          autoFocus
         />
         <TextField
           margin="normal"
@@ -103,7 +151,7 @@ export default function Signup() {
           autoComplete="current-password"
         />
 
-        <p>{notice}</p>
+        <p style={{ marginTop: '10px', marginBottom: '10px' }}>{notice}</p>
 
         <Button
           type="submit"

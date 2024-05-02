@@ -28,28 +28,40 @@ const university = new University({
 
 const users = [
   new User({
+    authId: '1',
     name: 'Aaron Rodrigues',
     email: 'aaron@gmail.com',
     questions: [],
     answers: [],
     watchList: [],
-    rewards: []
+    upvotedAnswers: [],
+    downvotedAnswers: [],
+    upvotedComments: [],
+    downvotedComments: []
   }),
   new User({
+    authId: '2',
     name: 'Connor Stevens',
     email: 'connor@gmail.com',
     questions: [],
     answers: [],
     watchList: [],
-    rewards: []
+    upvotedAnswers: [],
+    downvotedAnswers: [],
+    upvotedComments: [],
+    downvotedComments: []
   }),
   new User({
+    authId: '3',
     name: 'Grant Liu',
     email: 'grant@gmail.com',
     questions: [],
     answers: [],
     watchList: [],
-    rewards: []
+    upvotedAnswers: [],
+    downvotedAnswers: [],
+    upvotedComments: [],
+    downvotedComments: []
   })
 ];
 

@@ -1,4 +1,4 @@
-import { User } from './user';
+import { UserDB } from './user';
 
 export type ObjectId = string;
 
@@ -7,7 +7,7 @@ export type Question = {
   assessment: string;
   number: string[];
   text: string;
-  author: User;
+  author: UserDB;
   answers: Answer[];
   watchers: string[]; // might need to change to a user object
   comments: Comment[];
