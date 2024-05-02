@@ -22,11 +22,14 @@ import {
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
+import { useAuth } from '../../contexts/UserContext';
+
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
   const { universityId } = useParams();
   const navigate = useNavigate();
+  const { user: currentUser } = useAuth();
 
   const [query, setQuery] = useState<string>('');
   const [yearLevels, setYearLevels] = useState<string[]>([]);
@@ -75,6 +78,10 @@ export default function CoursesPage() {
   }, [query, courseData, yearLevels]);
 
   const handleOpenForm = () => {
+    if (!currentUser) {
+      alert('You must be logged in to make an assessment!');
+      return;
+    }
     setShowForm(true);
   };
 
