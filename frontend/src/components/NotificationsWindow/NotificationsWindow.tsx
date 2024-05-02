@@ -17,13 +17,10 @@ export default function NotificationsWindow({
   onClose,
   updateNumberOfNotifications
 }: NotificationsWindowProps) {
-  const { userDB } = useAuth();
-
-  const { data: notifications } = useGet<NotificationDTO[]>(
-    API.getNotifications + `/${userDB?.id}`,
-    null,
-    mapGetNotifications
-  );
+  const { userDb } = useAuth();
+  const { data: notifications, refresh: refreshNotifications } = useGet<
+    NotificationDTO[]
+  >(API.getNotifications + `/${userDb?._id}`, null, mapGetNotifications);
 
   useEffect(() => {
     if (notifications) {
@@ -46,6 +43,8 @@ export default function NotificationsWindow({
           <NotificationCard
             key={notificationObj.questionID} // notificationObj.id is somehow not unique?
             notification={notificationObj}
+            onClose={() => onClose()}
+            refreshNotifications={() => refreshNotifications()}
           />
         ))}
         {notifications.length > 8 && (

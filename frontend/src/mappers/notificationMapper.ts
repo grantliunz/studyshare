@@ -4,12 +4,16 @@ import { Mapper } from '../mappers/mapper';
 const mapGetNotifications: Mapper<NotificationDTO[]> = (
   data: any
 ): NotificationDTO[] => {
-  return data.map((item: any) => ({
-    questionID: item.questionID,
-    commenterName: item.commenterName,
-    questionSummary: item.questionSummary,
-    timestamp: new Date(item.timestamp)
-  }));
+  return data.map(
+    (item: any): NotificationDTO => ({
+      id: item.id,
+      questionID: item.questionID,
+      commenterName: item.commenterName,
+      questionSummary: item.questionSummary,
+      questionUrl: item.questionUrl,
+      timestamp: new Date(item.timestamp)
+    })
+  );
 };
 
 export { mapGetNotifications };

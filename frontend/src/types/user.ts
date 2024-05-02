@@ -1,4 +1,7 @@
-import { Answer, Comment, ObjectId, Question } from './assessment';
+import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
+import { Answer } from './answer';
+import { Comment, ObjectId } from './assessment';
+import { Question } from './question';
 
 export type UserDisplayDTO = {
   name: string;
@@ -12,7 +15,7 @@ export type UserDb = {
   email: string;
   questions: Question[];
   answers: Answer[];
-  watchList: Question[];
+  watchList: WatchlistEntry[];
   upvotedAnswers: Answer[];
   downvotedAnswers: Answer[];
   upvotedComments: Comment[];
@@ -28,7 +31,7 @@ export type UserDbLazy = {
   email: string;
   questions: ObjectId[];
   answers: ObjectId[];
-  watchList: ObjectId[];
+  watchList: WatchlistEntry[];
   upvotedAnswers: ObjectId[];
   downvotedAnswers: ObjectId[];
   upvotedComments: ObjectId[];
@@ -44,7 +47,7 @@ export type UserDTO = {
   email: string;
   questions: ObjectId[];
   answers: ObjectId[];
-  watchList: ObjectId[];
+  watchList: WatchlistEntry[];
   upvotedAnswers: ObjectId[];
   downvotedAnswers: ObjectId[];
   upvotedComments: ObjectId[];

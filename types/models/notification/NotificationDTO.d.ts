@@ -3,6 +3,7 @@ export interface NotificationDTO {
     questionID: string;
     commenterName: string;
     questionSummary: string;    
-    timestamp: Date;
     questionUrl: string;
+    timedifference: string;
+    timestamp: Date;
 }

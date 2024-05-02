@@ -2,9 +2,17 @@ import { Avatar, Button } from '@mui/material';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 import styles from './NotificationCard.module.css';
 import { useNavigate } from 'react-router-dom';
+import { UserDTO } from '../../../types/user';
+import usePut from '../../../hooks/usePut';
+import { useAuth } from '../../../contexts/UserContext';
+import API from '../../../util/api';
+import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
+import { AxiosError } from 'axios';
 
 interface NotificationCardProps {
   notification: NotificationDTO;
+  onClose: () => void;
+  refreshNotifications: () => void;
 }
 
 function getTimeDifference(timestamp: Date) {
@@ -28,18 +36,48 @@ function getTimeDifference(timestamp: Date) {
 }
 
 export default function NotificationCard({
-  notification
+  notification,
+  onClose,
+  refreshNotifications
 }: NotificationCardProps) {
   const navigate = useNavigate();
+  const { userDb, refreshUserDb } = useAuth();
+  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
+    `${API.updateUser}/${userDb?._id}`
+  );
 
-  function navigateToQuestion(questionID: string) {
-    // TODO: navigate to question page
+  async function navigateToQuestion(questionUrl: string, questionID: string) {
+    onClose();
+
+    const watchedQuestions = userDb?.watchList as WatchlistEntry[] | undefined;
+
+    // Update the last viewed time of the question
+    const watchedQuestionIndex = watchedQuestions!.findIndex(
+      (watchedQuestion) => watchedQuestion.questionId === questionID
+    );
+
+    watchedQuestions![watchedQuestionIndex] = {
+      ...watchedQuestions![watchedQuestionIndex],
+      lastViewed: new Date()
+    };
+    const res = await putUser({
+      watchList: watchedQuestions
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+    refreshNotifications();
+    // refreshUserDb();
+    navigate(questionUrl, { state: { questionID } });
   }
+
   return (
     <Button
       key={notification.id} // Use the id as the key
       onClick={() => {
-        navigateToQuestion(notification.questionID);
+        navigateToQuestion(notification.questionUrl, notification.questionID);
       }}
       variant="contained"
       sx={{

@@ -158,7 +158,7 @@ export const getNotifications = async (
           lastViewed: '$watchList.lastViewed',
           updatedAt: '$question.updatedAt',
           timeDifference: {
-            $subtract: ['$watchList.lastViewed', '$question.updatedAt']
+            $subtract: ['$question.updatedAt', '$watchList.lastViewed']
           },
           // Construct the URL by concatenating _id fields
           questionUrl: {
@@ -167,9 +167,7 @@ export const getNotifications = async (
               '/',
               { $toString: '$course._id' },
               '/',
-              { $toString: '$assessment._id' },
-              '/',
-              { $toString: '$question._id' }
+              { $toString: '$assessment._id' }
             ]
           }
         }
@@ -180,15 +178,16 @@ export const getNotifications = async (
     watchedQuestions.sort(
       (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
     );
-
     // Declare notifications array
     const notifications: NotificationDTO[] = [];
 
     // Counter variable for generating IDs
     let idCounter = 1;
-
     // Map through watchedQuestions and populate notifications array
     watchedQuestions.forEach((watchedQuestion: any) => {
+      if (watchedQuestion.timeDifference < 0) {
+        return;
+      }
       notifications.push({
         id: String(idCounter++),
         questionID: watchedQuestion.questionId,
@@ -198,6 +197,7 @@ export const getNotifications = async (
           ''
         ), // strips html tags
         questionUrl: watchedQuestion.questionUrl,
+        timedifference: watchedQuestion.timeDifference,
         timestamp: watchedQuestion.updatedAt
       });
     });

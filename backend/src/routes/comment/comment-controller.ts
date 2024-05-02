@@ -3,6 +3,7 @@ import Comment from './comment-model';
 import Answer from '../answer/answer-model';
 import { CreateCommentDTO } from './comment-dto';
 import { validationResult } from 'express-validator';
+import Question from '../question/question-model';
 
 // Controller function to create a new comment
 export const createComment = async (
@@ -29,6 +30,14 @@ export const createComment = async (
     if (!answer) {
       return res.status(404).json({ error: 'Answer not found' });
     }
+    const question = await Question.findById(answer.question);
+
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+    Object.assign(question, { __v: question.__v + 1 });
+
+    question.save();
 
     // create a new comment instance
     const comment = new Comment({

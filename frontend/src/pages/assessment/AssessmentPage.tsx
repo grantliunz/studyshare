@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
 import { useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
@@ -127,6 +127,8 @@ const AssessmentPage = () => {
   const { assessmentId } = useParams();
   const { user: currentUser } = useAuth();
 
+  const location = useLocation();
+  const { questionID } = location.state ?? {};
   const {
     data: assessment,
     isLoading: isFetchingAssessment,
@@ -149,10 +151,14 @@ const AssessmentPage = () => {
       setRootNode(root);
       const arr = buildOrderedQuestionsArray(root);
       setOrderedQuestionsArray(arr);
-
-      setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
+      if (questionID) {
+        const question = arr.find((qn) => qn._id === questionID);
+        setCurrentQuestion(question);
+      } else {
+        setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
+      }
     }
-  }, [assessment]);
+  }, [assessment, questionID]);
 
   const handleAddQuestion = (parentNumber: string[]) => {
     if (!currentUser) {

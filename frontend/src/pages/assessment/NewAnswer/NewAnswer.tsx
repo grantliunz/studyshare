@@ -37,7 +37,8 @@ const NewAnswer = ({
         downvotes: 0
       },
       comments: [],
-      isAnonymous
+      isAnonymous,
+      question: questionId
     });
     if (res instanceof AxiosError) {
       console.log(res.response?.data.error);

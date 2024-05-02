@@ -37,7 +37,8 @@ export const createAnswer = async (
       author,
       rating,
       comments,
-      isAnonymous
+      isAnonymous,
+      question
     });
     // save the answer to the database
     const createdAnswer = await answer.save();

@@ -18,6 +18,7 @@ import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
 import { Question } from '../../types/question';
+import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -54,7 +55,8 @@ const QuestionPanel = ({
   useEffect(() => {
     if (userDb) {
       setIsStarred(
-        userDb.watchList.find((id) => id === question._id) !== undefined
+        userDb.watchList.find((entry) => entry.questionId === question._id) !==
+          undefined
       );
     }
   }, [userDb]);
@@ -70,16 +72,22 @@ const QuestionPanel = ({
         console.log((questionRes.response?.data as { error: string }).error);
         return;
       }
+      const updatedWatchList = newValue
+        ? [
+            ...userDb.watchList,
+            { questionId: question._id, lastViewed: new Date() }
+          ]
+        : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
       const res = await putUser({
-        watchList: newValue
-          ? [...userDb.watchList, question._id]
-          : userDb.watchList.filter((id) => id !== question._id)
+        watchList: updatedWatchList
       });
+
       if (res instanceof AxiosError) {
         console.log((res.response?.data as { error: string }).error);
         return;
       }
+
       refreshUserDb();
     }
   };

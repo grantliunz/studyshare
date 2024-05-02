@@ -8,7 +8,7 @@ import { useState } from 'react';
 import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, userDb } = useAuth();
   const navigate = useNavigate();
 
   const [openNotifications, setOpenNotifications] = useState(false);
@@ -48,11 +48,13 @@ export default function Header() {
                 src={notificationIcon}
                 alt="Notification"
               />
-              <NotificationsWindow
-                open={openNotifications}
-                onClose={closeNotificationsWindow}
-                updateNumberOfNotifications={setNoNotifications}
-              />
+              {userDb && (
+                <NotificationsWindow
+                  open={openNotifications}
+                  onClose={closeNotificationsWindow}
+                  updateNumberOfNotifications={setNoNotifications}
+                />
+              )}
             </Badge>
             <img src={profileIcon} alt="Profile" />
           </>
