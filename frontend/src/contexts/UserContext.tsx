@@ -9,13 +9,11 @@ import {
   onAuthStateChanged,
   browserSessionPersistence,
   User,
-  signInWithRedirect,
-  getRedirectResult
+  signInWithPopup,
 } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from '../util/firebase';
 import { UserDB } from '../types/types';
-import useGet from '../hooks/useGet';
 import usePost from '../hooks/usePost';
 import { PostUser } from '../types/types';
 import API from '../util/api';
@@ -50,8 +48,8 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userDB, setUserDB] = useState<UserDB | null>(null);
+  const { postData: addUser } = usePost<PostUser, UserDB>(API.createUser);
 
-  const { postData: addUser } = usePost<PostUser, UserDB>( API.createUser );
 
   useEffect(() => {
     // Set persistence
@@ -61,15 +59,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           setUser(user); // Update the user state
 
-          // Add user to the database
+          // If the user is logged in, add the user to the database
           if (user) {
             addUserDB(user.uid, user.email || '', user.displayName || '');
           }
-          
-          // Get user from DB
-          const { data: userDBData } = useGet<UserDB>(`${API.getUser}/${user?.uid}`);
-
-          setUserDB(userDBData);
         });
 
         return unsubscribe; // Return the unsubscribe function
@@ -77,9 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .catch((error) => {
         console.error('Error setting persistence: ', error);
       });
-  }, []);
 
-  
+  }, []);
 
   const createUser = async (name: string, email: string, password: string) => {
     await createUserWithEmailAndPassword(auth, email, password);
@@ -88,40 +80,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const addUserDB = async (authId: string, email: string, name: string) => {
     const newUser: PostUser = {authId, email, name};
-    await addUser(newUser);
-  }
+    const userDBData = await addUser(newUser);
+    if (userDBData instanceof Error) {
+      console.error('Error adding user to database:', userDBData);
+    } else {
+      setUserDB(userDBData);
+    }
+  };
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
   const loginWithGoogle = async () => {
-    // try {
-      // Sign in with Google
-      await signInWithRedirect(auth, provider);
-  
-    //   // Get result after successful login
-    //   const result = await getRedirectResult(auth);
-  
-    //   // Check if user exists in the database
-    //   if (result?.user) {
-    //     const { data: existingUser } = await useGet<UserDB>(`${API.getUser}/${result.user.uid}`);
-        
-    //     // If user doesn't exist, create a new user in the database
-    //     if (!existingUser) {
-    //       // Add user to the database
-    //       await addUserDB(result.user.uid, result.user.email || '', result.user.displayName || '');
-    //     }
-    //   }
-
-
-    // } catch (error) {
-    //   console.error('Error signing in with Google: ', error);
-    // }
+    await signInWithPopup(auth, provider);
   };
   
-  
-
   const logout = async () => {
     return await signOut(auth);
   };

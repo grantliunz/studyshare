@@ -14,6 +14,13 @@ export const createUser = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
+    // Check if the user already exists using the firebase ID
+    const existing = await User.findOne({ authId: req.body.authId });
+
+    if (existing) {
+      return res.status(201).json(existing);
+    }
+
     const { authId, name, email, questions = [], answers = [], watchList = [], upvotedAnswers = [], downvotedAnswers = [], upvotedComments = [], downvotedComments = [] } = req.body; // assuming request body contains user data
 
     // Create a new user with the data
