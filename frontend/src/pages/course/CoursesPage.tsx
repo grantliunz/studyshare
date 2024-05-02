@@ -5,7 +5,6 @@ import style from './Course.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddButton from '../../components/AddButton/AddButton';
-import { Course, University } from '../../types/types';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import { mapGetCoursesData } from '../../mappers/courseMapper';
@@ -22,6 +21,8 @@ import {
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
+import { Course } from '@shared/types/models/course/course';
+import { University } from '@shared/types/models/university/university';
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);

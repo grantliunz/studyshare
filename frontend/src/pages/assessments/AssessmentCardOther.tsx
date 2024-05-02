@@ -1,7 +1,9 @@
 import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
-import { AssessmentType, SemesterType } from '../../types/assessment';
-import { useNavigate } from 'react-router-dom';
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
 
 type AssessmentCardOtherProps = {
   assessment: {

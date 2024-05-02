@@ -1,5 +1,5 @@
 import { Mapper } from '../mappers/mapper';
-import { UserDb, UserDbLazy } from '../types/user';
+import { UserDb, UserDbLazy } from '@shared/types/models/user/user';
 
 const mapGetUsersData: Mapper<UserDb[]> = (data: any): UserDb[] => {
   return data.map((userData: any) => ({

@@ -12,13 +12,12 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { QuestionLazy } from '../../types/assessment';
-import { UserDTO } from '../../types/user';
+import { UserDTO } from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
-import { Question } from '../../types/question';
-import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
+import { Question } from '@shared/types/models/question/question';
+import { QuestionLazy } from '@shared/types/models/assessment/assessment';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;

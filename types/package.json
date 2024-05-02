@@ -4,34 +4,35 @@
     "version": "0.1.0",
     "main": "src/index.ts",
     "private": true,
-    "contributors": [    "empty string"
+    "contributors": [
+        "empty string"
     ],
     "repository": {
-      "type": "git",
-      "url": "https://github.com/The-University-of-Auckland/capstone-project-team_07/",
-      "directory": "packages/types"
+        "type": "git",
+        "url": "https://github.com/The-University-of-Auckland/capstone-project-team_07/",
+        "directory": "packages/types"
     },
     "license": "SEE LICENSE IN LICENSE.md",
     "bugs": {
-      "url": "https://github.com/The-University-of-Auckland/capstone-project-team_07/issues"
+        "url": "https://github.com/The-University-of-Auckland/capstone-project-team_07/issues"
     },
     "engines": {
-      "node": ">=18",
-      "pnpm": ">=9.0.1"
+        "node": ">=18",
+        "pnpm": ">=9.0.1"
     },
     "scripts": {
-      "build": "tsc",
-      "dev": "tsc --watch",
-      "format": "prettier --check --cache . --ignore-path ../../.gitignore",
-      "format:fix": "prettier --write --cache . --ignore-path ../../.gitignore",
-      "lint": "biome check --formatter-enabled=false .",
-      "lint:fix": "biome check --formatter-enabled=false --apply .",
-      "check": "pnpm format && pnpm lint",
-      "check:fix": "pnpm format:fix && pnpm lint:fix"
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "format": "prettier --check --cache . --ignore-path ../../.gitignore",
+        "format:fix": "prettier --write --cache . --ignore-path ../../.gitignore",
+        "lint": "biome check --formatter-enabled=false .",
+        "lint:fix": "biome check --formatter-enabled=false --apply .",
+        "check": "pnpm format && pnpm lint",
+        "check:fix": "pnpm format:fix && pnpm lint:fix"
     },
     "devDependencies": {
-      "@tsconfig/node20": "^20.1.2",
-      "prettier": "^3.2.5",
-      "typescript": "^5.4.2"
+        "@tsconfig/node20": "^20.1.2",
+        "prettier": "^3.2.5",
+        "typescript": "^5.4.2"
     }
-  }
+}

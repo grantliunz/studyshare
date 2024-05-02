@@ -7,15 +7,15 @@ import { CircularProgress, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
-import { Comment, CreateCommentDTO } from '../../types/assessment';
 import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { AxiosError } from 'axios';
 import useGet from '../../hooks/useGet';
-import { UserDisplayDTO } from '../../types/user';
+import { UserDisplayDTO } from '@shared/types/models/user/user';
 import { useAuth } from '../../contexts/UserContext';
-import { Answer } from '../../types/answer';
+import { Answer } from '@shared/types/models/answer/answer';
 import { answerMapper } from '../../mappers/answerMapper';
+import { CreateCommentDTO } from '@shared/types/models/assessment/assessment';
 
 type AnswerCardProps = {
   answer: Answer;

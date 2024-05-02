@@ -8,8 +8,10 @@ import API from '../../../util/api';
 import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
-import { CreateQuestionDTO, Question } from '../../../types/question';
-import { QuestionLazy } from '../../../types/assessment';
+import {
+  CreateQuestionDTO,
+  Question
+} from '@shared/types/models/question/question';
 
 type newQuestionProps = {
   open: boolean;

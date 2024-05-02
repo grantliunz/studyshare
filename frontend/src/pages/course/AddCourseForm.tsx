@@ -10,10 +10,10 @@ import {
 import styles from '../course/AddCourseForm.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import usePost from '../../hooks/usePost';
-import { Course, PostCourse } from '../../types/types';
 import API from '../../util/api';
 import { mapGetCourseData } from '../../mappers/courseMapper';
 import { AxiosError } from 'axios';
+import { PostCourse, Course } from '@shared/types/models/course/course';
 
 interface AddCourseFormProps {
   open: boolean;
@@ -32,14 +32,10 @@ const AddCourseForm: React.FC<AddCourseFormProps> = ({
   const [courseCode, setCourseCode] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const {
-    postData: addCourse,
-    isLoading: isAddingCourse,
-    error: addCourseError
-  } = usePost<PostCourse, Course>(
-    `${API.postCourse}/${universityId}`,
-    mapGetCourseData
-  );
+  const { postData: addCourse, isLoading: isAddingCourse } = usePost<
+    PostCourse,
+    Course
+  >(`${API.postCourse}/${universityId}`, mapGetCourseData);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
