@@ -1,43 +1,6 @@
-import { UserDb } from './user';
+import { Question } from './question';
 
 export type ObjectId = string;
-
-export type Question = {
-  _id: string;
-  assessment: string;
-  number: string[];
-  text: string;
-  author: UserDb;
-  answers: Answer[];
-  watchers: string[]; // might need to change to a user object
-  comments: Comment[];
-};
-
-export type CreateQuestionDTO = {
-  number: string[];
-  text: string;
-  author: ObjectId;
-  answers: ObjectId[];
-  watchers: ObjectId[]; // might need to change to a user object
-  comments: ObjectId[];
-};
-
-export type Answer = {
-  _id: string;
-  text: string;
-  author: string;
-  rating: Rating;
-  comments: Comment[];
-  isAnonymous?: boolean;
-};
-
-export type CreateAnswerDTO = {
-  text: string;
-  author: ObjectId;
-  rating: Rating;
-  comments: ObjectId[];
-  isAnonymous?: boolean;
-};
 
 export type Comment = {
   text: string;
@@ -64,10 +27,10 @@ export type AssessmentGET = {
   number?: number;
   year: number;
   semester: SemesterType;
-  questions: QuestionGET[];
+  questions: QuestionLazy[];
 };
 
-export type QuestionGET = {
+export type QuestionLazy = {
   _id: ObjectId;
   assessment: ObjectId;
   number: string[];

@@ -12,18 +12,19 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { Question, QuestionGET } from '../../types/assessment';
+import { QuestionLazy } from '../../types/assessment';
 import { UserDTO } from '../../types/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
+import { Question } from '../../types/question';
 
 type QuestionPanelProps = {
-  currentQuestion: QuestionGET;
-  question: QuestionGET;
-  prevQuestion: QuestionGET | undefined;
-  nextQuestion: QuestionGET | undefined;
-  setQuestion: React.Dispatch<React.SetStateAction<QuestionGET | undefined>>;
+  currentQuestion: QuestionLazy;
+  question: QuestionLazy;
+  prevQuestion: QuestionLazy | undefined;
+  nextQuestion: QuestionLazy | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<QuestionLazy | undefined>>;
 };
 
 const QuestionPanel = ({

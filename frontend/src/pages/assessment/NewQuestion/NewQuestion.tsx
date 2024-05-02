@@ -4,11 +4,11 @@ import styles from './NewQuestion.module.css';
 import Editor from '../../../components/Editor/Editor';
 import { useState } from 'react';
 import usePost from '../../../hooks/usePost';
-import { CreateQuestionDTO, Question } from '../../../types/assessment';
 import API from '../../../util/api';
 import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
+import { CreateQuestionDTO, Question } from '../../../types/question';
 
 type newQuestionProps = {
   open: boolean;
