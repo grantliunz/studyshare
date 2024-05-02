@@ -12,7 +12,6 @@ const API = {
   getQuestion: '/question/getQuestion',
   createUser: '/user/createUser',
   getUser: '/user/getUser',
-  createUser: '/user/createUser',
   updateUser: '/user/updateUser',
   getAllUsers: '/user/getAllUsers',
   createAnswer: '/answer/createAnswer',
