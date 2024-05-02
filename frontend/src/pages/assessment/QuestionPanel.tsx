@@ -1,6 +1,6 @@
 import { Button, CircularProgress, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
@@ -12,14 +12,19 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { Question, QuestionGET } from '../../types/assessment';
+import { QuestionLazy } from '../../types/assessment';
+import { UserDTO } from '../../types/user';
+import usePut from '../../hooks/usePut';
+import { AxiosError } from 'axios';
+import { useAuth } from '../../contexts/UserContext';
+import { Question } from '../../types/question';
 
 type QuestionPanelProps = {
-  currentQuestion: QuestionGET;
-  question: QuestionGET;
-  prevQuestion: QuestionGET | undefined;
-  nextQuestion: QuestionGET | undefined;
-  setQuestion: React.Dispatch<React.SetStateAction<QuestionGET | undefined>>;
+  currentQuestion: QuestionLazy;
+  question: QuestionLazy;
+  prevQuestion: QuestionLazy | undefined;
+  nextQuestion: QuestionLazy | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<QuestionLazy | undefined>>;
 };
 
 const QuestionPanel = ({
@@ -35,6 +40,49 @@ const QuestionPanel = ({
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
     `${API.getQuestion}/${question._id}`
   );
+
+  const { userDb, refreshUserDb } = useAuth();
+
+  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
+    `${API.updateUser}/${userDb?._id}`
+  );
+
+  const { putData: putQuestion } = usePut<Partial<Question>, Question>(
+    `${API.updateQuestion}/${question._id}`
+  );
+
+  useEffect(() => {
+    if (userDb) {
+      setIsStarred(
+        userDb.watchList.find((id) => id === question._id) !== undefined
+      );
+    }
+  }, [userDb]);
+
+  const handleIsStarredChange = async (newValue: boolean) => {
+    if (userDb) {
+      const questionRes = await putQuestion({
+        watchers: newValue
+          ? [...question.watchers, userDb._id]
+          : question.watchers.filter((user) => user !== userDb._id)
+      });
+      if (questionRes instanceof AxiosError) {
+        console.log((questionRes.response?.data as { error: string }).error);
+        return;
+      }
+
+      const res = await putUser({
+        watchList: newValue
+          ? [...userDb.watchList, question._id]
+          : userDb.watchList.filter((id) => id !== question._id)
+      });
+      if (res instanceof AxiosError) {
+        console.log((res.response?.data as { error: string }).error);
+        return;
+      }
+      refreshUserDb();
+    }
+  };
 
   if (!polledQuestion) {
     return (
@@ -81,7 +129,7 @@ const QuestionPanel = ({
           justifyContent: 'space-between'
         }}
       >
-        <IconButton onClick={() => setIsStarred(!isStarred)}>
+        <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
           {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
         </IconButton>
         <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>

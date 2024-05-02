@@ -11,7 +11,7 @@ import {
   isRomanNumeral
 } from '../../util/questionNumber';
 import API from '../../util/api';
-import { AssessmentGET, QuestionGET } from '../../types/assessment';
+import { AssessmentGET, QuestionLazy } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
@@ -20,7 +20,7 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 export type QuestionNode = {
   number: string[];
   subquestions?: QuestionNode[];
-  question?: QuestionGET;
+  question?: QuestionLazy;
 };
 
 // Helper function to determine the type of a value (number, letter, or roman numeral)
@@ -69,7 +69,7 @@ const compareValues = (valueA: any, valueB: any, type: string) => {
   }
 };
 
-const buildQuestionsTree = (questions: QuestionGET[]) => {
+const buildQuestionsTree = (questions: QuestionLazy[]) => {
   // could use a map of visited for efficiency
   const root: QuestionNode = { number: [] };
   questions.forEach((question) => {
@@ -108,7 +108,7 @@ const buildQuestionsTree = (questions: QuestionGET[]) => {
 
 // builds a sorted array of questions
 const buildOrderedQuestionsArray = (root: QuestionNode) => {
-  const arr: QuestionGET[] = [];
+  const arr: QuestionLazy[] = [];
 
   const traverseNode = (node: QuestionNode) => {
     if (node.question) {
@@ -133,14 +133,14 @@ const AssessmentPage = () => {
     refresh: refreshAssessment
   } = useGet<AssessmentGET>(`${API.getAssessment}/${assessmentId}`);
 
-  const [currentQuestion, setCurrentQuestion] = useState<QuestionGET>();
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionLazy>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
   const [newQuestionParentNumber, setNewQuestionParentNumber] = useState<
     string[]
   >([]);
   const [rootNode, setRootNode] = useState<QuestionNode>({ number: [] });
   const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
-    QuestionGET[]
+    QuestionLazy[]
   >([]);
 
   useEffect(() => {

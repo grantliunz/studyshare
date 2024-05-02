@@ -1,9 +1,9 @@
 import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface IComment extends Document {
-  answer: Schema.Types.ObjectId;
+  answer: Types.ObjectId;
   text: string;
-  author: Schema.Types.ObjectId;
+  author: Types.ObjectId;
   rating: {
     upvotes: number;
     downvotes: number;

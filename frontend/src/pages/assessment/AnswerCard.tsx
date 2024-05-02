@@ -7,13 +7,14 @@ import { CircularProgress, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
-import { Answer, Comment } from '../../types/assessment';
+import { Comment, CreateCommentDTO } from '../../types/assessment';
 import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { AxiosError } from 'axios';
 import useGet from '../../hooks/useGet';
 import { UserDisplayDTO } from '../../types/user';
 import { useAuth } from '../../contexts/UserContext';
+import { Answer } from '../../types/answer';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -49,22 +50,20 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.getUser}/${answer.author}`
   );
 
-  const { postData: postComment } = usePost<Omit<Comment, '_id'>, Comment>(
+  const { postData: postComment } = usePost<CreateCommentDTO, Comment>(
     `${API.createComment}/${answer._id}`
   );
 
-  // temp to add an author to new answer
-  const { data: users } = useGet<any>(`${API.getAllUsers}`);
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
 
   const handleCreateNewComment = async () => {
-    if (!currentUser) {
+    if (!currentUser || !currentUserDb) {
       alert('You must be logged in to make a comment!');
       return;
     }
-    const comment: Omit<Comment, '_id'> = {
+    const comment: CreateCommentDTO = {
       text: newComment,
-      author: users[Math.floor(Math.random() * users.length)]._id,
+      author: currentUserDb._id,
       rating: {
         upvotes: 0,
         downvotes: 0
@@ -76,7 +75,9 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       return;
     }
     setNewComment('');
+    setIsExpanded(true);
     refreshAnswer();
+    refreshUserDb();
   };
 
   if (!polledAnswer) {
@@ -155,7 +156,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   border: '1px dashed black',
                   marginLeft: '11px',
-                  width: '1px'
+                  width: '0px'
                 }}
               />
               <div

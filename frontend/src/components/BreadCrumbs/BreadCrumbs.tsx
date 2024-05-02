@@ -71,11 +71,12 @@ const BreadCrumbs = () => {
   };
 
   useEffect(() => {
+    if (pathnames[0] === 'universities') return;
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
-      if(universityId !== 'universities') {
-          fetchUniversity(universityId);
-        }
+      if (universityId !== 'universities') {
+        fetchUniversity(universityId);
+      }
     }
     if (pathnames.length >= 2) {
       const courseId = pathnames[1];

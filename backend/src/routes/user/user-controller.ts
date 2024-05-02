@@ -21,7 +21,18 @@ export const createUser = async (
       return res.status(201).json(existing);
     }
 
-    const { authId, name, email, questions = [], answers = [], watchList = [], upvotedAnswers = [], downvotedAnswers = [], upvotedComments = [], downvotedComments = [] } = req.body; // assuming request body contains user data
+    const {
+      authId,
+      name,
+      email,
+      questions = [],
+      answers = [],
+      watchList = [],
+      upvotedAnswers = [],
+      downvotedAnswers = [],
+      upvotedComments = [],
+      downvotedComments = []
+    } = req.body; // assuming request body contains user data
 
     // Create a new user with the data
     const newUser = new User({
@@ -34,7 +45,7 @@ export const createUser = async (
       upvotedAnswers,
       downvotedAnswers,
       upvotedComments,
-      downvotedComments,
+      downvotedComments
     });
 
     // save the user to the database
@@ -42,6 +53,7 @@ export const createUser = async (
 
     res.status(201).json(createdUser); // respond with the created user
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
@@ -64,12 +76,11 @@ export const getUser = async (
   res: Response
 ) => {
   try {
-    
     // Get the user by its firebase ID
     let user = await User.findOne({ authId: req.params.userId });
 
     // If the user is not found by firebase ID, try to find by ID
-    user = user ?? await User.findOne({ _id: req.params.userId });
+    user = user ?? (await User.findOne({ _id: req.params.userId }));
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -99,14 +110,13 @@ export const updateUser = async (
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Update the user with the new data
-    user.name = req.body.name;
-    user.email = req.body.email ?? '';
+    const newDetails = { ...user, ...req.body };
 
-    // save the updated user
-    await user.save();
+    user.set(newDetails);
 
-    res.status(200).json(user); // respond with the updated user
+    const updatedUser = await user.save();
+
+    res.status(200).json(updatedUser); // respond with the updated user
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
   }

@@ -1,11 +1,11 @@
-import { Answer, Question, Comment } from './assessment';
+import { Answer, Comment, ObjectId, Question } from './assessment';
 
 export type UserDisplayDTO = {
   name: string;
 };
 
 // temporary type until we finalise the user type
-export type UserDB = {
+export type UserDb = {
   _id: string;
   authId: string;
   name: string;
@@ -19,3 +19,40 @@ export type UserDB = {
   downvotedComments: Comment[];
   createdAt: Date;
 };
+
+// type that does not contain populated nested objects
+export type UserDbLazy = {
+  _id: string;
+  authId: string;
+  name: string;
+  email: string;
+  questions: ObjectId[];
+  answers: ObjectId[];
+  watchList: ObjectId[];
+  upvotedAnswers: ObjectId[];
+  downvotedAnswers: ObjectId[];
+  upvotedComments: ObjectId[];
+  downvotedComments: ObjectId[];
+  createdAt: Date;
+};
+
+// temporary type until we finalise the user type
+export type UserDTO = {
+  authId: string;
+  _id: ObjectId;
+  name: string;
+  email: string;
+  questions: ObjectId[];
+  answers: ObjectId[];
+  watchList: ObjectId[];
+  upvotedAnswers: ObjectId[];
+  downvotedAnswers: ObjectId[];
+  upvotedComments: ObjectId[];
+  downvotedComments: ObjectId[];
+};
+
+export interface PostUser {
+  authId: string;
+  name: string;
+  email: string;
+}

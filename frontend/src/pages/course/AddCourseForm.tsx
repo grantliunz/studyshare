@@ -55,7 +55,10 @@ const AddCourseForm: React.FC<AddCourseFormProps> = ({
 
     const addedCourse = await addCourse(newCourseData);
     if (addedCourse instanceof AxiosError) {
-      setError(addedCourse.response?.data.error || 'An error occurred');
+      setError(
+        (addedCourse.response?.data as { error: string }).error ||
+          'An error occurred'
+      );
       return;
     }
     setCourseName(''); // Clear inputs after submitting

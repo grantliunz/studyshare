@@ -3,6 +3,7 @@ import Answer from './answer-model';
 import Question from '../question/question-model';
 import { CreateAnswerDTO } from './answer-dto';
 import { validationResult } from 'express-validator';
+import User from '../user/user-model';
 
 // Controller function to create a new answer
 export const createAnswer = async (
@@ -23,6 +24,13 @@ export const createAnswer = async (
       return res.status(404).json({ error: 'Question not found' });
     }
 
+    // get the author by its ID
+    const user = await User.findById(author);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Author not found' });
+    }
+
     // create a new answer instance
     const answer = new Answer({
       text,
@@ -39,6 +47,10 @@ export const createAnswer = async (
 
     // save the question with the updated answers array
     await question.save();
+
+    user.answers.push(createdAnswer._id);
+
+    user.save();
 
     res.status(201).json(createdAnswer); // respond with the created answer
   } catch (error) {
