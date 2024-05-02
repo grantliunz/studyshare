@@ -5,8 +5,8 @@ export type UserDisplayDTO = {
 };
 
 // temporary type until we finalise the user type
-export type UserDB = {
-  _id: string;
+export type UserDb = {
+  id: string;
   authId: string;
   name: string;
   email: string;
@@ -23,10 +23,20 @@ export type UserDB = {
 // temporary type until we finalise the user type
 export type UserDTO = {
   authId: string;
-  _id: ObjectId;
+  id: ObjectId;
   name: string;
   email: string;
   questions: ObjectId[];
   answers: ObjectId[];
   watchList: ObjectId[];
+  upvotedAnswers: ObjectId[];
+  downvotedAnswers: ObjectId[];
+  upvotedComments: ObjectId[];
+  downvotedComments: ObjectId[];
 };
+
+export interface PostUser {
+  authId: string;
+  name: string;
+  email: string;
+}

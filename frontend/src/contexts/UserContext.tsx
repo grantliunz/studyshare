@@ -13,14 +13,15 @@ import {
 } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from '../util/firebase';
-import { UserDB } from '../types/types';
 import usePost from '../hooks/usePost';
-import { PostUser } from '../types/types';
 import API from '../util/api';
+import { PostUser, UserDb } from '../types/user';
+import { mapGetUserData } from '../mappers/userMapper';
 
 interface AuthContextType {
   user: User | null;
-  userDB: UserDB | null;
+  userDB: UserDb | null;
+  refreshUserDb: () => void;
   createUser(name: string, email: string, password: string): Promise<void>;
   login(email: string, password: string): Promise<void>;
   loginWithGoogle(): Promise<void>;
@@ -32,6 +33,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   userDB: null,
   createUser: async () => {},
+  refreshUserDb: () => {},
   login: async () => {},
   loginWithGoogle: async () => {},
   logout: async () => {},
@@ -46,8 +48,11 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userDB, setUserDB] = useState<UserDB | null>(null);
-  const { postData: addUser } = usePost<PostUser, UserDB>(API.createUser);
+  const [userDB, setUserDB] = useState<UserDb | null>(null);
+  const { postData: addUser } = usePost<PostUser, UserDb>(
+    API.createUser,
+    mapGetUserData
+  );
 
   useEffect(() => {
     // Set persistence
@@ -70,6 +75,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
   }, []);
 
+  const refreshUserDb = () => {
+    if (user) {
+      addUserDB(user.uid, user.email || '', user.displayName || '');
+    }
+  };
+
   const createUser = async (name: string, email: string, password: string) => {
     await createUserWithEmailAndPassword(auth, email, password);
     await addUserDB(auth.currentUser?.uid || '', email, name);
@@ -77,11 +88,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const addUserDB = async (authId: string, email: string, name: string) => {
     const newUser: PostUser = { authId, email, name };
-    const userDBData = await addUser(newUser);
-    if (userDBData instanceof Error) {
-      console.error('Error adding user to database:', userDBData);
+    const userDbData = await addUser(newUser);
+    if (userDbData instanceof Error) {
+      console.error('Error adding user to database:', userDbData);
     } else {
-      setUserDB(userDBData);
+      console.log(userDbData);
+      setUserDB(userDbData);
     }
   };
 
@@ -107,6 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         userDB,
+        refreshUserDb,
         login,
         logout,
         createUser,

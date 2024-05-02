@@ -53,18 +53,16 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.createComment}/${answer._id}`
   );
 
-  // temp to add an author to new answer
-  const { data: users } = useGet<any>(`${API.getAllUsers}`);
-  const { user: currentUser } = useAuth();
-
+  const { user: currentUser, userDB: currentUserDb, refreshUserDb } = useAuth();
+  console.log(currentUserDb);
   const handleCreateNewComment = async () => {
-    if (!currentUser) {
+    if (!currentUser || !currentUserDb) {
       alert('You must be logged in to make a comment!');
       return;
     }
     const comment: Omit<Comment, '_id'> = {
       text: newComment,
-      author: users[Math.floor(Math.random() * users.length)]._id,
+      author: currentUserDb.id,
       rating: {
         upvotes: 0,
         downvotes: 0
@@ -75,6 +73,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       console.log((res.response?.data as { error: string }).error);
       return;
     }
+    console.log(res);
     setNewComment('');
     refreshAnswer();
   };
