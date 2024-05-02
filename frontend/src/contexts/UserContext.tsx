@@ -97,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
   
   const logout = async () => {
+    setUserDB(null);
     return await signOut(auth);
   };
 
