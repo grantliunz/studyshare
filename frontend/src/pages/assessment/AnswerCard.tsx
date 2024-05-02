@@ -7,7 +7,7 @@ import { CircularProgress, IconButton, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
-import { Answer, Comment } from '../../types/assessment';
+import { Answer, Comment, CreateCommentDTO } from '../../types/assessment';
 import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { AxiosError } from 'axios';
@@ -49,20 +49,20 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.getUser}/${answer.author}`
   );
 
-  const { postData: postComment } = usePost<Omit<Comment, '_id'>, Comment>(
+  const { postData: postComment } = usePost<CreateCommentDTO, Comment>(
     `${API.createComment}/${answer._id}`
   );
 
-  const { user: currentUser, userDB: currentUserDb, refreshUserDb } = useAuth();
-  console.log(currentUserDb);
+  const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
+
   const handleCreateNewComment = async () => {
     if (!currentUser || !currentUserDb) {
       alert('You must be logged in to make a comment!');
       return;
     }
-    const comment: Omit<Comment, '_id'> = {
+    const comment: CreateCommentDTO = {
       text: newComment,
-      author: currentUserDb.id,
+      author: currentUserDb._id,
       rating: {
         upvotes: 0,
         downvotes: 0
@@ -73,9 +73,10 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       console.log((res.response?.data as { error: string }).error);
       return;
     }
-    console.log(res);
     setNewComment('');
+    setIsExpanded(true);
     refreshAnswer();
+    refreshUserDb();
   };
 
   if (!polledAnswer) {

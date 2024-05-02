@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import Editor from '../../../components/Editor/Editor';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
-import useGet from '../../../hooks/useGet';
 import usePost from '../../../hooks/usePost';
 import API from '../../../util/api';
-import { Answer } from '../../../types/assessment';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
 
@@ -19,13 +17,11 @@ const NewAnswer = ({
 }: NewAnswerProps) => {
   const [text, setText] = useState<string>('');
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
   const { postData: postAnswer } = usePost(`${API.createAnswer}/${questionId}`);
 
-  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new answer
-
   const handleSubmitAnswer = async (text: string) => {
-    if (!currentUser) {
+    if (!currentUser || !currentUserDb) {
       alert('You must be logged in to submit an answer!');
       return;
     }
@@ -33,23 +29,23 @@ const NewAnswer = ({
       alert('Please enter an answer!');
       return;
     }
-    const newAnswer: Omit<Answer, '_id'> = {
+    const res = await postAnswer({
       text,
-      author: users[0]._id,
+      author: currentUserDb._id,
       rating: {
         upvotes: 0,
         downvotes: 0
       },
       comments: [],
       isAnonymous
-    };
-    const res = await postAnswer(newAnswer);
+    });
     if (res instanceof AxiosError) {
       console.log(res.response?.data.error);
       return;
     }
     setText('');
     onSubmitAnswer();
+    refreshUserDb();
   };
 
   return (

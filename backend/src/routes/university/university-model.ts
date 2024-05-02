@@ -1,4 +1,4 @@
-import { Document, Schema, Model, Types, model, Date } from 'mongoose';
+import { Document, Schema, Model, Types, model } from 'mongoose';
 
 export interface IUniversity extends Document {
   name: string;

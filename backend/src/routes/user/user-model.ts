@@ -1,16 +1,16 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 
 export interface IUser extends Document {
   authId: string;
   name: string;
   email: string;
-  questions: Schema.Types.ObjectId[];
-  answers: Schema.Types.ObjectId[];
-  watchList: Schema.Types.ObjectId[];
-  upvotedAnswers: Schema.Types.ObjectId[];
-  downvotedAnswers: Schema.Types.ObjectId[];
-  upvotedComments: Schema.Types.ObjectId[];
-  downvotedComments: Schema.Types.ObjectId[];
+  questions: Types.ObjectId[];
+  answers: Types.ObjectId[];
+  watchList: Types.ObjectId[];
+  upvotedAnswers: Types.ObjectId[];
+  downvotedAnswers: Types.ObjectId[];
+  upvotedComments: Types.ObjectId[];
+  downvotedComments: Types.ObjectId[];
 }
 
 const userSchema: Schema<IUser> = new Schema(

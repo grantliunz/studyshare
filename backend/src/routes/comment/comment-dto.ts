@@ -1,9 +1,8 @@
-import { Schema } from 'mongoose';
-import { CreateUserDTO } from '../user/user-dto';
+import { Types } from 'mongoose';
 
 export interface CreateCommentDTO extends Document {
   text: string;
-  author: Schema.Types.ObjectId;
+  author: Types.ObjectId;
   rating: {
     upvotes: number;
     downvotes: number;

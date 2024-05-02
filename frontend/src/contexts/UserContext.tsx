@@ -20,7 +20,7 @@ import { mapGetUserData } from '../mappers/userMapper';
 
 interface AuthContextType {
   user: User | null;
-  userDB: UserDb | null;
+  userDb: UserDb | null;
   refreshUserDb: () => void;
   createUser(name: string, email: string, password: string): Promise<void>;
   login(email: string, password: string): Promise<void>;
@@ -31,7 +31,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  userDB: null,
+  userDb: null,
   createUser: async () => {},
   refreshUserDb: () => {},
   login: async () => {},
@@ -48,7 +48,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userDB, setUserDB] = useState<UserDb | null>(null);
+  const [userDb, setUserDB] = useState<UserDb | null>(null);
   const { postData: addUser } = usePost<PostUser, UserDb>(
     API.createUser,
     mapGetUserData
@@ -92,7 +92,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userDbData instanceof Error) {
       console.error('Error adding user to database:', userDbData);
     } else {
-      console.log(userDbData);
       setUserDB(userDbData);
     }
   };
@@ -118,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        userDB,
+        userDb,
         refreshUserDb,
         login,
         logout,

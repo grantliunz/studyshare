@@ -13,6 +13,15 @@ export type Question = {
   comments: Comment[];
 };
 
+export type CreateQuestionDTO = {
+  number: string[];
+  text: string;
+  author: ObjectId;
+  answers: ObjectId[];
+  watchers: ObjectId[]; // might need to change to a user object
+  comments: ObjectId[];
+};
+
 export type Answer = {
   _id: string;
   text: string;
@@ -22,9 +31,23 @@ export type Answer = {
   isAnonymous?: boolean;
 };
 
+export type CreateAnswerDTO = {
+  text: string;
+  author: ObjectId;
+  rating: Rating;
+  comments: ObjectId[];
+  isAnonymous?: boolean;
+};
+
 export type Comment = {
   text: string;
-  author: string;
+  author: ObjectId;
+  rating: Rating;
+};
+
+export type CreateCommentDTO = {
+  text: string;
+  author: ObjectId;
   rating: Rating;
 };
 

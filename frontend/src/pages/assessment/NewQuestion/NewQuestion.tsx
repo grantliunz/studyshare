@@ -4,10 +4,9 @@ import styles from './NewQuestion.module.css';
 import Editor from '../../../components/Editor/Editor';
 import { useState } from 'react';
 import usePost from '../../../hooks/usePost';
-import { Question } from '../../../types/assessment';
+import { CreateQuestionDTO, Question } from '../../../types/assessment';
 import API from '../../../util/api';
 import { useParams } from 'react-router-dom';
-import useGet from '../../../hooks/useGet';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
 
@@ -25,18 +24,12 @@ export default function NewQuestion({
   onAddQuestion = () => {}
 }: newQuestionProps) {
   const { assessmentId } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, userDb, refreshUserDb } = useAuth();
   const [questionContent, setQuestionContent] = useState('');
   const [questionNumber, setQuestionNumber] = useState<string>('');
   const [createQuestionError, setCreateQuestionError] = useState<string>(' ');
 
-  const { data: users } = useGet<any>(`${API.getAllUsers}`); // temp to add an author to new question
-
-  const {
-    postData: createQuestion,
-    isLoading: isCreatingQuestion,
-    error: createQuestionBackendError
-  } = usePost<Omit<Question, 'assessment' | '_id'>, Question>(
+  const { postData: createQuestion } = usePost<CreateQuestionDTO, Question>(
     `${API.createQuestion}/${assessmentId}`
   );
 
@@ -45,7 +38,7 @@ export default function NewQuestion({
       setCreateQuestionError('Please enter a question!');
       return;
     }
-    if (!currentUser) {
+    if (!currentUser || !userDb) {
       alert('You must be logged in to make a question!');
       return;
     }
@@ -58,7 +51,7 @@ export default function NewQuestion({
     const newQuestion = {
       number: [...parentNumber, ...questionNumber.split('.')],
       text: questionContent,
-      author: users[0]._id,
+      author: userDb._id,
       answers: [],
       watchers: [],
       comments: []
@@ -71,6 +64,7 @@ export default function NewQuestion({
     }
     setCreateQuestionError(' ');
     onAddQuestion();
+    refreshUserDb();
   };
 
   const handleCloseModal = () => {

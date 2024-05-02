@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import Assessment from '../assessment/assessment-model';
 import Question from './question-model';
 import { CreateQuestionDTO } from './question-dto';
+import User from '../user/user-model';
 
 // Controller function to create a new question
 export const createQuestion = async (
@@ -40,6 +41,13 @@ export const createQuestion = async (
       return res.status(400).json({ error: 'Question already exists' });
     }
 
+    // get author
+    const user = await User.findById(author);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Author not found' });
+    }
+
     // create a new question instance
     const question = new Question({
       assessment: req.params.assessmentId,
@@ -59,6 +67,9 @@ export const createQuestion = async (
     // save the assessment with the updated questions array
     await assessment.save();
 
+    user.questions.push(createdQuestion._id);
+
+    user.save();
     res.status(201).json(createdQuestion); // respond with the created question
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
