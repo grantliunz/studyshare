@@ -71,14 +71,13 @@ const BreadCrumbs = () => {
 
   useEffect(() => {
     const pathnames = pathname.split('/').filter((x) => x);
-    if (pathnames[0] === 'universities') {
-      setUniversity(null);
-      return;
-    }
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
         fetchUniversity(universityId);
+      } else {
+        setUniversity(null);
+        return;
       }
     }
     if (pathnames.length >= 2) {
