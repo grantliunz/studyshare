@@ -8,6 +8,5 @@ router.get('/getAllUsers', User.getAllUsers);
 router.get('/getUser/:userId', User.getUser);
 router.put('/updateUser/:userId', User.updateUser);
 router.delete('/deleteUser/:userId', User.deleteUser);
-router.get('/getUserByAuthId/:authId', User.getUserByAuthId);
 
 export default router;
