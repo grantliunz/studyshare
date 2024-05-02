@@ -1,17 +1,17 @@
-import mongoose, { Model, Schema, models } from 'mongoose';
+import mongoose, { Model, Schema, Types, models } from 'mongoose';
 import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
 
 export interface IUser extends Document {
   authId: string;
   name: string;
   email: string;
-  questions: Schema.Types.ObjectId[];
-  answers: Schema.Types.ObjectId[];
+  questions: Types.ObjectId[];
+  answers: Types.ObjectId[];
   watchList: WatchlistEntry[];
-  upvotedAnswers: Schema.Types.ObjectId[];
-  downvotedAnswers: Schema.Types.ObjectId[];
-  upvotedComments: Schema.Types.ObjectId[];
-  downvotedComments: Schema.Types.ObjectId[];
+  upvotedAnswers: Types.ObjectId[];
+  downvotedAnswers: Types.ObjectId[];
+  upvotedComments: Types.ObjectId[];
+  downvotedComments: Types.ObjectId[];
 }
 
 const userSchema: Schema<IUser> = new Schema(

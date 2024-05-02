@@ -46,7 +46,10 @@ export default function AddUniversityForm({
     const newUniversityData: PostUniversity = { name };
     const addedUniversity = await addUniversity(newUniversityData);
     if (addedUniversity instanceof AxiosError) {
-      setError(addedUniversity.response?.data.error || 'An error occurred');
+      setError(
+        (addedUniversity.response?.data as { error: string }).error ||
+          'An error occurred'
+      );
       return addedUniversity;
     }
 

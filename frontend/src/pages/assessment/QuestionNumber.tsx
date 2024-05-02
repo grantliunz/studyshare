@@ -6,12 +6,12 @@ import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import { QuestionNode } from './AssessmentPage';
 import { arrayEquals } from '../../util/arrays';
-import { QuestionGET } from '../../types/assessment';
+import { QuestionLazy } from '../../types/assessment';
 
 type QuestionNumberProps = {
   questionNode: QuestionNode;
-  currentQuestion: QuestionGET | undefined;
-  setQuestion: React.Dispatch<React.SetStateAction<QuestionGET | undefined>>;
+  currentQuestion: QuestionLazy | undefined;
+  setQuestion: React.Dispatch<React.SetStateAction<QuestionLazy | undefined>>;
   handleAddQuestion: (hierarchy: string[]) => any;
 };
 

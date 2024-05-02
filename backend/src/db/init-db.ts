@@ -28,7 +28,7 @@ const university = new University({
 
 const users = [
   new User({
-    authId: '1',
+    authId: 'CyRFTFlO7PeMbFHhvl4CUTl403f1',
     name: 'Aaron Rodrigues',
     email: 'aaron@gmail.com',
     questions: [],
@@ -40,7 +40,7 @@ const users = [
     downvotedComments: []
   }),
   new User({
-    authId: '2',
+    authId: 'izYApPkEVxSFo7enwag01kkmfq13',
     name: 'Connor Stevens',
     email: 'connor@gmail.com',
     questions: [],
@@ -52,7 +52,7 @@ const users = [
     downvotedComments: []
   }),
   new User({
-    authId: '3',
+    authId: 'AwDUcnfnQ7Psct8k4XXVTBNkQxt1',
     name: 'Grant Liu',
     email: 'grant@gmail.com',
     questions: [],
