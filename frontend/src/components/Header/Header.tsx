@@ -51,6 +51,7 @@ export default function Header() {
                 onClick={openNotificationsWindow}
                 src={notificationIcon}
                 alt="Notification"
+                style={{ cursor: 'pointer' }}
               />
               {userDb && (
                 <NotificationsWindow

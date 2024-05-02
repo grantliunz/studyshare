@@ -35,7 +35,10 @@ export const createComment = async (
     if (!question) {
       return res.status(404).json({ error: 'Question not found' });
     }
-    Object.assign(question, { __v: question.__v + 1 });
+    Object.assign(question, {
+      __v: question.__v + 1,
+      latestContributor: author
+    });
 
     question.save();
 

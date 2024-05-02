@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
 import { CreateQuestionDTO, Question } from '../../../types/question';
+import { QuestionLazy } from '../../../types/assessment';
 
 type newQuestionProps = {
   open: boolean;
@@ -54,7 +55,8 @@ export default function NewQuestion({
       author: userDb._id,
       answers: [],
       watchers: [],
-      comments: []
+      comments: [],
+      latestContributor: userDb._id
     };
 
     const res = await createQuestion(newQuestion);

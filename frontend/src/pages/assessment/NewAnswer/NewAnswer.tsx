@@ -46,6 +46,7 @@ const NewAnswer = ({
     }
     setText('');
     onSubmitAnswer();
+    setIsAnonymous(false);
     refreshUserDb();
   };
 
@@ -85,6 +86,7 @@ const NewAnswer = ({
         <FormControlLabel
           control={
             <Checkbox
+              checked={isAnonymous} // Pass the value of isAnonymous to the checked prop
               onChange={(event) => setIsAnonymous(event.target.checked)}
             />
           }

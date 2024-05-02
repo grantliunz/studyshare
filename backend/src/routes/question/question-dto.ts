@@ -7,4 +7,5 @@ export interface CreateQuestionDTO {
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
   comments: Types.ObjectId[];
+  latestContributor: Types.ObjectId;
 }

@@ -11,6 +11,7 @@ export type Question = {
   answers: Answer[];
   watchers: ObjectId[]; // might need to change to a user object
   comments: Comment[];
+  latestContributor: ObjectId;
 };
 
 export type CreateQuestionDTO = {

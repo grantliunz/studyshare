@@ -40,6 +40,7 @@ export type QuestionLazy = {
   answers: ObjectId[];
   watchers: ObjectId[];
   comments: ObjectId[];
+  latestContributor: ObjectId;
 };
 
 export type Assessment = {

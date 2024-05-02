@@ -108,17 +108,6 @@ export const getNotifications = async (
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'question.author',
-          foreignField: '_id',
-          as: 'author'
-        }
-      },
-      {
-        $unwind: '$author'
-      },
-      {
-        $lookup: {
           from: 'assessments',
           localField: 'question.assessment',
           foreignField: '_id',
@@ -151,10 +140,41 @@ export const getNotifications = async (
         $unwind: '$university'
       },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'question.author',
+          foreignField: '_id',
+          as: 'author'
+        }
+      },
+      {
+        $unwind: '$author'
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'question.latestContributor',
+          foreignField: '_id',
+          as: 'latestContributor'
+        }
+      },
+      {
+        $unwind: {
+          path: '$latestContributor',
+          preserveNullAndEmptyArrays: true // Preserve documents if the latestContributor field is null
+        }
+      },
+      {
         $project: {
           questionId: '$question._id',
           questionSummary: '$question.text',
-          authorName: '$author.name',
+          authorName: {
+            $cond: {
+              if: { $eq: ['$question.latestContributor', null] }, // Check if latestContributor is null
+              then: 'Anonymous',
+              else: '$latestContributor.name'
+            }
+          },
           lastViewed: '$watchList.lastViewed',
           updatedAt: '$question.updatedAt',
           timeDifference: {

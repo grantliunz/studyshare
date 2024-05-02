@@ -39,33 +39,41 @@ export default function NotificationsWindow({
   return (
     <Modal open={open} onClose={onClose}>
       <div className={styles.modal}>
-        {notifications.slice(0, 8).map((notificationObj) => (
-          <NotificationCard
-            key={notificationObj.questionID} // notificationObj.id is somehow not unique?
-            notification={notificationObj}
-            onClose={() => onClose()}
-            refreshNotifications={() => refreshNotifications()}
-          />
-        ))}
-        {notifications.length > 8 && (
-          <Button
-            onClick={navigateToProfilePage} // You missed the function invocation here
-            variant="contained"
-            sx={{
-              borderRadius: '5px',
-              boxShadow: 0
-            }}
-            style={{
-              backgroundColor: '#FFFFFF',
-              color: 'black',
-              textTransform: 'none',
-              margin: '5px',
-              padding: '2px',
-              width: '100%'
-            }}
-          >
-            view more notifications
-          </Button>
+        {notifications.length === 0 ? (
+          <div style={{ textAlign: 'center' }}>
+            <p>No notifications</p>
+          </div>
+        ) : (
+          <>
+            {notifications.slice(0, 8).map((notificationObj) => (
+              <NotificationCard
+                key={notificationObj.questionID} // notificationObj.id is somehow not unique?
+                notification={notificationObj}
+                onClose={() => onClose()}
+                refreshNotifications={() => refreshNotifications()}
+              />
+            ))}
+            {notifications.length > 8 && (
+              <Button
+                onClick={navigateToProfilePage} // You missed the function invocation here
+                variant="contained"
+                sx={{
+                  borderRadius: '5px',
+                  boxShadow: 0
+                }}
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  color: 'black',
+                  textTransform: 'none',
+                  margin: '5px',
+                  padding: '2px',
+                  width: '100%'
+                }}
+              >
+                view more notifications
+              </Button>
+            )}
+          </>
         )}
       </div>
     </Modal>
