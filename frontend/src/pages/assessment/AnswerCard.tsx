@@ -155,7 +155,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   border: '1px dashed black',
                   marginLeft: '11px',
-                  width: '1px'
+                  width: '0px'
                 }}
               />
               <div
