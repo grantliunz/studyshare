@@ -6,6 +6,7 @@ import NotificationCard from './NotificationCard/NotificationCard';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import { mapGetNotifications } from '../../mappers/notificationMapper';
+import { useAuth } from '../../contexts/UserContext';
 interface NotificationsWindowProps {
   open: boolean;
   onClose: () => void;
@@ -16,8 +17,10 @@ export default function NotificationsWindow({
   onClose,
   updateNumberOfNotifications
 }: NotificationsWindowProps) {
+  const { userDB } = useAuth();
+
   const { data: notifications } = useGet<NotificationDTO[]>(
-    API.getNotifications + '/66324cae9cbb1e945fe6b944',
+    API.getNotifications + `/${userDB?.id}`,
     null,
     mapGetNotifications
   );

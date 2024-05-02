@@ -4,4 +4,5 @@ export interface NotificationDTO {
     commenterName: string;
     questionSummary: string;    
     timestamp: Date;
+    questionUrl: string;
 }

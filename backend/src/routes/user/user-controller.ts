@@ -107,9 +107,9 @@ export const getNotifications = async (
       },
       {
         $lookup: {
-          from: 'users', // Name of the users collection
-          localField: 'question.author', // Field in the questions collection
-          foreignField: '_id', // Field in the users collection
+          from: 'users',
+          localField: 'question.author',
+          foreignField: '_id',
           as: 'author'
         }
       },
@@ -117,14 +117,59 @@ export const getNotifications = async (
         $unwind: '$author'
       },
       {
+        $lookup: {
+          from: 'assessments',
+          localField: 'question.assessment',
+          foreignField: '_id',
+          as: 'assessment'
+        }
+      },
+      {
+        $unwind: '$assessment'
+      },
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'assessment.course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: '$course'
+      },
+      {
+        $lookup: {
+          from: 'universities',
+          localField: 'course.university',
+          foreignField: '_id',
+          as: 'university'
+        }
+      },
+      {
+        $unwind: '$university'
+      },
+      {
         $project: {
           questionId: '$question._id',
           questionSummary: '$question.text',
-          authorName: '$author.name', // Get the author's name
+          authorName: '$author.name',
           lastViewed: '$watchList.lastViewed',
           updatedAt: '$question.updatedAt',
           timeDifference: {
             $subtract: ['$watchList.lastViewed', '$question.updatedAt']
+          },
+          // Construct the URL by concatenating _id fields
+          questionUrl: {
+            $concat: [
+              { $toString: '$university._id' },
+              '/',
+              { $toString: '$course._id' },
+              '/',
+              { $toString: '$assessment._id' },
+              '/',
+              { $toString: '$question._id' }
+            ]
           }
         }
       }
@@ -151,6 +196,7 @@ export const getNotifications = async (
           /<[^>]*>?/gm,
           ''
         ), // strips html tags
+        questionUrl: watchedQuestion.questionUrl,
         timestamp: watchedQuestion.updatedAt
       });
     });

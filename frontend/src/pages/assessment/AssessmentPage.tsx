@@ -147,7 +147,10 @@ const AssessmentPage = () => {
     if (assessment) {
       const root = buildQuestionsTree(assessment.questions);
       setRootNode(root);
-      setOrderedQuestionsArray(buildOrderedQuestionsArray(root));
+      const arr = buildOrderedQuestionsArray(root);
+      setOrderedQuestionsArray(arr);
+
+      setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
     }
   }, [assessment]);
 
@@ -229,7 +232,7 @@ const AssessmentPage = () => {
                   width: '100%'
                 }}
               >
-                Click a question to get started!
+                Create a question to get started!
               </p>
             )}
 
