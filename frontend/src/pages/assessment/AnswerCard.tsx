@@ -26,6 +26,7 @@ type AnswerCardProps = {
 const AnswerCard = ({ answer }: AnswerCardProps) => {
   const [newComment, setNewComment] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [anonymousComment, setAnonymousComment] = useState<boolean>(false);
   const [voteDirection, setVoteDirection] = useState<VoteDirection>(
     VoteDirection.NEUTRAL
   );
@@ -139,7 +140,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       rating: {
         upvotes: 0,
         downvotes: 0
-      }
+      },
+      isAnonymous: anonymousComment
     };
     const res = await postComment(comment);
     if (res instanceof AxiosError) {
@@ -310,16 +312,28 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           style={{
             alignItems: 'center',
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'column' // Changed to column for better layout
           }}
         >
           <TextField
             fullWidth
             InputProps={{
               endAdornment: (
-                <IconButton disabled={newComment.trim() === ''} type="submit">
-                  <SendOutlinedIcon />
-                </IconButton>
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type="checkbox"
+                      id="anonymousCheckbox"
+                      onChange={(event) => {
+                        setAnonymousComment(event.target.checked);
+                      }}
+                    />
+                    <label htmlFor="anonymousCheckbox">Send Anonymously</label>
+                  </div>
+                  <IconButton disabled={newComment.trim() === ''} type="submit">
+                    <SendOutlinedIcon />
+                  </IconButton>
+                </>
               )
             }}
             multiline

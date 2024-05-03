@@ -19,6 +19,8 @@ const CommentCard = ({ comment }: CommentCardProps) => {
     newVoteDirection === VoteDirection.DOWN && comment.rating.downvotes++;
   };
 
+  console.log(comment);
+
   const { data: author } = useGet<UserDisplayDTO>(
     `${API.getUser}/${comment.author}`
   );
@@ -43,7 +45,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
       <PersonCard
         avatarPos="top"
         avatarSize="28px"
-        name={author?.name || 'Anonymous'}
+        name={(!comment.isAnonymous && author?.name) || 'Anonymous'}
         style={{ width: '80px' }}
       />
       <div

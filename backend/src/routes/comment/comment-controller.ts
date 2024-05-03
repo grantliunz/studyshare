@@ -18,6 +18,7 @@ export const createComment = async (
     const {
       text,
       author,
+      isAnonymous,
       rating = {
         upvotes: 0,
         downvotes: 0
@@ -47,7 +48,8 @@ export const createComment = async (
       answer: req.params.answerId,
       text,
       author,
-      rating
+      rating,
+      isAnonymous
     });
 
     // save the comment to the database
@@ -81,6 +83,8 @@ export const getAllComments = async (
     // fetch all comments from the database
     const comments = await Comment.find({ _id: { $in: answer.comments } });
 
+    console.log(comments);
+
     res.status(200).json(comments); // respond with the fetched comments
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
@@ -99,7 +103,6 @@ export const getComment = async (
     if (!comment) {
       return res.status(404).json({ error: 'Comment not found' });
     }
-
     res.status(200).json(comment); // respond with the fetched comment
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });

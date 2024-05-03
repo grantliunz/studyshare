@@ -6,7 +6,8 @@ const commentMapper: Mapper<Comment> = (data: any): Comment => {
     text: data.text,
     author: data.author,
     rating: data.rating,
-    createdAt: new Date(data.createdAt)
+    createdAt: new Date(data.createdAt),
+    isAnonymous: data.isAnonymous
   };
 };
 
