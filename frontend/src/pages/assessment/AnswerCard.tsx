@@ -64,8 +64,6 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     }
   }, [currentUserDb]);
 
-  console.log(currentUserDb);
-
   const handleVoteChange = async (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
