@@ -18,6 +18,7 @@ const API = {
   getNotifications: '/user/getNotifications',
   createAnswer: '/answer/createAnswer',
   getAnswer: '/answer/getAnswer',
+  updateAnswer: '/answer/updateAnswer',
   createComment: '/comment/createComment'
 };
 

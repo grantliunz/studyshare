@@ -41,7 +41,7 @@ const QuestionPanel = ({
     `${API.getQuestion}/${question._id}`
   );
 
-  const { userDb, refreshUserDb } = useAuth();
+  const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
   const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
     `${API.updateUser}/${userDb?._id}`
@@ -58,38 +58,40 @@ const QuestionPanel = ({
           undefined
       );
     }
-  }, []);
+  }, [userDb]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
-    setIsStarred(newValue);
-    if (userDb) {
-      const questionRes = await putQuestion({
-        watchers: newValue
-          ? [...question.watchers, userDb._id]
-          : question.watchers.filter((user) => user !== userDb._id)
-      });
-      if (questionRes instanceof AxiosError) {
-        console.log((questionRes.response?.data as { error: string }).error);
-        return;
-      }
-      const updatedWatchList = newValue
-        ? [
-            ...userDb.watchList,
-            { questionId: question._id, lastViewed: new Date() }
-          ]
-        : userDb.watchList.filter((entry) => entry.questionId !== question._id);
-
-      const res = await putUser({
-        watchList: updatedWatchList
-      });
-
-      if (res instanceof AxiosError) {
-        console.log((res.response?.data as { error: string }).error);
-        return;
-      }
-
-      refreshUserDb();
+    if (!userAuth || !userDb) {
+      alert('You must be logged in to add a question to watch list!');
+      return;
     }
+    setIsStarred(newValue);
+    const questionRes = await putQuestion({
+      watchers: newValue
+        ? [...question.watchers, userDb._id]
+        : question.watchers.filter((user) => user !== userDb._id)
+    });
+    if (questionRes instanceof AxiosError) {
+      console.log((questionRes.response?.data as { error: string }).error);
+      return;
+    }
+    const updatedWatchList = newValue
+      ? [
+          ...userDb.watchList,
+          { questionId: question._id, lastViewed: new Date() }
+        ]
+      : userDb.watchList.filter((entry) => entry.questionId !== question._id);
+
+    const res = await putUser({
+      watchList: updatedWatchList
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+
+    refreshUserDb();
   };
 
   if (!polledQuestion) {

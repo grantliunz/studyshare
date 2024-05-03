@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -14,6 +14,7 @@ type UpDownVoteProps = {
     newVoteDirection: VoteDirection
   ) => any;
   iconSize?: string;
+  value?: VoteDirection;
 };
 
 export enum VoteDirection {
@@ -26,11 +27,14 @@ const UpDownVote = ({
   rating,
   style,
   onChange = () => {},
-  iconSize = '1.5rem'
+  iconSize = '1.5rem',
+  value = VoteDirection.NEUTRAL
 }: UpDownVoteProps) => {
-  const [voteState, setVoteState] = useState<VoteDirection>(
-    VoteDirection.NEUTRAL
-  );
+  const [voteState, setVoteState] = useState<VoteDirection>(value);
+
+  useEffect(() => {
+    setVoteState(value);
+  }, [value]);
 
   const handleVote = (
     oldVoteDirection: VoteDirection,
