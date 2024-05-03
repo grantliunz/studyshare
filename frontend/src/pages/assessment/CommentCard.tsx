@@ -1,9 +1,10 @@
 import PersonCard from '../../components/PersonCard';
-import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
+import UpDownVote from '../../components/UpDownVote';
 import useGet from '../../hooks/useGet';
 import { UserDisplayDTO } from '@shared/types/models/user/user';
 import API from '../../util/api';
 import { Comment } from '@shared/types/models/assessment/assessment';
+import { VoteDirection } from '@shared/types/enums/VoteDirection';
 
 type CommentCardProps = {
   comment: Comment;

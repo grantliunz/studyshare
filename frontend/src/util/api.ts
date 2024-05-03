@@ -19,6 +19,7 @@ const API = {
   createAnswer: '/answer/createAnswer',
   getAnswer: '/answer/getAnswer',
   updateAnswer: '/answer/updateAnswer',
+  voteAnswer: '/answer/voteAnswer',
   createComment: '/comment/createComment'
 };
 

@@ -5,6 +5,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import { Rating } from '@shared/types/models/assessment/assessment';
+import { VoteDirection } from '@shared/types/enums/VoteDirection';
 
 type UpDownVoteProps = {
   rating: Rating;
@@ -16,12 +17,6 @@ type UpDownVoteProps = {
   iconSize?: string;
   value?: VoteDirection;
 };
-
-export enum VoteDirection {
-  UP = 1,
-  DOWN = -1,
-  NEUTRAL = 0
-}
 
 const UpDownVote = ({
   rating,

@@ -1,5 +1,5 @@
 import PersonCard from '../../components/PersonCard';
-import UpDownVote, { VoteDirection } from '../../components/UpDownVote';
+import UpDownVote from '../../components/UpDownVote';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import CommentCard from './CommentCard';
@@ -11,13 +11,13 @@ import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { AxiosError } from 'axios';
 import useGet from '../../hooks/useGet';
-import { UserDTO, UserDisplayDTO } from '@shared/types/models/user/user';
+import { UserDisplayDTO } from '@shared/types/models/user/user';
 import { useAuth } from '../../contexts/UserContext';
-import { Answer, CreateAnswerDTO } from '@shared/types/models/answer/answer';
+import { Answer, MakeVoteDTO } from '@shared/types/models/answer/answer';
 import { answerMapper } from '../../mappers/answerMapper';
 import { CreateCommentDTO } from '@shared/types/models/assessment/assessment';
-import usePut from '../../hooks/usePut';
 import { LoginPopupContext } from './AssessmentPage';
+import { VoteDirection } from '@shared/types/enums/VoteDirection';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -48,12 +48,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.getUser}/${answer.author}`
   );
 
-  const { putData: putAnswer } = usePut<Partial<CreateAnswerDTO>, Answer>(
-    `${API.updateAnswer}/${answer._id}`
-  );
-
-  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
-    `${API.updateUser}/${currentUserDb?._id}`
+  const { postData: voteAnswer } = usePost<MakeVoteDTO, Answer>(
+    `${API.voteAnswer}/${answer._id}`
   );
 
   useEffect(() => {
@@ -79,42 +75,12 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       return;
     }
     if (polledAnswer) {
-      if (oldVoteDirection === VoteDirection.UP) {
-        currentUserDb.upvotedAnswers = currentUserDb.upvotedAnswers.filter(
-          (id) => id !== answer._id
-        );
-      } else if (oldVoteDirection === VoteDirection.DOWN) {
-        currentUserDb.downvotedAnswers = currentUserDb.downvotedAnswers.filter(
-          (id) => id !== answer._id
-        );
-      }
-      if (newVoteDirection === VoteDirection.UP) {
-        currentUserDb.upvotedAnswers = [
-          ...new Set([...currentUserDb.upvotedAnswers, answer._id])
-        ];
-      } else if (newVoteDirection === VoteDirection.DOWN) {
-        currentUserDb.downvotedAnswers = [
-          ...new Set([...currentUserDb.downvotedAnswers, answer._id])
-        ];
-      }
-
-      const updateUserRes = await putUser({
-        upvotedAnswers: currentUserDb.upvotedAnswers,
-        downvotedAnswers: currentUserDb.downvotedAnswers
+      const res = await voteAnswer({
+        oldVoteDirection,
+        newVoteDirection,
+        userId: currentUserDb._id
       });
-      if (updateUserRes instanceof AxiosError) {
-        console.log((updateUserRes.response?.data as { error: string }).error);
-        return;
-      }
 
-      oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
-      oldVoteDirection === VoteDirection.DOWN &&
-        polledAnswer.rating.downvotes--;
-      newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
-      newVoteDirection === VoteDirection.DOWN &&
-        polledAnswer.rating.downvotes++;
-
-      const res = await putAnswer({ rating: polledAnswer.rating });
       if (res instanceof AxiosError) {
         console.log((res.response?.data as { error: string }).error);
         return;
