@@ -26,15 +26,21 @@ const UpDownVote = ({
   value = VoteDirection.NEUTRAL
 }: UpDownVoteProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(value);
+  const [count, setCount] = useState<number>(rating.upvotes - rating.downvotes);
 
   useEffect(() => {
     setVoteState(value);
   }, [value]);
 
+  useEffect(() => {
+    setCount(rating.upvotes - rating.downvotes);
+  }, [rating]);
+
   const handleVote = (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
+    setCount(count - oldVoteDirection + newVoteDirection);
     setVoteState(newVoteDirection);
     onChange(oldVoteDirection, newVoteDirection);
   };
@@ -57,7 +63,7 @@ const UpDownVote = ({
           <ThumbUpOutlinedIcon style={{ fontSize: iconSize }} />
         )}
       </IconButton>
-      {rating.upvotes - rating.downvotes}
+      {count}
       <IconButton
         onClick={() =>
           handleVote(
