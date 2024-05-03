@@ -8,13 +8,12 @@ import UniversityCard from './UniversityCard';
 import AddButton from '../../components/AddButton/AddButton';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import type { University } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
-import LoginPopup from '../../components/LoginPopup/LoginPopup';
+import { University } from '@shared/types/models/university/university';
 
-export default function University() {
+export default function UniversitiesPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
@@ -22,7 +21,6 @@ export default function University() {
   const [displayedData, setDisplayedData] = useState<
     University[] | null | undefined
   >(null);
-  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const {
     data: universitiesData,
@@ -44,7 +42,7 @@ export default function University() {
 
   const handleOpenForm = () => {
     if (!user) {
-      setShowLoginPopup(true);
+      alert('You must be logged in to make an assessment!');
       return;
     }
     setShowForm(true);
@@ -91,13 +89,7 @@ export default function University() {
           />
           <AddButton handleOpenForm={handleOpenForm} />
           {user && <Button onClick={signOut}>Logout (temporary)</Button>}
-          <LoginPopup
-            open={showLoginPopup}
-            setOpen={setShowLoginPopup}
-          />
         </>
-
-
       )}
     </div>
   );

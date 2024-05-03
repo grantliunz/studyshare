@@ -15,7 +15,7 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from '../util/firebase';
 import usePost from '../hooks/usePost';
 import API from '../util/api';
-import { PostUser, UserDbLazy } from '../types/user';
+import { PostUser, UserDbLazy } from '@shared/types/models/user/user';
 import { mapGetUserData } from '../mappers/userMapper';
 
 interface AuthContextType {

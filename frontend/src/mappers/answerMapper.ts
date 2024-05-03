@@ -1,5 +1,5 @@
 import { Mapper } from '../mappers/mapper';
-import { Answer } from '../types/answer';
+import { Answer } from '@shared/types/models/answer/answer';
 import { commentMapper } from './commentMapper';
 
 const answerMapper: Mapper<Answer> = (data: any): Answer => {

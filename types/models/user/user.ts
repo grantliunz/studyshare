@@ -1,7 +1,7 @@
-import { WatchlistEntry } from '@shared/types/models/watchlist/WatchlistEntry';
-import { Answer } from './answer';
-import { Comment, ObjectId } from './assessment';
-import { Question } from './question';
+import { Answer } from '../answer/answer';
+import { ObjectId } from '../assessment/assessment';
+import { Question } from '../question/question';
+import { WatchlistEntry } from '../watchlist/WatchlistEntry';
 
 export type UserDisplayDTO = {
   name: string;
@@ -41,8 +41,8 @@ export type UserDbLazy = {
 
 // temporary type until we finalise the user type
 export type UserDTO = {
-  authId: string;
   _id: ObjectId;
+  authId: string;
   name: string;
   email: string;
   questions: ObjectId[];
@@ -54,8 +54,8 @@ export type UserDTO = {
   downvotedComments: ObjectId[];
 };
 
-export interface PostUser {
+export type PostUser = {
   authId: string;
   name: string;
   email: string;
-}
+};

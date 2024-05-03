@@ -1,6 +1,9 @@
 import { Button } from '@mui/material';
 import styles from './AssessmentCard.module.css';
-import { AssessmentType, SemesterType } from '../../types/assessment';
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
 
 type AssessmentCardProps = {
   assessment: {
@@ -12,12 +15,6 @@ type AssessmentCardProps = {
   };
   onClick: () => void;
 };
-// interface AssessmentCardProps {
-//     AssessmentType: string;
-//     Number: number;
-//     Year: number;
-//     Semester: string;
-// }
 
 export default function AssessmentCard({
   assessment,

@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import {
   Modal,
   Fade,
@@ -8,11 +8,14 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddUniversityForm.module.css';
-import { PostUniversity, University } from '../../types/types';
 import { AxiosError } from 'axios';
 import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
+import {
+  PostUniversity,
+  University
+} from '@shared/types/models/university/university';
 
 interface AddUniversityFormProps {
   open: boolean;
@@ -26,14 +29,10 @@ export default function AddUniversityForm({
   refreshUniversities
 }: AddUniversityFormProps) {
   const [name, setName] = useState<string>('');
-  const {
-    postData: addUniversity,
-    isLoading: isAddingUniversity,
-    error: addUniversityError
-  } = usePost<PostUniversity, University>(
-    API.postUniversity,
-    mapGetUniversityData
-  );
+  const { postData: addUniversity, isLoading: isAddingUniversity } = usePost<
+    PostUniversity,
+    University
+  >(API.postUniversity, mapGetUniversityData);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

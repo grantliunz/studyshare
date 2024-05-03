@@ -11,10 +11,13 @@ import {
   isRomanNumeral
 } from '../../util/questionNumber';
 import API from '../../util/api';
-import { AssessmentGET, QuestionLazy } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
+import {
+  QuestionLazy,
+  AssessmentGET
+} from '@shared/types/models/assessment/assessment';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export type QuestionNode = {

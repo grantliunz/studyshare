@@ -11,13 +11,17 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddAssessmentForm.module.css';
-import { AssessmentType, SemesterType } from '../../types/assessment';
-interface AddAssessmentFormProps {
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
+
+type AddAssessmentFormProps = {
   state: AssessmentType;
   show: boolean;
   onAddAssessment: (formInputs: FormInputs, type: AssessmentType) => void;
   onClose: () => void;
-}
+};
 
 export type FormInputs = {
   number?: number;

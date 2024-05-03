@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import API from '../../util/api';
 import { Course, University } from '../../types/types';
-import { AssessmentGET } from '../../types/assessment';
+import { AssessmentGET } from '@shared/types/models/question/assessment';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { mapGetCourseData } from '../../mappers/courseMapper';
 import axios from 'axios';

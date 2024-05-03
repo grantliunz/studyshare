@@ -7,13 +7,17 @@ import AssessmentCardOther from './AssessmentCardOther';
 import AddAssessmentForm, { FormInputs } from './AddAssessmentForm';
 import { useParams } from 'react-router-dom';
 import useGet from '../../hooks/useGet';
-import { Assessment, AssessmentType } from '../../types/assessment';
 import API from '../../util/api';
 import { CircularProgress } from '@mui/material';
-import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
 import { useAuth } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import {
+  Assessment,
+  AssessmentType
+} from '@shared/types/models/assessment/assessment';
+import { Course } from '@shared/types/models/course/course';
+import { AxiosError } from 'axios';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 function mapSemesterToString(semester: string) {
@@ -99,6 +103,11 @@ const Assessments = () => {
       questions: [],
       ...formInputs
     });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
     refreshAssessments();
   };
 

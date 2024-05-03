@@ -1,4 +1,4 @@
-export interface WatchlistEntry {
-    questionId: string;
-    lastViewed: Date;
+export type WatchlistEntry = {
+  questionId: string;
+  lastViewed: Date;
 };

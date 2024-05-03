@@ -1,6 +1,6 @@
-import { Answer } from './answer';
-import { ObjectId } from './assessment';
-import { UserDb } from './user';
+import { Answer } from '../answer/answer';
+import { ObjectId } from '../assessment/assessment';
+import { UserDb } from '../user/user';
 
 export type Question = {
   _id: ObjectId;
