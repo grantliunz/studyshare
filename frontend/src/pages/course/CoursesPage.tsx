@@ -23,12 +23,14 @@ import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
 import { Course } from '@shared/types/models/course/course';
 import { University } from '@shared/types/models/university/university';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
   const { universityId } = useParams();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const [query, setQuery] = useState<string>('');
   const [yearLevels, setYearLevels] = useState<string[]>([]);
@@ -78,7 +80,7 @@ export default function CoursesPage() {
 
   const handleOpenForm = () => {
     if (!currentUser) {
-      alert('You must be logged in to make an assessment!');
+      setShowLoginPopup(true);
       return;
     }
     setShowForm(true);
@@ -160,6 +162,11 @@ export default function CoursesPage() {
         refreshCourses={refreshCourses}
       />
       <AddButton handleOpenForm={handleOpenForm} />
+
+      <LoginPopup
+        open={showLoginPopup}
+        setOpen={setShowLoginPopup}
+      />
     </div>
   );
 }

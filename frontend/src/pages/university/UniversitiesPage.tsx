@@ -12,6 +12,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
 import { University } from '@shared/types/models/university/university';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export default function UniversitiesPage() {
   const { user, logout } = useAuth();
@@ -28,6 +29,7 @@ export default function UniversitiesPage() {
     refresh: refreshUniversities,
     error: errorString = null
   } = useGet<University[]>(API.getUniversities, [], mapGetUniversitiesData);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -42,7 +44,7 @@ export default function UniversitiesPage() {
 
   const handleOpenForm = () => {
     if (!user) {
-      alert('You must be logged in to make an assessment!');
+      setShowLoginPopup(true);
       return;
     }
     setShowForm(true);
@@ -89,6 +91,10 @@ export default function UniversitiesPage() {
           />
           <AddButton handleOpenForm={handleOpenForm} />
           {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+          <LoginPopup
+            open={showLoginPopup}
+            setOpen={setShowLoginPopup}
+          />
         </>
       )}
     </div>

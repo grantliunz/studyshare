@@ -1,6 +1,6 @@
 import { Button, CircularProgress, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
@@ -18,6 +18,7 @@ import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
 import { Question } from '@shared/types/models/question/question';
 import { QuestionLazy } from '@shared/types/models/assessment/assessment';
+import { LoginPopupContext } from './AssessmentPage';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -36,6 +37,7 @@ const QuestionPanel = ({
 }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
     `${API.getQuestion}/${question._id}`
@@ -55,14 +57,14 @@ const QuestionPanel = ({
     if (userDb) {
       setIsStarred(
         userDb.watchList.find((entry) => entry.questionId === question._id) !==
-          undefined
+        undefined
       );
     }
   }, [userDb]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
     if (!userAuth || !userDb) {
-      alert('You must be logged in to add a question to watch list!');
+      setLoginPopup(true);
       return;
     }
     setIsStarred(newValue);
@@ -77,9 +79,9 @@ const QuestionPanel = ({
     }
     const updatedWatchList = newValue
       ? [
-          ...userDb.watchList,
-          { questionId: question._id, lastViewed: new Date() }
-        ]
+        ...userDb.watchList,
+        { questionId: question._id, lastViewed: new Date() }
+      ]
       : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
     const res = await putUser({

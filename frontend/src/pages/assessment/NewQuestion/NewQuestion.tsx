@@ -2,7 +2,7 @@ import { Modal, Box, IconButton, Button } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './NewQuestion.module.css';
 import Editor from '../../../components/Editor/Editor';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import usePost from '../../../hooks/usePost';
 import API from '../../../util/api';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import {
   CreateQuestionDTO,
   Question
 } from '@shared/types/models/question/question';
+import { LoginPopupContext } from '../AssessmentPage';
 
 type newQuestionProps = {
   open: boolean;
@@ -24,13 +25,14 @@ export default function NewQuestion({
   open,
   handleClose,
   parentNumber,
-  onAddQuestion = () => {}
+  onAddQuestion = () => { }
 }: newQuestionProps) {
   const { assessmentId } = useParams();
   const { user: currentUser, userDb, refreshUserDb } = useAuth();
   const [questionContent, setQuestionContent] = useState('');
   const [questionNumber, setQuestionNumber] = useState<string>('');
   const [createQuestionError, setCreateQuestionError] = useState<string>(' ');
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const { postData: createQuestion } = usePost<CreateQuestionDTO, Question>(
     `${API.createQuestion}/${assessmentId}`
@@ -42,7 +44,7 @@ export default function NewQuestion({
       return;
     }
     if (!currentUser || !userDb) {
-      alert('You must be logged in to make a question!');
+      setLoginPopup(true);
       return;
     }
 
