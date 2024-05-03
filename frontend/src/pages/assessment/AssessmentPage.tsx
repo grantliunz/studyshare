@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
-import { SetStateAction, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import { CircularProgress, IconButton } from '@mui/material';
@@ -11,10 +11,14 @@ import {
   isRomanNumeral
 } from '../../util/questionNumber';
 import API from '../../util/api';
-import { AssessmentGET, QuestionLazy } from '../../types/assessment';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
+import {
+  QuestionLazy,
+  AssessmentGET
+} from '@shared/types/models/assessment/assessment';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export type QuestionNode = {
   number: string[];
@@ -22,6 +26,7 @@ export type QuestionNode = {
   question?: QuestionLazy;
 };
 
+export const LoginPopupContext = createContext((bool: boolean) => {});
 // Helper function to determine the type of a value (number, letter, or roman numeral)
 const getValueType = (value: any) => {
   if (!Number.isNaN(Number(value))) {
@@ -144,6 +149,7 @@ const AssessmentPage = () => {
     QuestionLazy[]
   >([]);
   const [sidebarWidth, setSidebarWidth] = useState(200);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     if (assessment) {
@@ -162,7 +168,7 @@ const AssessmentPage = () => {
 
   const handleAddQuestion = (parentNumber: string[]) => {
     if (!currentUser) {
-      alert('You must be logged in to make a question!');
+      setShowLoginPopup(true);
       return;
     }
     setNewQuestionParentNumber(parentNumber);
@@ -195,29 +201,67 @@ const AssessmentPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {!assessment || !rootNode ? (
-        <div>Error retrieving assessment details</div>
-      ) : (
-        <>
-          <div
-            className={styles.questionsTabContainer}
-            style={{
-              minWidth: sidebarWidth,
-              maxWidth: sidebarWidth
-            }}
-          >
-            <h3 style={{ margin: '0px', alignSelf: 'start', padding: '10px' }}>
-              Questions
-            </h3>
-            {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
-              rootNode.subquestions.map((question) => (
-                <QuestionNumber
-                  key={question.number.join(',')}
-                  questionNode={question}
-                  setQuestion={setCurrentQuestion}
+    <LoginPopupContext.Provider value={setShowLoginPopup}>
+      <div className={styles.container}>
+        {!assessment || !rootNode ? (
+          <div>Error retrieving assessment details</div>
+        ) : (
+          <>
+            <div
+              className={styles.questionsTabContainer}
+              style={{
+                minWidth: sidebarWidth,
+                maxWidth: sidebarWidth
+              }}
+            >
+              <h3 style={{ margin: '0px' }}>Questions</h3>
+              {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
+                rootNode.subquestions.map((question) => (
+                  <QuestionNumber
+                    key={question.number.join(',')}
+                    questionNode={question}
+                    setQuestion={setCurrentQuestion}
+                    currentQuestion={currentQuestion}
+                    handleAddQuestion={handleAddQuestion}
+                  />
+                ))
+              ) : (
+                <p
+                  style={{
+                    alignSelf: 'center',
+                    placeSelf: 'center',
+                    width: '100%'
+                  }}
+                >
+                  Create a question to get started!
+                </p>
+              )}
+              <IconButton
+                size="medium"
+                style={{
+                  alignSelf: 'center',
+                  marginTop: '8px'
+                }}
+                onClick={() => handleAddQuestion([])}
+              >
+                <AddIcon fontSize="medium" />
+              </IconButton>
+            </div>
+            {currentQuestion ? (
+              orderedQuestionsArray.map((question, index) => (
+                <QuestionPanel
+                  key={question.number.join()}
                   currentQuestion={currentQuestion}
-                  handleAddQuestion={handleAddQuestion}
+                  question={question}
+                  prevQuestion={
+                    index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                  }
+                  nextQuestion={
+                    index < orderedQuestionsArray.length - 1
+                      ? orderedQuestionsArray[index + 1]
+                      : undefined
+                  }
+                  setQuestion={setCurrentQuestion}
                 />
               ))
             ) : (
@@ -231,62 +275,20 @@ const AssessmentPage = () => {
                 Create a question to get started!
               </p>
             )}
-            <IconButton
-              size="medium"
-              style={{
-                alignSelf: 'center',
-                marginTop: '8px'
+            <NewQuestion
+              open={newQuestionOpen}
+              handleClose={handleNewQuestionClose}
+              parentNumber={newQuestionParentNumber}
+              onAddQuestion={() => {
+                refreshAssessment();
+                handleNewQuestionClose();
               }}
-              onClick={() => handleAddQuestion([])}
-            >
-              <AddIcon fontSize="medium" />
-            </IconButton>
-          </div>
-          <div
-            className={styles.resizeBar}
-            onMouseDown={startResize}
-            onMouseUp={stopResize}
-          />
-          {currentQuestion ? (
-            orderedQuestionsArray.map((question, index) => (
-              <QuestionPanel
-                key={question.number.join()}
-                currentQuestion={currentQuestion}
-                question={question}
-                prevQuestion={
-                  index > 0 ? orderedQuestionsArray[index - 1] : undefined
-                }
-                nextQuestion={
-                  index < orderedQuestionsArray.length - 1
-                    ? orderedQuestionsArray[index + 1]
-                    : undefined
-                }
-                setQuestion={setCurrentQuestion}
-              />
-            ))
-          ) : (
-            <p
-              style={{
-                alignSelf: 'center',
-                placeSelf: 'center',
-                width: '100%'
-              }}
-            >
-              Create a question to get started!
-            </p>
-          )}
-          <NewQuestion
-            open={newQuestionOpen}
-            handleClose={handleNewQuestionClose}
-            parentNumber={newQuestionParentNumber}
-            onAddQuestion={() => {
-              refreshAssessment();
-              handleNewQuestionClose();
-            }}
-          />
-        </>
-      )}
-    </div>
+            />
+          </>
+        )}
+      </div>
+      <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
+    </LoginPopupContext.Provider>
   );
 };
 

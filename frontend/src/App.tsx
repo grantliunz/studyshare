@@ -3,7 +3,7 @@ import './App.css';
 import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
 import Signup from './pages/signup/Signup.tsx';
-import University from './pages/university/University.tsx';
+import UniversitiesPage from './pages/university/UniversitiesPage.tsx';
 import Assessments from './pages/assessments/Assessments.tsx';
 import CoursesPage from './pages/course/CoursesPage.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -38,7 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/universities" element={<University />} />
+        <Route path="/universities" element={<UniversitiesPage />} />
         <Route path="/:universityId" element={<CoursesPage />} />
         <Route path="/:universityId/:courseId" element={<Assessments />} />
         <Route

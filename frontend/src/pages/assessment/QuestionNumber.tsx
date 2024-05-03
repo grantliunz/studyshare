@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import { QuestionNode } from './AssessmentPage';
 import { arrayEquals } from '../../util/arrays';
-import { QuestionLazy } from '../../types/assessment';
+import { QuestionLazy } from '@shared/types/models/assessment/assessment';
 
 type QuestionNumberProps = {
   questionNode: QuestionNode;

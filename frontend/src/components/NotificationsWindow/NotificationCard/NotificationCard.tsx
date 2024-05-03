@@ -2,7 +2,7 @@ import { Avatar, Button } from '@mui/material';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 import styles from './NotificationCard.module.css';
 import { useNavigate } from 'react-router-dom';
-import { UserDTO } from '../../../types/user';
+import { UserDTO } from '@shared/types/models/user/user';
 import usePut from '../../../hooks/usePut';
 import { useAuth } from '../../../contexts/UserContext';
 import API from '../../../util/api';

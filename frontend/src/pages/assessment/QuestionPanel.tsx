@@ -1,6 +1,6 @@
 import { Button, CircularProgress, IconButton } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
@@ -12,12 +12,13 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { QuestionLazy } from '../../types/assessment';
-import { UserDTO } from '../../types/user';
+import { UserDTO } from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
-import { Question } from '../../types/question';
+import { Question } from '@shared/types/models/question/question';
+import { QuestionLazy } from '@shared/types/models/assessment/assessment';
+import { LoginPopupContext } from './AssessmentPage';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -36,12 +37,13 @@ const QuestionPanel = ({
 }: QuestionPanelProps) => {
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
     `${API.getQuestion}/${question._id}`
   );
 
-  const { userDb, refreshUserDb } = useAuth();
+  const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
   const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
     `${API.updateUser}/${userDb?._id}`
@@ -58,38 +60,40 @@ const QuestionPanel = ({
           undefined
       );
     }
-  }, []);
+  }, [userDb]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
-    setIsStarred(newValue);
-    if (userDb) {
-      const questionRes = await putQuestion({
-        watchers: newValue
-          ? [...question.watchers, userDb._id]
-          : question.watchers.filter((user) => user !== userDb._id)
-      });
-      if (questionRes instanceof AxiosError) {
-        console.log((questionRes.response?.data as { error: string }).error);
-        return;
-      }
-      const updatedWatchList = newValue
-        ? [
-            ...userDb.watchList,
-            { questionId: question._id, lastViewed: new Date() }
-          ]
-        : userDb.watchList.filter((entry) => entry.questionId !== question._id);
-
-      const res = await putUser({
-        watchList: updatedWatchList
-      });
-
-      if (res instanceof AxiosError) {
-        console.log((res.response?.data as { error: string }).error);
-        return;
-      }
-
-      refreshUserDb();
+    if (!userAuth || !userDb) {
+      setLoginPopup(true);
+      return;
     }
+    setIsStarred(newValue);
+    const questionRes = await putQuestion({
+      watchers: newValue
+        ? [...question.watchers, userDb._id]
+        : question.watchers.filter((user) => user !== userDb._id)
+    });
+    if (questionRes instanceof AxiosError) {
+      console.log((questionRes.response?.data as { error: string }).error);
+      return;
+    }
+    const updatedWatchList = newValue
+      ? [
+          ...userDb.watchList,
+          { questionId: question._id, lastViewed: new Date() }
+        ]
+      : userDb.watchList.filter((entry) => entry.questionId !== question._id);
+
+    const res = await putUser({
+      watchList: updatedWatchList
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+
+    refreshUserDb();
   };
 
   if (!polledQuestion) {

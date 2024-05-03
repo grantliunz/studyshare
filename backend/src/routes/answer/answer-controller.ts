@@ -119,7 +119,6 @@ export const updateAnswer = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { text, author, rating, comments } = req.body; // assuming request body contains answer data
 
     // Get the answer by its ID
     const answer = await Answer.findById(req.params.answerId);
@@ -128,11 +127,7 @@ export const updateAnswer = async (
       return res.status(404).json({ error: 'Answer not found' });
     }
 
-    // update the answer properties
-    answer.text = text;
-    answer.author = author;
-    answer.rating = rating;
-    answer.comments = comments;
+    Object.assign(answer, req.body);
 
     // save the updated answer
     const updatedAnswer = await answer.save();

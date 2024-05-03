@@ -1,4 +1,4 @@
-import { Comment, ObjectId, Rating } from './assessment';
+import { Comment, ObjectId, Rating } from '../assessment/assessment';
 
 export type Answer = {
   _id: ObjectId;
