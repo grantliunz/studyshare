@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import { CircularProgress, IconButton } from '@mui/material';
@@ -143,6 +143,7 @@ const AssessmentPage = () => {
   const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
     QuestionLazy[]
   >([]);
+  const [sidebarWidth, setSidebarWidth] = useState(200);
 
   useEffect(() => {
     if (assessment) {
@@ -177,13 +178,33 @@ const AssessmentPage = () => {
     return <CircularProgress style={{ margin: 'auto' }} />;
   }
 
+  const handleResize = (e: MouseEvent) => {
+    if (e.clientX > 200 && e.clientX < 800) {
+      setSidebarWidth(e.clientX);
+    }
+  };
+
+  const stopResize = () => {
+    window.removeEventListener('mousemove', handleResize);
+  };
+
+  const startResize = () => {
+    window.addEventListener('mousemove', handleResize);
+    window.addEventListener('mouseup', stopResize);
+  };
+
   return (
     <div className={styles.container}>
       {!assessment || !rootNode ? (
         <div>Error retrieving assessment details</div>
       ) : (
         <>
-          <div className={styles.questionsTabContainer}>
+          <div
+            className={styles.questionsTabContainer}
+            style={{
+              minWidth: sidebarWidth
+            }}
+          >
             <h3 style={{ margin: '0px' }}>Questions</h3>
             {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
               rootNode.subquestions.map((question) => (
@@ -217,6 +238,11 @@ const AssessmentPage = () => {
               <AddIcon fontSize="small" />
             </IconButton>
           </div>
+          <div
+            className={styles.resizeBar}
+            onMouseDown={startResize}
+            onMouseUp={stopResize}
+          />
           {currentQuestion ? (
             orderedQuestionsArray.map((question, index) => (
               <QuestionPanel
