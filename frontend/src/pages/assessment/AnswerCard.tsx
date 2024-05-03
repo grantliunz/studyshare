@@ -75,7 +75,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     newVoteDirection: VoteDirection
   ) => {
     if (!currentUser || !currentUserDb) {
-      alert('You must be logged in to vote!');
+      setLoginPopup(true);
       return;
     }
     if (polledAnswer) {
