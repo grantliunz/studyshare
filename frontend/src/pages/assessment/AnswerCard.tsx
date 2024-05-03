@@ -4,7 +4,7 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import CommentCard from './CommentCard';
 import { CircularProgress, IconButton, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
 import { Comment, CreateCommentDTO } from '../../types/assessment';
@@ -16,6 +16,7 @@ import { UserDisplayDTO } from '../../types/user';
 import { useAuth } from '../../contexts/UserContext';
 import { Answer } from '../../types/answer';
 import { answerMapper } from '../../mappers/answerMapper';
+import { LoginPopupContext } from './AssessmentPage';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -24,6 +25,8 @@ type AnswerCardProps = {
 const AnswerCard = ({ answer }: AnswerCardProps) => {
   const [newComment, setNewComment] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
     `${API.getAnswer}/${answer._id}`,
@@ -61,7 +64,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
 
   const handleCreateNewComment = async () => {
     if (!currentUser || !currentUserDb) {
-      alert('You must be logged in to make a comment!');
+      setLoginPopup(true);
       return;
     }
     const comment: CreateCommentDTO = {

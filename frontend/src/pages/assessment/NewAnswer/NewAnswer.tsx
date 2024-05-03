@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Editor from '../../../components/Editor/Editor';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import usePost from '../../../hooks/usePost';
 import API from '../../../util/api';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../../contexts/UserContext';
+import { LoginPopupContext } from '../AssessmentPage';
 
 type NewAnswerProps = {
   questionId: string;
@@ -13,16 +14,17 @@ type NewAnswerProps = {
 
 const NewAnswer = ({
   questionId,
-  onSubmitAnswer = () => {}
+  onSubmitAnswer = () => { }
 }: NewAnswerProps) => {
   const [text, setText] = useState<string>('');
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
   const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
   const { postData: postAnswer } = usePost(`${API.createAnswer}/${questionId}`);
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const handleSubmitAnswer = async (text: string) => {
     if (!currentUser || !currentUserDb) {
-      alert('You must be logged in to submit an answer!');
+      setLoginPopup(true);
       return;
     }
     if (text.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {

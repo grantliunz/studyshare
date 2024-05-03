@@ -74,7 +74,6 @@ const Assessments = () => {
   const handleOpenForm = (type: AssessmentType) => {
     if (!currentUser) {
       setShowLoginPopup(true);
-      //alert('You must be logged in to make an assessment!');
       return;
     }
     console.log(type);
@@ -87,7 +86,7 @@ const Assessments = () => {
     type: AssessmentType
   ) => {
     if (!currentUser) {
-      alert('You must be logged in to make an assessment!');
+      setShowLoginPopup(true);
       return;
     }
     if (!courseId) {
