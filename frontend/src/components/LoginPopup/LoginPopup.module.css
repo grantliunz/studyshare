@@ -1,0 +1,12 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 800px;
+    max-width: 90%;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  }

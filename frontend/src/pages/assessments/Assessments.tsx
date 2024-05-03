@@ -14,6 +14,7 @@ import { Course } from '../../types/types';
 import usePost from '../../hooks/usePost';
 import { useAuth } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 function mapSemesterToString(semester: string) {
   switch (semester) {
@@ -64,6 +65,7 @@ const Assessments = () => {
   const [showForm, setShowForm] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
   const navigate = useNavigate();
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
@@ -71,7 +73,8 @@ const Assessments = () => {
 
   const handleOpenForm = (type: AssessmentType) => {
     if (!currentUser) {
-      alert('You must be logged in to make an assessment!');
+      setShowLoginPopup(true);
+      //alert('You must be logged in to make an assessment!');
       return;
     }
     console.log(type);
@@ -182,6 +185,10 @@ const Assessments = () => {
 
           <AddAssessmentButton
             handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
+          />
+          <LoginPopup
+            open={showLoginPopup}
+            setOpen={setShowLoginPopup}
           />
         </div>
       </div>
