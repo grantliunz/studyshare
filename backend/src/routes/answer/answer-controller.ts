@@ -168,15 +168,21 @@ export const voteAnswer = async (
 
     // update the question and user
     if (oldVoteDirection === VoteDirection.UP) {
-      user.upvotedAnswers = user.upvotedAnswers.filter(
-        (id) => !id.equals(answer._id)
-      );
-      answer.rating.upvotes--;
+      user.upvotedAnswers = user.upvotedAnswers.filter((id) => {
+        if (id.equals(answer._id)) {
+          answer.rating.upvotes--;
+          return false;
+        }
+        return true;
+      });
     } else if (oldVoteDirection === VoteDirection.DOWN) {
-      user.downvotedAnswers = user.downvotedAnswers.filter(
-        (id) => !id.equals(answer._id)
-      );
-      answer.rating.downvotes--;
+      user.downvotedAnswers = user.downvotedAnswers.filter((id) => {
+        if (id.equals(answer._id)) {
+          answer.rating.downvotes--;
+          return false;
+        }
+        return true;
+      });
     }
     if (newVoteDirection === VoteDirection.UP) {
       if (!user.upvotedAnswers.find((id) => id.equals(answer._id))) {
