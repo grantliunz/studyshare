@@ -247,6 +247,11 @@ const AssessmentPage = () => {
                 <AddIcon fontSize="medium" />
               </IconButton>
             </div>
+            <div
+              className={styles.resizeBar}
+              onMouseDown={startResize}
+              onMouseUp={stopResize}
+            />
             {currentQuestion ? (
               orderedQuestionsArray.map((question, index) => (
                 <QuestionPanel
