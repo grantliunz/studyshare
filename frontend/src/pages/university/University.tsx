@@ -12,6 +12,7 @@ import type { University } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export default function University() {
   const { user, logout } = useAuth();
@@ -21,6 +22,7 @@ export default function University() {
   const [displayedData, setDisplayedData] = useState<
     University[] | null | undefined
   >(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const {
     data: universitiesData,
@@ -42,7 +44,7 @@ export default function University() {
 
   const handleOpenForm = () => {
     if (!user) {
-      alert('You must be logged in to make an assessment!');
+      setShowLoginPopup(true);
       return;
     }
     setShowForm(true);
@@ -89,7 +91,13 @@ export default function University() {
           />
           <AddButton handleOpenForm={handleOpenForm} />
           {user && <Button onClick={signOut}>Logout (temporary)</Button>}
+          <LoginPopup
+            open={showLoginPopup}
+            setOpen={setShowLoginPopup}
+          />
         </>
+
+
       )}
     </div>
   );
