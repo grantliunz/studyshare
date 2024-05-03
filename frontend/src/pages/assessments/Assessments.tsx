@@ -105,8 +105,7 @@ const Assessments = () => {
     });
 
     if (res instanceof AxiosError) {
-      console.log((res.response?.data as { error: string }).error);
-      return;
+      return (res.response?.data as { error: string }).error;
     }
     refreshAssessments();
   };
@@ -194,10 +193,7 @@ const Assessments = () => {
           <AddAssessmentButton
             handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
           />
-          <LoginPopup
-            open={showLoginPopup}
-            setOpen={setShowLoginPopup}
-          />
+          <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
         </div>
       </div>
     </div>

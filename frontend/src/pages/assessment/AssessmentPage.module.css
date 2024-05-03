@@ -8,9 +8,13 @@
 
 .questionsTabContainer {
   background-color: #e8e9ec;
-  padding: 12px 8px;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  width: fit-content;
+  box-sizing: border-box;
+}
+
+.resizeBar {
+  background-color: #8e8e8e;
+  width: 3px;
+  cursor: col-resize;
 }

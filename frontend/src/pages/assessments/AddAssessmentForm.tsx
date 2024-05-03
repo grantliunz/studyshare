@@ -7,7 +7,8 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl
+  FormControl,
+  FormHelperText
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './AddAssessmentForm.module.css';
@@ -19,7 +20,10 @@ import {
 type AddAssessmentFormProps = {
   state: AssessmentType;
   show: boolean;
-  onAddAssessment: (formInputs: FormInputs, type: AssessmentType) => void;
+  onAddAssessment: (
+    formInputs: FormInputs,
+    type: AssessmentType
+  ) => Promise<string | undefined>;
   onClose: () => void;
 };
 
@@ -86,7 +90,7 @@ export default function AddAssessmentForm({
     });
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!currentInput.year) return;
     if (currentInput.year < 1980 || currentInput.year > 2024) {
@@ -113,11 +117,14 @@ export default function AddAssessmentForm({
       (!currentInput.name || !currentInput.name.trim())
     ) {
       // test for a bad name
-      // TODO: Check if the name is already used in the database (optional, can just assume noone tries to make the same assessment twice)
       updateError('name', 'Please enter a valid name.');
       return;
     }
-    onAddAssessment(currentInput, state); //returns the current input fields and the type of assessment (exam, test, other)
+    const error = await onAddAssessment(currentInput, state); //returns the current input fields and the type of assessment (exam, test, other)
+    if (error) {
+      updateError(state !== 'Other' ? 'semester' : 'name', error);
+      return;
+    }
     clearInputs(); // Clear input after submitting
     clearErrors(); // Clear error message after submitting
     onClose(); // Close the form
@@ -128,6 +135,7 @@ export default function AddAssessmentForm({
       open={show}
       onClose={() => {
         clearInputs();
+        clearErrors();
         onClose();
       }}
       aria-labelledby="add-Assessment-modal"
@@ -140,7 +148,14 @@ export default function AddAssessmentForm({
             <h2 className={styles.headerText}>
               Add {state + (state === 'Other' ? ' Assessment' : '')}
             </h2>
-            <button className={styles.closeButton} onClick={onClose}>
+            <button
+              className={styles.closeButton}
+              onClick={() => {
+                clearInputs();
+                clearErrors();
+                onClose();
+              }}
+            >
               <CloseIcon />
             </button>
           </div>
@@ -189,6 +204,7 @@ export default function AddAssessmentForm({
                   <MenuItem value="Third">Third</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
+                <FormHelperText>{currentInputErrors.semester}</FormHelperText>
               </FormControl>
             )}
 

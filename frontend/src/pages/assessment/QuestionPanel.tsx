@@ -57,7 +57,7 @@ const QuestionPanel = ({
     if (userDb) {
       setIsStarred(
         userDb.watchList.find((entry) => entry.questionId === question._id) !==
-        undefined
+          undefined
       );
     }
   }, [userDb]);
@@ -79,9 +79,9 @@ const QuestionPanel = ({
     }
     const updatedWatchList = newValue
       ? [
-        ...userDb.watchList,
-        { questionId: question._id, lastViewed: new Date() }
-      ]
+          ...userDb.watchList,
+          { questionId: question._id, lastViewed: new Date() }
+        ]
       : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
     const res = await putUser({
@@ -112,106 +112,117 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div style={{ paddingTop: '10px', display: 'flex' }}>
-        {prevQuestion && (
-          <Button
-            onClick={() => setQuestion(prevQuestion)}
-            startIcon={<ArrowBackRoundedIcon />}
-            style={{ textTransform: 'none', marginRight: 'auto' }}
-          >
-            {prevQuestion?.number.join('')}
-          </Button>
-        )}
-        {nextQuestion && (
-          <Button
-            onClick={() => setQuestion(nextQuestion)}
-            endIcon={<ArrowForwardRoundedIcon />}
-            style={{ textTransform: 'none', marginLeft: 'auto' }}
-          >
-            {nextQuestion.number.join('')}
-          </Button>
-        )}
-      </div>
-      <div
-        // header
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
-          {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
-        </IconButton>
-        <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
-          {polledQuestion.number}
-        </h2>
-        <IconButton onClick={() => setIsFlagged(!isFlagged)}>
-          {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
-        </IconButton>
-      </div>
-      <ReactQuill
-        style={{
-          overflow: 'hidden',
-          height: 'fit-content',
-          border: '1px solid #B0B0B0',
-          borderRadius: '5px',
-          margin: '10px',
-          minHeight: '100px'
-        }}
-        value={polledQuestion.text}
-        readOnly={true}
-        theme={'bubble'}
-      />
       <div
         style={{
-          alignItems: 'end',
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '20px',
-          padding: '0px 20px'
+          maxWidth: '1200px',
+          margin: '0 auto'
         }}
       >
-        {polledQuestion.answers.length === 0
-          ? 'No'
-          : polledQuestion.answers.length}{' '}
-        Answer
-        {polledQuestion.answers.length === 1 ? '' : 's'}
+        <div style={{ paddingTop: '10px', display: 'flex' }}>
+          {prevQuestion && (
+            <Button
+              onClick={() => setQuestion(prevQuestion)}
+              startIcon={<ArrowBackRoundedIcon />}
+              style={{ textTransform: 'none', marginRight: 'auto' }}
+            >
+              {prevQuestion?.number.join('')}
+            </Button>
+          )}
+          {nextQuestion && (
+            <Button
+              onClick={() => setQuestion(nextQuestion)}
+              endIcon={<ArrowForwardRoundedIcon />}
+              style={{ textTransform: 'none', marginLeft: 'auto' }}
+            >
+              {nextQuestion.number.join('')}
+            </Button>
+          )}
+        </div>
+        <div
+          // header
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
+            {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
+          </IconButton>
+          <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
+            {polledQuestion.number}
+          </h2>
+          <IconButton onClick={() => setIsFlagged(!isFlagged)}>
+            {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
+          </IconButton>
+        </div>
+        <ReactQuill
+          style={{
+            overflow: 'hidden',
+            height: 'fit-content',
+            border: '1px solid #B0B0B0',
+            borderRadius: '5px',
+            margin: '10px',
+            minHeight: '100px'
+          }}
+          value={polledQuestion.text}
+          readOnly={true}
+          theme={'bubble'}
+        />
+        <div
+          style={{
+            alignItems: 'end',
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '20px',
+            padding: '0px 20px'
+          }}
+        >
+          {polledQuestion.answers.length === 0
+            ? 'No'
+            : polledQuestion.answers.length}{' '}
+          Answer
+          {polledQuestion.answers.length === 1 ? '' : 's'}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start'
+            }}
+          >
+            Created by
+            <PersonCard
+              name={polledQuestion.author.name}
+              avatarPos="left"
+              style={{ columnGap: '8px' }}
+            />
+          </div>
+        </div>
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'start'
+            margin: '20px',
+            alignItems: 'center'
           }}
         >
-          Created by
-          <PersonCard
-            name={polledQuestion.author.name}
-            avatarPos="left"
-            style={{ columnGap: '8px' }}
+          {polledQuestion.answers.map((answer, index) => (
+            <AnswerCard key={index} answer={answer} />
+          ))}
+        </div>
+        <div
+          style={{
+            height: '300px',
+            padding: '30px 20px',
+            marginBottom: '100px'
+          }}
+        >
+          <NewAnswer
+            questionId={polledQuestion._id}
+            onSubmitAnswer={refreshQuestion}
           />
         </div>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '20px',
-          alignItems: 'center'
-        }}
-      >
-        {polledQuestion.answers.map((answer, index) => (
-          <AnswerCard key={index} answer={answer} />
-        ))}
-      </div>
-      <div
-        style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
-      >
-        <NewAnswer
-          questionId={polledQuestion._id}
-          onSubmitAnswer={refreshQuestion}
-        />
       </div>
     </div>
   );
