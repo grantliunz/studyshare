@@ -4,18 +4,19 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import CommentCard from './CommentCard';
 import { CircularProgress, IconButton, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ReactQuill from 'react-quill';
-import { Comment, CreateCommentDTO } from '../../types/assessment';
 import usePost from '../../hooks/usePost';
 import API from '../../util/api';
 import { AxiosError } from 'axios';
 import useGet from '../../hooks/useGet';
-import { UserDisplayDTO } from '../../types/user';
+import { UserDTO, UserDisplayDTO } from '@shared/types/models/user/user';
 import { useAuth } from '../../contexts/UserContext';
-import { Answer } from '../../types/answer';
+import { Answer, CreateAnswerDTO } from '@shared/types/models/answer/answer';
 import { answerMapper } from '../../mappers/answerMapper';
+import { CreateCommentDTO } from '@shared/types/models/assessment/assessment';
+import usePut from '../../hooks/usePut';
 
 type AnswerCardProps = {
   answer: Answer;
@@ -24,33 +25,8 @@ type AnswerCardProps = {
 const AnswerCard = ({ answer }: AnswerCardProps) => {
   const [newComment, setNewComment] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-  const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
-    `${API.getAnswer}/${answer._id}`,
-    null,
-    answerMapper
-  );
-
-  const handleVoteChange = (
-    oldVoteDirection: VoteDirection,
-    newVoteDirection: VoteDirection
-  ) => {
-    if (polledAnswer) {
-      oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
-      oldVoteDirection === VoteDirection.DOWN &&
-        polledAnswer.rating.downvotes--;
-      newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
-      newVoteDirection === VoteDirection.DOWN &&
-        polledAnswer.rating.downvotes++;
-    }
-  };
-
-  const handleAddCommentChange = (text: string) => {
-    setNewComment(text);
-  };
-
-  const { data: author } = useGet<UserDisplayDTO>(
-    `${API.getUser}/${answer.author}`
+  const [voteDirection, setVoteDirection] = useState<VoteDirection>(
+    VoteDirection.NEUTRAL
   );
 
   const { postData: postComment } = usePost<CreateCommentDTO, Comment>(
@@ -58,6 +34,96 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   );
 
   const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
+
+  const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
+    `${API.getAnswer}/${answer._id}`,
+    null,
+    answerMapper
+  );
+
+  const { data: author } = useGet<UserDisplayDTO>(
+    `${API.getUser}/${answer.author}`
+  );
+
+  const { putData: putAnswer } = usePut<Partial<CreateAnswerDTO>, Answer>(
+    `${API.updateAnswer}/${answer._id}`
+  );
+
+  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
+    `${API.updateUser}/${currentUserDb?._id}`
+  );
+
+  useEffect(() => {
+    if (currentUserDb) {
+      if (currentUserDb.upvotedAnswers.includes(answer._id)) {
+        setVoteDirection(VoteDirection.UP);
+      } else if (currentUserDb.downvotedAnswers.includes(answer._id)) {
+        setVoteDirection(VoteDirection.DOWN);
+      } else {
+        setVoteDirection(VoteDirection.NEUTRAL);
+      }
+    }
+  }, [currentUserDb]);
+
+  console.log(currentUserDb);
+
+  const handleVoteChange = async (
+    oldVoteDirection: VoteDirection,
+    newVoteDirection: VoteDirection
+  ) => {
+    if (!currentUser || !currentUserDb) {
+      alert('You must be logged in to vote!');
+      return;
+    }
+    if (polledAnswer) {
+      if (oldVoteDirection === VoteDirection.UP) {
+        currentUserDb.upvotedAnswers = currentUserDb.upvotedAnswers.filter(
+          (id) => id !== answer._id
+        );
+      } else if (oldVoteDirection === VoteDirection.DOWN) {
+        currentUserDb.downvotedAnswers = currentUserDb.downvotedAnswers.filter(
+          (id) => id !== answer._id
+        );
+      }
+      if (newVoteDirection === VoteDirection.UP) {
+        currentUserDb.upvotedAnswers = [
+          ...new Set([...currentUserDb.upvotedAnswers, answer._id])
+        ];
+      } else if (newVoteDirection === VoteDirection.DOWN) {
+        currentUserDb.downvotedAnswers = [
+          ...new Set([...currentUserDb.downvotedAnswers, answer._id])
+        ];
+      }
+
+      const updateUserRes = await putUser({
+        upvotedAnswers: currentUserDb.upvotedAnswers,
+        downvotedAnswers: currentUserDb.downvotedAnswers
+      });
+      if (updateUserRes instanceof AxiosError) {
+        console.log((updateUserRes.response?.data as { error: string }).error);
+        return;
+      }
+
+      oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
+      oldVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes--;
+      newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
+      newVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes++;
+
+      const res = await putAnswer({ rating: polledAnswer.rating });
+      if (res instanceof AxiosError) {
+        console.log((res.response?.data as { error: string }).error);
+        return;
+      }
+      refreshUserDb();
+      refreshAnswer();
+    }
+  };
+
+  const handleAddCommentChange = (text: string) => {
+    setNewComment(text);
+  };
 
   const handleCreateNewComment = async () => {
     if (!currentUser || !currentUserDb) {
@@ -105,6 +171,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             width: '30px'
           }}
           onChange={handleVoteChange}
+          value={voteDirection}
         />
         <div
           style={{

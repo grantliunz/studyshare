@@ -8,12 +8,12 @@ import UniversityCard from './UniversityCard';
 import AddButton from '../../components/AddButton/AddButton';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import type { University } from '../../types/types';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
 import API from '../../util/api';
+import { University } from '@shared/types/models/university/university';
 
-export default function University() {
+export default function UniversitiesPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);

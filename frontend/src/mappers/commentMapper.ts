@@ -1,4 +1,4 @@
-import { Comment } from '../types/assessment';
+import { Comment } from '@shared/types/models/question/assessment';
 import { Mapper } from './mapper';
 
 const commentMapper: Mapper<Comment> = (data: any): Comment => {
