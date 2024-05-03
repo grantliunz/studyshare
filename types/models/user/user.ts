@@ -59,3 +59,13 @@ export type PostUser = {
   name: string;
   email: string;
 };
+
+export type UpdateWatchListDTO = {
+  questionId: ObjectId;
+  action: UpdateWatchListAction;
+};
+
+export enum UpdateWatchListAction {
+  WATCH,
+  UNWATCH
+}

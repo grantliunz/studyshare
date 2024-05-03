@@ -12,7 +12,10 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { UserDTO } from '@shared/types/models/user/user';
+import {
+  UpdateWatchListAction,
+  UpdateWatchListDTO
+} from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
@@ -45,12 +48,8 @@ const QuestionPanel = ({
 
   const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
-  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
-    `${API.updateUser}/${userDb?._id}`
-  );
-
-  const { putData: putQuestion } = usePut<Partial<Question>, Question>(
-    `${API.updateQuestion}/${question._id}`
+  const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
+    `${API.updateWatchList}/${userDb?._id}`
   );
 
   if (currentQuestion._id === question._id) {
@@ -72,24 +71,12 @@ const QuestionPanel = ({
       return;
     }
     setIsStarred(newValue);
-    const questionRes = await putQuestion({
-      watchers: newValue
-        ? [...question.watchers, userDb._id]
-        : question.watchers.filter((user) => user !== userDb._id)
-    });
-    if (questionRes instanceof AxiosError) {
-      console.log((questionRes.response?.data as { error: string }).error);
-      return;
-    }
-    const updatedWatchList = newValue
-      ? [
-          ...userDb.watchList,
-          { questionId: question._id, lastViewed: new Date() }
-        ]
-      : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
-    const res = await putUser({
-      watchList: updatedWatchList
+    const res = await updateWatchList({
+      questionId: question._id,
+      action: newValue
+        ? UpdateWatchListAction.WATCH
+        : UpdateWatchListAction.UNWATCH
     });
 
     if (res instanceof AxiosError) {
