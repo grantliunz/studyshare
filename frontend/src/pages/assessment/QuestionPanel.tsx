@@ -112,12 +112,7 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}
-      >
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ paddingTop: '10px', display: 'flex' }}>
           {prevQuestion && (
             <Button
@@ -223,6 +218,33 @@ const QuestionPanel = ({
             onSubmitAnswer={refreshQuestion}
           />
         </div>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '20px',
+          alignItems: 'center'
+        }}
+      >
+        {polledQuestion.answers
+          .sort(
+            (a, b) =>
+              b.rating.upvotes -
+              b.rating.downvotes -
+              (a.rating.upvotes - a.rating.downvotes)
+          )
+          .map((answer, index) => (
+            <AnswerCard key={index} answer={answer} />
+          ))}
+      </div>
+      <div
+        style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
+      >
+        <NewAnswer
+          questionId={polledQuestion._id}
+          onSubmitAnswer={refreshQuestion}
+        />
       </div>
     </div>
   );
