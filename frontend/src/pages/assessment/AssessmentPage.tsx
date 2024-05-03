@@ -203,7 +203,8 @@ const AssessmentPage = () => {
           <div
             className={styles.questionsTabContainer}
             style={{
-              minWidth: sidebarWidth
+              minWidth: sidebarWidth,
+              maxWidth: sidebarWidth
             }}
           >
             <h3 style={{ margin: '0px', alignSelf: 'start', padding: '10px' }}>

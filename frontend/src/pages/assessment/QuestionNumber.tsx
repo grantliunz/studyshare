@@ -1,5 +1,5 @@
 import { Button, IconButton } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,6 +22,17 @@ const QuestionNumber = ({
   handleAddQuestion
 }: QuestionNumberProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [hideText, setHideText] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log('hmm');
+    const width = document.getElementById('questionButton')?.clientWidth;
+    if (width && width < 100) {
+      setHideText(true);
+    } else {
+      setHideText(false);
+    }
+  });
 
   return (
     <div>
@@ -53,6 +64,7 @@ const QuestionNumber = ({
               onClick={() =>
                 questionNode.question && setQuestion(questionNode.question)
               }
+              id="questionButton"
               fullWidth
               sx={{
                 '&.MuiButtonBase-root:hover': {
@@ -88,7 +100,10 @@ const QuestionNumber = ({
                       padding: '0 0 0 10px',
                       textTransform: 'none',
                       display: 'flex',
-                      justifyContent: 'start'
+                      justifyContent: 'start',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden'
                     }
                   : {
                       textTransform: 'none',
@@ -100,7 +115,18 @@ const QuestionNumber = ({
                     }
               }
             >
-              {questionNode.number.at(-1)}
+              {questionNode.number.at(-1)}&nbsp;
+              <span
+                style={{
+                  opacity: 0.5,
+                  fontSize: '0.8rem',
+                  display: hideText ? 'none' : 'inline'
+                }}
+              >
+                {questionNode.question?.text
+                  .replace(/<\/?[^>]+(>|$)/g, '')
+                  .trim()}
+              </span>
             </Button>
             <IconButton
               style={{ padding: '4px', marginLeft: 'auto' }}
