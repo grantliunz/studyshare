@@ -1,0 +1,21 @@
+.logo {
+  font-family: Jomhuria;
+  font-size: 12rem;
+  color: rgba(65, 112, 155, 1);
+  margin: 0;
+  user-select: none;
+  line-height: 200px;
+  cursor: pointer;
+}
+
+.title {
+  padding: 0;
+  margin: 0;
+}
+
+.linksWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
