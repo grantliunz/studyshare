@@ -166,19 +166,15 @@ export const voteAnswer = async (
       return res.status(404).json({ error: 'User not found' });
     }
 
-    for (const id of user.upvotedAnswers) {
-      console.log(id.equals(answer._id));
-    }
-
     // update the question and user
     if (oldVoteDirection === VoteDirection.UP) {
-      user.upvotedAnswers = user.upvotedAnswers.filter((id) =>
-        id.equals(answer._id)
+      user.upvotedAnswers = user.upvotedAnswers.filter(
+        (id) => !id.equals(answer._id)
       );
       answer.rating.upvotes--;
     } else if (oldVoteDirection === VoteDirection.DOWN) {
-      user.downvotedAnswers = user.downvotedAnswers.filter((id) =>
-        id.equals(answer._id)
+      user.downvotedAnswers = user.downvotedAnswers.filter(
+        (id) => !id.equals(answer._id)
       );
       answer.rating.downvotes--;
     }
