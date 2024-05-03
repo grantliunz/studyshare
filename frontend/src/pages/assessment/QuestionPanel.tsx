@@ -52,10 +52,6 @@ const QuestionPanel = ({
     `${API.updateWatchList}/${userDb?._id}`
   );
 
-  if (currentQuestion._id === question._id) {
-    console.log(question.watchers);
-  }
-
   useEffect(() => {
     if (userDb) {
       setIsStarred(

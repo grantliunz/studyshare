@@ -27,6 +27,10 @@ const UpDownVote = ({
 }: UpDownVoteProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(value);
   const [count, setCount] = useState<number>(rating.upvotes - rating.downvotes);
+  const [isUpvoteButtonDisabled, setIsUpvoteButtonDisabled] =
+    useState<boolean>(false);
+  const [isDownvoteButtonDisabled, setIsDownvoteButtonDisabled] =
+    useState<boolean>(false);
 
   useEffect(() => {
     setVoteState(value);
@@ -48,14 +52,19 @@ const UpDownVote = ({
   return (
     <div style={style}>
       <IconButton
-        onClick={() =>
+        disabled={isUpvoteButtonDisabled}
+        onClick={() => {
+          setIsUpvoteButtonDisabled(true);
+          setTimeout(() => {
+            setIsUpvoteButtonDisabled(false);
+          }, 300);
           handleVote(
             voteState,
             voteState === VoteDirection.UP
               ? VoteDirection.NEUTRAL
               : VoteDirection.UP
-          )
-        }
+          );
+        }}
       >
         {voteState === VoteDirection.UP ? (
           <ThumbUpIcon style={{ fontSize: iconSize }} />
@@ -65,14 +74,19 @@ const UpDownVote = ({
       </IconButton>
       {count}
       <IconButton
-        onClick={() =>
+        disabled={isDownvoteButtonDisabled}
+        onClick={() => {
+          setIsDownvoteButtonDisabled(true);
+          setTimeout(() => {
+            setIsDownvoteButtonDisabled(false);
+          }, 300);
           handleVote(
             voteState,
             voteState === VoteDirection.DOWN
               ? VoteDirection.NEUTRAL
               : VoteDirection.DOWN
-          )
-        }
+          );
+        }}
       >
         {voteState === VoteDirection.DOWN ? (
           <ThumbDownIcon style={{ fontSize: iconSize }} />
