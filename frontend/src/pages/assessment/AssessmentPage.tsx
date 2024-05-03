@@ -179,7 +179,8 @@ const AssessmentPage = () => {
   }
 
   const handleResize = (e: MouseEvent) => {
-    if (e.clientX > 200 && e.clientX < 800) {
+    e.preventDefault();
+    if (e.clientX > 120 && e.clientX < 800) {
       setSidebarWidth(e.clientX);
     }
   };
@@ -205,7 +206,9 @@ const AssessmentPage = () => {
               minWidth: sidebarWidth
             }}
           >
-            <h3 style={{ margin: '0px' }}>Questions</h3>
+            <h3 style={{ margin: '0px', alignSelf: 'start', padding: '10px' }}>
+              Questions
+            </h3>
             {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
               rootNode.subquestions.map((question) => (
                 <QuestionNumber
@@ -228,14 +231,14 @@ const AssessmentPage = () => {
               </p>
             )}
             <IconButton
-              size="small"
+              size="medium"
               style={{
                 alignSelf: 'center',
                 marginTop: '8px'
               }}
               onClick={() => handleAddQuestion([])}
             >
-              <AddIcon fontSize="small" />
+              <AddIcon fontSize="medium" />
             </IconButton>
           </div>
           <div

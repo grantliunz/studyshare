@@ -14,7 +14,7 @@
 }
 
 .resizeBar {
-  background-color: #000000;
-  width: 2px;
+  background-color: #8e8e8e;
+  width: 3px;
   cursor: col-resize;
 }

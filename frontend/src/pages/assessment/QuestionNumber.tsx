@@ -85,14 +85,18 @@ const QuestionNumber = ({
                         ? 'white'
                         : 'black',
                       minWidth: '30px',
-                      padding: '0px',
-                      textTransform: 'none'
+                      padding: '0 0 0 10px',
+                      textTransform: 'none',
+                      display: 'flex',
+                      justifyContent: 'start'
                     }
                   : {
                       textTransform: 'none',
                       minWidth: '30px',
-                      padding: '0px',
-                      pointerEvents: 'none'
+                      padding: '0 0 0 0',
+                      pointerEvents: 'none',
+                      display: 'flex',
+                      justifyContent: 'start'
                     }
               }
             >
