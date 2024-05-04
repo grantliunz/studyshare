@@ -1,4 +1,4 @@
-import { Question } from '../question/question';
+import { Question, QuestionLazy } from '../question/question';
 
 export type ObjectId = string;
 
@@ -33,18 +33,6 @@ export type AssessmentGET = {
   year: number;
   semester: SemesterType;
   questions: QuestionLazy[];
-};
-
-export type QuestionLazy = {
-  _id: ObjectId;
-  assessment: ObjectId;
-  number: string[];
-  text: string;
-  author: ObjectId;
-  answers: ObjectId[];
-  watchers: ObjectId[];
-  comments: ObjectId[];
-  latestContributor: ObjectId;
 };
 
 export type Assessment = {

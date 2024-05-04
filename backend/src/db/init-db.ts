@@ -152,7 +152,13 @@ const assessments = [
 const questions = [
   new Question({
     number: ['1', 'a', 'i'],
-    text: '<p>How can I be like Penqor</p>',
+    versions: [
+      {
+        text: '<p>How can I be like Penqor</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -161,7 +167,13 @@ const questions = [
   }),
   new Question({
     number: ['1', 'a', 'ii'],
-    text: '<p>How long did Penqor spend at green place?</p>',
+    versions: [
+      {
+        text: '<p>How long did Penqor spend at green place?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -170,7 +182,13 @@ const questions = [
   }),
   new Question({
     number: ['1', 'a', 'iii'],
-    text: '<p>What is green place?</p>',
+    versions: [
+      {
+        text: '<p>What is green place?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -179,7 +197,13 @@ const questions = [
   }),
   new Question({
     number: ['1', 'b', 'i'],
-    text: '<p>Friend help?</p>',
+    versions: [
+      {
+        text: '<p>Friend help?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -188,7 +212,13 @@ const questions = [
   }),
   new Question({
     number: ['1', 'b', 'ii'],
-    text: '<p>What sound does a monkey make?</p>',
+    versions: [
+      {
+        text: '<p>What sound does a monkey make?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -197,7 +227,13 @@ const questions = [
   }),
   new Question({
     number: ['1', 'b', 'iii'],
-    text: '<p>How much can a gorilla deadlift?</p>',
+    versions: [
+      {
+        text: '<p>How much can a gorilla deadlift?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -206,7 +242,13 @@ const questions = [
   }),
   new Question({
     number: ['2', 'a'],
-    text: '<p>How much did Penqor deadlift last week?</p>',
+    versions: [
+      {
+        text: '<p>How much did Penqor deadlift last week?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -214,7 +256,13 @@ const questions = [
   }),
   new Question({
     number: ['2', 'b'],
-    text: '<p>How much can you deadlift?</p>',
+    versions: [
+      {
+        text: '<p>How much can you deadlift?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -223,7 +271,13 @@ const questions = [
   }),
   new Question({
     number: ['3'],
-    text: '<p>Where is ardo?</p>',
+    versions: [
+      {
+        text: '<p>Where is ardo?</p>',
+        author: users[0]._id,
+        createdAt: Date.now()
+      }
+    ],
     answers: [],
     watchers: [],
     reporters: [],
@@ -267,7 +321,6 @@ async function run() {
 
     for (const question of questions) {
       question.assessment = assessments[0]._id;
-      question.author = users[0]._id;
       await question.save();
       assessments[0].questions.push(question._id);
       await assessments[0].save();

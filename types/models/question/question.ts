@@ -5,9 +5,8 @@ import { UserDb } from '../user/user';
 export type Question = {
   _id: ObjectId;
   assessment: ObjectId;
+  versions: QuestionVersionEntry[];
   number: string[];
-  text: string;
-  author: UserDb;
   answers: Answer[];
   watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
@@ -19,11 +18,27 @@ export type Question = {
 
 export type CreateQuestionDTO = {
   number: string[];
-  text: string;
-  author: ObjectId;
+  versions: QuestionVersionEntry[];
   answers: ObjectId[];
   watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
   comments: ObjectId[];
   isAnonymous: boolean;
+};
+
+export type QuestionVersionEntry = {
+  text: string;
+  author: UserDb;
+  createdAt: Date;
+};
+
+export type QuestionLazy = {
+  _id: ObjectId;
+  assessment: ObjectId;
+  number: string[];
+  versions: { text: string; author: ObjectId; createdAt: Date }[];
+  answers: ObjectId[];
+  watchers: ObjectId[];
+  comments: ObjectId[];
+  latestContributor: ObjectId;
 };

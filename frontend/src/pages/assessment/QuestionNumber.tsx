@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
 import { QuestionNode } from './AssessmentPage';
 import { arrayEquals } from '../../util/arrays';
-import { QuestionLazy } from '@shared/types/models/assessment/assessment';
+import { QuestionLazy } from '@shared/types/models/question/question';
 
 type QuestionNumberProps = {
   questionNode: QuestionNode;
@@ -122,8 +122,11 @@ const QuestionNumber = ({
               display: hideText ? 'none' : 'inline'
             }}
           >
-            {questionNode.question?.text &&
-              questionNode.question?.text.replace(/<\/?[^>]+(>|$)/g, '').trim()}
+            {questionNode.question?.versions.at(-1)?.text &&
+              questionNode.question?.versions
+                .at(-1)
+                ?.text.replace(/<\/?[^>]+(>|$)/g, '')
+                .trim()}
           </span>
         </Button>
         <IconButton

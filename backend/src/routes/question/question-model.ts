@@ -3,8 +3,11 @@ import mongoose, { Model, Schema, Types } from 'mongoose';
 export interface IQuestion extends Document {
   assessment: Types.ObjectId;
   number: string[];
-  text: string;
-  author: Types.ObjectId;
+  versions: {
+    text: string;
+    author: Types.ObjectId;
+    createdAt: Date;
+  }[];
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
   reporters: Types.ObjectId[];
@@ -23,8 +26,21 @@ const questionSchema: Schema<IQuestion> = new Schema(
       type: [String],
       required: true
     },
-    text: {
-      type: String
+    versions: {
+      type: [
+        {
+          text: {
+            type: String
+          },
+          author: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+          },
+          createdAt: {
+            type: Date
+          }
+        }
+      ]
     },
     answers: {
       type: [Schema.Types.ObjectId],
@@ -41,10 +57,6 @@ const questionSchema: Schema<IQuestion> = new Schema(
     comments: {
       type: [Schema.Types.ObjectId],
       ref: 'Comment'
-    },
-    author: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
     },
     latestContributor: {
       type: Schema.Types.ObjectId,

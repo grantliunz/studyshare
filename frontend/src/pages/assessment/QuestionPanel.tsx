@@ -21,8 +21,7 @@ import {
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
-import { Question } from '@shared/types/models/question/question';
-import { QuestionLazy } from '@shared/types/models/assessment/assessment';
+import { Question, QuestionLazy } from '@shared/types/models/question/question';
 import { LoginPopupContext } from './AssessmentPage';
 import { questionMapper } from '../../mappers/questionMapper';
 
@@ -50,8 +49,6 @@ const QuestionPanel = ({
     null,
     questionMapper
   );
-
-  console.log(polledQuestion);
 
   const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
@@ -181,7 +178,7 @@ const QuestionPanel = ({
             margin: '10px',
             minHeight: '100px'
           }}
-          value={polledQuestion.text}
+          value={polledQuestion.versions.at(-1)?.text || 'an error occured'}
           readOnly={true}
           theme={'bubble'}
         />
@@ -210,9 +207,10 @@ const QuestionPanel = ({
             <PersonCard
               name={
                 (polledQuestion.isAnonymous &&
-                  polledQuestion.author._id === userDb?._id &&
+                  polledQuestion.versions.at(-1)?.author._id === userDb?._id &&
                   'Anonymous (You)') ||
-                (!polledQuestion.isAnonymous && polledQuestion.author?.name) ||
+                (!polledQuestion.isAnonymous &&
+                  polledQuestion.versions.at(-1)?.author?.name) ||
                 'Anonymous'
               }
               avatarPos="left"

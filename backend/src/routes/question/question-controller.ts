@@ -4,6 +4,7 @@ import Assessment from '../assessment/assessment-model';
 import Question from './question-model';
 import { CreateQuestionDTO } from './question-dto';
 import User from '../user/user-model';
+import { version } from 'os';
 
 // Controller function to create a new question
 export const createQuestion = async (
@@ -17,8 +18,7 @@ export const createQuestion = async (
     }
     const {
       number,
-      text,
-      author,
+      versions,
       answers = [],
       watchers = [],
       comments = [],
@@ -44,7 +44,12 @@ export const createQuestion = async (
     }
 
     // get author
-    const user = await User.findById(author);
+    const newVersion = versions.at(-1);
+    if (!newVersion) {
+      return res.status(404).json({ error: 'New version not found!' });
+    }
+
+    const user = await User.findById(newVersion.author._id);
 
     if (!user) {
       return res.status(404).json({ error: 'Author not found' });
@@ -54,8 +59,7 @@ export const createQuestion = async (
     const question = new Question({
       assessment: req.params.assessmentId,
       number,
-      text,
-      author,
+      versions,
       answers,
       watchers,
       comments,
@@ -116,12 +120,18 @@ export const getQuestion = async (
         }
       },
       { path: 'comments' },
-      { path: 'author' }
+      {
+        path: 'versions',
+        populate: {
+          path: 'author'
+        }
+      }
     ]);
 
     if (!question) {
       return res.status(404).json({ error: 'Question not found' });
     }
+
     console.log(question);
 
     res.status(200).json(question); // respond with the question
