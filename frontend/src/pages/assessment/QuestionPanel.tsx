@@ -197,8 +197,8 @@ const QuestionPanel = ({
               b.rating.downvotes -
               (a.rating.upvotes - a.rating.downvotes)
           )
-          .map((answer, index) => (
-            <AnswerCard key={index} answer={answer} />
+          .map((answer) => (
+            <AnswerCard key={answer._id} answer={answer} />
           ))}
       </div>
       <div
