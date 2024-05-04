@@ -206,10 +206,10 @@ const QuestionPanel = ({
             Created by
             <PersonCard
               name={
-                (polledQuestion.isAnonymous &&
+                (polledQuestion.versions.at(-1)?.isAnonymous &&
                   polledQuestion.versions.at(-1)?.author._id === userDb?._id &&
                   'Anonymous (You)') ||
-                (!polledQuestion.isAnonymous &&
+                (!polledQuestion.versions.at(-1)?.isAnonymous &&
                   polledQuestion.versions.at(-1)?.author?.name) ||
                 'Anonymous'
               }

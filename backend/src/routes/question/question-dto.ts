@@ -6,11 +6,11 @@ export interface CreateQuestionDTO {
     text: string;
     author: Types.ObjectId;
     createdAt: Date;
+    isAnonymous: boolean;
   }[];
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
   reporters: Types.ObjectId[];
   comments: Types.ObjectId[];
   latestContributor: Types.ObjectId;
-  isAnonymous: boolean;
 }

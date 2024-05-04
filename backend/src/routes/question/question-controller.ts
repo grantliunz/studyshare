@@ -22,8 +22,7 @@ export const createQuestion = async (
       answers = [],
       watchers = [],
       comments = [],
-      latestContributor,
-      isAnonymous
+      latestContributor
     } = req.body; // assuming request body contains question data
 
     // Get the assessment by its ID
@@ -49,7 +48,7 @@ export const createQuestion = async (
       return res.status(404).json({ error: 'New version not found!' });
     }
 
-    const user = await User.findById(newVersion.author._id);
+    const user = await User.findById(newVersion.author);
 
     if (!user) {
       return res.status(404).json({ error: 'Author not found' });
@@ -63,8 +62,7 @@ export const createQuestion = async (
       answers,
       watchers,
       comments,
-      latestContributor,
-      isAnonymous
+      latestContributor
     });
     // save the question to the database
     const createdQuestion = await question.save();

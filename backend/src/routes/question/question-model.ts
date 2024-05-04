@@ -7,13 +7,13 @@ export interface IQuestion extends Document {
     text: string;
     author: Types.ObjectId;
     createdAt: Date;
+    isAnonymous: boolean;
   }[];
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
   reporters: Types.ObjectId[];
   comments: Types.ObjectId[];
   latestContributor: Types.ObjectId;
-  isAnonymous: boolean;
 }
 
 const questionSchema: Schema<IQuestion> = new Schema(
@@ -37,7 +37,12 @@ const questionSchema: Schema<IQuestion> = new Schema(
             ref: 'User'
           },
           createdAt: {
-            type: Date
+            type: Date,
+            default: Date.now()
+          },
+          isAnonymous: {
+            type: Boolean,
+            default: false
           }
         }
       ]
@@ -61,10 +66,6 @@ const questionSchema: Schema<IQuestion> = new Schema(
     latestContributor: {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    },
-    isAnonymous: {
-      type: Boolean,
-      default: false
     }
   },
   {

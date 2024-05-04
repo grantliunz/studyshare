@@ -12,17 +12,22 @@ export type Question = {
   reporters: ObjectId[];
   comments: Comment[];
   latestContributor: ObjectId;
-  isAnonymous: boolean;
   createdAt: Date;
 };
 
 export type CreateQuestionDTO = {
   number: string[];
-  versions: QuestionVersionEntry[];
+  versions: CreateQuestionVersionEntryDTO[];
   answers: ObjectId[];
   watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
   comments: ObjectId[];
+};
+
+export type CreateQuestionVersionEntryDTO = {
+  text: string;
+  author: ObjectId;
+  createdAt: Date;
   isAnonymous: boolean;
 };
 
@@ -30,6 +35,7 @@ export type QuestionVersionEntry = {
   text: string;
   author: UserDb;
   createdAt: Date;
+  isAnonymous: boolean;
 };
 
 export type QuestionLazy = {
