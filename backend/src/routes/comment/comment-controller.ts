@@ -41,7 +41,7 @@ export const createComment = async (
     }
     Object.assign(question, {
       __v: question.__v + 1,
-      latestContributor: author
+      latestContributor: isAnonymous ? null : author
     });
 
     question.save();
