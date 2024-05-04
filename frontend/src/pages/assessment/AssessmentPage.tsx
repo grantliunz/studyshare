@@ -263,24 +263,46 @@ const AssessmentPage = () => {
                 <AddIcon fontSize="medium" />
               </IconButton>
               {reportedQuestions.length > 0 && (
-                <Accordion>
+                <Accordion
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                  style={{
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    border: 'none'
+                  }}
+                  elevation={0}
+                  sx={{ '&:before': { height: '0px' } }}
+                  disableGutters
+                >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
+                    style={{ opacity: '0.5' }}
                   >
                     Hidden Questions
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px'
+                    }}
+                  >
                     {reportedQuestions.map((q) => {
                       return (
-                        <button
+                        <div
+                          className={styles.reportedQuestionNumber}
                           onClick={() => {
                             setCurrentQuestion(q);
                           }}
+                          style={{
+                            backgroundColor:
+                              currentQuestion?._id === q._id
+                                ? 'rgba(0,0,0,0.1)'
+                                : 'transparent'
+                          }}
                         >
                           {q.number.join('')}
-                        </button>
+                        </div>
                       );
                     })}
                   </AccordionDetails>
