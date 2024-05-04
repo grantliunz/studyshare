@@ -57,7 +57,7 @@ const QuestionPanel = ({
     if (userDb) {
       setIsStarred(
         userDb.watchList.find((entry) => entry.questionId === question._id) !==
-        undefined
+          undefined
       );
     }
   }, [userDb]);
@@ -79,9 +79,9 @@ const QuestionPanel = ({
     }
     const updatedWatchList = newValue
       ? [
-        ...userDb.watchList,
-        { questionId: question._id, lastViewed: new Date() }
-      ]
+          ...userDb.watchList,
+          { questionId: question._id, lastViewed: new Date() }
+        ]
       : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
     const res = await putUser({
@@ -187,7 +187,10 @@ const QuestionPanel = ({
         >
           Created by
           <PersonCard
-            name={polledQuestion.author.name}
+            name={
+              (!polledQuestion.isAnonymous && polledQuestion.author.name) ||
+              'Anonymous'
+            }
             avatarPos="left"
             style={{ columnGap: '8px' }}
           />

@@ -9,6 +9,7 @@ export interface IQuestion extends Document {
   watchers: Types.ObjectId[];
   comments: Types.ObjectId[];
   latestContributor: Types.ObjectId;
+  isAnonymous: boolean;
 }
 
 const questionSchema: Schema<IQuestion> = new Schema(
@@ -43,6 +44,10 @@ const questionSchema: Schema<IQuestion> = new Schema(
     latestContributor: {
       type: Schema.Types.ObjectId,
       ref: 'User'
+    },
+    isAnonymous: {
+      type: Boolean,
+      default: false
     }
   },
   {

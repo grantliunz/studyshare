@@ -12,6 +12,7 @@ export type Question = {
   watchers: ObjectId[]; // might need to change to a user object
   comments: Comment[];
   latestContributor: ObjectId;
+  isAnonymous: boolean;
 };
 
 export type CreateQuestionDTO = {
@@ -21,4 +22,5 @@ export type CreateQuestionDTO = {
   answers: ObjectId[];
   watchers: ObjectId[]; // might need to change to a user object
   comments: ObjectId[];
+  isAnonymous: boolean;
 };

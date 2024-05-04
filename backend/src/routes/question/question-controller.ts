@@ -22,7 +22,8 @@ export const createQuestion = async (
       answers = [],
       watchers = [],
       comments = [],
-      latestContributor
+      latestContributor,
+      isAnonymous
     } = req.body; // assuming request body contains question data
 
     // Get the assessment by its ID
@@ -58,7 +59,8 @@ export const createQuestion = async (
       answers,
       watchers,
       comments,
-      latestContributor
+      latestContributor,
+      isAnonymous
     });
     // save the question to the database
     const createdQuestion = await question.save();
