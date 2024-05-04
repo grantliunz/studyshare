@@ -152,7 +152,8 @@ const QuestionPanel = ({
   };
 
   const handleEditQuestion = async () => {
-    if (!userDb) {
+    if (!userDb || !userDb) {
+      setLoginPopup(true);
       return;
     }
     const res = await createQuestionVersion({
