@@ -34,7 +34,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.createComment}/${answer._id}`
   );
 
-  const { user: currentUser, userDb: currentUserDb, refreshUserDb } = useAuth();
+  const { user: currentUser, userDb, refreshUserDb } = useAuth();
 
   const setLoginPopup = useContext(LoginPopupContext);
 
@@ -53,22 +53,22 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   );
 
   useEffect(() => {
-    if (currentUserDb) {
-      if (currentUserDb.upvotedAnswers.includes(answer._id)) {
+    if (userDb) {
+      if (userDb.upvotedAnswers.includes(answer._id)) {
         setVoteDirection(VoteDirection.UP);
-      } else if (currentUserDb.downvotedAnswers.includes(answer._id)) {
+      } else if (userDb.downvotedAnswers.includes(answer._id)) {
         setVoteDirection(VoteDirection.DOWN);
       } else {
         setVoteDirection(VoteDirection.NEUTRAL);
       }
     }
-  }, [currentUserDb]);
+  }, [userDb]);
 
   const handleVoteChange = async (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
-    if (!currentUser || !currentUserDb) {
+    if (!currentUser || !userDb) {
       setLoginPopup(true);
       return;
     }
@@ -84,7 +84,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       const res = await voteAnswer({
         oldVoteDirection,
         newVoteDirection,
-        userId: currentUserDb._id
+        userId: userDb._id
       });
 
       if (res instanceof AxiosError) {
@@ -101,13 +101,13 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   };
 
   const handleCreateNewComment = async () => {
-    if (!currentUser || !currentUserDb) {
+    if (!currentUser || !userDb) {
       setLoginPopup(true);
       return;
     }
     const comment: CreateCommentDTO = {
       text: newComment,
-      author: currentUserDb._id,
+      author: userDb._id,
       rating: {
         upvotes: 0,
         downvotes: 0
@@ -267,7 +267,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                       padding: '8px'
                     }}
                   >
-                    <CommentCard comment={comment} />
+                    <CommentCard commentId={comment._id} />
                   </div>
                 ))}
               </div>

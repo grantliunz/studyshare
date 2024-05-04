@@ -166,7 +166,7 @@ export const voteAnswer = async (
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // update the question and user
+    // update the answer and user
     if (oldVoteDirection === VoteDirection.UP) {
       user.upvotedAnswers = user.upvotedAnswers.filter((id) => {
         if (id.equals(answer._id)) {
