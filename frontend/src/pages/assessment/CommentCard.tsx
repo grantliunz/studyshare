@@ -8,22 +8,37 @@ import { VoteDirection } from '@shared/types/enums/VoteDirection';
 import { useContext, useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/UserContext';
 import { LoginPopupContext } from './AssessmentPage';
+import { commentMapper } from '../../mappers/commentMapper';
+import usePost from '../../hooks/usePost';
+import { MakeVoteDTO } from '@shared/types/models/answer/answer';
+import { AxiosError } from 'axios';
 
 type CommentCardProps = {
-  comment: Comment;
+  commentId: string;
 };
-const CommentCard = ({ comment }: CommentCardProps) => {
+const CommentCard = ({ commentId }: CommentCardProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(
     VoteDirection.NEUTRAL
   );
-  const { user, userDb } = useAuth();
+  const { user, userDb, refreshUserDb } = useAuth();
   const setLoginPopup = useContext(LoginPopupContext);
+  const { data: comment, refresh: refreshComment } = useGet<Comment>(
+    `${API.getComment}/${commentId}`,
+    null,
+    commentMapper
+  );
+  const { postData: voteComment } = usePost<MakeVoteDTO, Comment>(
+    `${API.voteComment}/${commentId}`
+  );
+  const { data: author } = useGet<UserDisplayDTO>(
+    `${API.getUser}/${comment?.author}`
+  );
 
   useEffect(() => {
     if (userDb) {
-      if (userDb.upvotedComments.includes(comment._id)) {
+      if (userDb.upvotedComments.includes(commentId)) {
         setVoteState(VoteDirection.UP);
-      } else if (userDb.downvotedComments.includes(comment._id)) {
+      } else if (userDb.downvotedComments.includes(commentId)) {
         setVoteState(VoteDirection.DOWN);
       } else {
         setVoteState(VoteDirection.NEUTRAL);
@@ -31,7 +46,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
     }
   }, [userDb]);
 
-  const handleVoteChange = (
+  const handleVoteChange = async (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
@@ -39,18 +54,32 @@ const CommentCard = ({ comment }: CommentCardProps) => {
       setLoginPopup(true);
       return;
     }
-    setVoteState(newVoteDirection);
-    oldVoteDirection === VoteDirection.UP && comment.rating.upvotes--;
-    oldVoteDirection === VoteDirection.DOWN && comment.rating.downvotes--;
-    newVoteDirection === VoteDirection.UP && comment.rating.upvotes++;
-    newVoteDirection === VoteDirection.DOWN && comment.rating.downvotes++;
+    if (comment) {
+      setVoteState(newVoteDirection);
+      oldVoteDirection === VoteDirection.UP && comment.rating.upvotes--;
+      oldVoteDirection === VoteDirection.DOWN && comment.rating.downvotes--;
+      newVoteDirection === VoteDirection.UP && comment.rating.upvotes++;
+      newVoteDirection === VoteDirection.DOWN && comment.rating.downvotes++;
+
+      const res = await voteComment({
+        oldVoteDirection,
+        newVoteDirection,
+        userId: userDb._id
+      });
+
+      if (res instanceof AxiosError) {
+        console.log((res.response?.data as { error: string }).error);
+        return;
+      }
+      refreshUserDb();
+      refreshComment();
+    }
   };
 
-  console.log(comment);
+  if (!comment) {
+    return <></>;
+  }
 
-  const { data: author } = useGet<UserDisplayDTO>(
-    `${API.getUser}/${comment.author}`
-  );
   return (
     <div
       style={{

@@ -4,6 +4,7 @@ export type ObjectId = string;
 
 export type Comment = {
   _id: ObjectId;
+  answer: Object;
   text: string;
   author: ObjectId;
   rating: Rating;

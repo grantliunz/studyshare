@@ -4,6 +4,9 @@ import Answer from '../answer/answer-model';
 import { CreateCommentDTO } from './comment-dto';
 import { validationResult } from 'express-validator';
 import Question from '../question/question-model';
+import { MakeVoteDTO } from '@shared/types/models/answer/answer';
+import User from '../user/user-model';
+import { VoteDirection } from '@shared/types/enums/VoteDirection';
 
 // Controller function to create a new comment
 export const createComment = async (
@@ -160,5 +163,69 @@ export const deleteComment = async (
     res.status(204).json({ error: 'Comment deleted successfully' }); // respond with success error
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+};
+
+export const voteComment = async (
+  req: Request<{ commentId: string }, {}, MakeVoteDTO>,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Get the comment by its ID
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    const { userId, oldVoteDirection, newVoteDirection } = req.body;
+
+    const user = await User.findById(userId);
+
+    // get the user by ID
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // update the comment and user
+    if (oldVoteDirection === VoteDirection.UP) {
+      user.upvotedComments = user.upvotedComments.filter((id) => {
+        if (id.equals(comment._id)) {
+          comment.rating.upvotes--;
+          return false;
+        }
+        return true;
+      });
+    } else if (oldVoteDirection === VoteDirection.DOWN) {
+      user.downvotedComments = user.downvotedComments.filter((id) => {
+        if (id.equals(comment._id)) {
+          comment.rating.downvotes--;
+          return false;
+        }
+        return true;
+      });
+    }
+    if (newVoteDirection === VoteDirection.UP) {
+      if (!user.upvotedComments.find((id) => id.equals(comment._id))) {
+        user.upvotedComments.push(comment._id);
+        comment.rating.upvotes++;
+      }
+    } else if (newVoteDirection === VoteDirection.DOWN) {
+      if (!user.downvotedComments.find((id) => id.equals(comment._id))) {
+        user.downvotedComments.push(comment._id);
+        comment.rating.downvotes++;
+      }
+    }
+
+    await user.save();
+    const updatedComment = await comment.save();
+
+    res.status(201).json(updatedComment);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

@@ -21,7 +21,9 @@ const API = {
   getAnswer: '/answer/getAnswer',
   updateAnswer: '/answer/updateAnswer',
   voteAnswer: '/answer/voteAnswer',
-  createComment: '/comment/createComment'
+  createComment: '/comment/createComment',
+  getComment: '/comment/getComment',
+  voteComment: '/comment/voteComment'
 };
 
 export default API;
