@@ -261,7 +261,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
               >
                 {polledAnswer.comments.map((comment, i) => (
                   <div
-                    key={i}
+                    key={comment._id}
                     style={{
                       backgroundColor: i % 2 === 0 ? '#d9d9d9' : '#e0e0e0',
                       padding: '8px'
