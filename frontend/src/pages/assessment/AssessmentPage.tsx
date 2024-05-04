@@ -3,8 +3,15 @@ import styles from './AssessmentPage.module.css';
 import { createContext, useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
-import { CircularProgress, IconButton } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+  IconButton
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NewQuestion from './NewQuestion/NewQuestion';
 import {
   convertRomanToNumber,
@@ -129,7 +136,7 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 
 const AssessmentPage = () => {
   const { assessmentId } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, userDb } = useAuth();
 
   const location = useLocation();
   const { questionID } = location.state ?? {};
@@ -148,15 +155,24 @@ const AssessmentPage = () => {
   const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
     QuestionLazy[]
   >([]);
+  const [reportedQuestions, setReportedQuestions] = useState<QuestionLazy[]>(
+    []
+  );
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     if (assessment) {
-      const root = buildQuestionsTree(assessment.questions);
+      const reported = assessment.questions.filter((q) =>
+        userDb?.reported.includes(q._id)
+      );
+      setReportedQuestions(reported);
+      const root = buildQuestionsTree(
+        assessment.questions.filter((q) => !reported.includes(q))
+      );
       setRootNode(root);
       const arr = buildOrderedQuestionsArray(root);
-      setOrderedQuestionsArray(arr);
+      setOrderedQuestionsArray(arr.concat(reported));
       if (questionID) {
         const question = arr.find((qn) => qn._id === questionID);
         setCurrentQuestion(question);
@@ -164,7 +180,7 @@ const AssessmentPage = () => {
         setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
       }
     }
-  }, [assessment, questionID]);
+  }, [userDb, assessment, questionID]);
 
   const handleAddQuestion = (parentNumber: string[]) => {
     if (!currentUser) {
@@ -246,6 +262,30 @@ const AssessmentPage = () => {
               >
                 <AddIcon fontSize="medium" />
               </IconButton>
+              {reportedQuestions.length > 0 && (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                  >
+                    Hidden Questions
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {reportedQuestions.map((q) => {
+                      return (
+                        <button
+                          onClick={() => {
+                            setCurrentQuestion(q);
+                          }}
+                        >
+                          {q.number.join('')}
+                        </button>
+                      );
+                    })}
+                  </AccordionDetails>
+                </Accordion>
+              )}
             </div>
             <div
               className={styles.resizeBar}
