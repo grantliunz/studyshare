@@ -86,8 +86,6 @@ export const getAllComments = async (
     // fetch all comments from the database
     const comments = await Comment.find({ _id: { $in: answer.comments } });
 
-    console.log(comments);
-
     res.status(200).json(comments); // respond with the fetched comments
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });

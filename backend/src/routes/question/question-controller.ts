@@ -4,6 +4,7 @@ import Assessment from '../assessment/assessment-model';
 import Question from './question-model';
 import { CreateQuestionDTO } from './question-dto';
 import User from '../user/user-model';
+import { CreateQuestionVersionEntryDTO } from '@shared/types/models/question/question';
 
 // Controller function to create a new question
 export const createQuestion = async (
@@ -17,13 +18,11 @@ export const createQuestion = async (
     }
     const {
       number,
-      text,
-      author,
+      versions,
       answers = [],
       watchers = [],
       comments = [],
-      latestContributor,
-      isAnonymous
+      latestContributor
     } = req.body; // assuming request body contains question data
 
     // Get the assessment by its ID
@@ -44,7 +43,12 @@ export const createQuestion = async (
     }
 
     // get author
-    const user = await User.findById(author);
+    const newVersion = versions.at(-1);
+    if (!newVersion) {
+      return res.status(404).json({ error: 'New version not found!' });
+    }
+
+    const user = await User.findById(newVersion.author);
 
     if (!user) {
       return res.status(404).json({ error: 'Author not found' });
@@ -54,13 +58,11 @@ export const createQuestion = async (
     const question = new Question({
       assessment: req.params.assessmentId,
       number,
-      text,
-      author,
+      versions,
       answers,
       watchers,
       comments,
-      latestContributor,
-      isAnonymous
+      latestContributor
     });
     // save the question to the database
     const createdQuestion = await question.save();
@@ -109,9 +111,19 @@ export const getQuestion = async (
   try {
     // Get the question by its ID
     const question = await Question.findById(req.params.id).populate([
-      { path: 'answers' },
+      {
+        path: 'answers',
+        populate: {
+          path: 'comments'
+        }
+      },
       { path: 'comments' },
-      { path: 'author' }
+      {
+        path: 'versions',
+        populate: {
+          path: 'author'
+        }
+      }
     ]);
 
     if (!question) {
@@ -153,6 +165,46 @@ export const updateQuestion = async (
     res.status(200).json(updatedQuestion); // respond with the updated question
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+};
+
+// Controller function to add a new version
+export const newVersion = async (
+  req: Request<{ id: string }, {}, CreateQuestionVersionEntryDTO>,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // delete the question by its ID
+    const question = await Question.findById(req.params.id);
+
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+
+    const { text, author, createdAt, isAnonymous } = req.body;
+    const user = await User.findById(req.body.author);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Author not found' });
+    }
+
+    question.versions.push({
+      text,
+      createdAt,
+      isAnonymous,
+      author: user?._id
+    });
+
+    const updatedQuestion = await question.save();
+
+    return res.status(200).json(updatedQuestion); // respond with the updated question
+  } catch (error) {
+    return res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 

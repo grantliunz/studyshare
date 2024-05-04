@@ -56,13 +56,18 @@ export default function NewQuestion({
 
     const newQuestion = {
       number: [...parentNumber, ...questionNumber.split('.')],
-      text: questionContent,
-      author: userDb._id,
+      versions: [
+        {
+          text: questionContent,
+          author: userDb._id,
+          createdAt: new Date(),
+          isAnonymous: anonymousQuestion
+        }
+      ],
       answers: [],
       watchers: [],
       comments: [],
-      latestContributor: userDb._id,
-      isAnonymous: anonymousQuestion
+      latestContributor: userDb._id
     };
 
     const res = await createQuestion(newQuestion);

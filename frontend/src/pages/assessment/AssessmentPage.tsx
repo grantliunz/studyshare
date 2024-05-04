@@ -21,11 +21,9 @@ import API from '../../util/api';
 import useGet from '../../hooks/useGet';
 import { arrayEquals } from '../../util/arrays';
 import { useAuth } from '../../contexts/UserContext';
-import {
-  QuestionLazy,
-  AssessmentGET
-} from '@shared/types/models/assessment/assessment';
+import { AssessmentGET } from '@shared/types/models/assessment/assessment';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
+import { QuestionLazy } from '@shared/types/models/question/question';
 
 export type QuestionNode = {
   number: string[];

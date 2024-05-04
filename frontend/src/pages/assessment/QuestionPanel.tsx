@@ -1,4 +1,11 @@
-import { Button, CircularProgress, IconButton } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  IconButton,
+  Slider
+} from '@mui/material';
 import PersonCard from '../../components/PersonCard';
 import { useContext, useEffect, useState } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
@@ -21,9 +28,16 @@ import {
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
-import { Question } from '@shared/types/models/question/question';
-import { QuestionLazy } from '@shared/types/models/assessment/assessment';
+import {
+  CreateQuestionVersionEntryDTO,
+  Question,
+  QuestionLazy
+} from '@shared/types/models/question/question';
 import { LoginPopupContext } from './AssessmentPage';
+import { questionMapper } from '../../mappers/questionMapper';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import EditOffOutlinedIcon from '@mui/icons-material/EditOffOutlined';
+import Editor from '../../components/Editor/Editor';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -43,9 +57,16 @@ const QuestionPanel = ({
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
   const setLoginPopup = useContext(LoginPopupContext);
+  const [versionNo, setVersionNo] = useState<number>(-1);
+  const [isEditingQuestion, setIsEditingQuestion] = useState<boolean>(false);
+  const [newVersionText, setNewVersionText] = useState<string>('');
+  const [isEditQuestionAnonymous, setIsEditQuestionAnonymous] =
+    useState<boolean>(false);
 
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
-    `${API.getQuestion}/${question._id}`
+    `${API.getQuestion}/${question._id}`,
+    null,
+    questionMapper
   );
 
   const { user: userAuth, userDb, refreshUserDb } = useAuth();
@@ -57,6 +78,10 @@ const QuestionPanel = ({
     `${API.updateReported}/${userDb?._id}`
   );
 
+  const { putData: createQuestionVersion } = usePut<
+    CreateQuestionVersionEntryDTO,
+    QuestionLazy
+  >(`${API.createQuestionVersion}/${question._id}`);
   useEffect(() => {
     if (userDb) {
       setIsStarred(
@@ -111,6 +136,44 @@ const QuestionPanel = ({
     refreshUserDb();
   };
 
+  const toggleIsEditingQuestion = () => {
+    if (!userAuth || !userDb) {
+      setLoginPopup(true);
+      return;
+    }
+    if (isEditingQuestion) {
+      setNewVersionText('');
+    } else {
+      setNewVersionText(
+        polledQuestion ? polledQuestion?.versions.at(versionNo)!.text : ''
+      );
+      setIsEditQuestionAnonymous(false);
+    }
+    setIsEditingQuestion(!isEditingQuestion);
+  };
+
+  const handleEditQuestion = async () => {
+    if (!userDb || !userDb) {
+      setLoginPopup(true);
+      return;
+    }
+    const res = await createQuestionVersion({
+      author: userDb._id,
+      createdAt: new Date(),
+      isAnonymous: isEditQuestionAnonymous,
+      text: newVersionText
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+
+    toggleIsEditingQuestion();
+    refreshQuestion();
+    setVersionNo(-1);
+  };
+
   if (!polledQuestion) {
     return (
       <div
@@ -163,23 +226,93 @@ const QuestionPanel = ({
           <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
             {polledQuestion.number}
           </h2>
+          <IconButton onClick={() => toggleIsEditingQuestion()}>
+            {isEditingQuestion ? <EditOffOutlinedIcon /> : <EditOutlinedIcon />}
+          </IconButton>
           <IconButton onClick={() => handleIsFlaggedChanged(!isFlagged)}>
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
         </div>
-        <ReactQuill
-          style={{
-            overflow: 'hidden',
-            height: 'fit-content',
-            border: '1px solid #B0B0B0',
-            borderRadius: '5px',
-            margin: '10px',
-            minHeight: '100px'
-          }}
-          value={polledQuestion.text}
-          readOnly={true}
-          theme={'bubble'}
-        />
+        {polledQuestion.versions.length > 1 && (
+          <div style={{ padding: '0px 50px' }}>
+            <Slider
+              aria-label="Question version history"
+              defaultValue={-1}
+              marks={polledQuestion.versions.map((_version, index) => ({
+                value: -1 * index - 1,
+                label: index === 0 ? 'latest version' : ''
+              }))}
+              max={-1}
+              min={-polledQuestion.versions.length}
+              onChange={(_event, value) => setVersionNo(value as number)}
+              size="small"
+              step={1}
+              value={versionNo}
+              valueLabelDisplay="off"
+            />
+          </div>
+        )}
+        {isEditingQuestion ? (
+          <>
+            <div
+              style={{
+                overflow: 'hidden',
+                borderRadius: '5px',
+                margin: '0px 10px 10px 10px',
+                height: '200px'
+              }}
+            >
+              <Editor value={newVersionText} setValue={setNewVersionText} />
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                columnGap: '30px',
+                justifyContent: 'center'
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => handleEditQuestion()}
+                style={{
+                  width: 'fit-content',
+                  textTransform: 'none',
+                  backgroundColor: '#41709b'
+                }}
+              >
+                Submit Question
+              </Button>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isEditQuestionAnonymous} // Pass the value of isAnonymous to the checked prop
+                    onChange={(event) =>
+                      setIsEditQuestionAnonymous(event.target.checked)
+                    }
+                  />
+                }
+                label="Submit Anonymously"
+              />
+            </div>
+          </>
+        ) : (
+          <ReactQuill
+            style={{
+              overflow: 'hidden',
+              height: 'fit-content',
+              border: '1px solid #B0B0B0',
+              borderRadius: '5px',
+              margin: '10px',
+              minHeight: '100px'
+            }}
+            value={
+              polledQuestion.versions.at(versionNo)?.text || 'an error occured'
+            }
+            readOnly={true}
+            theme={'bubble'}
+          />
+        )}
         <div
           style={{
             alignItems: 'end',
@@ -204,10 +337,12 @@ const QuestionPanel = ({
             Created by
             <PersonCard
               name={
-                (polledQuestion.isAnonymous &&
-                  polledQuestion.author._id === userDb?._id &&
+                (polledQuestion.versions.at(versionNo)?.isAnonymous &&
+                  polledQuestion.versions.at(versionNo)?.author._id ===
+                    userDb?._id &&
                   'Anonymous (You)') ||
-                (!polledQuestion.isAnonymous && polledQuestion.author?.name) ||
+                (!polledQuestion.versions.at(versionNo)?.isAnonymous &&
+                  polledQuestion.versions.at(versionNo)?.author?.name) ||
                 'Anonymous'
               }
               avatarPos="left"
