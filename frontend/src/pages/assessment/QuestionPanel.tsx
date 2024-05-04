@@ -46,12 +46,7 @@ const QuestionPanel = ({
     `${API.getQuestion}/${question._id}`
   );
 
-  const {
-    user: userAuth,
-    userDb,
-    refreshUserDb,
-    userDb: currentUserDb
-  } = useAuth();
+  const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
   const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
     `${API.updateWatchList}/${userDb?._id}`
@@ -182,7 +177,7 @@ const QuestionPanel = ({
             <PersonCard
               name={
                 (polledQuestion.isAnonymous &&
-                  polledQuestion.author._id === currentUserDb?._id &&
+                  polledQuestion.author._id === userDb?._id &&
                   'Anonymous (You)') ||
                 (!polledQuestion.isAnonymous && polledQuestion.author?.name) ||
                 'Anonymous'

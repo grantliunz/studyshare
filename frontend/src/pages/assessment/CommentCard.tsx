@@ -20,7 +20,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(
     VoteDirection.NEUTRAL
   );
-  const { user, userDb, refreshUserDb, userDb: currentUserDb } = useAuth();
+  const { user, userDb, refreshUserDb } = useAuth();
   const setLoginPopup = useContext(LoginPopupContext);
   const { data: comment, refresh: refreshComment } = useGet<Comment>(
     `${API.getComment}/${commentId}`,
@@ -104,7 +104,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
         avatarSize="28px"
         name={
           (comment.isAnonymous &&
-            comment?.author === currentUserDb?._id &&
+            comment?.author === userDb?._id &&
             'Anonymous (You)') ||
           (!comment.isAnonymous && author?.name) ||
           'Anonymous'
