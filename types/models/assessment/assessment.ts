@@ -9,12 +9,14 @@ export type Comment = {
   author: ObjectId;
   rating: Rating;
   createdAt: Date;
+  isAnonymous: boolean;
 };
 
 export type CreateCommentDTO = {
   text: string;
   author: ObjectId;
   rating: Rating;
+  isAnonymous: boolean;
 };
 
 export type Rating = {

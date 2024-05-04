@@ -8,4 +8,5 @@ export interface CreateQuestionDTO {
   watchers: Types.ObjectId[];
   comments: Types.ObjectId[];
   latestContributor: Types.ObjectId;
+  isAnonymous: boolean;
 }

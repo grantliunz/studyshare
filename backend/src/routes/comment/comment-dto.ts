@@ -8,4 +8,5 @@ export interface CreateCommentDTO extends Document {
     downvotes: number;
   };
   createdAt: Date;
+  isAnonymous: boolean;
 }

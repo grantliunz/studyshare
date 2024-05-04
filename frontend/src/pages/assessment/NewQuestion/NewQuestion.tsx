@@ -25,7 +25,7 @@ export default function NewQuestion({
   open,
   handleClose,
   parentNumber,
-  onAddQuestion = () => { }
+  onAddQuestion = () => {}
 }: newQuestionProps) {
   const { assessmentId } = useParams();
   const { user: currentUser, userDb, refreshUserDb } = useAuth();
@@ -33,6 +33,7 @@ export default function NewQuestion({
   const [questionNumber, setQuestionNumber] = useState<string>('');
   const [createQuestionError, setCreateQuestionError] = useState<string>(' ');
   const setLoginPopup = useContext(LoginPopupContext);
+  const [anonymousQuestion, setAnonymousQuestion] = useState<boolean>(false);
 
   const { postData: createQuestion } = usePost<CreateQuestionDTO, Question>(
     `${API.createQuestion}/${assessmentId}`
@@ -60,7 +61,8 @@ export default function NewQuestion({
       answers: [],
       watchers: [],
       comments: [],
-      latestContributor: userDb._id
+      latestContributor: userDb._id,
+      isAnonymous: anonymousQuestion
     };
 
     const res = await createQuestion(newQuestion);
@@ -165,17 +167,31 @@ export default function NewQuestion({
         >
           <Editor value={questionContent} setValue={setQuestionContent} />
         </div>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          style={{
-            width: 'fit-content',
-            textTransform: 'none',
-            backgroundColor: '#41709b'
-          }}
-        >
-          Create Question
-        </Button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            style={{
+              textTransform: 'none',
+              backgroundColor: '#41709b',
+              marginRight: '8px' // Add some margin to separate the button and checkbox
+            }}
+          >
+            Create Question
+          </Button>
+          <div>
+            <input
+              type="checkbox"
+              id="anonymousCheckbox"
+              onChange={(event) => {
+                setAnonymousQuestion(event.target.checked);
+              }}
+            />
+            <label htmlFor="anonymousCheckbox" style={{ marginLeft: '4px' }}>
+              Send Anonymously
+            </label>
+          </div>
+        </div>
       </Box>
     </Modal>
   );

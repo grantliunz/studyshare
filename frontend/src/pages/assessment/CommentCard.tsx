@@ -102,7 +102,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
       <PersonCard
         avatarPos="top"
         avatarSize="28px"
-        name={author?.name || 'Anonymous'}
+        name={(!comment.isAnonymous && author?.name) || 'Anonymous'}
         style={{ width: '80px' }}
       />
       <div
