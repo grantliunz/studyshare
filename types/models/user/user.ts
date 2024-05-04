@@ -16,6 +16,7 @@ export type UserDb = {
   questions: Question[];
   answers: Answer[];
   watchList: WatchlistEntry[];
+  reported: Question[];
   upvotedAnswers: Answer[];
   downvotedAnswers: Answer[];
   upvotedComments: Comment[];
@@ -32,6 +33,7 @@ export type UserDbLazy = {
   questions: ObjectId[];
   answers: ObjectId[];
   watchList: WatchlistEntry[];
+  reported: ObjectId[];
   upvotedAnswers: ObjectId[];
   downvotedAnswers: ObjectId[];
   upvotedComments: ObjectId[];
@@ -48,6 +50,7 @@ export type UserDTO = {
   questions: ObjectId[];
   answers: ObjectId[];
   watchList: WatchlistEntry[];
+  reported: ObjectId[];
   upvotedAnswers: ObjectId[];
   downvotedAnswers: ObjectId[];
   upvotedComments: ObjectId[];
@@ -68,4 +71,14 @@ export type UpdateWatchListDTO = {
 export enum UpdateWatchListAction {
   WATCH,
   UNWATCH
+}
+
+export type UpdateReportedDTO = {
+  questionId: ObjectId;
+  action: UpdateReportedAction;
+};
+
+export enum UpdateReportedAction {
+  REPORT,
+  UNREPORT
 }

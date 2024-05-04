@@ -6,6 +6,7 @@ export interface CreateQuestionDTO {
   author: Types.ObjectId;
   answers: Types.ObjectId[];
   watchers: Types.ObjectId[];
+  reporters: Types.ObjectId[];
   comments: Types.ObjectId[];
   latestContributor: Types.ObjectId;
   isAnonymous: boolean;

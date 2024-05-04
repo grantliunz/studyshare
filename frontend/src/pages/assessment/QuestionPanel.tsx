@@ -13,6 +13,8 @@ import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
 import {
+  UpdateReportedAction,
+  UpdateReportedDTO,
   UpdateWatchListAction,
   UpdateWatchListDTO
 } from '@shared/types/models/user/user';
@@ -51,6 +53,9 @@ const QuestionPanel = ({
   const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
     `${API.updateWatchList}/${userDb?._id}`
   );
+  const { putData: updateReported } = usePut<UpdateReportedDTO, null>(
+    `${API.updateReported}/${userDb?._id}`
+  );
 
   useEffect(() => {
     if (userDb) {
@@ -58,6 +63,7 @@ const QuestionPanel = ({
         userDb.watchList.find((entry) => entry.questionId === question._id) !==
           undefined
       );
+      setIsFlagged(userDb.reported.includes(question._id));
     }
   }, [userDb]);
 
@@ -73,6 +79,28 @@ const QuestionPanel = ({
       action: newValue
         ? UpdateWatchListAction.WATCH
         : UpdateWatchListAction.UNWATCH
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+
+    refreshUserDb();
+  };
+
+  const handleIsFlaggedChanged = async (newValue: boolean) => {
+    if (!userAuth || !userDb) {
+      setLoginPopup(true);
+      return;
+    }
+    setIsFlagged(newValue);
+
+    const res = await updateReported({
+      questionId: question._id,
+      action: newValue
+        ? UpdateReportedAction.REPORT
+        : UpdateReportedAction.UNREPORT
     });
 
     if (res instanceof AxiosError) {
@@ -135,7 +163,7 @@ const QuestionPanel = ({
           <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
             {polledQuestion.number}
           </h2>
-          <IconButton onClick={() => setIsFlagged(!isFlagged)}>
+          <IconButton onClick={() => handleIsFlaggedChanged(!isFlagged)}>
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
         </div>
