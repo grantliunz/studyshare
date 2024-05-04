@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -15,7 +15,7 @@ type UpDownVoteProps = {
     newVoteDirection: VoteDirection
   ) => any;
   iconSize?: string;
-  value?: VoteDirection;
+  voteState: VoteDirection;
 };
 
 const UpDownVote = ({
@@ -23,29 +23,17 @@ const UpDownVote = ({
   style,
   onChange = () => {},
   iconSize = '1.5rem',
-  value = VoteDirection.NEUTRAL
+  voteState
 }: UpDownVoteProps) => {
-  const [voteState, setVoteState] = useState<VoteDirection>(value);
-  const [count, setCount] = useState<number>(rating.upvotes - rating.downvotes);
   const [isUpvoteButtonDisabled, setIsUpvoteButtonDisabled] =
     useState<boolean>(false);
   const [isDownvoteButtonDisabled, setIsDownvoteButtonDisabled] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    setVoteState(value);
-  }, [value]);
-
-  useEffect(() => {
-    setCount(rating.upvotes - rating.downvotes);
-  }, [rating]);
-
   const handleVote = (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
-    setCount(count - oldVoteDirection + newVoteDirection);
-    setVoteState(newVoteDirection);
     onChange(oldVoteDirection, newVoteDirection);
   };
 
@@ -72,7 +60,7 @@ const UpDownVote = ({
           <ThumbUpOutlinedIcon style={{ fontSize: iconSize }} />
         )}
       </IconButton>
-      {count}
+      {rating.upvotes - rating.downvotes}
       <IconButton
         disabled={isDownvoteButtonDisabled}
         onClick={() => {

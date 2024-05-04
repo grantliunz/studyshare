@@ -5,15 +5,41 @@ import { UserDisplayDTO } from '@shared/types/models/user/user';
 import API from '../../util/api';
 import { Comment } from '@shared/types/models/assessment/assessment';
 import { VoteDirection } from '@shared/types/enums/VoteDirection';
+import { useContext, useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/UserContext';
+import { LoginPopupContext } from './AssessmentPage';
 
 type CommentCardProps = {
   comment: Comment;
 };
 const CommentCard = ({ comment }: CommentCardProps) => {
+  const [voteState, setVoteState] = useState<VoteDirection>(
+    VoteDirection.NEUTRAL
+  );
+  const { user, userDb } = useAuth();
+  const setLoginPopup = useContext(LoginPopupContext);
+
+  useEffect(() => {
+    if (userDb) {
+      if (userDb.upvotedComments.includes(comment._id)) {
+        setVoteState(VoteDirection.UP);
+      } else if (userDb.downvotedComments.includes(comment._id)) {
+        setVoteState(VoteDirection.DOWN);
+      } else {
+        setVoteState(VoteDirection.NEUTRAL);
+      }
+    }
+  }, [userDb]);
+
   const handleVoteChange = (
     oldVoteDirection: VoteDirection,
     newVoteDirection: VoteDirection
   ) => {
+    if (!user || !userDb) {
+      setLoginPopup(true);
+      return;
+    }
+    setVoteState(newVoteDirection);
     oldVoteDirection === VoteDirection.UP && comment.rating.upvotes--;
     oldVoteDirection === VoteDirection.DOWN && comment.rating.downvotes--;
     newVoteDirection === VoteDirection.UP && comment.rating.upvotes++;
@@ -40,6 +66,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
         style={{ display: 'flex', flexDirection: 'column' }}
         onChange={handleVoteChange}
         iconSize="1.1rem"
+        voteState={voteState}
       />
       <PersonCard
         avatarPos="top"

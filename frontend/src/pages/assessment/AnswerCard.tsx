@@ -73,6 +73,14 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
       return;
     }
     if (polledAnswer) {
+      oldVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes--;
+      oldVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes--;
+      newVoteDirection === VoteDirection.UP && polledAnswer.rating.upvotes++;
+      newVoteDirection === VoteDirection.DOWN &&
+        polledAnswer.rating.downvotes++;
+
+      setVoteDirection(newVoteDirection);
       const res = await voteAnswer({
         oldVoteDirection,
         newVoteDirection,
@@ -138,7 +146,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             width: '30px'
           }}
           onChange={handleVoteChange}
-          value={voteDirection}
+          voteState={voteDirection}
         />
         <div
           style={{
