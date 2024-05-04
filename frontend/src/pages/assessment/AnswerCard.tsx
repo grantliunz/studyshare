@@ -35,7 +35,12 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
     `${API.createComment}/${answer._id}`
   );
 
-  const { user: currentUser, userDb, refreshUserDb } = useAuth();
+  const {
+    user: currentUser,
+    userDb,
+    refreshUserDb,
+    userDb: currentUserDb
+  } = useAuth();
 
   const setLoginPopup = useContext(LoginPopupContext);
 
@@ -164,7 +169,13 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           }}
         >
           <PersonCard
-            name={(!answer.isAnonymous && author?.name) || 'Anonymous'}
+            name={
+              (answer.isAnonymous &&
+                answer.author === currentUserDb?._id &&
+                'Anonymous (You)') ||
+              (!answer.isAnonymous && author?.name) ||
+              'Anonymous'
+            }
             avatarSize="32px"
             style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />
