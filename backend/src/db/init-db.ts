@@ -151,6 +151,7 @@ const assessments = [
 
 const questions = [
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'a', 'i'],
     versions: [
       {
@@ -166,12 +167,23 @@ const questions = [
     latestContributor: users[0]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'a', 'ii'],
     versions: [
       {
-        text: '<p>How long did Penqor spend at green place?</p>',
+        text: '<p>How long did</p>',
         author: users[0]._id,
-        createdAt: Date.now()
+        createdAt: new Date()
+      },
+      {
+        text: '<p>How long did Penqor ?</p>',
+        author: users[1]._id,
+        createdAt: new Date()
+      },
+      {
+        text: '<p>How long did Penqor spend at green place?</p>',
+        author: users[2]._id,
+        createdAt: new Date()
       }
     ],
     answers: [],
@@ -181,6 +193,7 @@ const questions = [
     latestContributor: users[1]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'a', 'iii'],
     versions: [
       {
@@ -196,6 +209,7 @@ const questions = [
     latestContributor: users[2]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'b', 'i'],
     versions: [
       {
@@ -211,6 +225,7 @@ const questions = [
     latestContributor: users[0]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'b', 'ii'],
     versions: [
       {
@@ -226,6 +241,7 @@ const questions = [
     latestContributor: users[1]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['1', 'b', 'iii'],
     versions: [
       {
@@ -241,6 +257,7 @@ const questions = [
     latestContributor: users[2]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['2', 'a'],
     versions: [
       {
@@ -255,6 +272,7 @@ const questions = [
     comments: []
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['2', 'b'],
     versions: [
       {
@@ -270,6 +288,7 @@ const questions = [
     latestContributor: users[1]._id
   }),
   new Question({
+    assessment: assessments[0]._id,
     number: ['3'],
     versions: [
       {
@@ -320,7 +339,6 @@ async function run() {
     }
 
     for (const question of questions) {
-      question.assessment = assessments[0]._id;
       await question.save();
       assessments[0].questions.push(question._id);
       await assessments[0].save();

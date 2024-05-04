@@ -1,6 +1,6 @@
-import { Button, CircularProgress, IconButton } from '@mui/material';
+import { Button, CircularProgress, IconButton, Slider } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, version } from 'react';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
@@ -43,6 +43,7 @@ const QuestionPanel = ({
   const [isStarred, setIsStarred] = useState<boolean>(false);
   const [isFlagged, setIsFlagged] = useState<boolean>(false);
   const setLoginPopup = useContext(LoginPopupContext);
+  const [versionNo, setVersionNo] = useState<number>(-1);
 
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
     `${API.getQuestion}/${question._id}`,
@@ -169,6 +170,24 @@ const QuestionPanel = ({
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
         </div>
+        {polledQuestion.versions.length > 1 && (
+          <div style={{ padding: '0px 50px' }}>
+            <Slider
+              aria-label="Question version history"
+              defaultValue={-1}
+              marks={polledQuestion.versions.map((version, index) => ({
+                value: -1 * index - 1,
+                label: index === 0 ? 'latest version' : ''
+              }))}
+              max={-1}
+              min={-question.versions.length}
+              onChange={(event, value) => setVersionNo(value as number)}
+              size="small"
+              step={1}
+              valueLabelDisplay="off"
+            />
+          </div>
+        )}
         <ReactQuill
           style={{
             overflow: 'hidden',
@@ -178,7 +197,9 @@ const QuestionPanel = ({
             margin: '10px',
             minHeight: '100px'
           }}
-          value={polledQuestion.versions.at(-1)?.text || 'an error occured'}
+          value={
+            polledQuestion.versions.at(versionNo)?.text || 'an error occured'
+          }
           readOnly={true}
           theme={'bubble'}
         />
@@ -206,11 +227,12 @@ const QuestionPanel = ({
             Created by
             <PersonCard
               name={
-                (polledQuestion.versions.at(-1)?.isAnonymous &&
-                  polledQuestion.versions.at(-1)?.author._id === userDb?._id &&
+                (polledQuestion.versions.at(versionNo)?.isAnonymous &&
+                  polledQuestion.versions.at(versionNo)?.author._id ===
+                    userDb?._id &&
                   'Anonymous (You)') ||
-                (!polledQuestion.versions.at(-1)?.isAnonymous &&
-                  polledQuestion.versions.at(-1)?.author?.name) ||
+                (!polledQuestion.versions.at(versionNo)?.isAnonymous &&
+                  polledQuestion.versions.at(versionNo)?.author?.name) ||
                 'Anonymous'
               }
               avatarPos="left"
