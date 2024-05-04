@@ -4,7 +4,7 @@ import Assessment from '../assessment/assessment-model';
 import Question from './question-model';
 import { CreateQuestionDTO } from './question-dto';
 import User from '../user/user-model';
-import { version } from 'os';
+import { CreateQuestionVersionEntryDTO } from '@shared/types/models/question/question';
 
 // Controller function to create a new question
 export const createQuestion = async (
@@ -130,8 +130,6 @@ export const getQuestion = async (
       return res.status(404).json({ error: 'Question not found' });
     }
 
-    console.log(question);
-
     res.status(200).json(question); // respond with the question
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
@@ -167,6 +165,46 @@ export const updateQuestion = async (
     res.status(200).json(updatedQuestion); // respond with the updated question
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+};
+
+// Controller function to add a new version
+export const newVersion = async (
+  req: Request<{ id: string }, {}, CreateQuestionVersionEntryDTO>,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // delete the question by its ID
+    const question = await Question.findById(req.params.id);
+
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+
+    const { text, author, createdAt, isAnonymous } = req.body;
+    const user = await User.findById(req.body.author);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Author not found' });
+    }
+
+    question.versions.push({
+      text,
+      createdAt,
+      isAnonymous,
+      author: user?._id
+    });
+
+    const updatedQuestion = await question.save();
+
+    return res.status(200).json(updatedQuestion); // respond with the updated question
+  } catch (error) {
+    return res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
 
