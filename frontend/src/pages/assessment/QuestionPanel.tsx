@@ -147,6 +147,7 @@ const QuestionPanel = ({
       setNewVersionText(
         polledQuestion ? polledQuestion?.versions.at(versionNo)!.text : ''
       );
+      setIsEditQuestionAnonymous(false);
     }
     setIsEditingQuestion(!isEditingQuestion);
   };
