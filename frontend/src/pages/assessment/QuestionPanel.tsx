@@ -176,7 +176,10 @@ const QuestionPanel = ({
             Created by
             <PersonCard
               name={
-                (!polledQuestion.isAnonymous && polledQuestion.author.name) ||
+                (polledQuestion.isAnonymous &&
+                  polledQuestion.author._id === userDb?._id &&
+                  'Anonymous (You)') ||
+                (!polledQuestion.isAnonymous && polledQuestion.author?.name) ||
                 'Anonymous'
               }
               avatarPos="left"

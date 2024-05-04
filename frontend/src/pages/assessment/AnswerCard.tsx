@@ -164,7 +164,13 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
           }}
         >
           <PersonCard
-            name={(!answer.isAnonymous && author?.name) || 'Anonymous'}
+            name={
+              (answer.isAnonymous &&
+                answer.author === userDb?._id &&
+                'Anonymous (You)') ||
+              (!answer.isAnonymous && author?.name) ||
+              'Anonymous'
+            }
             avatarSize="32px"
             style={{ alignItems: 'center', fontSize: '0.8rem' }}
           />
