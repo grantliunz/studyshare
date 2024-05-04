@@ -11,6 +11,7 @@ export interface CreateUserDTO extends Document {
   questions: CreateQuestionDTO[] | Types.ObjectId[];
   answers: CreateAnswerDTO[] | Types.ObjectId[];
   watchList: CreateQuestionDTO[] | Types.ObjectId[];
+  reported: CreateQuestionDTO[] | Types.ObjectId[];
   upvotedAnswers: CreateAnswerDTO[] | Types.ObjectId[];
   downvotedAnswers: CreateAnswerDTO[] | Types.ObjectId[];
   upvotedComments: CreateCommentDTO[] | Types.ObjectId[];
@@ -23,4 +24,5 @@ export interface UpdateUserDTO extends Document {
   questions?: Types.ObjectId[] | CreateQuestionDTO[];
   answers?: Types.ObjectId[] | CreateAnswerDTO[];
   watchList?: WatchlistEntry[];
+  reported?: Types.ObjectId[] | CreateQuestionDTO[];
 }

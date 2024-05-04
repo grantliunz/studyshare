@@ -34,6 +34,7 @@ const users = [
     questions: [],
     answers: [],
     watchList: [],
+    reported: [],
     upvotedAnswers: [],
     downvotedAnswers: [],
     upvotedComments: [],
@@ -46,6 +47,7 @@ const users = [
     questions: [],
     answers: [],
     watchList: [],
+    reported: [],
     upvotedAnswers: [],
     downvotedAnswers: [],
     upvotedComments: [],
@@ -58,6 +60,7 @@ const users = [
     questions: [],
     answers: [],
     watchList: [],
+    reported: [],
     upvotedAnswers: [],
     downvotedAnswers: [],
     upvotedComments: [],
@@ -152,6 +155,7 @@ const questions = [
     text: '<p>How can I be like Penqor</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[0]._id
   }),
@@ -160,6 +164,7 @@ const questions = [
     text: '<p>How long did Penqor spend at green place?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[1]._id
   }),
@@ -168,6 +173,7 @@ const questions = [
     text: '<p>What is green place?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[2]._id
   }),
@@ -176,6 +182,7 @@ const questions = [
     text: '<p>Friend help?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[0]._id
   }),
@@ -184,6 +191,7 @@ const questions = [
     text: '<p>What sound does a monkey make?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[1]._id
   }),
@@ -192,6 +200,7 @@ const questions = [
     text: '<p>How much can a gorilla deadlift?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[2]._id
   }),
@@ -200,6 +209,7 @@ const questions = [
     text: '<p>How much did Penqor deadlift last week?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: []
   }),
   new Question({
@@ -207,6 +217,7 @@ const questions = [
     text: '<p>How much can you deadlift?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[1]._id
   }),
@@ -215,6 +226,7 @@ const questions = [
     text: '<p>Where is ardo?</p>',
     answers: [],
     watchers: [],
+    reporters: [],
     comments: [],
     latestContributor: users[1]._id
   })

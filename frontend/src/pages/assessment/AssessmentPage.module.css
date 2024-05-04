@@ -18,3 +18,11 @@
   width: 3px;
   cursor: col-resize;
 }
+
+.reportedQuestionNumber {
+  text-align: start;
+  border: 1px solid #8e8e8e;
+  border-radius: 5px;
+  padding: 2px 5px;
+  cursor: pointer;
+}

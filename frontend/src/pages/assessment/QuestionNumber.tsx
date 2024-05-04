@@ -122,7 +122,8 @@ const QuestionNumber = ({
               display: hideText ? 'none' : 'inline'
             }}
           >
-            {questionNode.question?.text.replace(/<\/?[^>]+(>|$)/g, '').trim()}
+            {questionNode.question?.text &&
+              questionNode.question?.text.replace(/<\/?[^>]+(>|$)/g, '').trim()}
           </span>
         </Button>
         <IconButton

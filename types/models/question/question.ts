@@ -10,6 +10,7 @@ export type Question = {
   author: UserDb;
   answers: Answer[];
   watchers: ObjectId[]; // might need to change to a user object
+  reporters: ObjectId[];
   comments: Comment[];
   latestContributor: ObjectId;
   isAnonymous: boolean;
@@ -21,6 +22,7 @@ export type CreateQuestionDTO = {
   author: ObjectId;
   answers: ObjectId[];
   watchers: ObjectId[]; // might need to change to a user object
+  reporters: ObjectId[];
   comments: ObjectId[];
   isAnonymous: boolean;
 };

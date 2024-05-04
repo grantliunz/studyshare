@@ -11,6 +11,7 @@ export interface IUser extends Document {
     questionId: Types.ObjectId;
     lastViewed: Date;
   }[];
+  reported: Types.ObjectId[];
   upvotedAnswers: Types.ObjectId[];
   downvotedAnswers: Types.ObjectId[];
   upvotedComments: Types.ObjectId[];
@@ -51,6 +52,10 @@ const userSchema: Schema<IUser> = new Schema(
         }
       }
     ],
+    reported: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Question'
+    },
     upvotedAnswers: {
       type: [Schema.Types.ObjectId],
       ref: 'Answer'
