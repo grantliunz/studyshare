@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Fade, Modal } from '@mui/material';
+import { useEffect } from 'react';
+import { Button, Modal } from '@mui/material';
 import styles from './NotificationsWindow.module.css';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 import NotificationCard from './NotificationCard/NotificationCard';

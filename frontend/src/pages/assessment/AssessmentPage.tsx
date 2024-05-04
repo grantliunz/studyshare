@@ -26,9 +26,7 @@ export type QuestionNode = {
   question?: QuestionLazy;
 };
 
-
-
-export const LoginPopupContext = createContext((bool: boolean) => { });
+export const LoginPopupContext = createContext((bool: boolean) => {});
 // Helper function to determine the type of a value (number, letter, or roman numeral)
 const getValueType = (value: any) => {
   if (!Number.isNaN(Number(value))) {
@@ -85,8 +83,8 @@ const buildQuestionsTree = (questions: QuestionLazy[]) => {
       const currHierarchy = hierarchy.slice(0, i + 1);
       const node = currentRoot.subquestions
         ? currentRoot.subquestions.find((questionNode) =>
-          arrayEquals(questionNode.number, currHierarchy)
-        )
+            arrayEquals(questionNode.number, currHierarchy)
+          )
         : undefined;
       if (!node) {
         const newNode =
@@ -150,6 +148,7 @@ const AssessmentPage = () => {
   const [orderedQuestionsArray, setOrderedQuestionsArray] = useState<
     QuestionLazy[]
   >([]);
+  const [sidebarWidth, setSidebarWidth] = useState(200);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
@@ -185,6 +184,22 @@ const AssessmentPage = () => {
     return <CircularProgress style={{ margin: 'auto' }} />;
   }
 
+  const handleResize = (e: MouseEvent) => {
+    e.preventDefault();
+    if (e.clientX > 120 && e.clientX < 800) {
+      setSidebarWidth(e.clientX);
+    }
+  };
+
+  const stopResize = () => {
+    window.removeEventListener('mousemove', handleResize);
+  };
+
+  const startResize = () => {
+    window.addEventListener('mousemove', handleResize);
+    window.addEventListener('mouseup', stopResize);
+  };
+
   return (
     <LoginPopupContext.Provider value={setShowLoginPopup}>
       <div className={styles.container}>
@@ -192,7 +207,13 @@ const AssessmentPage = () => {
           <div>Error retrieving assessment details</div>
         ) : (
           <>
-            <div className={styles.questionsTabContainer}>
+            <div
+              className={styles.questionsTabContainer}
+              style={{
+                minWidth: sidebarWidth,
+                maxWidth: sidebarWidth
+              }}
+            >
               <h3 style={{ margin: '0px' }}>Questions</h3>
               {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
                 rootNode.subquestions.map((question) => (
@@ -216,16 +237,21 @@ const AssessmentPage = () => {
                 </p>
               )}
               <IconButton
-                size="small"
+                size="medium"
                 style={{
                   alignSelf: 'center',
                   marginTop: '8px'
                 }}
                 onClick={() => handleAddQuestion([])}
               >
-                <AddIcon fontSize="small" />
+                <AddIcon fontSize="medium" />
               </IconButton>
             </div>
+            <div
+              className={styles.resizeBar}
+              onMouseDown={startResize}
+              onMouseUp={stopResize}
+            />
             {currentQuestion ? (
               orderedQuestionsArray.map((question, index) => (
                 <QuestionPanel
@@ -266,10 +292,7 @@ const AssessmentPage = () => {
           </>
         )}
       </div>
-      <LoginPopup
-        open={showLoginPopup}
-        setOpen={setShowLoginPopup}
-      />
+      <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
     </LoginPopupContext.Provider>
   );
 };

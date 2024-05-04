@@ -4,6 +4,9 @@ import Question from '../question/question-model';
 import { CreateAnswerDTO } from './answer-dto';
 import { validationResult } from 'express-validator';
 import User from '../user/user-model';
+import { VoteDirection } from '@shared/types/enums/VoteDirection';
+import { Types } from 'mongoose';
+import { MakeVoteDTO } from '@shared/types/models/answer/answer';
 
 // Controller function to create a new answer
 export const createAnswer = async (
@@ -133,6 +136,70 @@ export const updateAnswer = async (
     const updatedAnswer = await answer.save();
 
     res.status(200).json(updatedAnswer); // respond with the updated answer
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const voteAnswer = async (
+  req: Request<{ answerId: string }, {}, MakeVoteDTO>,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Get the answer by its ID
+    const answer = await Answer.findById(req.params.answerId);
+    if (!answer) {
+      return res.status(404).json({ error: 'Answer not found' });
+    }
+
+    const { userId, oldVoteDirection, newVoteDirection } = req.body;
+
+    const user = await User.findById(userId);
+
+    // get the user by ID
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // update the question and user
+    if (oldVoteDirection === VoteDirection.UP) {
+      user.upvotedAnswers = user.upvotedAnswers.filter((id) => {
+        if (id.equals(answer._id)) {
+          answer.rating.upvotes--;
+          return false;
+        }
+        return true;
+      });
+    } else if (oldVoteDirection === VoteDirection.DOWN) {
+      user.downvotedAnswers = user.downvotedAnswers.filter((id) => {
+        if (id.equals(answer._id)) {
+          answer.rating.downvotes--;
+          return false;
+        }
+        return true;
+      });
+    }
+    if (newVoteDirection === VoteDirection.UP) {
+      if (!user.upvotedAnswers.find((id) => id.equals(answer._id))) {
+        user.upvotedAnswers.push(answer._id);
+        answer.rating.upvotes++;
+      }
+    } else if (newVoteDirection === VoteDirection.DOWN) {
+      if (!user.downvotedAnswers.find((id) => id.equals(answer._id))) {
+        user.downvotedAnswers.push(answer._id);
+        answer.rating.downvotes++;
+      }
+    }
+
+    await user.save();
+    const updatedAnswer = await answer.save();
+
+    res.status(201).json(updatedAnswer);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }

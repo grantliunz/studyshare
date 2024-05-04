@@ -1,3 +1,4 @@
+import { VoteDirection } from '../../enums/VoteDirection';
 import { Comment, ObjectId, Rating } from '../assessment/assessment';
 
 export type Answer = {
@@ -16,4 +17,10 @@ export type CreateAnswerDTO = {
   rating: Rating;
   comments: ObjectId[];
   isAnonymous?: boolean;
+};
+
+export type MakeVoteDTO = {
+  userId: ObjectId;
+  oldVoteDirection: VoteDirection;
+  newVoteDirection: VoteDirection;
 };

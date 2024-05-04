@@ -3,6 +3,7 @@ import { Question } from '../question/question';
 export type ObjectId = string;
 
 export type Comment = {
+  _id: ObjectId;
   text: string;
   author: ObjectId;
   rating: Rating;

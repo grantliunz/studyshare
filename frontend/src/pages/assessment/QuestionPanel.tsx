@@ -12,7 +12,10 @@ import NewAnswer from './NewAnswer/NewAnswer';
 import ReactQuill from 'react-quill';
 import useGet from '../../hooks/useGet';
 import API from '../../util/api';
-import { UserDTO } from '@shared/types/models/user/user';
+import {
+  UpdateWatchListAction,
+  UpdateWatchListDTO
+} from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
 import { useAuth } from '../../contexts/UserContext';
@@ -45,12 +48,8 @@ const QuestionPanel = ({
 
   const { user: userAuth, userDb, refreshUserDb } = useAuth();
 
-  const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
-    `${API.updateUser}/${userDb?._id}`
-  );
-
-  const { putData: putQuestion } = usePut<Partial<Question>, Question>(
-    `${API.updateQuestion}/${question._id}`
+  const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
+    `${API.updateWatchList}/${userDb?._id}`
   );
 
   useEffect(() => {
@@ -68,24 +67,12 @@ const QuestionPanel = ({
       return;
     }
     setIsStarred(newValue);
-    const questionRes = await putQuestion({
-      watchers: newValue
-        ? [...question.watchers, userDb._id]
-        : question.watchers.filter((user) => user !== userDb._id)
-    });
-    if (questionRes instanceof AxiosError) {
-      console.log((questionRes.response?.data as { error: string }).error);
-      return;
-    }
-    const updatedWatchList = newValue
-      ? [
-          ...userDb.watchList,
-          { questionId: question._id, lastViewed: new Date() }
-        ]
-      : userDb.watchList.filter((entry) => entry.questionId !== question._id);
 
-    const res = await putUser({
-      watchList: updatedWatchList
+    const res = await updateWatchList({
+      questionId: question._id,
+      action: newValue
+        ? UpdateWatchListAction.WATCH
+        : UpdateWatchListAction.UNWATCH
     });
 
     if (res instanceof AxiosError) {
@@ -112,88 +99,90 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div style={{ paddingTop: '10px', display: 'flex' }}>
-        {prevQuestion && (
-          <Button
-            onClick={() => setQuestion(prevQuestion)}
-            startIcon={<ArrowBackRoundedIcon />}
-            style={{ textTransform: 'none', marginRight: 'auto' }}
-          >
-            {prevQuestion?.number.join('')}
-          </Button>
-        )}
-        {nextQuestion && (
-          <Button
-            onClick={() => setQuestion(nextQuestion)}
-            endIcon={<ArrowForwardRoundedIcon />}
-            style={{ textTransform: 'none', marginLeft: 'auto' }}
-          >
-            {nextQuestion.number.join('')}
-          </Button>
-        )}
-      </div>
-      <div
-        // header
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
-          {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
-        </IconButton>
-        <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
-          {polledQuestion.number}
-        </h2>
-        <IconButton onClick={() => setIsFlagged(!isFlagged)}>
-          {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
-        </IconButton>
-      </div>
-      <ReactQuill
-        style={{
-          overflow: 'hidden',
-          height: 'fit-content',
-          border: '1px solid #B0B0B0',
-          borderRadius: '5px',
-          margin: '10px',
-          minHeight: '100px'
-        }}
-        value={polledQuestion.text}
-        readOnly={true}
-        theme={'bubble'}
-      />
-      <div
-        style={{
-          alignItems: 'end',
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '20px',
-          padding: '0px 20px'
-        }}
-      >
-        {polledQuestion.answers.length === 0
-          ? 'No'
-          : polledQuestion.answers.length}{' '}
-        Answer
-        {polledQuestion.answers.length === 1 ? '' : 's'}
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ paddingTop: '10px', display: 'flex' }}>
+          {prevQuestion && (
+            <Button
+              onClick={() => setQuestion(prevQuestion)}
+              startIcon={<ArrowBackRoundedIcon />}
+              style={{ textTransform: 'none', marginRight: 'auto' }}
+            >
+              {prevQuestion?.number.join('')}
+            </Button>
+          )}
+          {nextQuestion && (
+            <Button
+              onClick={() => setQuestion(nextQuestion)}
+              endIcon={<ArrowForwardRoundedIcon />}
+              style={{ textTransform: 'none', marginLeft: 'auto' }}
+            >
+              {nextQuestion.number.join('')}
+            </Button>
+          )}
+        </div>
         <div
+          // header
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start'
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}
         >
-          Created by
-          <PersonCard
-            name={
-              (!polledQuestion.isAnonymous && polledQuestion.author.name) ||
-              'Anonymous'
-            }
-            avatarPos="left"
-            style={{ columnGap: '8px' }}
-          />
+          <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
+            {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
+          </IconButton>
+          <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
+            {polledQuestion.number}
+          </h2>
+          <IconButton onClick={() => setIsFlagged(!isFlagged)}>
+            {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
+          </IconButton>
+        </div>
+        <ReactQuill
+          style={{
+            overflow: 'hidden',
+            height: 'fit-content',
+            border: '1px solid #B0B0B0',
+            borderRadius: '5px',
+            margin: '10px',
+            minHeight: '100px'
+          }}
+          value={polledQuestion.text}
+          readOnly={true}
+          theme={'bubble'}
+        />
+        <div
+          style={{
+            alignItems: 'end',
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '20px',
+            padding: '0px 20px'
+          }}
+        >
+          {polledQuestion.answers.length === 0
+            ? 'No'
+            : polledQuestion.answers.length}{' '}
+          Answer
+          {polledQuestion.answers.length === 1 ? '' : 's'}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start'
+            }}
+          >
+            Created by
+            <PersonCard
+              name={
+                (!polledQuestion.isAnonymous && polledQuestion.author.name) ||
+                'Anonymous'
+              }
+              avatarPos="left"
+              style={{ columnGap: '8px' }}
+            />
+          </div>
         </div>
       </div>
       <div
@@ -204,9 +193,16 @@ const QuestionPanel = ({
           alignItems: 'center'
         }}
       >
-        {polledQuestion.answers.map((answer, index) => (
-          <AnswerCard key={index} answer={answer} />
-        ))}
+        {polledQuestion.answers
+          .sort(
+            (a, b) =>
+              b.rating.upvotes -
+              b.rating.downvotes -
+              (a.rating.upvotes - a.rating.downvotes)
+          )
+          .map((answer) => (
+            <AnswerCard key={answer._id} answer={answer} />
+          ))}
       </div>
       <div
         style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
