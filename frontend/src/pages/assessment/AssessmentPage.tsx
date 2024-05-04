@@ -268,16 +268,14 @@ const AssessmentPage = () => {
                   id="panel1-header"
                   style={{
                     backgroundColor: 'rgba(0,0,0,0)',
-                    border: 'none'
+                    border: 'none',
+                    opacity: 0.5
                   }}
                   elevation={0}
                   sx={{ '&:before': { height: '0px' } }}
                   disableGutters
                 >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    style={{ opacity: '0.5' }}
-                  >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Hidden Questions
                   </AccordionSummary>
                   <AccordionDetails
