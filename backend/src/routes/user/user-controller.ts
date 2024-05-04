@@ -5,6 +5,10 @@ import { CreateUserDTO, UpdateUserDTO } from './user-dto';
 import Question from '../question/question-model';
 import mongoose from 'mongoose';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
+import {
+  UpdateWatchListAction,
+  UpdateWatchListDTO
+} from '@shared/types/models/user/user';
 
 // Controller function to create a new user
 export const createUser = async (
@@ -285,6 +289,11 @@ export const deleteUser = async (
   res: Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     // Get the user by its ID
     const user = await User.findById(req.params.userId);
 
@@ -294,6 +303,63 @@ export const deleteUser = async (
 
     // delete the user from the database
     await User.findByIdAndDelete(req.params.userId);
+
+    res.status(204).end(); // respond with no content
+  } catch (error) {
+    res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+};
+
+// controller to update watchlist
+export const updateWatchList = async (
+  req: Request<{ userId: string }, {}, UpdateWatchListDTO>,
+  res: Response
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { questionId, action } = req.body;
+
+    // Get the user by its ID
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const question = await Question.findById(questionId);
+
+    if (!question) {
+      return res.status(404).json({ errors: 'Question not found' });
+    }
+
+    if (action === UpdateWatchListAction.WATCH) {
+      if (
+        !user.watchList.find((entry) => entry.questionId.equals(questionId))
+      ) {
+        user.watchList.push({
+          questionId: question._id,
+          lastViewed: new Date()
+        });
+      }
+      if (!question.watchers.find((id) => id.equals(user._id))) {
+        question.watchers.push(user._id);
+      }
+    } else if (action === UpdateWatchListAction.UNWATCH) {
+      user.watchList = user.watchList.filter((entry) => {
+        return !entry.questionId.equals(questionId);
+      });
+      question.watchers = question.watchers.filter(
+        (id) => !id.equals(user._id)
+      );
+    }
+
+    // save user and question
+    await user.save();
+    await question.save();
 
     res.status(204).end(); // respond with no content
   } catch (error) {

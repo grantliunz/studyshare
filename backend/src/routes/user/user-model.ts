@@ -7,7 +7,10 @@ export interface IUser extends Document {
   email: string;
   questions: Types.ObjectId[];
   answers: Types.ObjectId[];
-  watchList: WatchlistEntry[];
+  watchList: {
+    questionId: Types.ObjectId;
+    lastViewed: Date;
+  }[];
   upvotedAnswers: Types.ObjectId[];
   downvotedAnswers: Types.ObjectId[];
   upvotedComments: Types.ObjectId[];
