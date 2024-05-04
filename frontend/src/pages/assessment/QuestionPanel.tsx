@@ -24,6 +24,7 @@ import { useAuth } from '../../contexts/UserContext';
 import { Question } from '@shared/types/models/question/question';
 import { QuestionLazy } from '@shared/types/models/assessment/assessment';
 import { LoginPopupContext } from './AssessmentPage';
+import { questionMapper } from '../../mappers/questionMapper';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -45,8 +46,12 @@ const QuestionPanel = ({
   const setLoginPopup = useContext(LoginPopupContext);
 
   const { data: polledQuestion, refresh: refreshQuestion } = useGet<Question>(
-    `${API.getQuestion}/${question._id}`
+    `${API.getQuestion}/${question._id}`,
+    null,
+    questionMapper
   );
+
+  console.log(polledQuestion);
 
   const { user: userAuth, userDb, refreshUserDb } = useAuth();
 

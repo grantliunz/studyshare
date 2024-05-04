@@ -14,6 +14,7 @@ export type Question = {
   comments: Comment[];
   latestContributor: ObjectId;
   isAnonymous: boolean;
+  createdAt: Date;
 };
 
 export type CreateQuestionDTO = {

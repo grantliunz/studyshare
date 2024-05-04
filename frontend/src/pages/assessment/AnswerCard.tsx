@@ -41,7 +41,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
 
   const { data: polledAnswer, refresh: refreshAnswer } = useGet<Answer>(
     `${API.getAnswer}/${answer._id}`,
-    null,
+    answer,
     answerMapper
   );
 
@@ -275,7 +275,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                       padding: '8px'
                     }}
                   >
-                    <CommentCard commentId={comment._id} />
+                    <CommentCard comment={comment} />
                   </div>
                 ))}
               </div>

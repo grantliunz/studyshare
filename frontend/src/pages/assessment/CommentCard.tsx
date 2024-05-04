@@ -14,31 +14,32 @@ import { MakeVoteDTO } from '@shared/types/models/answer/answer';
 import { AxiosError } from 'axios';
 
 type CommentCardProps = {
-  commentId: string;
+  comment: Comment;
 };
-const CommentCard = ({ commentId }: CommentCardProps) => {
+
+const CommentCard = ({ comment }: CommentCardProps) => {
   const [voteState, setVoteState] = useState<VoteDirection>(
     VoteDirection.NEUTRAL
   );
   const { user, userDb, refreshUserDb } = useAuth();
   const setLoginPopup = useContext(LoginPopupContext);
-  const { data: comment, refresh: refreshComment } = useGet<Comment>(
-    `${API.getComment}/${commentId}`,
-    null,
+  const { data: polledComment, refresh: refreshComment } = useGet<Comment>(
+    `${API.getComment}/${comment._id}`,
+    comment,
     commentMapper
   );
   const { postData: voteComment } = usePost<MakeVoteDTO, Comment>(
-    `${API.voteComment}/${commentId}`
+    `${API.voteComment}/${comment._id}`
   );
   const { data: author } = useGet<UserDisplayDTO>(
-    `${API.getUser}/${comment?.author}`
+    `${API.getUser}/${comment.author}`
   );
 
   useEffect(() => {
     if (userDb) {
-      if (userDb.upvotedComments.includes(commentId)) {
+      if (userDb.upvotedComments.includes(polledComment!._id)) {
         setVoteState(VoteDirection.UP);
-      } else if (userDb.downvotedComments.includes(commentId)) {
+      } else if (userDb.downvotedComments.includes(polledComment!._id)) {
         setVoteState(VoteDirection.DOWN);
       } else {
         setVoteState(VoteDirection.NEUTRAL);
@@ -54,12 +55,14 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
       setLoginPopup(true);
       return;
     }
-    if (comment) {
+    if (polledComment) {
       setVoteState(newVoteDirection);
-      oldVoteDirection === VoteDirection.UP && comment.rating.upvotes--;
-      oldVoteDirection === VoteDirection.DOWN && comment.rating.downvotes--;
-      newVoteDirection === VoteDirection.UP && comment.rating.upvotes++;
-      newVoteDirection === VoteDirection.DOWN && comment.rating.downvotes++;
+      oldVoteDirection === VoteDirection.UP && polledComment.rating.upvotes--;
+      oldVoteDirection === VoteDirection.DOWN &&
+        polledComment.rating.downvotes--;
+      newVoteDirection === VoteDirection.UP && polledComment.rating.upvotes++;
+      newVoteDirection === VoteDirection.DOWN &&
+        polledComment.rating.downvotes++;
 
       const res = await voteComment({
         oldVoteDirection,
@@ -76,7 +79,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
     }
   };
 
-  if (!comment) {
+  if (!polledComment) {
     return <></>;
   }
 
@@ -93,7 +96,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
       }}
     >
       <UpDownVote
-        rating={comment.rating}
+        rating={polledComment.rating}
         style={{ display: 'flex', flexDirection: 'column' }}
         onChange={handleVoteChange}
         iconSize="1.1rem"
@@ -103,10 +106,10 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
         avatarPos="top"
         avatarSize="28px"
         name={
-          (comment.isAnonymous &&
-            comment?.author === userDb?._id &&
+          (polledComment.isAnonymous &&
+            polledComment?.author === userDb?._id &&
             'Anonymous (You)') ||
-          (!comment.isAnonymous && author?.name) ||
+          (!polledComment.isAnonymous && author?.name) ||
           'Anonymous'
         }
         style={{ width: '80px' }}
@@ -120,7 +123,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
           position: 'relative' // Add position relative to the parent container
         }}
       >
-        <div style={{ flex: 1, display: 'flex' }}>{comment.text}</div>
+        <div style={{ flex: 1, display: 'flex' }}>{polledComment.text}</div>
         <div
           style={{
             display: 'flex',
@@ -135,7 +138,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
               height: 'fit-content'
             }}
           >
-            {comment.createdAt.toLocaleDateString('en-US', {
+            {polledComment.createdAt.toLocaleDateString('en-US', {
               weekday: 'short',
               year: 'numeric',
               month: 'short',
@@ -149,7 +152,7 @@ const CommentCard = ({ commentId }: CommentCardProps) => {
               height: 'fit-content'
             }}
           >
-            {comment.createdAt.toLocaleTimeString('en-US', {
+            {polledComment.createdAt.toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit'
             })}
