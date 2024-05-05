@@ -69,7 +69,8 @@ export const createQuestion = async (
 
     // add the question ID to the assessment's questions
     assessment.questions.push(createdQuestion._id);
-
+    assessment.latestContributor = latestContributor;
+    assessment.newestQuestion = createdQuestion._id;
     // save the assessment with the updated questions array
     await assessment.save();
 

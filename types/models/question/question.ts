@@ -22,6 +22,7 @@ export type CreateQuestionDTO = {
   watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
   comments: ObjectId[];
+  latestContributor: ObjectId;
 };
 
 export type CreateQuestionVersionEntryDTO = {

@@ -10,6 +10,8 @@ export interface IAssessment extends Document {
   course: Types.ObjectId;
   name?: string;
   watchers: Types.ObjectId[];
+  latestContributor: Types.ObjectId;
+  newestQuestion: Types.ObjectId;
 }
 
 const assessmentSchema: Schema<IAssessment> = new Schema(
@@ -48,6 +50,14 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
     watchers: {
       type: [Schema.Types.ObjectId],
       ref: 'User'
+    },
+    latestContributor: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    newestQuestion: {
+      type: Schema.Types.ObjectId,
+      ref: 'Question'
     }
   },
   {

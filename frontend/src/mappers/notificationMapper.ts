@@ -8,11 +8,13 @@ const mapGetNotifications: Mapper<NotificationDTO[]> = (
     (item: any): NotificationDTO => ({
       id: item.id,
       entityID: item.entityID,
-      commenterName: item.commenterName,
+      authorName: item.authorName,
       entitySummary: item.entitySummary,
       entityUrl: item.entityUrl,
       timestamp: new Date(item.timestamp),
-      timedifference: item.timedifference
+      timeDifference: item.timeDifference,
+      entityType: item.entityType,
+      questionId: item.questionId || undefined
     })
   );
 };

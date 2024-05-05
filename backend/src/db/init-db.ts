@@ -126,7 +126,9 @@ const assessments = [
     year: 2024,
     semester: SemesterType.FIRST,
     questions: [],
-    watchers: []
+    watchers: [],
+    latestContributor: users[0]._id,
+    newestQuestion: null
   }),
   new Assessment({
     type: AssessmentType.TEST,
@@ -134,7 +136,9 @@ const assessments = [
     semester: SemesterType.FIRST,
     number: 1,
     questions: [],
-    watchers: []
+    watchers: [],
+    latestContributor: users[1]._id,
+    newestQuestion: null
   }),
   new Assessment({
     type: AssessmentType.EXAM,
@@ -149,7 +153,9 @@ const assessments = [
     semester: SemesterType.FIRST,
     name: 'Problem Sheet 1',
     questions: [],
-    watchers: []
+    watchers: [],
+    latestContributor: users[2]._id,
+    newestQuestion: null
   })
 ];
 

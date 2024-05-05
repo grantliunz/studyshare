@@ -49,7 +49,7 @@ function matchString(assessment: Assessment, searchText: string) {
 
 const Assessments = () => {
   const { universityId, courseId } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, userDb } = useAuth();
   const { data: course, isLoading: isFetchingCourse } = useGet<Course>(
     `${API.getCourse}/${courseId}`
   );
@@ -101,6 +101,9 @@ const Assessments = () => {
       courseId,
       type,
       questions: [],
+      latestContributor: userDb!._id,
+      watchers: [],
+      newestQuestion: null,
       ...formInputs
     });
 

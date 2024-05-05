@@ -94,7 +94,8 @@ export const getNotifications = async (
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    // Aggregation pipeline to compare lastViewed with the last update of a question
+
+    // Aggregation pipeline to fetch watched questions
     const watchedQuestions = await User.aggregate([
       {
         $match: {
@@ -183,18 +184,119 @@ export const getNotifications = async (
               '$assessment.summary'
             ]
           },
+          authorId: '$question.latestContributor',
           authorName: {
             $cond: {
-              if: { $eq: ['$question.latestContributor', null] }, // Check if latestContributor is null
+              if: { $eq: ['$question.latestContributor', null] },
               then: 'Anonymous',
               else: '$latestContributor.name'
             }
           },
           lastViewed: '$watchList.lastViewed',
           updatedAt: '$question.updatedAt',
+          timestamp: '$question.updatedAt',
           timeDifference: {
             $subtract: ['$question.updatedAt', '$watchList.lastViewed']
           },
+          entityType: WatchListType.QUESTION,
+          entityUrl: {
+            $concat: [
+              { $toString: '$university._id' },
+              '/',
+              { $toString: '$course._id' },
+              '/',
+              { $toString: '$assessment._id' }
+            ]
+          }
+        }
+      }
+    ]);
+
+    // Aggregation pipeline to fetch watched assessments
+    const watchedAssessments = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$watchList'
+      },
+      {
+        $lookup: {
+          from: 'assessments',
+          localField: 'watchList.watchedId',
+          foreignField: '_id',
+          as: 'assessment'
+        }
+      },
+      {
+        $unwind: '$assessment'
+      },
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'assessment.course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: '$course'
+      },
+      {
+        $lookup: {
+          from: 'universities',
+          localField: 'course.university',
+          foreignField: '_id',
+          as: 'university'
+        }
+      },
+      {
+        $unwind: '$university'
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assessment.latestContributor',
+          foreignField: '_id',
+          as: 'latestContributor'
+        }
+      },
+      {
+        $unwind: {
+          path: '$latestContributor',
+          preserveNullAndEmptyArrays: true // Preserve documents if the latestContributor field is null
+        }
+      },
+      {
+        $project: {
+          entityID: '$assessment._id',
+          entitySummary: {
+            $concat: [
+              { $toString: '$assessment.semester' },
+              ' ',
+              '$assessment.type',
+              ' ',
+              { $toString: '$assessment.year' }
+            ]
+          },
+          authorId: '$assessment.latestContributor',
+          authorName: {
+            $cond: {
+              if: { $eq: ['$assessment.latestContributor', null] },
+              then: 'Anonymous',
+              else: '$latestContributor.name'
+            }
+          },
+          lastViewed: '$watchList.lastViewed',
+          updatedAt: '$assessment.updatedAt',
+          timestamp: '$assessment.updatedAt',
+          timeDifference: {
+            $subtract: ['$assessment.updatedAt', '$watchList.lastViewed']
+          },
+          questionId: '$assessment.newestQuestion',
+          entityType: WatchListType.ASSESSMENT,
           // Construct the URL by concatenating _id fields
           entityUrl: {
             $concat: [
@@ -208,34 +310,33 @@ export const getNotifications = async (
         }
       }
     ]);
-    console.log(watchedQuestions);
-    // Sort watchedQuestions array
-    watchedQuestions.sort(
-      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
-    );
-    // Declare notifications array
-    const notifications: NotificationDTO[] = [];
-
-    // Counter variable for generating IDs
-    let idCounter = 1;
-    // Map through watchedQuestions and populate notifications array
-    watchedQuestions.forEach((watchedQuestion: any) => {
-      if (watchedQuestion.timeDifference < 0) {
-        return;
-      }
-      notifications.push({
-        id: String(idCounter++),
-        entityID: watchedQuestion.entityID,
-        commenterName: watchedQuestion.authorName,
-        entitySummary: watchedQuestion.entitySummary.replace(/<[^>]*>?/gm, ''), // strips html tags
-        entityUrl: watchedQuestion.entityUrl,
-        timedifference: watchedQuestion.timeDifference,
-        timestamp: watchedQuestion.updatedAt
-      });
+    // Merge watchedQuestions and watchedAssessments into a single array
+    const notifications: NotificationDTO[] = [
+      ...watchedQuestions,
+      ...watchedAssessments
+    ];
+    console.log(notifications);
+    notifications.forEach((notification) => {
+      notification.entitySummary = notification.entitySummary.replace(
+        /<[^>]*>?/gm,
+        ''
+      );
+    });
+    console.log('User Id ' + user._id);
+    // Sort notifications array
+    notifications.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    const filteredNotifications = notifications.filter((notification) => {
+      console.log(notification.authorId);
+      return (
+        notification.timeDifference >= 0 &&
+        !notification.authorId.equals(user._id)
+      );
     });
 
-    return res.status(200).json(notifications);
+    // Format and send the response
+    return res.status(200).json(filteredNotifications);
   } catch (error) {
+    // Handle errors
     res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
