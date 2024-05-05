@@ -93,12 +93,15 @@ export default function AddAssessmentForm({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!currentInput.year) return;
-    if (currentInput.year < 1980 || currentInput.year > 2024) {
+    if (
+      currentInput.year < 1980 ||
+      currentInput.year > new Date().getFullYear()
+    ) {
       // test for a bad year
       updateError('year', 'Please enter a valid Year.');
       return;
     }
-
+    // Change these to enums?
     if (
       state !== 'Other' &&
       state !== 'Exam' &&
@@ -119,6 +122,9 @@ export default function AddAssessmentForm({
       // test for a bad name
       updateError('name', 'Please enter a valid name.');
       return;
+    }
+    if (state === 'Other') {
+      currentInput.semester = SemesterType.OTHER;
     }
     const error = await onAddAssessment(currentInput, state); //returns the current input fields and the type of assessment (exam, test, other)
     if (error) {

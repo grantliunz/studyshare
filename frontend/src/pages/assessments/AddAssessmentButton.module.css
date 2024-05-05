@@ -8,7 +8,7 @@
 
 .addButton {
   padding: 6px;
-  background-color: #afafaf;
+  background-color: #bfbfbf;
   border: none;
   color: black;
   border-radius: 10px;
@@ -20,6 +20,6 @@
 }
 
 .addButton:hover {
-  background-color: #41709b;
+  background-color: #afafaf;
   color: white;
 }
