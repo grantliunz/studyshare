@@ -39,7 +39,7 @@ export const createAssessment = async (
       semester,
       course: req.params.courseId,
       name,
-      number // is number needed?
+      number
     });
 
     if (existingAssessment) {
@@ -56,6 +56,7 @@ export const createAssessment = async (
       semester,
       questions,
       name,
+      number,
       latestContributor,
       newestQuestion
     });

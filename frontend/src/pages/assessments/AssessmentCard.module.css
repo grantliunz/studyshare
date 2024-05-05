@@ -11,6 +11,14 @@
   padding: 0px;
   margin: 0px;
   text-align: left;
+  font-style: italic;
+}
+
+.numberText {
+  font-size: 15px;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
 }
 
 .otherYearText {
@@ -18,4 +26,5 @@
   padding: 0px;
   margin: 0px;
   text-align: left;
+  font-style: italic;
 }
