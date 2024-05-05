@@ -54,7 +54,7 @@ export default function NewQuestion({
       return;
     }
 
-    const newQuestion = {
+    const res = await createQuestion({
       number: [...parentNumber, ...questionNumber.split('.')],
       versions: [
         {
@@ -64,13 +64,12 @@ export default function NewQuestion({
           isAnonymous: anonymousQuestion
         }
       ],
+      reporters: [],
       answers: [],
       reporters: [],
       comments: [],
       latestContributor: userDb._id
-    };
-
-    const res = await createQuestion(newQuestion);
+    });
     if (res instanceof AxiosError) {
       setCreateQuestionError((res.response?.data as { error: string }).error);
       return;
