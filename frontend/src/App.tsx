@@ -4,6 +4,7 @@ import Login from './pages/login/Login.tsx';
 import Landing from './pages/landing/Landing.tsx';
 import Signup from './pages/signup/Signup.tsx';
 import UniversitiesPage from './pages/university/UniversitiesPage.tsx';
+import Profile from './pages/profile/Profile.tsx';
 import Assessments from './pages/assessments/Assessments.tsx';
 import CoursesPage from './pages/course/CoursesPage.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
 
         <Route path="/universities" element={<UniversitiesPage />} />
         <Route path="/:universityId" element={<CoursesPage />} />
