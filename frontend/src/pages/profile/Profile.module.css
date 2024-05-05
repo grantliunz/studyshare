@@ -1,0 +1,103 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    margin-left: 5%; /* Margin to the left as percentage */
+    margin-right: 5%; /* Margin to the right as percentage */
+}
+
+.title {
+    font-size: 3rem;
+    margin-bottom: 20px; /* Spacing below title */
+}
+
+/* profile info has 2 divs profile container and profile stats right next to each other */
+.profileInfo {
+    display: flex;
+    width: 100%; /* Full width */
+    justify-content: space-between; /* Space between profile container and profile stats */
+}
+
+.profileContainer {
+    display: flex;
+    align-items: flex-start; /* Align text to the left */
+    background-color: #f0f0f0; /* Gray background */
+    border: 1px solid #ccc; /* Gray border */
+    padding: 20px; /* Padding inside the profile container */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 20px; /* Spacing below profile container */
+    width: 45%; /* Limit width to 90% of the screen */
+    height: 130px; /* Make profile container and profile stats same height */
+}
+
+.profileBio {
+    flex: 1; /* Take remaining space */
+    background-color: #f0f0f0; /* Gray background */
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Padding inside the profile bio */
+    margin-left: 20px; /* Spacing between profile container and profile bio */
+}
+
+.avatar {
+    margin-right: 20px; /* Spacing between avatar and name/email */
+    overflow: hidden;
+}
+
+.profileName {
+    margin-bottom: 5px; /* Spacing between name and email */
+    white-space: nowrap; /* Prevent text wrap */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis for overflow text */
+}
+
+.profileDetails {
+    overflow: hidden;
+}
+
+.profileEmail {
+    color: #666; /* Gray color for email */
+    margin-bottom: 20px; /* Spacing below email */
+    white-space: nowrap; /* Prevent text wrap */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis for overflow text */
+}
+
+.profileStats {
+    display: flex;
+    justify-content: space-between; /* Distribute items evenly */
+    align-items: center; /* Center items vertically */
+    background-color: #f0f0f0; /* Gray background for stats */
+    border: 1px solid #ccc; /* Gray border for stats */
+    border-radius: 5px; /* Rounded corners for stats */
+    padding: 20px; /* Padding inside stats */
+    margin-left: 20px; /* Spacing between profile container and stats */
+    width: 45%; /* Limit width to 40% of the screen */
+    height: 130px; /* Make profile container and profile stats same height */
+}
+
+.stat {
+    text-align: center; /* Align text in the center */
+    margin: 0 10px; /* Spacing between stats */
+    margin-left: 5%; /* Spacing to the left as percentage */
+    margin-right: 5%; /* Spacing to the right as percentage */
+}
+
+
+.profileTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Spacing between tags */
+    margin-bottom: 20px; /* Spacing below tags */
+}
+
+.profileCards {
+    display: flex;
+    flex-direction: column; /* Arrange cards vertically */
+    width: 100%; /* Full width */
+}
+
+.logoutButton {
+    margin-top: 20px; /* Spacing above logout button */
+}
