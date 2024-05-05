@@ -185,9 +185,12 @@ const AssessmentPage = () => {
       );
       setRootNode(root);
       const arr = buildOrderedQuestionsArray(root);
-      setOrderedQuestionsArray(arr.concat(reported));
+      const newOrderedQuestionsArray = arr.concat(reported);
+      setOrderedQuestionsArray(newOrderedQuestionsArray);
       if (questionID) {
-        const question = arr.find((qn) => qn._id === questionID);
+        const question = newOrderedQuestionsArray.find(
+          (qn) => qn._id === questionID
+        );
         setCurrentQuestion(question);
       } else {
         setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
@@ -200,7 +203,7 @@ const AssessmentPage = () => {
         );
       }
     }
-  }, [userDb, assessment, questionID]);
+  }, [JSON.stringify(userDb?.reported), assessment, questionID]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
     if (!currentUser || !userDb) {
@@ -357,6 +360,7 @@ const AssessmentPage = () => {
                     {reportedQuestions.map((q) => {
                       return (
                         <div
+                          key={q.number.join('')}
                           className={styles.reportedQuestionNumber}
                           onClick={() => {
                             setCurrentQuestion(q);

@@ -1,13 +1,12 @@
-import { Modal } from "@mui/material"
-import styles from './LoginPopup.module.css'
+import { Modal } from '@mui/material';
+import styles from './LoginPopup.module.css';
 import { useAuth } from '../../contexts/UserContext';
 import { Paper, CircularProgress } from '@mui/material';
-import { useNavigate } from "react-router-dom";
-import { FirebaseError } from "firebase/app";
+import { FirebaseError } from 'firebase/app';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getFirebaseErrorMessage } from '../../util/firebase';
 
 interface LoginPopupProps {
@@ -16,10 +15,9 @@ interface LoginPopupProps {
 }
 
 export default function LoginPopup({ open, setOpen }: LoginPopupProps) {
-
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false); // State to track loading state
-  const { user, login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,12 +44,8 @@ export default function LoginPopup({ open, setOpen }: LoginPopupProps) {
     setOpen(false);
   };
 
-
   return (
-    <Modal
-      open={open}
-      onClose={() => setOpen(false)}
-    >
+    <Modal open={open} onClose={() => setOpen(false)}>
       <div className={styles.modal}>
         <Paper
           component="form"
@@ -67,9 +61,7 @@ export default function LoginPopup({ open, setOpen }: LoginPopupProps) {
             alignItems: 'center'
           }}
         >
-          <h1 className={styles.logo}>
-            StudyShare
-          </h1>
+          <h1 className={styles.logo}>StudyShare</h1>
           <h2 className={styles.title}>Log in</h2>
           <TextField
             margin="normal"
@@ -118,7 +110,6 @@ export default function LoginPopup({ open, setOpen }: LoginPopupProps) {
           <Button onClick={submitGoogle}>Log In with Google</Button>
         </Paper>
       </div>
-
     </Modal>
-  )
+  );
 }
