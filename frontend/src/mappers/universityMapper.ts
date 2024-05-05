@@ -1,5 +1,6 @@
+import { University } from '@shared/types/models/university/university';
 import { Mapper } from '../mappers/mapper';
-import { University } from '../types/types';
+
 const mapGetUniversitiesData: Mapper<University[]> = (
   data: any
 ): University[] => {

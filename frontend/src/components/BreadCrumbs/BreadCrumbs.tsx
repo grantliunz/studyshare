@@ -2,13 +2,13 @@ import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import API from '../../util/api';
-import { Course } from '@shared/types/models/course/course';
-import { University } from '@shared/types/models/university/university';
-import { AssessmentGET } from '@shared/types/models/assessment/assessment';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { mapGetCourseData } from '../../mappers/courseMapper';
 import axios from 'axios';
 import style from './BreadCrumbs.module.css';
+import { University } from '@shared/types/models/university/university';
+import { AssessmentGET } from '@shared/types/models/assessment/assessment';
+import { Course } from '@shared/types/models/course/course';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 

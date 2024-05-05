@@ -40,7 +40,7 @@ export type QuestionNode = {
   question?: QuestionLazy;
 };
 
-export const LoginPopupContext = createContext((bool: boolean) => {});
+export const LoginPopupContext = createContext((_bool: boolean) => {});
 // Helper function to determine the type of a value (number, letter, or roman numeral)
 const getValueType = (value: any) => {
   if (!Number.isNaN(Number(value))) {
