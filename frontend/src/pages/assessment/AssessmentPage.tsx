@@ -228,7 +228,15 @@ const AssessmentPage = () => {
                 maxWidth: sidebarWidth
               }}
             >
-              <h3 style={{ margin: '0px' }}>Questions</h3>
+              <h3
+                style={{
+                  display: 'flex',
+                  textAlign: 'start',
+                  margin: '8px 0px 0px 8px'
+                }}
+              >
+                Questions
+              </h3>
               {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
                 rootNode.subquestions.map((question) => (
                   <QuestionNumber

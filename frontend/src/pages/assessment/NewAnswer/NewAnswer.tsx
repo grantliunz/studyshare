@@ -14,7 +14,7 @@ type NewAnswerProps = {
 
 const NewAnswer = ({
   questionId,
-  onSubmitAnswer = () => { }
+  onSubmitAnswer = () => {}
 }: NewAnswerProps) => {
   const [text, setText] = useState<string>('');
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
@@ -67,13 +67,23 @@ const NewAnswer = ({
       <Editor value={text} setValue={setText} />
       <div
         style={{
+          width: '100%',
           alignItems: 'center',
           columnGap: '16px',
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           marginTop: '12px'
         }}
       >
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isAnonymous}
+              onChange={(event) => setIsAnonymous(event.target.checked)}
+            />
+          }
+          label="Anonymous"
+        />
         <Button
           variant="contained"
           onClick={() => handleSubmitAnswer(text)}
@@ -85,15 +95,6 @@ const NewAnswer = ({
         >
           Submit Answer
         </Button>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isAnonymous} // Pass the value of isAnonymous to the checked prop
-              onChange={(event) => setIsAnonymous(event.target.checked)}
-            />
-          }
-          label="Send Anonymously"
-        />
       </div>
     </div>
   );
