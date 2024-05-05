@@ -125,14 +125,18 @@ const assessments = [
     type: AssessmentType.EXAM,
     year: 2024,
     semester: SemesterType.FIRST,
-    questions: []
+    questions: [],
+    latestContributor: users[0]._id,
+    newestQuestion: null
   }),
   new Assessment({
     type: AssessmentType.TEST,
     year: 2024,
     semester: SemesterType.FIRST,
     number: 1,
-    questions: []
+    questions: [],
+    latestContributor: users[1]._id,
+    newestQuestion: null
   }),
   new Assessment({
     type: AssessmentType.EXAM,
@@ -145,7 +149,9 @@ const assessments = [
     year: 2024,
     semester: SemesterType.FIRST,
     name: 'Problem Sheet 1',
-    questions: []
+    questions: [],
+    latestContributor: users[2]._id,
+    newestQuestion: null
   })
 ];
 
@@ -161,7 +167,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[0]._id
@@ -187,7 +192,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -203,7 +207,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[2]._id
@@ -219,7 +222,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[0]._id
@@ -235,7 +237,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -251,7 +252,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[2]._id
@@ -267,7 +267,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: []
   }),
@@ -282,7 +281,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -298,7 +296,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id

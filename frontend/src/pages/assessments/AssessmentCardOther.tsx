@@ -27,12 +27,14 @@ export default function AssessmentCardOther({
       variant="contained"
       sx={{
         borderRadius: '10px',
-        boxShadow: 3
+        backgroundColor: '#D9D9D9',
+        '&:hover': {
+          backgroundColor: '#BFBFBF' // Change the background color on hover
+        }
       }}
       style={{
         display: 'block',
         width: '300px',
-        backgroundColor: '#D9D9D9',
         color: 'black',
         textTransform: 'none',
         margin: '10px'

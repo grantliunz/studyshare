@@ -8,8 +8,8 @@ export type Question = {
   versions: QuestionVersionEntry[];
   number: string[];
   answers: Answer[];
-  watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
+  isAnonymous: boolean;
   comments: Comment[];
   latestContributor: ObjectId;
   createdAt: Date;
@@ -19,9 +19,9 @@ export type CreateQuestionDTO = {
   number: string[];
   versions: CreateQuestionVersionEntryDTO[];
   answers: ObjectId[];
-  watchers: ObjectId[]; // might need to change to a user object
   reporters: ObjectId[];
   comments: ObjectId[];
+  latestContributor: ObjectId;
 };
 
 export type CreateQuestionVersionEntryDTO = {
@@ -44,7 +44,6 @@ export type QuestionLazy = {
   number: string[];
   versions: { text: string; author: ObjectId; createdAt: Date }[];
   answers: ObjectId[];
-  watchers: ObjectId[];
   comments: ObjectId[];
   latestContributor: ObjectId;
 };

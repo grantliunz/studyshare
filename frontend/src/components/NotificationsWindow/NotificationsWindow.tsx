@@ -47,7 +47,7 @@ export default function NotificationsWindow({
           <>
             {notifications.slice(0, 8).map((notificationObj) => (
               <NotificationCard
-                key={notificationObj.questionID} // notificationObj.id is somehow not unique?
+                key={notificationObj.entityID} // notificationObj.id is somehow not unique?
                 notification={notificationObj}
                 onClose={() => onClose()}
                 refreshNotifications={() => refreshNotifications()}

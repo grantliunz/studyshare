@@ -23,7 +23,8 @@ import {
   UpdateReportedAction,
   UpdateReportedDTO,
   UpdateWatchListAction,
-  UpdateWatchListDTO
+  UpdateWatchListDTO,
+  WatchListType
 } from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
@@ -85,7 +86,7 @@ const QuestionPanel = ({
   useEffect(() => {
     if (userDb) {
       setIsStarred(
-        userDb.watchList.find((entry) => entry.questionId === question._id) !==
+        userDb.watchList.find((entry) => entry.watchedId === question._id) !==
           undefined
       );
       setIsFlagged(userDb.reported.includes(question._id));
@@ -100,10 +101,11 @@ const QuestionPanel = ({
     setIsStarred(newValue);
 
     const res = await updateWatchList({
-      questionId: question._id,
+      watchedId: question._id,
       action: newValue
         ? UpdateWatchListAction.WATCH
-        : UpdateWatchListAction.UNWATCH
+        : UpdateWatchListAction.UNWATCH,
+      watchType: WatchListType.QUESTION
     });
 
     if (res instanceof AxiosError) {
@@ -197,6 +199,7 @@ const QuestionPanel = ({
               onClick={() => setQuestion(prevQuestion)}
               startIcon={<ArrowBackRoundedIcon />}
               style={{ textTransform: 'none', marginRight: 'auto' }}
+              title="Go to previous question"
             >
               {prevQuestion?.number.join('')}
             </Button>
@@ -206,6 +209,7 @@ const QuestionPanel = ({
               onClick={() => setQuestion(nextQuestion)}
               endIcon={<ArrowForwardRoundedIcon />}
               style={{ textTransform: 'none', marginLeft: 'auto' }}
+              title="Go to next question"
             >
               {nextQuestion.number.join('')}
             </Button>
@@ -220,16 +224,29 @@ const QuestionPanel = ({
             justifyContent: 'space-between'
           }}
         >
-          <IconButton onClick={() => handleIsStarredChange(!isStarred)}>
+          <IconButton
+            onClick={() => handleIsStarredChange(!isStarred)}
+            title={
+              !isStarred
+                ? 'Add question to watchlist'
+                : 'Remove question from watchlist'
+            }
+          >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
           <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
             {polledQuestion.number}
           </h2>
-          <IconButton onClick={() => toggleIsEditingQuestion()}>
+          <IconButton
+            onClick={() => toggleIsEditingQuestion()}
+            title={!isEditingQuestion ? 'Edit question' : 'Cancel'}
+          >
             {isEditingQuestion ? <EditOffOutlinedIcon /> : <EditOutlinedIcon />}
           </IconButton>
-          <IconButton onClick={() => handleIsFlaggedChanged(!isFlagged)}>
+          <IconButton
+            onClick={() => handleIsFlaggedChanged(!isFlagged)}
+            title={!isFlagged ? 'Hide question' : 'Unhide question'}
+          >
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
         </div>
@@ -238,6 +255,7 @@ const QuestionPanel = ({
             <Slider
               aria-label="Question version history"
               defaultValue={-1}
+              title="Question version history"
               marks={polledQuestion.versions.map((_version, index) => ({
                 value: -1 * index - 1,
                 label: index === 0 ? 'latest version' : ''

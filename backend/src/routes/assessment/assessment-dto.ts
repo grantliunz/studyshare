@@ -10,4 +10,7 @@ export interface CreateAssessmentDTO extends Document {
   semester: SemesterType;
   questions?: CreateQuestionDTO[] | Types.ObjectId[];
   course: string;
+  userId: Types.ObjectId;
+  latestContributor: Types.ObjectId;
+  newestQuestion: Types.ObjectId | null;
 }

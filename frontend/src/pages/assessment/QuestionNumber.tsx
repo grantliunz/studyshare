@@ -52,6 +52,7 @@ const QuestionNumber = ({
             padding: '3px',
             visibility: questionNode.subquestions ? 'inherit' : 'hidden'
           }}
+          title={isExpanded ? 'Collapse' : 'Expand'}
         >
           {isExpanded ? (
             <ExpandMoreRoundedIcon />
@@ -136,6 +137,7 @@ const QuestionNumber = ({
             visibility: isHovered ? 'inherit' : 'hidden'
           }}
           onClick={() => handleAddQuestion(questionNode.number)}
+          title="Add subquestion"
         >
           <AddIcon fontSize="small" />
         </IconButton>

@@ -2,8 +2,9 @@ import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import API from '../../util/api';
-import { Course, University } from '../../types/types';
-import { AssessmentGET } from '@shared/types/models/question/assessment';
+import { Course } from '@shared/types/models/course/course';
+import { University } from '@shared/types/models/university/university';
+import { AssessmentGET } from '@shared/types/models/assessment/assessment';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { mapGetCourseData } from '../../mappers/courseMapper';
 import axios from 'axios';
@@ -145,7 +146,7 @@ const BreadCrumbs = () => {
           </Link>
         )}
         {assessment && (
-          <Typography className={style.link}>
+          <Typography className={`${style.link} ${style.assessment}`}>
             {createAssessmentString(assessment)}
           </Typography>
         )}

@@ -19,3 +19,7 @@
 .link:hover {
   text-decoration: underline !important;
 }
+
+.assessment:hover {
+  text-decoration: none !important;
+}

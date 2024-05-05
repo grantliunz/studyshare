@@ -54,11 +54,6 @@ export default function UniversitiesPage() {
     setShowForm(false);
   };
 
-  const signOut = () => {
-    logout();
-    navigate('/');
-  };
-
   const onQueryChange = (newQuery: string) => {
     setQuery(newQuery);
   };
@@ -90,11 +85,7 @@ export default function UniversitiesPage() {
             refreshUniversities={refreshUniversities}
           />
           <AddButton handleOpenForm={handleOpenForm} />
-          {user && <Button onClick={signOut}>Logout (temporary)</Button>}
-          <LoginPopup
-            open={showLoginPopup}
-            setOpen={setShowLoginPopup}
-          />
+          <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
         </>
       )}
     </div>

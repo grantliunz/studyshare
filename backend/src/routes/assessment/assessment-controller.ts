@@ -14,7 +14,16 @@ export const createAssessment = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { type, year, semester, questions = [], name, number } = req.body; // assuming request body contains assessment data
+    const {
+      type,
+      year,
+      semester,
+      questions = [],
+      name,
+      number,
+      latestContributor,
+      newestQuestion = null
+    } = req.body; // assuming request body contains assessment data
 
     // Get the course by its ID
     const course = await Course.findById(req.params.courseId);
@@ -30,7 +39,7 @@ export const createAssessment = async (
       semester,
       course: req.params.courseId,
       name,
-      number
+      number // is number needed?
     });
 
     if (existingAssessment) {
@@ -46,7 +55,9 @@ export const createAssessment = async (
       year,
       semester,
       questions,
-      name
+      name,
+      latestContributor,
+      newestQuestion
     });
 
     // save the assessment to the database
@@ -127,12 +138,14 @@ export const updateAssessment = async (
       return res.status(404).json({ error: 'Assessment not found' });
     }
 
-    const { type, year, semester } = req.body;
+    const { type, year, semester, userId } = req.body;
 
     // update the assessment with the new data
     assessment.type = type;
     assessment.year = year;
     assessment.semester = semester;
+    assessment.latestContributor = userId;
+    // come back to this
 
     if (req.body.number) {
       assessment.number = req.body.number;

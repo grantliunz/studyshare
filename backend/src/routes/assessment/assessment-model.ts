@@ -9,6 +9,8 @@ export interface IAssessment extends Document {
   questions: Types.ObjectId[];
   course: Types.ObjectId;
   name?: string;
+  latestContributor: Types.ObjectId;
+  newestQuestion: Types.ObjectId;
 }
 
 const assessmentSchema: Schema<IAssessment> = new Schema(
@@ -42,6 +44,15 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
     },
     questions: {
       type: [Schema.Types.ObjectId],
+      ref: 'Question'
+    },
+
+    latestContributor: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    newestQuestion: {
+      type: Schema.Types.ObjectId,
       ref: 'Question'
     }
   },

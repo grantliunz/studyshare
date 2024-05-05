@@ -163,10 +163,7 @@ export default function CoursesPage() {
       />
       <AddButton handleOpenForm={handleOpenForm} />
 
-      <LoginPopup
-        open={showLoginPopup}
-        setOpen={setShowLoginPopup}
-      />
+      <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
     </div>
   );
 }

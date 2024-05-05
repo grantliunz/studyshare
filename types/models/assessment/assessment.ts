@@ -44,6 +44,8 @@ export type Assessment = {
   year: number;
   semester: SemesterType;
   questions: Question[];
+  latestContributor: ObjectId;
+  newestQuestion: ObjectId | null;
 };
 
 export enum AssessmentType {
