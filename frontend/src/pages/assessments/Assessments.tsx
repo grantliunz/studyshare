@@ -156,15 +156,17 @@ const Assessments = () => {
         <h2 className={styles.typeHeader}>Tests</h2>
         <div className={styles.assessmentType}>
           {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Test' ? (
-                <AssessmentCard
-                  key={assessment._id}
-                  assessment={assessment}
-                  onClick={() => handleCardClicked(assessment._id)}
-                />
-              ) : null
-            )}
+            assessments
+              .filter((assessment) => matchString(assessment, searchText))
+              .map((assessment) =>
+                assessment.type === 'Test' ? (
+                  <AssessmentCard
+                    key={assessment._id}
+                    assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
+                  />
+                ) : null
+              )}
           <AddAssessmentButton
             handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
           />
@@ -173,15 +175,17 @@ const Assessments = () => {
         <h2 className={styles.typeHeader}>Other</h2>
         <div className={styles.assessmentType}>
           {assessments &&
-            assessments.map((assessment) =>
-              assessment.type === 'Other' ? (
-                <AssessmentCardOther
-                  key={assessment._id}
-                  assessment={assessment}
-                  onClick={() => handleCardClicked(assessment._id)}
-                />
-              ) : null
-            )}
+            assessments
+              .filter((assessment) => matchString(assessment, searchText))
+              .map((assessment) =>
+                assessment.type === 'Other' ? (
+                  <AssessmentCardOther
+                    key={assessment._id}
+                    assessment={assessment}
+                    onClick={() => handleCardClicked(assessment._id)}
+                  />
+                ) : null
+              )}
 
           <AddAssessmentForm
             state={assessmentTypeState}
