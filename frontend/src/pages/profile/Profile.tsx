@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, Chip, Typography, CircularProgress } from '@mui/material';
 import Avatar, { genConfig } from 'react-nice-avatar';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
@@ -85,11 +85,12 @@ export default function Profile() {
                             month: 'long',
                             year: 'numeric',
                         });
+                        const regex = /(<([^>]+)>)/ig;
 
                         const question = await getQuestionData(answer.data.question);
                         answeredQuestions.push({
                             Title: question.Content,
-                            Content: answer.data.text,
+                            Content: answer.data.text.replace(regex, ''),
                             Year: question.Year,
                             DateCreated: dateCreated,
                             Path: question.Path
@@ -107,6 +108,7 @@ export default function Profile() {
             setIsLoading(false);
         }
         fetchData();
+
     }, [userDb]);
 
 
@@ -120,7 +122,7 @@ export default function Profile() {
 
         const assessment = await axios.get<any>(`${BACKEND_URL}${API.getAssessment}/${question.data.assessment}`);
         const course = await axios.get<any>(`${BACKEND_URL}${API.getCourse}/${assessment.data.course}`);
-        const year = course.data.code + " " + assessment.data.type + " " + assessment.data.semester + " " + "SEMESTER" + " " + assessment.data.year;
+        const year = course.data.code + " / " + "Semester " +  assessment.data.semester + " " + assessment.data.year;
         const path = "/" + course.data.university + "/" + assessment.data.course + "/" + assessment.data._id;
         const regex = /(<([^>]+)>)/ig;
 
@@ -141,64 +143,79 @@ export default function Profile() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Profile</h1>
-
-            <div className={styles.profileInfo}>
-
-                <div className={styles.profileContainer}>
-                    <div className={styles.avatar}>
-                        <Avatar style={{ width: '125px', height: '125px' }} {...config} />
+            {isError ? (
+                <>
+                <div className={styles.errorContainer}>
+                    <h1 className={styles.error}>Error fetching data</h1>
+                </div>
+                </> 
+            ) : ( isLoading ? (
+                <>
+                <div className={styles.loadingContainer}>
+                    <CircularProgress />
+                </div>
+                </>
+            ) : (
+            <>
+                <h1 className={styles.title}>Profile</h1>
+                <div className={styles.profileInfo}>
+                    <div className={styles.profileContainer}>
+                        <div className={styles.avatar}>
+                            <Avatar style={{ width: '125px', height: '125px' }} {...config} />
+                        </div>
+                        <div className={styles.profileDetails}>
+                            <h1 className={styles.profileName}>{userDb?.name}</h1>
+                            <h2 className={styles.profileEmail}>{userDb?.email}</h2>
+                        </div>
                     </div>
-                    <div className={styles.profileDetails}>
-                        <h1 className={styles.profileName}>{userDb?.name}</h1>
-                        <h2 className={styles.profileEmail}>{userDb?.email}</h2>
+
+                    <div className={styles.profileStats}>
+                        <div className={styles.stat}>
+                            <Typography variant="h6">Watchlisted</Typography>
+                            <Typography variant="h4">{userDb?.watchList.length}</Typography>
+                        </div>
+                        <div className={styles.stat}>
+                            <Typography variant="h6">Added</Typography>
+                            <Typography variant="h4">{userDb?.questions.length}</Typography>
+                        </div>
+                        <div className={styles.stat}>
+                            <Typography variant="h6">Answers</Typography>
+                            <Typography variant="h4">{userDb?.answers.length}</Typography>
+                        </div>
                     </div>
                 </div>
 
-                <div className={styles.profileStats}>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Watchlisted</Typography>
-                        <Typography variant="h4">{userDb?.watchList.length}</Typography>
-                    </div>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Added</Typography>
-                        <Typography variant="h4">{userDb?.questions.length}</Typography>
-                    </div>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Answers</Typography>
-                        <Typography variant="h4">{userDb?.answers.length}</Typography>
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.profileTags}>
-                {tags.map((tag, index) => (
-                    <Chip
-                        key={index}
-                        label={tag}
-                        color={selectedTag === tag ? 'primary' : 'default'}
-                        onClick={() => setSelectedTag(tag)}
-                        style={{ backgroundColor: selectedTag === tag ? '#41709b' : '#e0e0e0' }}
-                    />
-                ))}
-            </div>
-
-            <div className={styles.profileCards}>
-                {selectedCardData.map((card, index) => (
-                    <div key={index} onClick={() => navigate(card.Path)}>
-                        <ProfileCard
-                            Title={card.Title}
-                            Content={card.Content}
-                            Year={card.Year}
-                            DateCreated={card.DateCreated}
+                <div className={styles.profileTags}>
+                    {tags.map((tag, index) => (
+                        <Chip
+                            key={index}
+                            label={tag}
+                            color={selectedTag === tag ? 'primary' : 'default'}
+                            onClick={() => setSelectedTag(tag)}
+                            style={{ backgroundColor: selectedTag === tag ? '#41709b' : '#e0e0e0' }}
                         />
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            <div className={styles.logoutButton}>
-                <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
-            </div>
+                <div className={styles.profileCards}>
+                    {selectedCardData.map((card, index) => (
+                        <div key={index} onClick={() => navigate(card.Path)}>
+                            <ProfileCard
+                                Title={card.Title}
+                                Content={card.Content}
+                                Year={card.Year}
+                                DateCreated={card.DateCreated}
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                <div className={styles.logoutButton}>
+                    <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
+                </div>
+                </>
+            )
+        )}
         </div>
     );
 }
