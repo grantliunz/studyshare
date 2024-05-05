@@ -158,7 +158,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             display: 'flex',
             width: '100%',
             overflow: 'hidden',
-
+            borderRadius: '10px',
             padding: '0px 12px',
             position: 'relative' // Add position relative to the container
           }}
@@ -272,7 +272,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                     key={comment._id}
                     style={{
                       backgroundColor: i % 2 === 0 ? '#d9d9d9' : '#e0e0e0',
-                      padding: '8px'
+                      padding: '8px',
+                      borderRadius: '10px'
                     }}
                   >
                     <CommentCard comment={comment} />

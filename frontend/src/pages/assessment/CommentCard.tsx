@@ -116,7 +116,6 @@ const CommentCard = ({ comment }: CommentCardProps) => {
       />
       <div
         style={{
-          borderRadius: '8px',
           padding: '8px',
           width: '100%',
           display: 'flex'
