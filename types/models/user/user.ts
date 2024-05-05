@@ -63,9 +63,15 @@ export type PostUser = {
   email: string;
 };
 
+export enum WatchListType {
+  ASSESSMENT = 'ASSESSMENT',
+  QUESTION = 'QUESTION'
+};
+
 export type UpdateWatchListDTO = {
-  questionId: ObjectId;
+  id: ObjectId;
   action: UpdateWatchListAction;
+  watchType: WatchListType;
 };
 
 export enum UpdateWatchListAction {

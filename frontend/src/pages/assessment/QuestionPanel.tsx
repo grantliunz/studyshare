@@ -23,7 +23,8 @@ import {
   UpdateReportedAction,
   UpdateReportedDTO,
   UpdateWatchListAction,
-  UpdateWatchListDTO
+  UpdateWatchListDTO,
+  WatchListType
 } from '@shared/types/models/user/user';
 import usePut from '../../hooks/usePut';
 import { AxiosError } from 'axios';
@@ -85,7 +86,7 @@ const QuestionPanel = ({
   useEffect(() => {
     if (userDb) {
       setIsStarred(
-        userDb.watchList.find((entry) => entry.questionId === question._id) !==
+        userDb.watchList.find((entry) => entry.id === question._id) !==
           undefined
       );
       setIsFlagged(userDb.reported.includes(question._id));
@@ -100,10 +101,11 @@ const QuestionPanel = ({
     setIsStarred(newValue);
 
     const res = await updateWatchList({
-      questionId: question._id,
+      id: question._id,
       action: newValue
         ? UpdateWatchListAction.WATCH
-        : UpdateWatchListAction.UNWATCH
+        : UpdateWatchListAction.UNWATCH,
+      watchType: WatchListType.QUESTION
     });
 
     if (res instanceof AxiosError) {

@@ -125,27 +125,31 @@ const assessments = [
     type: AssessmentType.EXAM,
     year: 2024,
     semester: SemesterType.FIRST,
-    questions: []
+    questions: [],
+    watchers: []
   }),
   new Assessment({
     type: AssessmentType.TEST,
     year: 2024,
     semester: SemesterType.FIRST,
     number: 1,
-    questions: []
+    questions: [],
+    watchers: []
   }),
   new Assessment({
     type: AssessmentType.EXAM,
     year: 2023,
     semester: SemesterType.FIRST,
-    questions: []
+    questions: [],
+    watchers: []
   }),
   new Assessment({
     type: AssessmentType.OTHER,
     year: 2024,
     semester: SemesterType.FIRST,
     name: 'Problem Sheet 1',
-    questions: []
+    questions: [],
+    watchers: []
   })
 ];
 

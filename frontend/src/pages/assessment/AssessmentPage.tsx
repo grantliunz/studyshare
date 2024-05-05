@@ -28,7 +28,8 @@ import LoginPopup from '../../components/LoginPopup/LoginPopup';
 import { QuestionLazy } from '@shared/types/models/question/question';
 import {
   UpdateWatchListAction,
-  UpdateWatchListDTO
+  UpdateWatchListDTO,
+  WatchListType
 } from '@shared/types/models/user/user';
 import { AxiosError } from 'axios';
 import usePut from '../../hooks/usePut';
@@ -202,10 +203,11 @@ const AssessmentPage = () => {
     setIsStarred(newValue);
 
     const res = await updateWatchList({
-      assessmentId: assessment!._id!,
+      id: assessment!._id!, // can change this later
       action: newValue
         ? UpdateWatchListAction.WATCH
-        : UpdateWatchListAction.UNWATCH
+        : UpdateWatchListAction.UNWATCH,
+      watchType: WatchListType.ASSESSMENT
     });
 
     if (res instanceof AxiosError) {

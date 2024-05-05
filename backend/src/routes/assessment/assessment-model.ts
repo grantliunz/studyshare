@@ -9,6 +9,7 @@ export interface IAssessment extends Document {
   questions: Types.ObjectId[];
   course: Types.ObjectId;
   name?: string;
+  watchers: Types.ObjectId[];
 }
 
 const assessmentSchema: Schema<IAssessment> = new Schema(
@@ -43,6 +44,10 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
     questions: {
       type: [Schema.Types.ObjectId],
       ref: 'Question'
+    },
+    watchers: {
+      type: [Schema.Types.ObjectId],
+      ref: 'User'
     }
   },
   {
