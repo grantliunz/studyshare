@@ -66,7 +66,6 @@ export default function NewQuestion({
       ],
       reporters: [],
       answers: [],
-      reporters: [],
       comments: [],
       latestContributor: userDb._id
     });

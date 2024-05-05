@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import {
@@ -41,6 +41,7 @@ export type QuestionNode = {
 };
 
 export const LoginPopupContext = createContext((_bool: boolean) => {});
+
 // Helper function to determine the type of a value (number, letter, or roman numeral)
 const getValueType = (value: any) => {
   if (!Number.isNaN(Number(value))) {
@@ -147,7 +148,6 @@ const AssessmentPage = () => {
   const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
     `${API.updateWatchList}/${userDb?._id}`
   );
-  const setLoginPopup = useContext(LoginPopupContext);
 
   const location = useLocation();
   const { quest: questionID } = location.state ?? {};

@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
 import useGet from '../../hooks/useGet';
 import { mapGetUniversitiesData } from '../../mappers/universityMapper';
 import styles from './University.module.css';
 import UniversityCard from './UniversityCard';
 import AddButton from '../../components/AddButton/AddButton';
-import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import AddUniversityForm from './AddUniversityForm';
@@ -15,8 +13,7 @@ import { University } from '@shared/types/models/university/university';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
 export default function UniversitiesPage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [displayedData, setDisplayedData] = useState<

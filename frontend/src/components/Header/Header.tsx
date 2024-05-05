@@ -8,7 +8,6 @@ import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import Avatar, { genConfig } from 'react-nice-avatar';
 
-
 export default function Header() {
   const { user, userDb } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ export default function Header() {
 
   const onClickProfile = () => {
     navigate('/profile');
-  }
+  };
 
   const openNotificationsWindow = () => {
     setOpenNotifications(true);
@@ -66,10 +65,14 @@ export default function Header() {
                 />
               )}
             </Badge>
-            <div className={styles.profileIcon} onClick = {onClickProfile} style={{cursor: 'pointer'}}>
+            <div
+              className={styles.profileIcon}
+              onClick={onClickProfile}
+              style={{ cursor: 'pointer' }}
+            >
               <Avatar
                 style={{ width: '50px', height: '50px' }}
-                {...genConfig(user.email)}
+                {...genConfig(user.email || ' ')}
               />
             </div>
           </>
