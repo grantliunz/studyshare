@@ -207,7 +207,7 @@ const AssessmentPage = () => {
 
   const handleIsStarredChange = async (newValue: boolean) => {
     if (!currentUser || !userDb) {
-      setLoginPopup(true);
+      setShowLoginPopup(true);
       return;
     }
     setIsStarred(newValue);
