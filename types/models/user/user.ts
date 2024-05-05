@@ -69,7 +69,7 @@ export enum WatchListType {
 };
 
 export type UpdateWatchListDTO = {
-  id: ObjectId;
+  watchedId: ObjectId;
   action: UpdateWatchListAction;
   watchType: WatchListType;
 };

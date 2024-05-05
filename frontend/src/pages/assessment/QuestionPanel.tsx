@@ -86,7 +86,7 @@ const QuestionPanel = ({
   useEffect(() => {
     if (userDb) {
       setIsStarred(
-        userDb.watchList.find((entry) => entry.id === question._id) !==
+        userDb.watchList.find((entry) => entry.watchedId === question._id) !==
           undefined
       );
       setIsFlagged(userDb.reported.includes(question._id));
@@ -101,7 +101,7 @@ const QuestionPanel = ({
     setIsStarred(newValue);
 
     const res = await updateWatchList({
-      id: question._id,
+      watchedId: question._id,
       action: newValue
         ? UpdateWatchListAction.WATCH
         : UpdateWatchListAction.UNWATCH,

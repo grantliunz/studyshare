@@ -46,14 +46,14 @@ export default function NotificationCard({
     `${API.updateUser}/${userDb?._id}`
   );
 
-  async function navigateToQuestion(questionUrl: string, questionID: string) {
+  async function navigateToQuestion(questionUrl: string, entityID: string) {
     onClose();
 
     const watchedQuestions = userDb?.watchList as WatchlistEntry[] | undefined;
 
     // Update the last viewed time of the question
     const watchedQuestionIndex = watchedQuestions!.findIndex(
-      (watchedQuestion) => watchedQuestion.questionId === questionID
+      (watchedQuestion) => watchedQuestion.watchedId === entityID
     );
 
     watchedQuestions![watchedQuestionIndex] = {
@@ -70,14 +70,14 @@ export default function NotificationCard({
     }
     refreshNotifications();
     // refreshUserDb();
-    navigate(questionUrl, { state: { questionID } });
+    navigate(questionUrl, { state: { entityID } });
   }
 
   return (
     <Button
       key={notification.id} // Use the id as the key
       onClick={() => {
-        navigateToQuestion(notification.questionUrl, notification.questionID);
+        navigateToQuestion(notification.entityUrl, notification.entityID);
       }}
       variant="contained"
       sx={{
@@ -97,7 +97,7 @@ export default function NotificationCard({
         <p className={styles.notificationText}>
           <b>{notification.commenterName}</b>
           {' responded to your watchlisted question: "' +
-            notification.questionSummary +
+            notification.entitySummary +
             '"'}
         </p>
         <p className={styles.timestampText}>

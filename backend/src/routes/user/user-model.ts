@@ -9,7 +9,7 @@ export interface IUser extends Document {
   questions: Types.ObjectId[];
   answers: Types.ObjectId[];
   watchList: {
-    id: Types.ObjectId;
+    watchedId: Types.ObjectId;
     lastViewed: Date;
     watchType: WatchListType;
   }[];
@@ -44,7 +44,7 @@ const userSchema: Schema<IUser> = new Schema(
     },
     watchList: [
       {
-        id: {
+        watchedId: {
           type: Schema.Types.ObjectId,
           ref: 'Question'
         },

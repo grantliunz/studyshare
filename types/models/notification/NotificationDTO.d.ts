@@ -1,9 +1,9 @@
 export type NotificationDTO = {
   id: string;
-  questionID: string;
+  entityID: string;
   commenterName: string;
-  questionSummary: string;
-  questionUrl: string;
+  entitySummary: string;
+  entityUrl: string;
   timedifference: string;
   timestamp: Date;
 };

@@ -94,7 +94,6 @@ export const getNotifications = async (
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
     // Aggregation pipeline to compare lastViewed with the last update of a question
     const watchedQuestions = await User.aggregate([
       {
@@ -108,7 +107,7 @@ export const getNotifications = async (
       {
         $lookup: {
           from: 'questions',
-          localField: 'watchList.questionId',
+          localField: 'watchList.watchedId',
           foreignField: '_id',
           as: 'question'
         }
@@ -152,17 +151,6 @@ export const getNotifications = async (
       {
         $lookup: {
           from: 'users',
-          localField: 'question.author',
-          foreignField: '_id',
-          as: 'author'
-        }
-      },
-      {
-        $unwind: '$author'
-      },
-      {
-        $lookup: {
-          from: 'users',
           localField: 'question.latestContributor',
           foreignField: '_id',
           as: 'latestContributor'
@@ -176,8 +164,25 @@ export const getNotifications = async (
       },
       {
         $project: {
-          questionId: '$question._id',
-          questionSummary: '$question.text',
+          entityID: '$question._id',
+          entitySummary: {
+            $ifNull: [
+              {
+                $reduce: {
+                  input: { $slice: ['$question.versions', -1] },
+                  initialValue: '',
+                  in: {
+                    $cond: {
+                      if: { $ne: ['$$this.text', null] },
+                      then: '$$this.text',
+                      else: '$$value'
+                    }
+                  }
+                }
+              },
+              '$assessment.summary'
+            ]
+          },
           authorName: {
             $cond: {
               if: { $eq: ['$question.latestContributor', null] }, // Check if latestContributor is null
@@ -191,7 +196,7 @@ export const getNotifications = async (
             $subtract: ['$question.updatedAt', '$watchList.lastViewed']
           },
           // Construct the URL by concatenating _id fields
-          questionUrl: {
+          entityUrl: {
             $concat: [
               { $toString: '$university._id' },
               '/',
@@ -203,7 +208,7 @@ export const getNotifications = async (
         }
       }
     ]);
-
+    console.log(watchedQuestions);
     // Sort watchedQuestions array
     watchedQuestions.sort(
       (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
@@ -220,13 +225,10 @@ export const getNotifications = async (
       }
       notifications.push({
         id: String(idCounter++),
-        questionID: watchedQuestion.questionId,
+        entityID: watchedQuestion.entityID,
         commenterName: watchedQuestion.authorName,
-        questionSummary: watchedQuestion.questionSummary.replace(
-          /<[^>]*>?/gm,
-          ''
-        ), // strips html tags
-        questionUrl: watchedQuestion.questionUrl,
+        entitySummary: watchedQuestion.entitySummary.replace(/<[^>]*>?/gm, ''), // strips html tags
+        entityUrl: watchedQuestion.entityUrl,
         timedifference: watchedQuestion.timeDifference,
         timestamp: watchedQuestion.updatedAt
       });
@@ -327,7 +329,7 @@ export const updateWatchList = async (
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { id, action, watchType } = req.body;
+    const { watchedId, action, watchType } = req.body;
 
     // Get the user by its ID
     const user = await User.findById(req.params.userId);
@@ -346,14 +348,14 @@ export const updateWatchList = async (
       return res.status(400).json({ error: 'Invalid watchType' });
     }
 
-    const entity = await Model.findById(id);
+    const entity = await Model.findById(watchedId);
     if (!entity) {
       return res.status(404).json({ errors: `${Model.modelName} not found` });
     }
     if (action === UpdateWatchListAction.WATCH) {
-      if (!user.watchList.find((entry) => entry.id.equals(id))) {
+      if (!user.watchList.find((entry) => entry.watchedId.equals(watchedId))) {
         user.watchList.push({
-          id: entity._id,
+          watchedId: entity._id,
           lastViewed: new Date(),
           watchType: watchType
         });
@@ -363,7 +365,7 @@ export const updateWatchList = async (
       }
     } else if (action === UpdateWatchListAction.UNWATCH) {
       user.watchList = user.watchList.filter((entry) => {
-        return !entry.id.equals(id);
+        return !entry.watchedId.equals(watchedId);
       });
       entity.watchers = entity.watchers.filter(
         (id: any) => !id.equals(user._id)

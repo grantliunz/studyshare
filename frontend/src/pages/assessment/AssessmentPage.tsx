@@ -203,7 +203,7 @@ const AssessmentPage = () => {
     setIsStarred(newValue);
 
     const res = await updateWatchList({
-      id: assessment!._id!, // can change this later
+      watchedId: assessment!._id!, // can change this later
       action: newValue
         ? UpdateWatchListAction.WATCH
         : UpdateWatchListAction.UNWATCH,
