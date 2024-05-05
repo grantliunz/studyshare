@@ -183,7 +183,6 @@ export default function NewQuestion({
           <div>
             <input
               type="checkbox"
-              id="anonymousCheckbox"
               onChange={(event) => {
                 setAnonymousQuestion(event.target.checked);
               }}
