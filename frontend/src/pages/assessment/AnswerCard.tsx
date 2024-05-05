@@ -317,7 +317,6 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                     </label>
                     <input
                       type="checkbox"
-                      id="anonymousCheckbox"
                       onChange={(event) => {
                         setAnonymousComment(event.target.checked);
                       }}

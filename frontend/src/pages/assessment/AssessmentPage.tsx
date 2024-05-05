@@ -187,7 +187,9 @@ const AssessmentPage = () => {
       const arr = buildOrderedQuestionsArray(root);
       const newOrderedQuestionsArray = arr.concat(reported);
       setOrderedQuestionsArray(newOrderedQuestionsArray);
-      if (questionID) {
+      if (currentQuestion) {
+        // do nothing
+      } else if (questionID) {
         const question = newOrderedQuestionsArray.find(
           (qn) => qn._id === questionID
         );
@@ -203,7 +205,7 @@ const AssessmentPage = () => {
         );
       }
     }
-  }, [JSON.stringify(userDb?.reported), assessment, questionID]);
+  }, [userDb, assessment, questionID]);
 
   const handleIsStarredChange = async (newValue: boolean) => {
     if (!currentUser || !userDb) {
