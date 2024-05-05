@@ -172,7 +172,26 @@ export default function NewQuestion({
         >
           <Editor value={questionContent} setValue={setQuestionContent} />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            justifyContent: 'space-between'
+          }}
+        >
+          <div>
+            <input
+              type="checkbox"
+              id="anonymousCheckbox"
+              onChange={(event) => {
+                setAnonymousQuestion(event.target.checked);
+              }}
+            />
+            <label htmlFor="anonymousCheckbox" style={{ marginLeft: '4px' }}>
+              Anonymous
+            </label>
+          </div>
           <Button
             variant="contained"
             onClick={handleSubmit}
@@ -184,18 +203,6 @@ export default function NewQuestion({
           >
             Create Question
           </Button>
-          <div>
-            <input
-              type="checkbox"
-              id="anonymousCheckbox"
-              onChange={(event) => {
-                setAnonymousQuestion(event.target.checked);
-              }}
-            />
-            <label htmlFor="anonymousCheckbox" style={{ marginLeft: '4px' }}>
-              Send Anonymously
-            </label>
-          </div>
         </div>
       </Box>
     </Modal>

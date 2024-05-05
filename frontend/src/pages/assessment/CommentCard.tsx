@@ -119,16 +119,25 @@ const CommentCard = ({ comment }: CommentCardProps) => {
           borderRadius: '8px',
           padding: '8px',
           width: '100%',
-          display: 'flex',
-          position: 'relative' // Add position relative to the parent container
+          display: 'flex'
         }}
       >
-        <div style={{ flex: 1, display: 'flex' }}>{polledComment.text}</div>
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            overflowWrap: 'anywhere',
+            textAlign: 'start'
+          }}
+        >
+          {polledComment.text}
+        </div>
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-end' // Align content to the end of the column
+            alignItems: 'flex-end',
+            marginLeft: '8px'
           }}
         >
           <p

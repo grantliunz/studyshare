@@ -131,7 +131,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
   }
 
   return (
-    <div style={{ overflow: 'hidden', width: '100%' }}>
+    <div style={{ width: '100%' }}>
       <div
         style={{
           alignItems: 'center',
@@ -297,8 +297,22 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             fullWidth
             InputProps={{
               endAdornment: (
-                <>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'end'
+                  }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <label
+                      htmlFor="anonymousCheckbox"
+                      style={{
+                        fontSize: '0.8rem'
+                      }}
+                    >
+                      Anonymous
+                    </label>
                     <input
                       type="checkbox"
                       id="anonymousCheckbox"
@@ -306,13 +320,19 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                         setAnonymousComment(event.target.checked);
                       }}
                     />
-                    <label htmlFor="anonymousCheckbox">Send Anonymously</label>
                   </div>
-                  <IconButton disabled={newComment.trim() === ''} type="submit">
+                  <IconButton
+                    disabled={newComment.trim() === ''}
+                    type="submit"
+                    style={{ padding: '5px 5px 0 0', margin: '0 0 0 5px' }}
+                  >
                     <SendOutlinedIcon />
                   </IconButton>
-                </>
-              )
+                </div>
+              ),
+              style: {
+                padding: '4pxpx 8px'
+              }
             }}
             multiline
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

@@ -350,33 +350,38 @@ const QuestionPanel = ({
             />
           </div>
         </div>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '20px',
-          alignItems: 'center'
-        }}
-      >
-        {polledQuestion.answers
-          .sort(
-            (a, b) =>
-              b.rating.upvotes -
-              b.rating.downvotes -
-              (a.rating.upvotes - a.rating.downvotes)
-          )
-          .map((answer) => (
-            <AnswerCard key={answer._id} answer={answer} />
-          ))}
-      </div>
-      <div
-        style={{ height: '300px', padding: '30px 20px', marginBottom: '100px' }}
-      >
-        <NewAnswer
-          questionId={polledQuestion._id}
-          onSubmitAnswer={refreshQuestion}
-        />
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            margin: '20px',
+            alignItems: 'center'
+          }}
+        >
+          {polledQuestion.answers
+            .sort(
+              (a, b) =>
+                b.rating.upvotes -
+                b.rating.downvotes -
+                (a.rating.upvotes - a.rating.downvotes)
+            )
+            .map((answer) => (
+              <AnswerCard key={answer._id} answer={answer} />
+            ))}
+        </div>
+        <div
+          style={{
+            height: '300px',
+            padding: '30px 20px',
+            marginBottom: '100px'
+          }}
+        >
+          <NewAnswer
+            questionId={polledQuestion._id}
+            onSubmitAnswer={refreshQuestion}
+          />
+        </div>
       </div>
     </div>
   );
