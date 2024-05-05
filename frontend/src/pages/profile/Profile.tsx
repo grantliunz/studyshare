@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import styles from './Profile.module.css';
-import { Button, Chip, Typography, CircularProgress } from '@mui/material';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import { Button, Chip, Typography, CircularProgress } from '@mui/material';
 import { useAuth } from '../../contexts/UserContext';
 import ProfileCard from './ProfileCard';
 import API from '../../util/api';
@@ -14,16 +14,17 @@ export default function Profile() {
     const { userDb, logout } = useAuth();
     const navigate = useNavigate();
 
+    // User avatar configuration
     const config = genConfig(userDb?.email || '');
-
-    const tags = ['Watchlisted Questions', 'Added Questions', 'Answered Questions'];
 
     // States to store data
     const [watchlistedQuestions, setWatchlistedQuestions] = useState([] as any[]);
     const [addedQuestions, setAddedQuestions] = useState([] as any[]);
     const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
 
-    // State to manage selected tag
+    // Tags and states to manage selected tag and card data
+    const tags = ['Watchlisted Questions', 'Added Questions', 'Answered Questions'];
+
     const [selectedTag, setSelectedTag] = useState('Watchlisted Questions');
     const [selectedCardData, setSelectedCardData] = useState([] as any[]);
 
@@ -32,7 +33,7 @@ export default function Profile() {
     const [isError, setIsError] = useState(false);
 
 
-    // Set the selected card data based on the selected tag
+    // Set profile cards data based on selected tag
     useEffect(() => {
         if (selectedTag === 'Watchlisted Questions') {
             setSelectedCardData(watchlistedQuestions);
@@ -44,6 +45,7 @@ export default function Profile() {
     }, [selectedTag, watchlistedQuestions, addedQuestions, answeredQuestions]);
 
 
+    // Fetch user data upon component mount
     useEffect(() => {
         const fetchData = async () => {
             if (!userDb) return;
@@ -53,7 +55,6 @@ export default function Profile() {
                 // Get all questions watchlisted by the user
                 let watchlistedQuestions: any[] = [];
                 if (userDb?.watchList) {
-
                     for (let watchList of userDb?.watchList) {
                         if (watchList.watchType === 'QUESTION') {
                             watchlistedQuestions.push(await getQuestionData(watchList.watchedId));
@@ -61,8 +62,8 @@ export default function Profile() {
                     }
                 }
                 setWatchlistedQuestions(watchlistedQuestions);
-                console.log(watchlistedQuestions);
 
+                // Get all questions added by the user
                 let addedQuestions: any[] = [];
                 if (userDb?.questions) {
                     for (let questionId of userDb?.questions) {
@@ -98,9 +99,6 @@ export default function Profile() {
                     }
                 }
                 setAnsweredQuestions(answeredQuestions);
-                console.log(answeredQuestions);
-
-
             } catch (error) {
                 console.log(error);
                 setIsError(true);
@@ -108,11 +106,12 @@ export default function Profile() {
             setIsLoading(false);
         }
         fetchData();
-
     }, [userDb]);
 
 
     async function getQuestionData(questionId: string) {
+
+        // Retrieve question data
         const question = await axios.get<any>(`${BACKEND_URL}${API.getQuestion}/${questionId}`);
         const dateCreated = new Date(question.data.createdAt).toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -120,12 +119,12 @@ export default function Profile() {
             year: 'numeric',
         });
 
+        // Retrieve assessment and course data
         const assessment = await axios.get<any>(`${BACKEND_URL}${API.getAssessment}/${question.data.assessment}`);
         const course = await axios.get<any>(`${BACKEND_URL}${API.getCourse}/${assessment.data.course}`);
         const year = course.data.code + " / " + "Semester " +  assessment.data.semester + " " + assessment.data.year;
         const path = "/" + course.data.university + "/" + assessment.data.course + "/" + assessment.data._id;
         const regex = /(<([^>]+)>)/ig;
-
 
         return {
             Title: question.data.number.join('.'),
@@ -144,17 +143,15 @@ export default function Profile() {
     return (
         <div className={styles.container}>
             {isError ? (
-                <>
-                <div className={styles.errorContainer}>
-                    <h1 className={styles.error}>Error fetching data</h1>
-                </div>
-                </> 
+            <div className={styles.errorContainer}>
+                <h1 className={styles.error}>Error fetching data</h1>
+            </div>
             ) : ( isLoading ? (
-                <>
+            <>
                 <div className={styles.loadingContainer}>
                     <CircularProgress />
                 </div>
-                </>
+            </>
             ) : (
             <>
                 <h1 className={styles.title}>Profile</h1>
@@ -198,22 +195,30 @@ export default function Profile() {
                 </div>
 
                 <div className={styles.profileCards}>
-                    {selectedCardData.map((card, index) => (
-                        <div key={index} onClick={() => navigate(card.Path)}>
-                            <ProfileCard
-                                Title={card.Title}
-                                Content={card.Content}
-                                Year={card.Year}
-                                DateCreated={card.DateCreated}
-                            />
+                    { selectedCardData.length === 0 ? (
+                        <div>
+                            <h2 className={styles.noData}>There are no {selectedTag.toLowerCase()} to display</h2>
                         </div>
-                    ))}
+                    ) : (
+                    <>
+                        {selectedCardData.map((card, index) => (
+                            <div key={index} onClick={() => navigate(card.Path)}>
+                                <ProfileCard
+                                    Title={card.Title}
+                                    Content={card.Content}
+                                    Year={card.Year}
+                                    DateCreated={card.DateCreated}
+                                />
+                            </div>
+                        ))}
+                    </>
+                    )}
                 </div>
 
                 <div className={styles.logoutButton}>
                     <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
                 </div>
-                </>
+            </>
             )
         )}
         </div>

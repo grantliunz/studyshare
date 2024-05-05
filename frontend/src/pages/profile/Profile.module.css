@@ -120,3 +120,9 @@
 .logoutButton {
     margin-top: 20px;
 }
+
+.noData {
+    font-size: 1.25rem;
+    color: #666;
+    margin-top: 20px;
+}
