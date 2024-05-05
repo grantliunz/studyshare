@@ -315,23 +315,19 @@ export const getNotifications = async (
       ...watchedQuestions,
       ...watchedAssessments
     ];
-    console.log(notifications);
     notifications.forEach((notification) => {
       notification.entitySummary = notification.entitySummary.replace(
         /<[^>]*>?/gm,
         ''
       );
     });
-    console.log('User Id ' + user._id);
     // Sort notifications array
     notifications.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    const filteredNotifications = notifications.filter((notification) => {
-      console.log(notification.authorId);
-      return (
+    const filteredNotifications = notifications.filter(
+      (notification) =>
         notification.timeDifference >= 0 &&
         !notification.authorId.equals(user._id)
-      );
-    });
+    );
 
     // Format and send the response
     return res.status(200).json(filteredNotifications);
