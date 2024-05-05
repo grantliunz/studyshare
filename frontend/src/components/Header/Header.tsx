@@ -1,5 +1,4 @@
 import styles from './Header.module.css';
-import profileIcon from '../../assets/icons/profile.svg';
 import notificationIcon from '../../assets/icons/notification.svg';
 import { useAuth } from '../../contexts/UserContext';
 import { Badge, Button } from '@mui/material';
@@ -7,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
+import Avatar, { genConfig } from 'react-nice-avatar';
+
 
 export default function Header() {
   const { user, userDb } = useAuth();
@@ -18,6 +19,10 @@ export default function Header() {
   const onClick = () => {
     navigate('/login');
   };
+
+  const onClickProfile = () => {
+    navigate('/profile');
+  }
 
   const openNotificationsWindow = () => {
     setOpenNotifications(true);
@@ -61,7 +66,12 @@ export default function Header() {
                 />
               )}
             </Badge>
-            <img src={profileIcon} alt="Profile" />
+            <div className={styles.profileIcon} onClick = {onClickProfile} style={{cursor: 'pointer'}}>
+              <Avatar
+                style={{ width: '50px', height: '50px' }}
+                {...genConfig(user.email)}
+              />
+            </div>
           </>
         ) : (
           <div>
