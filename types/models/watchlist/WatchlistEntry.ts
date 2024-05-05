@@ -1,4 +1,5 @@
 export type WatchlistEntry = {
-  questionId: string;
+  watchedId: string;
   lastViewed: Date;
+  watchType: string;
 };
