@@ -20,7 +20,6 @@ export const createQuestion = async (
       number,
       versions,
       answers = [],
-      watchers = [],
       comments = [],
       latestContributor
     } = req.body; // assuming request body contains question data
@@ -60,7 +59,6 @@ export const createQuestion = async (
       number,
       versions,
       answers,
-      watchers,
       comments,
       latestContributor
     });

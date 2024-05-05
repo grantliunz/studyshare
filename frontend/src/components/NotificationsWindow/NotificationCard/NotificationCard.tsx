@@ -73,6 +73,7 @@ export default function NotificationCard({
     // refreshUserDb();
     refreshNotifications();
     const quest = questionId != '' ? questionId : entityID;
+    console.log(quest);
     navigate(questionUrl, { state: { quest } });
   }
   return (

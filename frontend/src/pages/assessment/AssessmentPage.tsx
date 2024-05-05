@@ -150,7 +150,7 @@ const AssessmentPage = () => {
   const setLoginPopup = useContext(LoginPopupContext);
 
   const location = useLocation();
-  const { questionID } = location.state ?? {};
+  const { quest: questionID } = location.state ?? {};
   const {
     data: assessment,
     isLoading: isFetchingAssessment,
