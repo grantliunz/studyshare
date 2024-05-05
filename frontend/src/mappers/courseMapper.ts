@@ -1,5 +1,5 @@
+import { Course } from '@shared/types/models/course/course';
 import { Mapper } from '../mappers/mapper';
-import { Course } from '../types/types';
 
 const mapGetCoursesData: Mapper<Course[]> = (data: any): Course[] => {
   // Assuming the API response data is an array of objects

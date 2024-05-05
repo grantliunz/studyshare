@@ -41,7 +41,7 @@ export default function NotificationCard({
   refreshNotifications
 }: NotificationCardProps) {
   const navigate = useNavigate();
-  const { userDb, refreshUserDb } = useAuth();
+  const { userDb } = useAuth();
   const { putData: putUser } = usePut<Partial<UserDTO>, UserDTO>(
     `${API.updateUser}/${userDb?._id}`
   );

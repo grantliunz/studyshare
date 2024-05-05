@@ -54,7 +54,7 @@ export default function NewQuestion({
       return;
     }
 
-    const newQuestion = {
+    const res = await createQuestion({
       number: [...parentNumber, ...questionNumber.split('.')],
       versions: [
         {
@@ -64,13 +64,11 @@ export default function NewQuestion({
           isAnonymous: anonymousQuestion
         }
       ],
-      answers: [],
       reporters: [],
+      answers: [],
       comments: [],
       latestContributor: userDb._id
-    };
-
-    const res = await createQuestion(newQuestion);
+    });
     if (res instanceof AxiosError) {
       setCreateQuestionError((res.response?.data as { error: string }).error);
       return;
@@ -183,7 +181,6 @@ export default function NewQuestion({
           <div>
             <input
               type="checkbox"
-              id="anonymousCheckbox"
               onChange={(event) => {
                 setAnonymousQuestion(event.target.checked);
               }}
