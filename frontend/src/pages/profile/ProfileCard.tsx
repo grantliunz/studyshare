@@ -1,21 +1,20 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import { CardActionArea } from "@mui/material";
 import style from "./ProfileCard.module.css";
 
 interface ProfileCardProps {
-  QuestionTitle: string;
-  QuestionContent: string;
-  QuestionYear: string;
+  Title: string;
+  Content: string;
+  Year: string;
   DateCreated: string;
-  onClick: () => void;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
-  QuestionTitle,
-  QuestionContent,
-  QuestionYear,
-  DateCreated
+  Title,
+  Content,
+  Year,
+  DateCreated,
 }) => {
   return (
     <Card
@@ -32,12 +31,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       <CardActionArea>
         <CardContent className={style.cardContent}>
           <div className={style.header}>
-            <p className={style.title}>{QuestionTitle}</p>
+            <p className={style.title}>{Title}</p>
             <p className={style.date}>{DateCreated}</p>
           </div>
           <div className={style.body}>
-            <p className={style.content}>{QuestionContent}</p>
-            <p className={style.year}>{QuestionYear}</p>
+            <p className={style.content}>{Content}</p>
+            <p className={style.year}>{Year}</p>
           </div>
         </CardContent>
       </CardActionArea>
