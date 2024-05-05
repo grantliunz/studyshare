@@ -91,10 +91,7 @@ export default function UniversitiesPage() {
           />
           <AddButton handleOpenForm={handleOpenForm} />
           {user && <Button onClick={signOut}>Logout (temporary)</Button>}
-          <LoginPopup
-            open={showLoginPopup}
-            setOpen={setShowLoginPopup}
-          />
+          <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
         </>
       )}
     </div>

@@ -236,13 +236,14 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
                 style={{
                   padding: '0px'
                 }}
+                title={isExpanded ? 'Collapse' : 'Expand'}
               >
                 {isExpanded ? (
                   <ExpandMoreRoundedIcon />
                 ) : (
                   <KeyboardArrowRightRoundedIcon />
                 )}
-              </IconButton>{' '}
+              </IconButton>
               Comments {polledAnswer.comments.length}
             </div>
             <div

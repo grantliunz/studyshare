@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: center;
   margin: 10px;
+  z-index: 100;
 }
 
 .addButton {
@@ -15,4 +16,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background-color: #41709b;
+  color: white;
 }

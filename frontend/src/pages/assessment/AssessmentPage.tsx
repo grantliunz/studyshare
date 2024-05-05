@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './AssessmentPage.module.css';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import QuestionPanel from './QuestionPanel';
 import QuestionNumber from './QuestionNumber';
 import {
@@ -10,6 +10,8 @@ import {
   CircularProgress,
   IconButton
 } from '@mui/material';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NewQuestion from './NewQuestion/NewQuestion';
@@ -24,6 +26,12 @@ import { useAuth } from '../../contexts/UserContext';
 import { AssessmentGET } from '@shared/types/models/assessment/assessment';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 import { QuestionLazy } from '@shared/types/models/question/question';
+import {
+  UpdateWatchListAction,
+  UpdateWatchListDTO
+} from '@shared/types/models/user/user';
+import { AxiosError } from 'axios';
+import usePut from '../../hooks/usePut';
 
 export type QuestionNode = {
   number: string[];
@@ -134,7 +142,11 @@ const buildOrderedQuestionsArray = (root: QuestionNode) => {
 
 const AssessmentPage = () => {
   const { assessmentId } = useParams();
-  const { user: currentUser, userDb } = useAuth();
+  const { user: currentUser, userDb, refreshUserDb } = useAuth();
+  const { putData: updateWatchList } = usePut<UpdateWatchListDTO, null>(
+    `${API.updateWatchList}/${userDb?._id}`
+  );
+  const setLoginPopup = useContext(LoginPopupContext);
 
   const location = useLocation();
   const { questionID } = location.state ?? {};
@@ -143,6 +155,8 @@ const AssessmentPage = () => {
     isLoading: isFetchingAssessment,
     refresh: refreshAssessment
   } = useGet<AssessmentGET>(`${API.getAssessment}/${assessmentId}`);
+
+  const [isStarred, setIsStarred] = useState<boolean>(false);
 
   const [currentQuestion, setCurrentQuestion] = useState<QuestionLazy>();
   const [newQuestionOpen, setNewQuestionOpen] = useState(false);
@@ -179,6 +193,28 @@ const AssessmentPage = () => {
       }
     }
   }, [userDb, assessment, questionID]);
+
+  const handleIsStarredChange = async (newValue: boolean) => {
+    if (!currentUser || !userDb) {
+      setLoginPopup(true);
+      return;
+    }
+    setIsStarred(newValue);
+
+    const res = await updateWatchList({
+      assessmentId: assessment!._id!,
+      action: newValue
+        ? UpdateWatchListAction.WATCH
+        : UpdateWatchListAction.UNWATCH
+    });
+
+    if (res instanceof AxiosError) {
+      console.log((res.response?.data as { error: string }).error);
+      return;
+    }
+
+    refreshUserDb();
+  };
 
   const handleAddQuestion = (parentNumber: string[]) => {
     if (!currentUser) {
@@ -228,15 +264,32 @@ const AssessmentPage = () => {
                 maxWidth: sidebarWidth
               }}
             >
-              <h3
-                style={{
-                  display: 'flex',
-                  textAlign: 'start',
-                  margin: '8px 0px 0px 8px'
-                }}
-              >
-                Questions
-              </h3>
+              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                <h3
+                  style={{
+                    display: 'flex',
+                    textAlign: 'start',
+                    margin: '8px 0px 0px 8px'
+                  }}
+                >
+                  Questions
+                </h3>
+                <IconButton
+                  onClick={() => handleIsStarredChange(!isStarred)}
+                  title={
+                    !isStarred
+                      ? 'Add assessment to watchlist'
+                      : 'Remove assessment from watchlist'
+                  }
+                  style={{
+                    marginLeft: 'auto',
+                    marginRight: '8px',
+                    marginTop: '4px'
+                  }}
+                >
+                  {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
+                </IconButton>
+              </div>
               {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
                 rootNode.subquestions.map((question) => (
                   <QuestionNumber
@@ -265,6 +318,7 @@ const AssessmentPage = () => {
                   marginTop: '8px'
                 }}
                 onClick={() => handleAddQuestion([])}
+                title="Add question"
               >
                 <AddIcon fontSize="medium" />
               </IconButton>
