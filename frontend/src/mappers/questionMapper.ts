@@ -15,7 +15,6 @@ const questionMapper: Mapper<Question> = (data: any): Question => {
       ...version,
       createdAt: new Date(version.createdAt)
     })),
-    watchers: data.watchers,
     answers: data.answers.map((answer: Answer) => ({
       ...answer,
       createdAt: new Date(answer.createdAt),
@@ -25,6 +24,7 @@ const questionMapper: Mapper<Question> = (data: any): Question => {
       }))
     })),
     comments: data.comments.map((comment: any) => commentMapper(comment)),
+    reporters: data.reporters,
     isAnonymous: data.isAnonymous,
     latestContributor: data.latestContributor,
     createdAt: new Date(data.createdAt)

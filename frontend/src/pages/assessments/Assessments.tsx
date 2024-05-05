@@ -102,7 +102,6 @@ const Assessments = () => {
       type,
       questions: [],
       latestContributor: userDb!._id,
-      watchers: [],
       newestQuestion: null,
       ...formInputs
     });

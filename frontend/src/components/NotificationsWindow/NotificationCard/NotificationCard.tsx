@@ -57,7 +57,6 @@ export default function NotificationCard({
     const watchedItemIndex = watchedItems!.findIndex(
       (watchedItem) => watchedItem.watchedId === entityID
     );
-    console.log(watchedItems);
 
     watchedItems![watchedItemIndex] = {
       ...watchedItems![watchedItemIndex],
@@ -68,7 +67,7 @@ export default function NotificationCard({
     });
 
     if (res instanceof AxiosError) {
-      console.log((res.response?.data as { error: string }).error);
+      console.error((res.response?.data as { error: string }).error);
       return;
     }
     // refreshUserDb();

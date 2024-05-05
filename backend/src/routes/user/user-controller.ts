@@ -461,21 +461,14 @@ export const updateWatchList = async (
           watchType: watchType
         });
       }
-      if (!entity.watchers.find((id: any) => id.equals(user._id))) {
-        entity.watchers.push(user._id);
-      }
     } else if (action === UpdateWatchListAction.UNWATCH) {
       user.watchList = user.watchList.filter((entry) => {
         return !entry.watchedId.equals(watchedId);
       });
-      entity.watchers = entity.watchers.filter(
-        (id: any) => !id.equals(user._id)
-      );
     }
 
-    // Save user and entity
+    // Save user
     await user.save();
-    await entity.save();
 
     res.status(204).end(); // respond with no content
   } catch (error) {

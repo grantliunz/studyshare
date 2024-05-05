@@ -192,6 +192,13 @@ const AssessmentPage = () => {
       } else {
         setCurrentQuestion(arr.length > 0 ? arr[0] : undefined);
       }
+      if (userDb) {
+        setIsStarred(
+          userDb.watchList.find(
+            (entry) => entry.watchedId === assessment._id
+          ) !== undefined
+        );
+      }
     }
   }, [userDb, assessment, questionID]);
 

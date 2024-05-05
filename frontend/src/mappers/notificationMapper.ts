@@ -14,7 +14,8 @@ const mapGetNotifications: Mapper<NotificationDTO[]> = (
       timestamp: new Date(item.timestamp),
       timeDifference: item.timeDifference,
       entityType: item.entityType,
-      questionId: item.questionId || undefined
+      questionId: item.questionId || undefined,
+      authorId: item.authorId
     })
   );
 };

@@ -126,7 +126,6 @@ const assessments = [
     year: 2024,
     semester: SemesterType.FIRST,
     questions: [],
-    watchers: [],
     latestContributor: users[0]._id,
     newestQuestion: null
   }),
@@ -136,7 +135,6 @@ const assessments = [
     semester: SemesterType.FIRST,
     number: 1,
     questions: [],
-    watchers: [],
     latestContributor: users[1]._id,
     newestQuestion: null
   }),
@@ -144,8 +142,7 @@ const assessments = [
     type: AssessmentType.EXAM,
     year: 2023,
     semester: SemesterType.FIRST,
-    questions: [],
-    watchers: []
+    questions: []
   }),
   new Assessment({
     type: AssessmentType.OTHER,
@@ -153,7 +150,6 @@ const assessments = [
     semester: SemesterType.FIRST,
     name: 'Problem Sheet 1',
     questions: [],
-    watchers: [],
     latestContributor: users[2]._id,
     newestQuestion: null
   })
@@ -171,7 +167,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[0]._id
@@ -197,7 +192,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -213,7 +207,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[2]._id
@@ -229,7 +222,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[0]._id
@@ -245,7 +237,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -261,7 +252,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[2]._id
@@ -277,7 +267,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: []
   }),
@@ -292,7 +281,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
@@ -308,7 +296,6 @@ const questions = [
       }
     ],
     answers: [],
-    watchers: [],
     reporters: [],
     comments: [],
     latestContributor: users[1]._id
