@@ -79,6 +79,7 @@ const BreadCrumbs = () => {
       setIsProfile(true);
       return;
     }
+
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
@@ -147,17 +148,17 @@ const BreadCrumbs = () => {
             </Link>
           )
         }
-        {university && (
+        {university && !profile && (
           <Link className={style.link} href={`/${university.id}`}>
             {university.name}
           </Link>
         )}
-        {course && (
+        {course && !profile && (
           <Link className={style.link} href={`/${university?.id}/${course.id}`}>
             {course.code}
           </Link>
         )}
-        {assessment && (
+        {assessment && !profile && (
           <Typography className={`${style.link} ${style.assessment}`}>
             {createAssessmentString(assessment)}
           </Typography>
