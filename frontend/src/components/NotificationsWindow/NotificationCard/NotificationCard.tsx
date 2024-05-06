@@ -1,4 +1,5 @@
-import { Avatar, Button } from '@mui/material';
+import { Button } from '@mui/material';
+import Avatar, { genConfig } from 'react-nice-avatar';
 import { NotificationDTO } from '@shared/types/models/notification/NotificationDTO';
 import styles from './NotificationCard.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -75,6 +76,17 @@ export default function NotificationCard({
     const quest = questionId != '' ? questionId : entityID;
     navigate(questionUrl, { state: { quest } });
   }
+
+  const config = (name: string) => {
+    const avatarConfig = genConfig(name || '');
+    if (avatarConfig.hairStyle === 'womanLong') {
+        avatarConfig.hairStyle = 'womanShort';
+    } else if (avatarConfig.hairStyle === 'thick') {
+        avatarConfig.hairStyle = 'normal';
+    }
+    return avatarConfig;
+  };
+
   return (
     <Button
       key={notification.id} // Use the id as the key
@@ -98,7 +110,9 @@ export default function NotificationCard({
         padding: '2px'
       }}
     >
-      <Avatar className={styles.avatar} />
+      <div className={styles.avatar}>
+        <Avatar style={{ width: '50px', height: '50px' }} {...config(notification.authorName)} />
+      </div>
       <div>
         <p className={styles.notificationText}>
           <b>{notification.authorName}</b>

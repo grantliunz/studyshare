@@ -71,7 +71,7 @@ export default function Profile() {
 
     // User avatar configuration
     const config = () => {
-        const avatarConfig = genConfig(userDb?.email || '');
+        const avatarConfig = genConfig(userDb?.name || '');
         if (avatarConfig.hairStyle === 'womanLong') {
             avatarConfig.hairStyle = 'womanShort';
         } else if (avatarConfig.hairStyle === 'thick') {

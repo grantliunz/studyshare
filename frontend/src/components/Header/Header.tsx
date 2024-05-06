@@ -83,7 +83,7 @@ export default function Header() {
             >
               <Avatar
                 style={{ width: '50px', height: '50px' }}
-                {...config(user.email || '')}
+                {...config(userDb?.name || '')}
               />
             </div>
           </>

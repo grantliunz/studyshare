@@ -53,6 +53,7 @@
     justify-content: space-between; 
 }
 
+/* Left align all the text here */
 .profileContainer {
     display: flex;
     align-items: flex-start;
@@ -88,6 +89,7 @@
 
 .profileDetails {
     overflow: hidden;
+    justify-content: flex-start;
 }
 
 .profileEmail {
