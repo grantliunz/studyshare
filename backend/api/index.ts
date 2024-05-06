@@ -18,7 +18,7 @@ const app: Application = express();
 app.use(morgan('combined'));
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static('public'));
+app.use(express.static('api'));
 
 // Import and use our application routes.
 import routes from './routes/routes';
