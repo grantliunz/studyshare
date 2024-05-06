@@ -40,7 +40,7 @@ export default function NewQuestion({
   );
 
   const handleSubmit = async () => {
-    if (questionContent.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+    if (questionContent.replace(/<(?!img)[^>]+>/g, '').trim() === '') {
       setCreateQuestionError('Please enter a question!');
       return;
     }
