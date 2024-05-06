@@ -57,6 +57,24 @@ export type UserDTO = {
   downvotedComments: ObjectId[];
 };
 
+export type UserProfileDTO = {
+  watchListedQuestions: ProfileCardDTO[];
+  addedQuestions: ProfileCardDTO[];
+  answeredQuestions: ProfileCardDTO[];
+  watchListedAssessments: ProfileCardDTO[];
+};
+
+
+export type ProfileCardDTO = {
+  id: string;
+  Title: string;
+  Description: string;
+  Year: string;
+  DateCreated: string;
+  Path: string;
+};
+
+
 export type PostUser = {
   authId: string;
   name: string;
