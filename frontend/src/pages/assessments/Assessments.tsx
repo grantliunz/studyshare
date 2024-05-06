@@ -80,7 +80,6 @@ const Assessments = () => {
       setShowLoginPopup(true);
       return;
     }
-    console.log(type);
     setShowForm(true);
     setAssessmentTypeState(type);
   };
