@@ -14,9 +14,6 @@ export default function Profile() {
     const { userDb, logout } = useAuth();
     const navigate = useNavigate();
 
-    // User avatar configuration
-    const config = genConfig(userDb?.email || '');
-
     // States to store data
     const [watchlistedAssignments, setWatchlistedAssignments] = useState([] as any[]);
     const [watchlistedQuestions, setWatchlistedQuestions] = useState([] as any[]);
@@ -72,6 +69,17 @@ export default function Profile() {
         navigate('/universities');
     }
 
+    // User avatar configuration
+    const config = () => {
+        const avatarConfig = genConfig(userDb?.email || '');
+        if (avatarConfig.hairStyle === 'womanLong') {
+            avatarConfig.hairStyle = 'womanShort';
+        } else if (avatarConfig.hairStyle === 'thick') {
+            avatarConfig.hairStyle = 'normal';
+        }
+        return avatarConfig;
+    };
+
     return (
         <div className={styles.container}>
             {isError ? (
@@ -89,7 +97,7 @@ export default function Profile() {
             <div className={styles.profileInfo}>
                 <div className={styles.profileContainer}>
                     <div className={styles.avatar}>
-                        <Avatar style={{ width: '125px', height: '125px' }} {...config} />
+                        <Avatar style={{ width: '125px', height: '125px' }} {...config()} />
                     </div>
                     <div className={styles.profileDetails}>
                         <h1 className={styles.profileName}>{userDb?.name}</h1>
