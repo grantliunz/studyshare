@@ -33,17 +33,18 @@ export default function Profile() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
-
     // Set profile cards data based on selected tag
     useEffect(() => {
-        if (selectedTag === 'Watchlisted Questions') {
+        if (selectedTag === 'Watchlisted Assignments') {
+            setSelectedCardData(watchlistedAssignments);
+        } else if (selectedTag === 'Watchlisted Questions') {
             setSelectedCardData(watchlistedQuestions);
         } else if (selectedTag === 'Added Questions') {
             setSelectedCardData(addedQuestions);
         } else if (selectedTag === 'Answered Questions') {
             setSelectedCardData(answeredQuestions);
         }
-    }, [selectedTag, watchlistedQuestions, addedQuestions, answeredQuestions]);
+    }, [selectedTag, watchlistedAssignments, watchlistedQuestions, addedQuestions, answeredQuestions]);
 
 
     // Fetch user data upon component mount
@@ -53,7 +54,6 @@ export default function Profile() {
             setIsLoading(true);
             try {
                 const profileData = await axios.get<any>(`${BACKEND_URL}${API.getProfile}/${userDb._id}`);
-                console.log(profileData);
                 setWatchlistedAssignments(profileData.data.watchListedAssessments);
                 setWatchlistedQuestions(profileData.data.watchListedQuestions);
                 setAddedQuestions(profileData.data.addedQuestions);
@@ -78,42 +78,48 @@ export default function Profile() {
             <div className={styles.errorContainer}>
                 <h1 className={styles.error}>Error fetching data</h1>
             </div>
-            ) : ( isLoading ? (
+            ) : ( 
             <>
+            <div className={styles.profileHeader}>
+                <h1 className={styles.title}>Profile</h1>
+                <div className={styles.logoutButton}>
+                    <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
+                </div>
+            </div>
+            <div className={styles.profileInfo}>
+                <div className={styles.profileContainer}>
+                    <div className={styles.avatar}>
+                        <Avatar style={{ width: '125px', height: '125px' }} {...config} />
+                    </div>
+                    <div className={styles.profileDetails}>
+                        <h1 className={styles.profileName}>{userDb?.name}</h1>
+                        <h2 className={styles.profileEmail}>{userDb?.email}</h2>
+                    </div>
+                </div>
+
+                <div className={styles.profileStats}>
+                    <div className={styles.stat}>
+                        <Typography variant="h6">Watchlisted</Typography>
+                        <Typography variant="h4">{userDb?.watchList.length}</Typography>
+                    </div>
+                    <div className={styles.stat}>
+                        <Typography variant="h6">Added</Typography>
+                        <Typography variant="h4">{userDb?.questions.length}</Typography>
+                    </div>
+                    <div className={styles.stat}>
+                        <Typography variant="h6">Answers</Typography>
+                        <Typography variant="h4">{userDb?.answers.length}</Typography>
+                    </div>
+                </div>
+            </div>
+            </>
+            )}
+            {isLoading && !isError ? (
                 <div className={styles.loadingContainer}>
                     <CircularProgress />
                 </div>
-            </>
-            ) : (
-            <>
-                <h1 className={styles.title}>Profile</h1>
-                <div className={styles.profileInfo}>
-                    <div className={styles.profileContainer}>
-                        <div className={styles.avatar}>
-                            <Avatar style={{ width: '125px', height: '125px' }} {...config} />
-                        </div>
-                        <div className={styles.profileDetails}>
-                            <h1 className={styles.profileName}>{userDb?.name}</h1>
-                            <h2 className={styles.profileEmail}>{userDb?.email}</h2>
-                        </div>
-                    </div>
-
-                    <div className={styles.profileStats}>
-                        <div className={styles.stat}>
-                            <Typography variant="h6">Watchlisted</Typography>
-                            <Typography variant="h4">{userDb?.watchList.length}</Typography>
-                        </div>
-                        <div className={styles.stat}>
-                            <Typography variant="h6">Added</Typography>
-                            <Typography variant="h4">{userDb?.questions.length}</Typography>
-                        </div>
-                        <div className={styles.stat}>
-                            <Typography variant="h6">Answers</Typography>
-                            <Typography variant="h4">{userDb?.answers.length}</Typography>
-                        </div>
-                    </div>
-                </div>
-
+            ) : (isError ? null :
+                <>
                 <div className={styles.profileTags}>
                     {tags.map((tag, index) => (
                         <Chip
@@ -146,13 +152,8 @@ export default function Profile() {
                     </>
                     )}
                 </div>
-
-                <div className={styles.logoutButton}>
-                    <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
-                </div>
-            </>
-            )
-        )}
+                </>
+            )}
         </div>
     );
 }
