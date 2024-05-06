@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/UserContext';
 import ProfileCard from './ProfileCard';
 import API from '../../util/api';
 import axios from 'axios';
+import { set } from 'firebase/database';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -43,6 +44,15 @@ export default function Profile() {
         }
     }, [selectedTag, watchlistedAssignments, watchlistedQuestions, addedQuestions, answeredQuestions]);
 
+    // Check if user data is available
+    useEffect(() => {
+        if (!userDb) {
+            setIsError(true);
+        } else {
+            setIsError(false);
+        }
+    }
+    , [userDb]);
 
     // Fetch user data upon component mount
     useEffect(() => {
@@ -88,7 +98,7 @@ export default function Profile() {
         <div className={styles.container}>
             {isError ? (
             <div className={styles.errorContainer}>
-                <h1 className={styles.error}>Error fetching data</h1>
+                <h1 className={styles.error}>Error!</h1>
             </div>
             ) : ( 
             <>
