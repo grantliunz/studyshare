@@ -1,4 +1,5 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Avatar, { genConfig } from 'react-nice-avatar';
 import React from 'react';
 
 type PersonCardProps = {
@@ -6,6 +7,7 @@ type PersonCardProps = {
   avatarPos?: 'top' | 'bottom' | 'left' | 'right';
   avatarSize?: string;
   style?: React.CSSProperties;
+  anonymous?: boolean;
 };
 
 const posMap: {
@@ -17,11 +19,22 @@ const posMap: {
   right: 'row-reverse'
 };
 
+const config = (name: string) => {
+  const avatarConfig = genConfig(name || '');
+  if (avatarConfig.hairStyle === 'womanLong') {
+    avatarConfig.hairStyle = 'womanShort';
+  } else if (avatarConfig.hairStyle === 'thick') {
+    avatarConfig.hairStyle = 'normal';
+  }
+  return avatarConfig;
+}
+
 const PersonCard = ({
   name,
   avatarPos = 'top',
   avatarSize = '24px',
-  style
+  style,
+  anonymous = false
 }: PersonCardProps) => {
   return (
     <div
@@ -32,7 +45,15 @@ const PersonCard = ({
         ...style
       }}
     >
-      <AccountCircleOutlinedIcon style={{ fontSize: avatarSize }} />
+      {anonymous ? (
+         <AccountCircleOutlinedIcon style={{ fontSize: avatarSize }} />
+      ) :
+        <Avatar
+          style={{ width: avatarSize, height: avatarSize }}
+          {...config(name)}
+        />
+      }
+     
       <p
         style={{
           margin: '0px',
