@@ -69,6 +69,10 @@ export default function Profile() {
         navigate('/universities');
     }
 
+    const navigateToQuestion = (path: string, quest?: string) => {
+        navigate(path, { state: { quest } });
+    }
+
     // User avatar configuration
     const config = () => {
         const avatarConfig = genConfig(userDb?.name || '');
@@ -148,7 +152,7 @@ export default function Profile() {
                     ) : (
                     <>
                         {selectedCardData.map((card, index) => (
-                            <div key={index} onClick={() => navigate(card.Path)}>
+                            <div key={index} onClick={() => navigateToQuestion(card.Path, card.id)}>
                                 <ProfileCard
                                     Title={card.Title}
                                     Content={card.Description}
