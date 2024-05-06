@@ -54,6 +54,10 @@ const UpDownVote = ({
           );
         }}
         title="Upvote"
+        style={{
+          margin: '0',
+          padding: '0'
+        }}
       >
         {voteState === VoteDirection.UP ? (
           <ThumbUpIcon style={{ fontSize: iconSize }} />
@@ -77,6 +81,10 @@ const UpDownVote = ({
           );
         }}
         title="Downvote"
+        style={{
+          margin: '0',
+          padding: '0'
+        }}
       >
         {voteState === VoteDirection.DOWN ? (
           <ThumbDownIcon style={{ fontSize: iconSize }} />
