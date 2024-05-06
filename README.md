@@ -1,13 +1,31 @@
 # COMPSCI 732 / SOFTENG 750 project - Team Radiant Raccoons
+# StudyShare
+Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams. 
 
-Use this folder to store all code and other artifacts for your project.
+## Features
+StudyShare provides its users with multiple features to help make the process of finding, asking and answering questions as easy as possible.
+ - Users are able to view different exams from different courses and universities without having to make an account
+ - Users can create an account or login with Google
+ - Users can view questions and answers of an assessment
+ - Users can view the edit history of questions
+ 
+ Once logged in users can:
+ - Create universities, courses and assessments
+ - Post questions on exams/assessments
+ - Edit posted questions
+ - Answer questions
+ - Comment on answers
+ - Upvote/downvote comments and answers
+ - Add assessments or questions to their watchlist so that they are notified if any questions or answers are posted
+ - Hide any questions that are not relevant/innapropriate
+ - View their profile where they can see their watchlisted assessments and questions as well as their asked and answered questions
 
-You should divide this folder into sub-folders to store the specific components of your project. A suggested structure is:
+## Tech Stack??? (idk if we want)
 
-- documentation
-- backend
-- frontend
+## Setup
+### TODO
 
+# Contributing 
 
 ## Commit conventions
 
