@@ -381,12 +381,13 @@ const AssessmentPage = () => {
                   </AccordionDetails>
                 </Accordion>
               )}
+              <div
+                className={styles.resizeBar}
+                onMouseDown={startResize}
+                onMouseUp={stopResize}
+              />
             </div>
-            <div
-              className={styles.resizeBar}
-              onMouseDown={startResize}
-              onMouseUp={stopResize}
-            />
+
             {currentQuestion ? (
               orderedQuestionsArray.map((question, index) => (
                 <QuestionPanel

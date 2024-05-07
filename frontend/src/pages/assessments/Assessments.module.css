@@ -1,3 +1,4 @@
+@import url('../../App.css');
 .container {
   display: flex;
   flex-direction: column;
@@ -12,6 +13,7 @@
 
 .assessmentsWrapper {
   width: 90vw;
+  animation: swishRight 0.5s ease forwards;
 }
 
 .typeHeader {

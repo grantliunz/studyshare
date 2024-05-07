@@ -15,13 +15,17 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
   const navigate = useNavigate();
   return (
     <Card
-      elevation={2}
+      elevation={15}
+      className={`${styles.universityCard}`}
       style={{
         backgroundImage: `url(${mapIdToImage(university.image)})`,
         height: '310px',
         width: '230px',
         margin: '10px',
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)'
+        borderStyle: 'solid',
+        borderColor: 'black',
+        borderWidth: '1px',
+        borderRadius: '13px'
       }}
     >
       <CardActionArea

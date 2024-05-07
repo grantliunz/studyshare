@@ -35,7 +35,7 @@ const QuestionNumber = ({
   });
 
   return (
-    <div>
+    <div className={style.sidePanel}>
       <div
         style={{
           alignItems: 'center',
