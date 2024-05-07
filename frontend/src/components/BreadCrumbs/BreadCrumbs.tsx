@@ -106,9 +106,9 @@ const BreadCrumbs = () => {
 
   function createAssessmentString(assessment: AssessmentGET): React.ReactNode {
     const semesterMap: { [key: string]: string } = {
-      First: '1',
-      Second: '2',
-      Third: '3',
+      First: 'Semester 1',
+      Second: 'Semester 2',
+      Third: 'Summer School',
       Other: 'Other'
     };
 
@@ -134,7 +134,7 @@ const BreadCrumbs = () => {
       assessmentText += ` ${assessment.number}`;
     }
 
-    return `${assessment.year} Semester ${semesterText}${assessmentText}`;
+    return `${assessment.year} ${semesterText}${assessmentText}`;
   }
 
   return (

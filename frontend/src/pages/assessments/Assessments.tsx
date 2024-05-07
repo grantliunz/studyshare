@@ -27,9 +27,9 @@ function mapSemesterToString(semester: string) {
     case 'Second':
       return 'Semester 2';
     case 'Third':
-      return 'Semester 3';
+      return 'Summer School';
     case 'Other':
-      return 'Other Semester';
+      return 'Other';
     default:
       return semester;
   }
