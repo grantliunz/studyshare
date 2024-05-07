@@ -100,7 +100,16 @@ export default function CoursesPage() {
   return (
     <div className={style.container}>
       {errorString ? (
-        <div>{errorString}</div>
+        <div
+          style={{
+            color: 'red',
+            fontSize: '1.5rem',
+            textAlign: 'center',
+            marginTop: '2rem'
+          }}
+        >
+          {errorString}
+        </div>
       ) : (
         !isLoadingCourses &&
         universityData && (

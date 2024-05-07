@@ -8,8 +8,20 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-right: 20px;
+  justify-content: center;
+  justify-self: center;
+  align-self: center;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
 }
 
 .courseName {
   font-size: 1.5rem;
+  justify-content: center;
+  justify-self: center;
+  align-self: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+
 }

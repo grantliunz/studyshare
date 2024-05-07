@@ -379,7 +379,7 @@ const QuestionPanel = ({
                 'Anonymous'
               }
               avatarPos="left"
-              style={{ columnGap: '8px' }}
+              style={{ columnGap: '5px' }}
               anonymous={polledQuestion.versions.at(versionNo)?.isAnonymous}
             />
           </div>
