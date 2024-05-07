@@ -13,7 +13,6 @@
 
 .assessmentsWrapper {
   width: 90vw;
-  animation: swishRight 0.5s ease forwards;
 }
 
 .typeHeader {
@@ -26,4 +25,5 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 1rem;
+  animation: swishRight 0.5s ease forwards;
 }

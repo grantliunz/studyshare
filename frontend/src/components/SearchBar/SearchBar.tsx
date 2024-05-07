@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import style from './SearchBar.module.css';
+import { Tooltip } from '@mui/material';
 
 interface SearchBarProps {
   title: string;
@@ -22,9 +23,11 @@ const SearchBar: React.FC<SearchBarProps> = (props) => {
         type="text"
         placeholder={props.title}
       />
-      <button className="button">
-        <SearchIcon />
-      </button>
+      <Tooltip title="Search">
+        <button className={style.button}>
+          <SearchIcon />
+        </button>
+      </Tooltip>
     </div>
   );
 };

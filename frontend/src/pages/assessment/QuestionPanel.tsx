@@ -231,6 +231,11 @@ const QuestionPanel = ({
                 ? 'Add question to watchlist'
                 : 'Remove question from watchlist'
             }
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
@@ -240,12 +245,22 @@ const QuestionPanel = ({
           <IconButton
             onClick={() => toggleIsEditingQuestion()}
             title={!isEditingQuestion ? 'Edit question' : 'Cancel'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isEditingQuestion ? <EditOffOutlinedIcon /> : <EditOutlinedIcon />}
           </IconButton>
           <IconButton
             onClick={() => handleIsFlaggedChanged(!isFlagged)}
             title={!isFlagged ? 'Hide question' : 'Unhide question'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>

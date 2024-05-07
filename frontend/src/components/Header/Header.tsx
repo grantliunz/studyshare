@@ -1,7 +1,7 @@
 import styles from './Header.module.css';
 import notificationIcon from '../../assets/icons/notification.svg';
 import { useAuth } from '../../contexts/UserContext';
-import { Badge, Button } from '@mui/material';
+import { Badge, Button, Grow } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import NotificationsWindow from '../NotificationsWindow/NotificationsWindow';
@@ -35,9 +35,9 @@ export default function Header() {
   const config = (email: string) => {
     const avatarConfig = genConfig(email || '');
     if (avatarConfig.hairStyle === 'womanLong') {
-        avatarConfig.hairStyle = 'womanShort';
+      avatarConfig.hairStyle = 'womanShort';
     } else if (avatarConfig.hairStyle === 'thick') {
-        avatarConfig.hairStyle = 'normal';
+      avatarConfig.hairStyle = 'normal';
     }
     return avatarConfig;
   };
@@ -62,12 +62,23 @@ export default function Header() {
                 }
               }}
             >
-              <img
-                onClick={openNotificationsWindow}
-                src={notificationIcon}
-                alt="Notification"
-                style={{ cursor: 'pointer' }}
-              />
+              <Grow in={true} style={{ transformOrigin: 'center' }}>
+                <img
+                  onClick={openNotificationsWindow}
+                  src={notificationIcon}
+                  alt="Notification"
+                  style={{
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s ease'
+                  }}
+                  onMouseOver={(e: any) =>
+                    (e.target.style.transform = 'scale(1.1)')
+                  }
+                  onMouseOut={(e: any) =>
+                    (e.target.style.transform = 'scale(1)')
+                  }
+                />
+              </Grow>
               {userDb && (
                 <NotificationsWindow
                   open={openNotifications}

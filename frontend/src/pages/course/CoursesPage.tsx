@@ -105,41 +105,43 @@ export default function CoursesPage() {
         !isLoadingCourses &&
         universityData && (
           <>
-            <h1 className={style.uniName}>{universityData.name}</h1>
-            <div className={style.searchAndFilter}>
-              <SearchBar
-                title="Search for a course"
-                onQueryChange={onQueryChange}
-              />
-              <FormControl className={style.yearLevelSelect}>
-                <InputLabel id="year-level-select-label">
-                  Select Year
-                </InputLabel>
-                <Select
-                  labelId="year-level-select-label"
-                  id="year-level-select"
-                  multiple
-                  value={yearLevels.sort((a, b) => a.localeCompare(b))}
-                  onChange={onYearLevelChange}
-                  input={<OutlinedInput label="Select Year" />}
-                  renderValue={(selected) =>
-                    selected.map((value) => value + '00').join(', ')
-                  }
-                >
-                  {[1, 2, 3, 4, 7].map((value) => (
-                    <MenuItem key={value} value={value.toString()}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={yearLevels.includes(value.toString())}
-                          />
-                        }
-                        label={value * 100}
-                      />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <div className={style.upperContent}>
+              <h1 className={style.uniName}>{universityData.name}</h1>
+              <div className={style.searchAndFilter}>
+                <SearchBar
+                  title="Search for a course"
+                  onQueryChange={onQueryChange}
+                />
+                <FormControl className={style.yearLevelSelect}>
+                  <InputLabel id="year-level-select-label">
+                    Select Year
+                  </InputLabel>
+                  <Select
+                    labelId="year-level-select-label"
+                    id="year-level-select"
+                    multiple
+                    value={yearLevels.sort((a, b) => a.localeCompare(b))}
+                    onChange={onYearLevelChange}
+                    input={<OutlinedInput label="Select Year" />}
+                    renderValue={(selected) =>
+                      selected.map((value) => value + '00').join(', ')
+                    }
+                  >
+                    {[1, 2, 3, 4, 7].map((value) => (
+                      <MenuItem key={value} value={value.toString()}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={yearLevels.includes(value.toString())}
+                            />
+                          }
+                          label={value * 100}
+                        />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
             </div>
           </>
         )

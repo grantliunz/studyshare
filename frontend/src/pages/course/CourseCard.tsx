@@ -27,7 +27,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
         cursor: 'pointer',
         outline: 'none',
         maxHeight: 70,
-        marginBottom: 1.5
+        marginBottom: 1.5,
+        '&:hover': {
+          backgroundColor: '#bfbfbf',
+          scale: '1.05'
+        }
       }}
       onClick={onClick}
     >

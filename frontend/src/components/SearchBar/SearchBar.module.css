@@ -23,3 +23,11 @@
   cursor: pointer;
   padding: 5px;
 }
+
+.button:hover {
+  scale: 1.05;
+}
+.button:active {
+  scale: 1;
+  cursor: initial
+}

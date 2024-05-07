@@ -35,7 +35,7 @@ const QuestionNumber = ({
   });
 
   return (
-    <div className={style.sidePanel}>
+    <div>
       <div
         style={{
           alignItems: 'center',
@@ -68,13 +68,14 @@ const QuestionNumber = ({
           fullWidth
           sx={{
             '&.MuiButtonBase-root:hover': {
+              scale: '1.05',
               bgcolor: questionNode.question
                 ? arrayEquals(
                     currentQuestion?.number || [],
                     questionNode.number
                   )
                   ? '#41709b'
-                  : 'rgba(0, 0, 0, 0.04)'
+                  : 'rgba(0, 0, 0, 0.10)'
                 : 'transparent'
             },
             '&.MuiButtonBase-root': {

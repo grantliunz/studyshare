@@ -102,7 +102,8 @@ export default function AssessmentCard({
           boxShadow: 3,
           backgroundColor: '#D9D9D9',
           '&:hover': {
-            backgroundColor: '#BFBFBF' // Change the background color on hover
+            backgroundColor: '#BFBFBF',
+            scale: '1.05'
           }
         }}
         style={{

@@ -300,6 +300,11 @@ const AssessmentPage = () => {
                     marginRight: '8px',
                     marginTop: '4px'
                   }}
+                  sx={{
+                    '&.MuiButtonBase-root:hover': {
+                      scale: '1.15'
+                    }
+                  }}
                 >
                   {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
                 </IconButton>
@@ -333,6 +338,11 @@ const AssessmentPage = () => {
                 }}
                 onClick={() => handleAddQuestion([])}
                 title="Add question"
+                sx={{
+                  '&.MuiButtonBase-root:hover': {
+                    scale: '1.15'
+                  }
+                }}
               >
                 <AddIcon fontSize="medium" />
               </IconButton>
