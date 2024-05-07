@@ -165,7 +165,8 @@ export default function NewQuestion({
             marginBottom: '10px',
             height: '80%',
             flexGrow: 1,
-            width: '100%'
+            width: '100%',
+            overflow: 'hidden'
           }}
         >
           <Editor value={questionContent} setValue={setQuestionContent} />
