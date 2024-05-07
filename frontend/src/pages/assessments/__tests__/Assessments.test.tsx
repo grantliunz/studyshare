@@ -1,7 +1,6 @@
 import {
   RenderOptions,
   fireEvent,
-  render,
   render as rtlRender,
   screen,
   waitFor
