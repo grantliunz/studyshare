@@ -7,7 +7,6 @@ import { useAuth } from '../../contexts/UserContext';
 import ProfileCard from './ProfileCard';
 import API from '../../util/api';
 import axios from 'axios';
-import { set } from 'firebase/database';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -22,7 +21,7 @@ export default function Profile() {
     const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
 
     // Tags and states to manage selected tag and card data
-    const tags = ['Watchlisted Assignments', 'Watchlisted Questions', 'Added Questions', 'Answered Questions'];
+    const tags = ['Watchlisted Assessments', 'Watchlisted Questions', 'Added Questions', 'Answered Questions'];
 
     const [selectedTag, setSelectedTag] = useState('Watchlisted Assignments');
     const [selectedCardData, setSelectedCardData] = useState([] as any[]);
@@ -33,7 +32,7 @@ export default function Profile() {
 
     // Set profile cards data based on selected tag
     useEffect(() => {
-        if (selectedTag === 'Watchlisted Assignments') {
+        if (selectedTag === 'Watchlisted Assessments') {
             setSelectedCardData(watchlistedAssignments);
         } else if (selectedTag === 'Watchlisted Questions') {
             setSelectedCardData(watchlistedQuestions);
@@ -61,7 +60,7 @@ export default function Profile() {
             setIsLoading(true);
             try {
                 const profileData = await axios.get<any>(`${BACKEND_URL}${API.getProfile}/${userDb._id}`);
-                setWatchlistedAssignments(profileData.data.watchListedAssessments);
+                setWatchlistedAssignments(profileData.data.watchListedAssignments);
                 setWatchlistedQuestions(profileData.data.watchListedQuestions);
                 setAddedQuestions(profileData.data.addedQuestions);
                 setAnsweredQuestions(profileData.data.answeredQuestions);
@@ -121,15 +120,19 @@ export default function Profile() {
 
                 <div className={styles.profileStats}>
                     <div className={styles.stat}>
-                        <Typography variant="h6">Watchlisted</Typography>
-                        <Typography variant="h4">{userDb?.watchList.length}</Typography>
+                        <Typography variant="h6">Watchlisted Assessments</Typography>
+                        <Typography variant="h4">{userDb?.watchList.filter((watch: any) => watch.watchType === 'ASSESSMENT').length}</Typography>
                     </div>
                     <div className={styles.stat}>
-                        <Typography variant="h6">Added</Typography>
+                        <Typography variant="h6">Watchlisted Questions</Typography>
+                        <Typography variant="h4">{userDb?.watchList.filter((watch: any) => watch.watchType === 'QUESTION').length}</Typography>
+                    </div>
+                    <div className={styles.stat}>
+                        <Typography variant="h6">Added Questions</Typography>
                         <Typography variant="h4">{userDb?.questions.length}</Typography>
                     </div>
                     <div className={styles.stat}>
-                        <Typography variant="h6">Answers</Typography>
+                        <Typography variant="h6">Answered Questions</Typography>
                         <Typography variant="h4">{userDb?.answers.length}</Typography>
                     </div>
                 </div>
@@ -155,7 +158,7 @@ export default function Profile() {
                 </div>
 
                 <div className={styles.profileCards}>
-                    { selectedCardData.length === 0 ? (
+                    { !selectedCardData || selectedCardData.length === 0 ? (
                         <div>
                             <h2 className={styles.noData}>There are no {selectedTag.toLowerCase()} to display</h2>
                         </div>

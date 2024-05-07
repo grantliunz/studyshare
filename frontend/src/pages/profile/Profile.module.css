@@ -34,9 +34,10 @@
 
 }
 
+/* Make font Jomhuria */
 .title {
     font-size: 3rem;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .loadingContainer {
@@ -115,6 +116,8 @@
 
 .stat {
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin: 0 10px;
     margin-left: 5%;
     margin-right: 5%;
