@@ -2,8 +2,7 @@
 
 import API from '../src/util/api'
 import { getResponse, postResponse } from '../testUtil/testUtil';
-import { CreateAnswerDTO, MakeVoteDTO } from '@shared/types/models/answer/answer'
-import { universityId, courseId } from '../testUtil/testIds';
+import { universityId, courseId} from '../testUtil/testIds';
 
 
 const randomCourseNo = Math.floor(Math.random() * 1000);
