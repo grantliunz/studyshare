@@ -9,7 +9,13 @@ export async function getResponseObject(urlString : string) : Promise<any> {
 }
 
 export async function postResponseObject(urlString : string, data : any) : Promise<any> {
-  return ((await axios.post(`${BACKEND_URL}${urlString}`, data)).data);
+  try {
+    return ((await axios.post(`${BACKEND_URL}${urlString}`, data)).data);
+  }
+  catch (error : any) {
+    return error.response.data;
+  }
+  
 }
 
 export async function getResponse(urlString : string) : Promise<number> {
