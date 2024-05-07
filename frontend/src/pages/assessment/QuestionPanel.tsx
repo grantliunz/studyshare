@@ -192,7 +192,17 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div
+        style={{
+          maxWidth: '1200px',
+          backgroundColor: 'white',
+          borderRadius: '10px 10px 0px 0px',
+          margin: '0 auto',
+          paddingBottom: '50px',
+          paddingLeft: '40px',
+          paddingRight: '40px'
+        }}
+      >
         <div style={{ paddingTop: '10px', display: 'flex' }}>
           {prevQuestion && (
             <Button

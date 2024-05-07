@@ -87,22 +87,21 @@ export default function Header() {
                 />
               )}
             </Badge>
-            <Grow in={true} style={{ transformOrigin: 'center' }}>
-              <div
-                className={styles.profileIcon}
-                onClick={onClickProfile}
-                style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
-              >
-                <Avatar
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    border: '2px solid white'
-                  }}
-                  {...config(userDb?.name || '')}
-                />
-              </div>
-            </Grow>
+
+            <div
+              className={styles.profileIcon}
+              onClick={onClickProfile}
+              style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
+            >
+              <Avatar
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  border: '2px solid white'
+                }}
+                {...config(userDb?.name || '')}
+              />
+            </div>
           </>
         ) : (
           <div>

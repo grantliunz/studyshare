@@ -30,6 +30,7 @@ export default function Landing() {
           borderColor: 'black',
           borderStyle: 'solid'
         }}
+        sx={{}}
       >
         <h1 className={styles.title}>StudyShare</h1>
         <p className={styles.description}>

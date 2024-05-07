@@ -126,7 +126,7 @@ export default function Profile() {
                   height: '40px',
                   borderRadius: '5px',
                   color: 'white',
-                  backgroundColor: '#41709b',
+                  backgroundColor: '#253f55',
                   textTransform: 'none',
                   fontSize: '1rem'
                 }}

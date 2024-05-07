@@ -111,8 +111,8 @@ const Assessments = () => {
       ) : (
         <>
           <div className={styles.upperContent}>
-            <h1>{course?.code}</h1>
-            <h2>{course?.name}</h2>
+            <h1 style={{ color: 'white' }}>{course?.code}</h1>
+            <h2 style={{ color: '#263f55' }}>{course?.name}</h2>
             <div className={styles.searchWrapper}>
               <SearchBar
                 title="Search for a past paper"

@@ -12,6 +12,7 @@
   padding-top: 20vh;
   padding-left: 15vw;
   box-sizing: border-box;
+  background: linear-gradient(#41709b 10%, white 50%, #41709b 90%);
 }
 
 .container {
@@ -20,7 +21,7 @@
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  background-color: #fff;
+  background: #fff5d3;
   padding: 0 100px 20px 50px;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

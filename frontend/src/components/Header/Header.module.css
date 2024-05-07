@@ -1,31 +1,39 @@
 .container {
   width: 100%;
-  background-color: #41709b;
-  margin: 0;
+  background-color: #253f55;
   padding: 0px 30px;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  
   z-index: 100;
   box-sizing: border-box;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  justify-items: center;
+  border-bottom: white;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  margin-bottom: 30px;
 }
 
 .title {
   font-family: Jomhuria;
   font-size: 5rem;
-  background-color: rgba(65, 112, 155, 1);
   color: white;
   margin: 0;
   padding: 0;
   line-height: 80px;
   height: 70px;
   cursor: pointer;
+  justify-content: center;
 }
 
 .breadcrumbContainer {
   display: flex;
   flex-grow: 1;
-  margin-left: 20px;
+  margin-left: 75px;
 }
 
 .rightContainer {
@@ -33,4 +41,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+}
+
+.profileIcon:hover {
+  cursor: pointer;
+  scale: 1.1;
 }

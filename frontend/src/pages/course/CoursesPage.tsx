@@ -17,7 +17,8 @@ import {
   Checkbox,
   FormControlLabel,
   SelectChangeEvent,
-  OutlinedInput
+  OutlinedInput,
+  Card
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
@@ -99,16 +100,27 @@ export default function CoursesPage() {
   };
   return (
     <div className={style.container}>
-      {errorString ? (
-        <div
-          style={{
-            color: 'red',
-            fontSize: '1.5rem',
-            textAlign: 'center',
-            marginTop: '2rem'
-          }}
-        >
-          {errorString}
+      {errorString && universityData ? (
+        <div className={style.upperContent}>
+          <h1 className={style.uniName}>{universityData.name}</h1>
+          <Card
+            style={{
+              backgroundColor: '#32506b',
+              borderRadius: 10,
+              minWidth: '100%'
+            }}
+          >
+            <div
+              style={{
+                color: 'white',
+                fontSize: '1.5rem',
+                textAlign: 'center',
+                padding: '1rem'
+              }}
+            >
+              {errorString}
+            </div>
+          </Card>
         </div>
       ) : (
         !isLoadingCourses &&
@@ -121,7 +133,7 @@ export default function CoursesPage() {
                   title="Search for a course"
                   onQueryChange={onQueryChange}
                 />
-                <FormControl className={style.yearLevelSelect}>
+                <FormControl className={style.yearLevelSelect} focused={false}>
                   <InputLabel id="year-level-select-label">
                     Select Year
                   </InputLabel>

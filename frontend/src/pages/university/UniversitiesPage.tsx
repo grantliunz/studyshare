@@ -65,6 +65,7 @@ export default function UniversitiesPage() {
           <SearchBar
             title={'Search for a university'}
             onQueryChange={onQueryChange}
+            width="850px"
           />
           <div className={styles.universitiesGrid}>
             {isLoadingUniversities && <CircularProgress />}
