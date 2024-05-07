@@ -141,13 +141,14 @@ const BreadCrumbs = () => {
     <div className={style.breadCrumbs}>
       <Breadcrumbs className={style.slashes}>
         {profile ? (
-          <Typography className={style.link}>Profile</Typography>
-          ) : (
-            <Link className={style.link} href="/">
-              Universities
-            </Link>
-          )
-        }
+          <Typography className={`${style.link} ${style.assessment}`}>
+            Profile
+          </Typography>
+        ) : (
+          <Link className={style.link} href="/">
+            Universities
+          </Link>
+        )}
         {university && !profile && (
           <Link className={style.link} href={`/${university.id}`}>
             {university.name}

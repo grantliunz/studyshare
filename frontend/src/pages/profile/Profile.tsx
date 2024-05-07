@@ -11,14 +11,16 @@ import axios from 'axios';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
 export default function Profile() {
-    const { userDb, logout } = useAuth();
-    const navigate = useNavigate();
+  const { userDb, logout } = useAuth();
+  const navigate = useNavigate();
 
-    // States to store data
-    const [watchlistedAssignments, setWatchlistedAssignments] = useState([] as any[]);
-    const [watchlistedQuestions, setWatchlistedQuestions] = useState([] as any[]);
-    const [addedQuestions, setAddedQuestions] = useState([] as any[]);
-    const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
+  // States to store data
+  const [watchlistedAssignments, setWatchlistedAssignments] = useState(
+    [] as any[]
+  );
+  const [watchlistedQuestions, setWatchlistedQuestions] = useState([] as any[]);
+  const [addedQuestions, setAddedQuestions] = useState([] as any[]);
+  const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
 
     // Tags and states to manage selected tag and card data
     const tags = ['Watchlisted Assessments', 'Watchlisted Questions', 'Added Questions', 'Answered Questions'];
@@ -26,9 +28,10 @@ export default function Profile() {
     const [selectedTag, setSelectedTag] = useState('Watchlisted Assessments');
     const [selectedCardData, setSelectedCardData] = useState([] as any[]);
 
-    // States to manage loading and error
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
+  // States to manage loading and error
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
 
     // Set profile cards data based on selected tag
     useEffect(() => {
@@ -43,80 +46,96 @@ export default function Profile() {
         }
     }, [selectedTag, watchlistedAssignments, watchlistedQuestions, addedQuestions, answeredQuestions]);
 
-    // Check if user data is available
-    useEffect(() => {
-        if (!userDb) {
-            setIsError(true);
-        } else {
-            setIsError(false);
-        }
+  // Check if user data is available
+  useEffect(() => {
+    if (!userDb) {
+      setIsError(true);
+    } else {
+      setIsError(false);
     }
-    , [userDb]);
+  }, [userDb]);
 
-    // Fetch user data upon component mount
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!userDb) return;
-            setIsLoading(true);
-            try {
-                const profileData = await axios.get<any>(`${BACKEND_URL}${API.getProfile}/${userDb._id}`);
-                setWatchlistedAssignments(profileData.data.watchListedAssessments);
-                setWatchlistedQuestions(profileData.data.watchListedQuestions);
-                setAddedQuestions(profileData.data.addedQuestions);
-                setAnsweredQuestions(profileData.data.answeredQuestions);
-            } catch (error) {
-                console.log(error);
-                setIsError(true);
-            }
-            setIsLoading(false);
-        }
-        fetchData();
-    }, [userDb]);
-
-    const logoutUser = () => {
-        logout();
-        navigate('/universities');
-    }
-
-    const navigateToQuestion = (path: string, quest?: string) => {
-        navigate(path, { state: { quest } });
-    }
-
-    // User avatar configuration
-    const config = () => {
-        const avatarConfig = genConfig(userDb?.name || '');
-        if (avatarConfig.hairStyle === 'womanLong') {
-            avatarConfig.hairStyle = 'womanShort';
-        } else if (avatarConfig.hairStyle === 'thick') {
-            avatarConfig.hairStyle = 'normal';
-        }
-        return avatarConfig;
+  // Fetch user data upon component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userDb) return;
+      setIsLoading(true);
+      try {
+        const profileData = await axios.get<any>(
+          `${BACKEND_URL}${API.getProfile}/${userDb._id}`
+        );
+        setWatchlistedAssignments(profileData.data.watchListedAssessments);
+        setWatchlistedQuestions(profileData.data.watchListedQuestions);
+        setAddedQuestions(profileData.data.addedQuestions);
+        setAnsweredQuestions(profileData.data.answeredQuestions);
+      } catch (error) {
+        console.log(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
     };
+    fetchData();
+  }, [userDb]);
 
-    return (
-        <div className={styles.container}>
-            {isError ? (
-            <div className={styles.errorContainer}>
-                <h1 className={styles.error}>Error!</h1>
+  const logoutUser = () => {
+    logout();
+    navigate('/universities');
+  };
+
+  const navigateToQuestion = (path: string, quest?: string) => {
+    navigate(path, { state: { quest } });
+  };
+
+  // User avatar configuration
+  const config = () => {
+    const avatarConfig = genConfig(userDb?.name || '');
+    if (avatarConfig.hairStyle === 'womanLong') {
+      avatarConfig.hairStyle = 'womanShort';
+    } else if (avatarConfig.hairStyle === 'thick') {
+      avatarConfig.hairStyle = 'normal';
+    }
+    return avatarConfig;
+  };
+
+  return (
+    <div className={styles.container}>
+      {isError ? (
+        <div className={styles.errorContainer}>
+          <h1 className={styles.error}>Error!</h1>
+        </div>
+      ) : (
+        <>
+          <div className={styles.profileHeader}>
+            <h1 className={styles.title}>Profile</h1>
+            <div className={styles.logoutButton}>
+              <Button
+                variant="contained"
+                style={{
+                  width: '100px',
+                  height: '40px',
+                  borderRadius: '5px',
+                  color: 'white',
+                  backgroundColor: '#41709b'
+                }}
+                onClick={logoutUser}
+              >
+                Logout
+              </Button>
             </div>
-            ) : ( 
-            <>
-            <div className={styles.profileHeader}>
-                <h1 className={styles.title}>Profile</h1>
-                <div className={styles.logoutButton}>
-                    <Button variant="contained" style={{ width: '100px', height: '40px', borderRadius: '5px', color: 'white', backgroundColor: '#41709b' }} onClick={logoutUser}>Logout</Button>
-                </div>
+          </div>
+          <div className={styles.profileInfo}>
+            <div className={styles.profileContainer}>
+              <div className={styles.avatar}>
+                <Avatar
+                  style={{ width: '125px', height: '125px' }}
+                  {...config()}
+                />
+              </div>
+              <div className={styles.profileDetails}>
+                <h1 className={styles.profileName}>{userDb?.name}</h1>
+                <h2 className={styles.profileEmail}>{userDb?.email}</h2>
+              </div>
             </div>
-            <div className={styles.profileInfo}>
-                <div className={styles.profileContainer}>
-                    <div className={styles.avatar}>
-                        <Avatar style={{ width: '125px', height: '125px' }} {...config()} />
-                    </div>
-                    <div className={styles.profileDetails}>
-                        <h1 className={styles.profileName}>{userDb?.name}</h1>
-                        <h2 className={styles.profileEmail}>{userDb?.email}</h2>
-                    </div>
-                </div>
 
                 <div className={styles.profileStats}>
                     <div className={styles.stat}>
@@ -137,25 +156,29 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
-            </>
-            )}
-            {isLoading && !isError ? (
-                <div className={styles.loadingContainer}>
-                    <CircularProgress />
-                </div>
-            ) : (isError ? null :
-                <>
-                <div className={styles.profileTags}>
-                    {tags.map((tag, index) => (
-                        <Chip
-                            key={index}
-                            label={tag}
-                            color={selectedTag === tag ? 'primary' : 'default'}
-                            onClick={() => setSelectedTag(tag)}
-                            style={{ backgroundColor: selectedTag === tag ? '#41709b' : '#e0e0e0' }}
-                        />
-                    ))}
-                </div>
+          </div>
+        </>
+      )}
+      {isLoading && !isError ? (
+        <div className={styles.loadingContainer}>
+          <CircularProgress />
+        </div>
+      ) : isError ? null : (
+        <>
+          <div className={styles.profileTags}>
+            {tags.map((tag, index) => (
+              <Chip
+                key={index}
+                label={tag}
+                color={selectedTag === tag ? 'primary' : 'default'}
+                onClick={() => setSelectedTag(tag)}
+                style={{
+                  backgroundColor: selectedTag === tag ? '#41709b' : '#e0e0e0'
+                }}
+              />
+            ))}
+          </div>
+
 
                 <div className={styles.profileCards}>
                     { !selectedCardData || selectedCardData.length === 0 ? (
@@ -178,7 +201,11 @@ export default function Profile() {
                     )}
                 </div>
                 </>
+
             )}
-        </div>
-    );
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
