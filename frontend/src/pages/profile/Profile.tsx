@@ -22,29 +22,39 @@ export default function Profile() {
   const [addedQuestions, setAddedQuestions] = useState([] as any[]);
   const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
 
-    // Tags and states to manage selected tag and card data
-    const tags = ['Watchlisted Assessments', 'Watchlisted Questions', 'Added Questions', 'Answered Questions'];
+  // Tags and states to manage selected tag and card data
+  const tags = [
+    'Watchlisted Assignments',
+    'Watchlisted Questions',
+    'Added Questions',
+    'Answered Questions'
+  ];
 
-    const [selectedTag, setSelectedTag] = useState('Watchlisted Assessments');
-    const [selectedCardData, setSelectedCardData] = useState([] as any[]);
+  const [selectedTag, setSelectedTag] = useState('Watchlisted Assignments');
+  const [selectedCardData, setSelectedCardData] = useState([] as any[]);
 
   // States to manage loading and error
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-
-    // Set profile cards data based on selected tag
-    useEffect(() => {
-        if (selectedTag === 'Watchlisted Assessments') {
-            setSelectedCardData(watchlistedAssignments);
-        } else if (selectedTag === 'Watchlisted Questions') {
-            setSelectedCardData(watchlistedQuestions);
-        } else if (selectedTag === 'Added Questions') {
-            setSelectedCardData(addedQuestions);
-        } else if (selectedTag === 'Answered Questions') {
-            setSelectedCardData(answeredQuestions);
-        }
-    }, [selectedTag, watchlistedAssignments, watchlistedQuestions, addedQuestions, answeredQuestions]);
+  // Set profile cards data based on selected tag
+  useEffect(() => {
+    if (selectedTag === 'Watchlisted Assignments') {
+      setSelectedCardData(watchlistedAssignments);
+    } else if (selectedTag === 'Watchlisted Questions') {
+      setSelectedCardData(watchlistedQuestions);
+    } else if (selectedTag === 'Added Questions') {
+      setSelectedCardData(addedQuestions);
+    } else if (selectedTag === 'Answered Questions') {
+      setSelectedCardData(answeredQuestions);
+    }
+  }, [
+    selectedTag,
+    watchlistedAssignments,
+    watchlistedQuestions,
+    addedQuestions,
+    answeredQuestions
+  ]);
 
   // Check if user data is available
   useEffect(() => {
@@ -137,24 +147,19 @@ export default function Profile() {
               </div>
             </div>
 
-                <div className={styles.profileStats}>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Watchlisted Assessments</Typography>
-                        <Typography variant="h4">{userDb?.watchList.filter((watch: any) => watch.watchType === 'ASSESSMENT').length}</Typography>
-                    </div>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Watchlisted Questions</Typography>
-                        <Typography variant="h4">{userDb?.watchList.filter((watch: any) => watch.watchType === 'QUESTION').length}</Typography>
-                    </div>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Added Questions</Typography>
-                        <Typography variant="h4">{userDb?.questions.length}</Typography>
-                    </div>
-                    <div className={styles.stat}>
-                        <Typography variant="h6">Answered Questions</Typography>
-                        <Typography variant="h4">{userDb?.answers.length}</Typography>
-                    </div>
-                </div>
+            <div className={styles.profileStats}>
+              <div className={styles.stat}>
+                <Typography variant="h6">Watchlisted</Typography>
+                <Typography variant="h4">{userDb?.watchList.length}</Typography>
+              </div>
+              <div className={styles.stat}>
+                <Typography variant="h6">Added</Typography>
+                <Typography variant="h4">{userDb?.questions.length}</Typography>
+              </div>
+              <div className={styles.stat}>
+                <Typography variant="h6">Answers</Typography>
+                <Typography variant="h4">{userDb?.answers.length}</Typography>
+              </div>
             </div>
           </div>
         </>
@@ -179,29 +184,29 @@ export default function Profile() {
             ))}
           </div>
 
-
-                <div className={styles.profileCards}>
-                    { !selectedCardData || selectedCardData.length === 0 ? (
-                        <div>
-                            <h2 className={styles.noData}>There are no {selectedTag.toLowerCase()} to display</h2>
-                        </div>
-                    ) : (
-                    <>
-                        {selectedCardData.map((card, index) => (
-                            <div key={index} onClick={() => navigateToQuestion(card.Path, card.id)}>
-                                <ProfileCard
-                                    Title={card.Title}
-                                    Content={card.Description}
-                                    Year={card.Year}
-                                    DateCreated={card.DateCreated}
-                                />
-                            </div>
-                        ))}
-                    </>
-                    )}
-                </div>
-                </>
-
+          <div className={styles.profileCards}>
+            {selectedCardData.length === 0 ? (
+              <div>
+                <h2 className={styles.noData}>
+                  There are no {selectedTag.toLowerCase()} to display
+                </h2>
+              </div>
+            ) : (
+              <>
+                {selectedCardData.map((card, index) => (
+                  <div
+                    key={index}
+                    onClick={() => navigateToQuestion(card.Path, card.id)}
+                  >
+                    <ProfileCard
+                      Title={card.Title}
+                      Content={card.Description}
+                      Year={card.Year}
+                      DateCreated={card.DateCreated}
+                    />
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </>
