@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -19,5 +19,9 @@ router.use('/answer', answerRouter);
 router.use('/university', universityRouter);
 router.use('/course', courseRouter);
 router.use('/assessment', assessmentRouter);
+
+router.get('/', (_req: Request, res: Response) => {
+  res.status(201).json({ message: 'Welcome to StudyShare' });
+});
 
 export default router;

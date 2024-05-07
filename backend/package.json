@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts",
-    "start": "node ./src/app.ts",
-    "init-db": "ts-node ./src/db/init-db.ts"
+    "dev": "nodemon ./api/index.ts",
+    "start": "node ./api/index.ts",
+    "init-db": "ts-node ./api/db/init-db.ts"
   },
   "keywords": [],
   "author": "",

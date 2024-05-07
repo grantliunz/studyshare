@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 // TODO import your schema here
 import University from '../routes/university/university-model';
 import Course from '../routes/course/course-model';
