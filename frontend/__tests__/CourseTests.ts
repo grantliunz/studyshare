@@ -3,10 +3,7 @@
 import API from '../src/util/api'
 import { getResponse, postResponse } from '../testUtil/testUtil';
 import { CreateAnswerDTO, MakeVoteDTO } from '@shared/types/models/answer/answer'
-import { userId, answerId, questionId, universityId, courseId, assessmentId, commentId } from '../testUtil/testIds';
-import { CreateAssessmentDTO } from '../../backend/src/routes/assessment/assessment-dto';
-import { Assessment } from '@shared/types/models/assessment/assessment';
-import { AssessmentType } from '@shared/types/models/assessment/assessment';
+import { universityId, courseId } from '../testUtil/testIds';
 
 
 const randomCourseNo = Math.floor(Math.random() * 1000);
