@@ -205,9 +205,9 @@ export default function AddAssessmentForm({
                   className={styles.inputField}
                   label="Semester"
                 >
-                  <MenuItem value="First">Semester 1</MenuItem>
-                  <MenuItem value="Second">Semester 2</MenuItem>
-                  <MenuItem value="Third">Summer School</MenuItem>
+                  <MenuItem value="Semester 1">Semester 1</MenuItem>
+                  <MenuItem value="Semester 2">Semester 2</MenuItem>
+                  <MenuItem value="Summer School">Summer School</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
                 <FormHelperText>{currentInputErrors.semester}</FormHelperText>

@@ -42,21 +42,6 @@ export default function AssessmentCard({
 
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
-  function mapSemesterToString(semester: string) {
-    switch (semester) {
-      case 'First':
-        return 'Semester 1';
-      case 'Second':
-        return 'Semester 2';
-      case 'Third':
-        return 'Summer School';
-      case 'Other':
-        return 'Other';
-      default:
-        return semester;
-    }
-  }
-
   useEffect(() => {
     if (assessment) {
       if (userDb) {
@@ -116,10 +101,7 @@ export default function AssessmentCard({
         <div style={{ flexDirection: 'row', display: 'flex' }}>
           <div>
             <p className={styles.yearText}>{assessment.year}</p>
-            <p className={styles.semesterText}>
-              {' '}
-              {mapSemesterToString(assessment.semester)}
-            </p>
+            <p className={styles.semesterText}> {assessment.semester}</p>
             {assessment.number && (
               <p className={styles.numberText}>Test {assessment.number}</p>
             )}
