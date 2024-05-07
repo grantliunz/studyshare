@@ -10,9 +10,12 @@ import {
   UpdateReportedDTO,
   UpdateWatchListAction,
   UpdateWatchListDTO,
-  WatchListType
+  WatchListType,
+  UserProfileDTO,
+  ProfileCardDTO
 } from '@shared/types/models/user/user';
 import Assessment from '../assessment/assessment-model';
+import { watch } from 'fs';
 
 // Controller function to create a new user
 export const createUser = async (
@@ -336,6 +339,438 @@ export const getNotifications = async (
     res.status(500).json({ error: `Internal server error: ${error}` });
   }
 };
+
+
+// Controller function to get a user's profile
+export const getProfile = async (
+  req: Request<{ userId: string }, {}, {}>,
+  res: Response
+) => {
+  try {
+
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const regex = /(<([^>]+)>)/ig;
+
+    const questionsAdded = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$questions'
+      },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'questions',
+          foreignField: '_id',
+          as: 'question'
+        }
+      },
+      {
+        $unwind: '$question'
+      },
+      {
+        $lookup: {
+          from: 'assessments',
+          localField: 'question.assessment',
+          foreignField: '_id',
+          as: 'assessment'
+        }
+      },
+      {
+        $unwind: '$assessment'
+      },
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'assessment.course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: '$course'
+      },
+      {
+        $project: {
+          _id: '$question._id',
+          number: '$question.number',
+          versions: '$question.versions',
+          year: {
+            $concat: [
+              '$course.code',
+              '/ Semester ',
+              '$assessment.semester',
+              ' ',
+              '$assessment.type', 
+              ' ',
+              { $toString: '$assessment.year' }
+            ]
+          },
+          DateCreated: '$question.createdAt',
+          Path: {
+            $concat: [
+              '/',
+              { $toString: '$course.university' },
+              '/',
+              { $toString: '$course._id' },
+              '/',
+              { $toString: '$assessment._id' }
+            ]
+          }
+        }
+      }
+    ]);
+
+    // Create an array of ProfileCardDTO Question objects
+    const questionsAddedCard: ProfileCardDTO[] = questionsAdded.map((question) => {
+      return {
+        id: question._id,
+        Title: question.number.join('.'),
+        Description: question.versions[question.versions.length - 1].text.replace(regex, ''),
+        Year: question.year,
+        DateCreated: new Date(question.DateCreated).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+        Path: question.Path
+      };
+    });
+
+    const questionsAnswered = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$answers'
+      },
+      {
+        $lookup: {
+          from: 'answers',
+          localField: 'answers',
+          foreignField: '_id',
+          as: 'answer'
+        }
+      },
+      {
+        $unwind: '$answer'
+      },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'answer.question',
+          foreignField: '_id',
+          as: 'question'
+        }
+      },
+      {
+        $unwind: '$question'
+      },
+      {
+        $lookup: {
+          from: 'assessments',
+          localField: 'question.assessment',
+          foreignField: '_id',
+          as: 'assessment'
+        }
+      },
+      {
+        $unwind: '$assessment'
+      },
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'assessment.course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: '$course'
+      },
+      {
+        $project: {
+          _id : '$question._id',
+          text: '$answer.text',
+          question: '$question.versions',
+          year: {
+            $concat: [
+              '$course.code',
+              ' / Semester ',
+              '$assessment.semester',
+              ' ',
+              '$assessment.type', 
+              ' ',
+              { $toString: '$assessment.year' }
+            ]
+          },
+          DateCreated: '$answer.createdAt',
+          Path: {
+            $concat: [
+              '/',
+              { $toString: '$course.university' },
+              '/',
+              { $toString: '$course._id' },
+              '/',
+              { $toString: '$assessment._id' }
+            ]
+          }
+        }
+      }
+    ]);
+
+    // Create an array of ProfileCardDTO Answer objects
+    const questionsAnsweredCard: ProfileCardDTO[] = questionsAnswered.map((answer) => {
+      return {
+        id: answer._id,
+        Title: answer.question[answer.question.length - 1].text.replace(regex, ''),
+        Description: answer.text.replace(regex, ''),
+        Year: answer.year,
+        DateCreated: new Date(answer.DateCreated).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+        Path: answer.Path
+      };
+    });
+
+    const watchListed = await User.aggregate([
+      {
+        $match: {
+          _id: user._id
+        }
+      },
+      {
+        $unwind: '$watchList'
+      },
+      {
+        $facet: {
+          questionDocs: [
+            {
+              $match: {
+                'watchList.watchType': WatchListType.QUESTION
+              }
+            },
+            {
+              $lookup: {
+                from: 'questions',
+                localField: 'watchList.watchedId',
+                foreignField: '_id',
+                as: 'question'
+              }
+            },
+            {
+              $unwind: {
+                path: '$question',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $lookup: {
+                from: 'assessments',
+                localField: 'question.assessment',
+                foreignField: '_id',
+                as: 'assessment'
+              }
+            },
+            {
+              $unwind: {
+                path: '$assessment',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $lookup: {
+                from: 'courses',
+                localField: 'assessment.course',
+                foreignField: '_id',
+                as: 'course'
+              }
+            },
+            {
+              $unwind: {
+                path: '$course',
+                preserveNullAndEmptyArrays: true
+              }
+            }
+          ],
+          assessmentDocs: [
+            {
+              $match: {
+                'watchList.watchType': WatchListType.ASSESSMENT
+              }
+            },
+            {
+              $lookup: {
+                from: 'assessments',
+                localField: 'watchList.watchedId',
+                foreignField: '_id',
+                as: 'assessment'
+              }
+            },
+            {
+              $unwind: {
+                path: '$assessment',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $lookup: {
+                from: 'courses',
+                localField: 'assessment.course',
+                foreignField: '_id',
+                as: 'course'
+              }
+            },
+            {
+              $unwind: {
+                path: '$course',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $lookup: {
+                from: 'universities',
+                localField: 'course.university',
+                foreignField: '_id',
+                as: 'university'
+              }
+            },
+            {
+              $unwind: {
+                path: '$university',
+                preserveNullAndEmptyArrays: true
+              }
+            }
+          ]
+        }
+      },
+      {
+        $project: {
+          watchListedQuestions: {
+            $concatArrays: ['$questionDocs', '$assessmentDocs']
+          }
+        }
+      },
+      {
+        $unwind: '$watchListedQuestions'
+      },
+      {
+        $project: {
+          _id: {
+            $cond: {
+              if: { $eq: ['$watchListedQuestions.watchList.watchType', WatchListType.QUESTION] },
+              then: '$watchListedQuestions.question._id',
+              else: '$watchListedQuestions.assessment._id'
+            }
+          },
+          watch: '$watchListedQuestions.watchList.watchType',
+          number: {
+            $cond: {
+              if: { $eq: ['$watchListedQuestions.watchList.watchType', WatchListType.QUESTION] },
+              then: '$watchListedQuestions.question.number',
+              else: null
+            }
+          },
+          versions: {
+            $cond: {
+              if: { $eq: ['$watchListedQuestions.watchList.watchType', WatchListType.QUESTION] },
+              then: '$watchListedQuestions.question.versions',
+              else: null
+            }
+          },
+          year: {
+            $concat: [
+              '$watchListedQuestions.course.code',
+              ' / Semester ',
+              '$watchListedQuestions.assessment.semester',
+              ' ',
+              '$watchListedQuestions.assessment.type', 
+              ' ',
+              { $toString: '$watchListedQuestions.assessment.year' }
+            ]
+          },
+          DateCreated: {
+            $cond: {
+              if: { $eq: ['$watchListedQuestions.watchList.watchType', WatchListType.QUESTION] },
+              then: '$watchListedQuestions.question.createdAt',
+              else: '$watchListedQuestions.assessment.createdAt'
+            }
+          },
+          Path: {
+            $concat: [
+              '/',
+              { $toString: '$watchListedQuestions.course.university' },
+              '/',
+              { $toString: '$watchListedQuestions.course._id' },
+              '/',
+              { $toString: '$watchListedQuestions.assessment._id' }
+            ]
+          }
+        }
+      }
+    ]);
+    
+    // Create 2 arrays for watchlisted questions and assessments
+    const watchListedQuestions: ProfileCardDTO[] = [];
+    const watchListedAssessments: ProfileCardDTO[] = [];
+
+    watchListed.forEach((doc) => {
+      if (doc.watch === WatchListType.QUESTION) {
+        watchListedQuestions.push({
+          id: doc._id.toString(),
+          Title: doc.number.join('.'),
+          Description: doc.versions[doc.versions.length - 1].text.replace(regex, ''),
+          Year: doc.year,
+          DateCreated: new Date(doc.DateCreated).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          }),
+          Path: doc.Path
+        });
+      } else {
+        watchListedAssessments.push({
+          id: doc._id.toString(),
+          Title: doc.year,
+          Description: new Date(doc.DateCreated).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          }),
+          Year: '',
+          DateCreated: '',
+          Path: doc.Path
+        });
+      }
+    });
+
+    // Create a UserProfileDTO object
+    const profile: UserProfileDTO = {
+      watchListedQuestions,
+      addedQuestions: questionsAddedCard,
+      answeredQuestions: questionsAnsweredCard,
+      watchListedAssessments
+    };
+    res.status(200).json(profile);
+
+  } catch (error) {
+    res.status(500).json({ error: `Internal server error: ${error}` });
+  }
+}
+
+
 
 // Controller function to get a single user
 export const getUser = async (

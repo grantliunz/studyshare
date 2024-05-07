@@ -31,6 +31,17 @@ export default function Header() {
     setOpenNotifications(false);
   };
 
+  // User avatar configuration
+  const config = (email: string) => {
+    const avatarConfig = genConfig(email || '');
+    if (avatarConfig.hairStyle === 'womanLong') {
+        avatarConfig.hairStyle = 'womanShort';
+    } else if (avatarConfig.hairStyle === 'thick') {
+        avatarConfig.hairStyle = 'normal';
+    }
+    return avatarConfig;
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title} onClick={() => navigate('/')}>
@@ -72,7 +83,7 @@ export default function Header() {
             >
               <Avatar
                 style={{ width: '50px', height: '50px' }}
-                {...genConfig(user.email || ' ')}
+                {...config(userDb?.name || '')}
               />
             </div>
           </>

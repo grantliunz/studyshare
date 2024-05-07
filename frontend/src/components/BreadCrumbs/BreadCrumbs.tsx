@@ -15,12 +15,14 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 const BreadCrumbs = () => {
   const { pathname } = useLocation();
 
+  const [profile, setIsProfile] = useState<boolean>(false);
   const [course, setCourse] = useState<null | Course>(null);
   const [university, setUniversity] = useState<University | null>(null);
   const [assessment, setAssessment] = useState<AssessmentGET | null>(null);
 
   const fetchUniversity = async (universityId: string) => {
     try {
+      setIsProfile(false);
       const response = await axios.get(
         `${BACKEND_URL}${API.getUniversityById}/${universityId}`
       );
@@ -72,6 +74,12 @@ const BreadCrumbs = () => {
 
   useEffect(() => {
     const pathnames = pathname.split('/').filter((x) => x);
+
+    if (pathnames.length === 1 && pathnames[0] === 'profile') {
+      setIsProfile(true);
+      return;
+    }
+
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
@@ -132,20 +140,26 @@ const BreadCrumbs = () => {
   return (
     <div className={style.breadCrumbs}>
       <Breadcrumbs className={style.slashes}>
-        <Link className={style.link} href="/universities">
-          Universities
-        </Link>
-        {university && (
+        {profile ? (
+          <Typography className={`${style.link} ${style.assessment}`}>
+            Profile
+          </Typography>
+        ) : (
+          <Link className={style.link} href="/">
+            Universities
+          </Link>
+        )}
+        {university && !profile && (
           <Link className={style.link} href={`/${university.id}`}>
             {university.name}
           </Link>
         )}
-        {course && (
+        {course && !profile && (
           <Link className={style.link} href={`/${university?.id}/${course.id}`}>
             {course.code}
           </Link>
         )}
-        {assessment && (
+        {assessment && !profile && (
           <Typography className={`${style.link} ${style.assessment}`}>
             {createAssessmentString(assessment)}
           </Typography>

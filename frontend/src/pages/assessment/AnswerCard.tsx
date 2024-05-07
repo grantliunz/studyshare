@@ -174,6 +174,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             }
             avatarSize="32px"
             style={{ alignItems: 'center', fontSize: '0.8rem' }}
+            anonymous={answer.isAnonymous}
           />
           <ReactQuill
             style={{ overflow: 'hidden', height: 'fit-content', flexGrow: 1 }}
