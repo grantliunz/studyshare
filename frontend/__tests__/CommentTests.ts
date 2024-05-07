@@ -2,7 +2,7 @@
 import API from '../src/util/api'
 import { getResponse, postResponse } from '../testUtil/testUtil';
 import { CreateCommentDTO, MakeVoteDTO } from '@shared/types/models/answer/answer'
-import { userId, answerId, questionId, universityId, courseId, assessmentId, commentId } from '../testUtil/testIds';
+import { userId, answerId, commentId } from '../testUtil/testIds';
 
 it('getComment', async () => {
  expect (await getResponse(`${API.getComment}/`+ commentId)).toBe(200);
