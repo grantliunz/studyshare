@@ -1,6 +1,6 @@
-# COMPSCI 732 / SOFTENG 750 project - Team Radiant Raccoons
+# Team Radiant Raccoons
 # StudyShare
-Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams. 
+Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. Built with the MERN stack with Firebase authentication. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams. 
 
 ## Features
 StudyShare provides its users with multiple features to help make the process of finding, asking and answering questions as easy as possible.
@@ -20,10 +20,100 @@ StudyShare provides its users with multiple features to help make the process of
  - Hide any questions that are not relevant/innapropriate
  - View their profile where they can see their watchlisted assessments and questions as well as their asked and answered questions
 
-## Tech Stack??? (idk if we want)
 
 ## Setup
-### TODO
+### Setting up the frontend
+
+
+#### Prerequisites
+
+Before getting started, ensure you have the following installed on your system:
+
+- Node.js: [Download Node.js](https://nodejs.org/en/download/) and follow the installation instructions.
+
+#### Configuration
+
+
+1. Navigate to the frontend directory from main folder:
+
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory of the frontend with the following structure:
+
+   ```plaintext
+   VITE_API_BASE_URL=http://localhost:3000
+   VITE_IMAGE_BASE_URL=http://localhost:3000
+   ```
+
+   Update the URLs accordingly if your backend server is running on a different port or host.
+
+#### Running the Frontend
+
+To start the frontend development server, run the following command:
+
+```bash
+npm run dev
+```
+
+This will start the frontend server and you can access it in your browser at the specified address.
+
+#### Usage
+
+Once the frontend server is up and running, you can access the StudyShare application in your browser and interact with it.
+
+
+### Setting up the backend
+
+
+1. Navigate to the backend directory from main folder:
+
+   ```bash
+   cd backend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory of the backend with the following structure:
+
+   ```plaintext
+   PORT=3000
+   MONGODB_CONNECTION_STRING=mongodb+srv://StudyShare:<password>@studyshare.fhntujg.mongodb.net/
+   ```
+
+   Replace `<password>` with the password obtained from Discord server.
+
+#### Running the Backend
+
+To start the backend server, run the following command:
+
+```bash
+npm run dev
+```
+
+This will start the backend server on the specified port (default is 3000) and connect it to the MongoDB Atlas database using the provided connection string.
+
+#### Usage
+
+Once the backend is up and running, you can start making requests to it from your frontend or API client.
+
+
+#### File Structure
+
+Each data object is grouped under the routes folder. There will be a route file that declares all the routes, a controller file that contains all the route functionality and the model file that contains the schema.
+
+Use the existing user folder as reference.
 
 # Contributing 
 
