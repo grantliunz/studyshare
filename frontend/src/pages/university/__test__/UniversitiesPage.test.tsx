@@ -5,43 +5,44 @@ import {
   waitFor
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HttpResponse, http } from 'msw';
-import { setupServer } from 'msw/node';
 import { AuthProvider } from '../../../contexts/UserContext';
 import UniversitiesPage from '../UniversitiesPage';
 import API from '../../../util/api';
 import { MemoryRouter } from 'react-router-dom';
 import { ReactElement, ReactNode } from 'react';
-import { describe, expect, it, beforeAll, afterAll, afterEach } from 'vitest';
+import { describe, expect, it, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
+import { University } from '@shared/types/models/university/university';
 
-const server = setupServer(
-  http.get(`*${API.getUniversities}`, () => {
-    return HttpResponse.json(
-      [
-        {
-          _id: '1',
-          name: 'University 1',
-          image: '1',
-          courses: [],
-          createdAt: { seconds: 1633977600 }
-        },
-        {
-          _id: '2',
-          name: 'University 2',
-          image: '2',
-          courses: [],
-          createdAt: { seconds: 1633977600 }
-        }
-      ],
-      { status: 200 }
-    );
-  })
-);
+const mockUniversities: University[] = [
+  {
+    id: '1',
+    name: 'University 1',
+    image: '1',
+    courses: [],
+    createdAt: new Date()
+  },
+  {
+    id: '2',
+    name: 'University 2',
+    image: '2',
+    courses: [],
+    createdAt: new Date()
+  }
+];
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+const axiosMock = new MockAdapter(axios);
+const getUniversityUrl = new RegExp(`.*${API.getUniversities}.*`);
+
+beforeEach(() => {
+  axiosMock.onGet(getUniversityUrl).reply(200, mockUniversities);
+});
+
+afterEach(() => {
+  axiosMock.reset();
+});
 
 const render = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) => {
   const Wrapper = ({ children }: { children: ReactNode }) => (
@@ -86,11 +87,7 @@ describe('UniversitiesPage', () => {
   });
 
   it('displays error message when fetching data fails', async () => {
-    server.use(
-      http.get(`*${API.getUniversities}`, () => {
-        return HttpResponse.json(null, { status: 500 });
-      })
-    );
+    axiosMock.onGet(getUniversityUrl).reply(500);
 
     render(<UniversitiesPage />);
 
