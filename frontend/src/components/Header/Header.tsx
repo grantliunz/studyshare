@@ -93,7 +93,11 @@ export default function Header() {
               style={{ cursor: 'pointer' }}
             >
               <Avatar
-                style={{ width: '50px', height: '50px' }}
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  border: '2px solid white'
+                }}
                 {...config(userDb?.name || '')}
               />
             </div>

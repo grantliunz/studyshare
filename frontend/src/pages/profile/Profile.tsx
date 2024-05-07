@@ -140,7 +140,11 @@ export default function Profile() {
             <div className={styles.profileContainer}>
               <div className={styles.avatar}>
                 <Avatar
-                  style={{ width: '125px', height: '125px' }}
+                  style={{
+                    width: '125px',
+                    height: '125px',
+                    border: '2px solid black'
+                  }}
                   {...config()}
                 />
               </div>
