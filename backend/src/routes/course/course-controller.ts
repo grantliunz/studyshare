@@ -15,7 +15,11 @@ export const createCourse = async (
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     const { name, code } = req.body; // assuming request body contains course data
+
+    // Remove spaces from course code and convert to uppercase
+    const courseCode = code?.replace(/\s/g, '').toUpperCase();
 
     // Get the university by its ID
     const university = await University.findById(req.params.universityId);
@@ -24,21 +28,20 @@ export const createCourse = async (
     }
     // check if course with the same name already exists
     const existingCourse = await Course.findOne({
-      name,
-      code,
+      code: courseCode,
       university: req.params.universityId
     });
     if (existingCourse) {
       return res.status(400).json({
         error:
-          'Course with the same name and code already exists in this university'
+          'Course with the same code already exists in this university'
       });
     }
 
     // create a new course instance and add code and assessments if available
     const course = new Course({
       name,
-      code,
+      code: courseCode,
       university: req.params.universityId
     });
 
