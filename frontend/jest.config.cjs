@@ -2,7 +2,5 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  transform: {
-    "^.+\\.ts?$": "ts-jest"
-  },
+  globalSetup: "./testUtil/setup.ts",
 };
