@@ -20,26 +20,11 @@ import { Course } from '@shared/types/models/course/course';
 import { AxiosError } from 'axios';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
-function mapSemesterToString(semester: string) {
-  switch (semester) {
-    case 'First':
-      return 'Semester 1';
-    case 'Second':
-      return 'Semester 2';
-    case 'Third':
-      return 'Summer School';
-    case 'Other':
-      return 'Other';
-    default:
-      return semester;
-  }
-}
-
 function matchString(assessment: Assessment, searchText: string) {
   const str =
     assessment.year.toString() +
     ' ' +
-    mapSemesterToString(assessment.semester) +
+    assessment.semester +
     ' ' +
     assessment.number?.toString() +
     ' ' +
