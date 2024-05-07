@@ -78,6 +78,10 @@ export default function CoursesPage() {
     }
   }, [query, courseData, yearLevels]);
 
+  useEffect(() => {
+    console.log('courseData:', courseData);
+  }, [courseData]);
+
   const handleOpenForm = () => {
     if (!currentUser) {
       setShowLoginPopup(true);
