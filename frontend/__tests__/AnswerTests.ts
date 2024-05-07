@@ -3,10 +3,7 @@
 import API from '../src/util/api'
 import { getResponse, postResponse } from '../testUtil/testUtil';
 import { CreateAnswerDTO, MakeVoteDTO } from '@shared/types/models/answer/answer'
-import { userId, answerId, questionId, universityId, courseId, assessmentId, commentId } from '../testUtil/testIds';
-
-
-
+import { userId, answerId, questionId } from '../testUtil/testIds';
 
 it('getAnswer', async () => { 
  expect (await getResponse(`${API.getAnswer}/`+ answerId)).toBe(200);
