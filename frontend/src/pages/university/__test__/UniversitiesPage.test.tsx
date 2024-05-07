@@ -12,6 +12,8 @@ import UniversitiesPage from '../UniversitiesPage';
 import API from '../../../util/api';
 import { MemoryRouter } from 'react-router-dom';
 import { ReactElement, ReactNode } from 'react';
+import { describe, expect, it, beforeAll, afterAll, afterEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 const server = setupServer(
   http.get(`*${API.getUniversities}`, () => {
