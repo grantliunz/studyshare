@@ -136,7 +136,8 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
         style={{
           alignItems: 'center',
           columnGap: '12px',
-          display: 'flex'
+          display: 'flex',
+          padding: '4px 0px'
         }}
       >
         <UpDownVote
@@ -160,7 +161,7 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             overflow: 'hidden',
             borderRadius: '10px',
             padding: '0px 12px',
-            position: 'relative' // Add position relative to the container
+            position: 'relative'
           }}
         >
           <PersonCard
@@ -173,9 +174,10 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             }
             avatarSize="32px"
             style={{ alignItems: 'center', fontSize: '0.8rem' }}
+            anonymous={answer.isAnonymous}
           />
           <ReactQuill
-            style={{ overflow: 'hidden', height: 'fit-content' }}
+            style={{ overflow: 'hidden', height: 'fit-content', flexGrow: 1 }}
             value={polledAnswer.text}
             readOnly={true}
             theme={'bubble'}
@@ -184,7 +186,6 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             style={{
               borderRadius: '8px',
               padding: '8px',
-              width: '100%',
               display: 'flex',
               position: 'relative', // Add position rel
               flexDirection: 'column'

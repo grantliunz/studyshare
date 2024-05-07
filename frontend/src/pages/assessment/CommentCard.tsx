@@ -113,6 +113,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
           'Anonymous'
         }
         style={{ width: '80px' }}
+        anonymous={polledComment.isAnonymous}
       />
       <div
         style={{

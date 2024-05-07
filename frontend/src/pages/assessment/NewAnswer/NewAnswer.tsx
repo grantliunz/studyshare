@@ -27,7 +27,7 @@ const NewAnswer = ({
       setLoginPopup(true);
       return;
     }
-    if (text.replace(/<\/?[^>]+(>|$)/g, '').trim() === '') {
+    if (text.replace(/<(?!img)[^>]+>/g, '').trim() === '') {
       alert('Please enter an answer!');
       return;
     }

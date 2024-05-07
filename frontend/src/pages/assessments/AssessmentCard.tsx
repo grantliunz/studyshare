@@ -1,4 +1,4 @@
-import { Button, IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import styles from './AssessmentCard.module.css';
