@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/UserContext';
 import ProfileCard from './ProfileCard';
 import API from '../../util/api';
 import axios from 'axios';
+import { WatchListType } from '@shared/types/models/user/user';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
@@ -24,13 +25,13 @@ export default function Profile() {
 
   // Tags and states to manage selected tag and card data
   const tags = [
-    'Watchlisted Assignments',
-    'Watchlisted Questions',
-    'Added Questions',
-    'Answered Questions'
+    'Assessment Watchlist',
+    'Question Watchlist',
+    'Questions Added',
+    'Answers'
   ];
 
-  const [selectedTag, setSelectedTag] = useState('Watchlisted Assignments');
+  const [selectedTag, setSelectedTag] = useState('Assessment Watchlist');
   const [selectedCardData, setSelectedCardData] = useState([] as any[]);
 
   // States to manage loading and error
@@ -39,13 +40,13 @@ export default function Profile() {
 
   // Set profile cards data based on selected tag
   useEffect(() => {
-    if (selectedTag === 'Watchlisted Assignments') {
+    if (selectedTag === 'Assessment Watchlist') {
       setSelectedCardData(watchlistedAssignments);
-    } else if (selectedTag === 'Watchlisted Questions') {
+    } else if (selectedTag === 'Question Watchlist') {
       setSelectedCardData(watchlistedQuestions);
-    } else if (selectedTag === 'Added Questions') {
+    } else if (selectedTag === 'Questions Added') {
       setSelectedCardData(addedQuestions);
-    } else if (selectedTag === 'Answered Questions') {
+    } else if (selectedTag === 'Answers') {
       setSelectedCardData(answeredQuestions);
     }
   }, [
@@ -125,11 +126,13 @@ export default function Profile() {
                   height: '40px',
                   borderRadius: '5px',
                   color: 'white',
-                  backgroundColor: '#41709b'
+                  backgroundColor: '#41709b',
+                  textTransform: 'none',
+                  fontSize: '1rem'
                 }}
                 onClick={logoutUser}
               >
-                Logout
+                Log out
               </Button>
             </div>
           </div>
@@ -149,13 +152,30 @@ export default function Profile() {
 
             <div className={styles.profileStats}>
               <div className={styles.stat}>
-                <Typography variant="h6">Watchlisted</Typography>
-                <Typography variant="h4">{userDb?.watchList.length}</Typography>
+                <Typography variant="h6">Assessment Watchlist</Typography>
+                <Typography variant="h4">
+                  {
+                    userDb?.watchList.filter(
+                      (i) => i.watchType == WatchListType.ASSESSMENT
+                    ).length
+                  }
+                </Typography>
               </div>
               <div className={styles.stat}>
-                <Typography variant="h6">Added</Typography>
+                <Typography variant="h6">Questions</Typography>
                 <Typography variant="h4">{userDb?.questions.length}</Typography>
               </div>
+              <div className={styles.stat}>
+                <Typography variant="h6">Question Watchlist</Typography>
+                <Typography variant="h4">
+                  {
+                    userDb?.watchList.filter(
+                      (i) => i.watchType == WatchListType.QUESTION
+                    ).length
+                  }
+                </Typography>
+              </div>
+
               <div className={styles.stat}>
                 <Typography variant="h6">Answers</Typography>
                 <Typography variant="h4">{userDb?.answers.length}</Typography>
