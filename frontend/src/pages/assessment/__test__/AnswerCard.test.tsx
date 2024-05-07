@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { describe, expect, it, beforeAll, beforeEach, afterEach } from 'vitest';
+import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
@@ -27,9 +27,6 @@ describe('AnswerCard', () => {
 
   // Mock Axios requests
   const axiosMock = new MockAdapter(axios);
-
-  beforeAll(() => {});
-
   const answerUrl = new RegExp(`.*${API.getAnswer}/${mockAnswer._id}$`);
   const authorUrl = new RegExp(`.*${API.getUser}/${mockAnswer.author}$`);
 
