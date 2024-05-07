@@ -23,7 +23,7 @@ export default function Profile() {
     // Tags and states to manage selected tag and card data
     const tags = ['Watchlisted Assessments', 'Watchlisted Questions', 'Added Questions', 'Answered Questions'];
 
-    const [selectedTag, setSelectedTag] = useState('Watchlisted Assignments');
+    const [selectedTag, setSelectedTag] = useState('Watchlisted Assessments');
     const [selectedCardData, setSelectedCardData] = useState([] as any[]);
 
     // States to manage loading and error
@@ -60,7 +60,7 @@ export default function Profile() {
             setIsLoading(true);
             try {
                 const profileData = await axios.get<any>(`${BACKEND_URL}${API.getProfile}/${userDb._id}`);
-                setWatchlistedAssignments(profileData.data.watchListedAssignments);
+                setWatchlistedAssignments(profileData.data.watchListedAssessments);
                 setWatchlistedQuestions(profileData.data.watchListedQuestions);
                 setAddedQuestions(profileData.data.addedQuestions);
                 setAnsweredQuestions(profileData.data.answeredQuestions);
