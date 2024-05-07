@@ -3,6 +3,7 @@ import styles from './Landing.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/UserContext';
 import { useEffect } from 'react';
+import { Paper } from '@mui/material';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -20,7 +21,16 @@ export default function Landing() {
   return (
     <div className={styles.pageWrapper}>
       <div className="grid" />
-      <div className={styles.container}>
+      <Paper
+        elevation={20}
+        className={styles.container}
+        style={{
+          borderRadius: '10px',
+          borderWidth: '1px',
+          borderColor: 'black',
+          borderStyle: 'solid'
+        }}
+      >
         <h1 className={styles.title}>StudyShare</h1>
         <p className={styles.description}>
           The collaborative platform where students come together to share,
@@ -36,6 +46,10 @@ export default function Landing() {
             fontSize: '1.5rem',
             textTransform: 'none'
           }}
+          sx={{
+            borderRadius: '5px',
+            boxShadow: '10'
+          }}
         >
           Get Started
         </Button>
@@ -43,7 +57,7 @@ export default function Landing() {
           Already have an account? &nbsp;
           <Link to="/login">Log in</Link>
         </p>
-      </div>
+      </Paper>
     </div>
   );
 }
