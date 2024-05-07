@@ -406,7 +406,7 @@ export const getProfile = async (
           year: {
             $concat: [
               '$course.code',
-              '/ Semester ',
+              ' / ',
               '$assessment.semester',
               ' ',
               '$assessment.type', 
@@ -506,7 +506,7 @@ export const getProfile = async (
           year: {
             $concat: [
               '$course.code',
-              ' / Semester ',
+              ' / ',
               '$assessment.semester',
               ' ',
               '$assessment.type', 
@@ -693,7 +693,7 @@ export const getProfile = async (
           year: {
             $concat: [
               '$watchListedQuestions.course.code',
-              ' / Semester ',
+              ' / ',
               '$watchListedQuestions.assessment.semester',
               ' ',
               '$watchListedQuestions.assessment.type', 
