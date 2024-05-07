@@ -11,7 +11,6 @@ import API from '../../../util/api';
 import { MemoryRouter } from 'react-router-dom';
 import { ReactElement, ReactNode } from 'react';
 import { describe, expect, it, afterEach } from 'vitest';
-import '@testing-library/jest-dom';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import { University } from '@shared/types/models/university/university';

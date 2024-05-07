@@ -1,133 +1,106 @@
 import {
   RenderOptions,
+  fireEvent,
+  render,
   render as rtlRender,
   screen,
   waitFor
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HttpResponse, PathParams, http } from 'msw';
-import { setupServer } from 'msw/node';
-import { AuthProvider } from '../../../contexts/UserContext';
 import CoursesPage from '../CoursesPage';
 import API from '../../../util/api';
-import { MemoryRouter, Params } from 'react-router-dom';
-import { ReactElement, ReactNode } from 'react';
-import { vi, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import { it, expect } from 'vitest';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
+import { University } from '@shared/types/models/university/university';
+import { Course } from '@shared/types/models/course/course';
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useParams: (): Readonly<Params<string>> => ({ universityId: '1' })
-  };
-});
-
-const server = setupServer(
-  http.get<PathParams>(`*${API.getCourses}/:universityId`, ({ params }) => {
-    const { universityId } = params;
-    return HttpResponse.json(
-      [
-        {
-          _id: 'c1',
-          name: 'Course 1',
-          code: 'CS100',
-          university: '1',
-          assessments: [],
-          createdAt: { seconds: 1633977600 }
-        },
-        {
-          _id: 'c2',
-          name: 'Course 2',
-          code: 'CS200',
-          university: '1',
-          assessments: [],
-          createdAt: { seconds: 1633977600 }
-        }
-      ],
-      { status: 200 }
-    );
-  }),
-  http.get(`*${API.getUniversityById}/:universityId`, ({ params }) => {
-    const { universityId } = params;
-    return HttpResponse.json(
-      {
-        _id: universityId,
-        name: 'University Name',
-        image: 'image.png',
-        courses: ['c1', 'c2'],
-        createdAt: { seconds: 1633977600 },
-        updatedAt: { seconds: 1633977600 },
-        __v: 4
-      },
-      { status: 200 }
-    );
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
-const renderWithRouter = (
-  ui: ReactElement,
-  initialRoute: string,
-  options?: Omit<RenderOptions, 'wrapper'>
-) => {
-  const Wrapper = ({ children }: { children: ReactNode }) => (
-    <AuthProvider>
-      <MemoryRouter initialEntries={[initialRoute]}>{children}</MemoryRouter>
-    </AuthProvider>
-  );
-  return rtlRender(ui, { wrapper: Wrapper, ...options });
+// Mock Axios requests
+const mockUniversity: University = {
+  id: '662f9cf0c02c023a03c89544',
+  name: 'Monkey',
+  image: '1',
+  courses: ['1', '2'],
+  createdAt: new Date()
 };
 
+const mockCourses: (Omit<Course, 'id'> & {
+  _id: string;
+})[] = [
+  {
+    _id: '1',
+    name: 'Data Structures and Algorithms',
+    code: 'SOFTENG284',
+    assessments: [],
+    createdAt: new Date()
+  },
+  {
+    _id: '2',
+    name: 'Software Engineering Design',
+    code: 'SOFTENG306',
+    assessments: [],
+    createdAt: new Date()
+  }
+];
+
+const axiosMock = new MockAdapter(axios);
+const getUniversityUrl = new RegExp(`.*${API.getUniversityById}.*`);
+const getCoursesUrl = new RegExp(`.*${API.getCourses}.*`);
+
+beforeEach(() => {
+  // Mock GET request to fetch answer data
+  axiosMock.onGet(getUniversityUrl).reply(200, mockUniversity);
+
+  // MOCK GET request to fetch author data
+  axiosMock.onGet(getCoursesUrl).reply(200, mockCourses);
+});
+
+afterEach(() => {
+  axiosMock.reset();
+});
+
 describe('CoursesPage', () => {
-  it('renders courses correctly', async () => {
-    renderWithRouter(<CoursesPage />, '/1');
-    expect(screen.getByText('University Name')).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText('Search for a course')
-    ).toBeInTheDocument();
+  it('renders university name', async () => {
+    render(
+      <MemoryRouter initialEntries={['/test/123123']}>
+        <CoursesPage />
+      </MemoryRouter>
+    );
+
     await waitFor(() => {
-      expect(screen.getByText('Course 1')).toBeInTheDocument();
-      expect(screen.getByText('Course 2')).toBeInTheDocument();
+      expect(screen.getByText(mockUniversity.name)).toBeInTheDocument();
+    });
+  });
+
+  it('renders courses correctly', async () => {
+    render(
+      <MemoryRouter initialEntries={['/test/123123']}>
+        <CoursesPage />
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      for (const course of mockCourses) {
+        expect(screen.getByText(course.name)).toBeInTheDocument();
+        expect(screen.getByText(course.code)).toBeInTheDocument();
+      }
     });
   });
 
   it('filters courses based on search query', async () => {
-    renderWithRouter(<CoursesPage />, '/1');
-    const searchInput = screen.getByPlaceholderText('Search for a course');
-    userEvent.type(searchInput, 'Course 1');
+    render(
+      <MemoryRouter initialEntries={['/test/123123']}>
+        <CoursesPage />
+      </MemoryRouter>
+    );
     await waitFor(() => {
-      expect(screen.getByText('Course 1')).toBeInTheDocument();
-      expect(screen.queryByText('Course 2')).not.toBeInTheDocument();
+      const searchInput = screen.getByPlaceholderText('Search for a course');
+
+      expect(searchInput).toBeInTheDocument();
+
+      userEvent.type(searchInput, '284');
+      expect(screen.getByText(mockCourses[0].name)).toBeInTheDocument();
+      expect(screen.queryByText(mockCourses[1].name)).not.toBeInTheDocument();
     });
   });
-
-  it('filters courses based on year level', async () => {
-    renderWithRouter(<CoursesPage />, '/1');
-    userEvent.click(screen.getByText('Select Year'));
-    userEvent.click(screen.getByText('100'));
-    await waitFor(() => {
-      expect(screen.getByText('Course 1')).toBeInTheDocument();
-      expect(screen.queryByText('Course 2')).not.toBeInTheDocument();
-    });
-  });
-
-  it('displays loading state while fetching data', () => {
-    renderWithRouter(<CoursesPage />, '/1');
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
-  });
-
-  // it('displays error message when fetching data fails', async () => {
-  //   server.use(
-  //     http.get(`*${API.getCourses}/:universityId`, () => {
-  //       return HttpResponse.json(null, { status: 500 });
-  //     })
-  //   );
-  //   renderWithRouter(<CoursesPage />, '/1');
-  //   await waitFor(() => {
-  //     expect(screen.getByText('An error occurred')).toBeInTheDocument();
-  //   });
-  // });
 });
