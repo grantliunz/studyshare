@@ -42,7 +42,7 @@ const axiosMock = new MockAdapter(axios);
 const getUniversityUrl = new RegExp(
   `.*${API.getUniversityById}/${mockUniversity.id}`
 );
-const getCoursesUrl = new RegExp(`.*${API.getCourses}.*`);
+const getCoursesUrl = new RegExp(`.*${API.getCourses}/${mockUniversity.id}`);
 
 beforeEach(() => {
   // Mock GET request to fetch answer data
