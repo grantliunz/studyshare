@@ -15,8 +15,8 @@ import {
   Select,
   MenuItem,
   Checkbox,
-  FormControlLabel,
-  SelectChangeEvent
+  SelectChangeEvent,
+  ListItemText
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
@@ -134,14 +134,10 @@ export default function CoursesPage() {
                   >
                     {[1, 2, 3, 4, 7].map((value) => (
                       <MenuItem key={value} value={value.toString()}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={yearLevels.includes(value.toString())}
-                            />
-                          }
-                          label={value * 100}
+                        <Checkbox
+                          checked={yearLevels.includes(value.toString())}
                         />
+                        <ListItemText primary={value * 100} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -153,10 +149,9 @@ export default function CoursesPage() {
       )}
       {isLoadingCourses && <CircularProgress />}
       {displayedData &&
-        displayedData.map((course, index) => (
-          <div className={style.courseCards}>
+        displayedData.map((course) => (
+          <div key={course.id} className={style.courseCards}>
             <CourseCard
-              key={index}
               courseCode={course.code}
               courseName={course.name}
               onClick={() => navigate(`/${universityId}/${course.id}`)}
