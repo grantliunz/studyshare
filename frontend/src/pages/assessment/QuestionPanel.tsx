@@ -273,7 +273,14 @@ const QuestionPanel = ({
           >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
-          <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
+          <h2
+            style={{
+              margin: '0px',
+              flexGrow: '1',
+              textAlign: 'start',
+              overflow: 'auto'
+            }}
+          >
             {polledQuestion.number.join('.')}
           </h2>
           <IconButton
