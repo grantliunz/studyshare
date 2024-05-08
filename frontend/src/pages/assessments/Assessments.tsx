@@ -59,7 +59,7 @@ const Assessments = () => {
   const semesterOrder: Record<string, number> = {
     'Semester 1': 1,
     'Semester 2': 2,
-    SummerSchool: 3,
+    'Summer School': 3,
     Other: 4
   };
 
@@ -135,16 +135,17 @@ const Assessments = () => {
                   .filter((assessment) => matchString(assessment, searchText))
                   .filter((assessment) => assessment.type === 'Exam')
                   .sort((a: Assessment, b: Assessment) => {
-                    // First, sort by semester
-                    const semesterSort =
-                      semesterOrder[a.semester] - semesterOrder[b.semester];
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
 
-                    // If semesters are the same, sort by year
-                    if (semesterSort === 0) {
-                      return b.year - a.year;
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
                     }
 
-                    return semesterSort;
+                    return yearSort;
                   })
                   .map((assessment) => (
                     <AssessmentCard
@@ -164,16 +165,17 @@ const Assessments = () => {
                 assessments
                   .filter((assessment) => matchString(assessment, searchText))
                   .sort((a: Assessment, b: Assessment) => {
-                    // First, sort by semester
-                    const semesterSort =
-                      semesterOrder[a.semester] - semesterOrder[b.semester];
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
 
-                    // If semesters are the same, sort by year
-                    if (semesterSort === 0) {
-                      return b.year - a.year;
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
                     }
 
-                    return semesterSort;
+                    return yearSort;
                   })
                   .map((assessment) =>
                     assessment.type === 'Test' ? (
