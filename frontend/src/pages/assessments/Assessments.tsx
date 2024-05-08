@@ -56,6 +56,13 @@ const Assessments = () => {
   const navigate = useNavigate();
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
+  const semesterOrder: Record<string, number> = {
+    'Semester 1': 1,
+    'Semester 2': 2,
+    'Summer School': 3,
+    Other: 4
+  };
+
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
   }
@@ -126,15 +133,27 @@ const Assessments = () => {
               {assessments &&
                 assessments
                   .filter((assessment) => matchString(assessment, searchText))
-                  .map((assessment) =>
-                    assessment.type === 'Exam' ? (
-                      <AssessmentCard
-                        key={assessment._id}
-                        assessment={assessment}
-                        onClick={() => handleCardClicked(assessment._id)}
-                      />
-                    ) : null
-                  )}
+                  .filter((assessment) => assessment.type === 'Exam')
+                  .sort((a: Assessment, b: Assessment) => {
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
+
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
+                    }
+
+                    return yearSort;
+                  })
+                  .map((assessment) => (
+                    <AssessmentCard
+                      key={assessment._id}
+                      assessment={assessment}
+                      onClick={() => handleCardClicked(assessment._id)}
+                    />
+                  ))}
               <AddAssessmentButton
                 handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
               />
@@ -145,6 +164,19 @@ const Assessments = () => {
               {assessments &&
                 assessments
                   .filter((assessment) => matchString(assessment, searchText))
+                  .sort((a: Assessment, b: Assessment) => {
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
+
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
+                    }
+
+                    return yearSort;
+                  })
                   .map((assessment) =>
                     assessment.type === 'Test' ? (
                       <AssessmentCard
@@ -164,6 +196,7 @@ const Assessments = () => {
               {assessments &&
                 assessments
                   .filter((assessment) => matchString(assessment, searchText))
+                  .sort((a, b) => b.year - a.year)
                   .map((assessment) =>
                     assessment.type === 'Other' ? (
                       <AssessmentCardOther
