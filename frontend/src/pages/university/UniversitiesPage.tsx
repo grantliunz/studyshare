@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/UserContext';
 import useGet from '../../hooks/useGet';
 import { mapGetUniversitiesData } from '../../mappers/universityMapper';
-import styles from './University.module.css';
+import styles from './UniversityPage.module.css';
 import UniversityCard from './UniversityCard';
 import AddButton from '../../components/AddButton/AddButton';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -65,6 +65,7 @@ export default function UniversitiesPage() {
           <SearchBar
             title={'Search for a university'}
             onQueryChange={onQueryChange}
+            width="850px"
           />
           <div className={styles.universitiesGrid}>
             {isLoadingUniversities && <CircularProgress />}
@@ -76,6 +77,7 @@ export default function UniversitiesPage() {
               displayedData?.length === 0 &&
               !errorString && <p>No universities found</p>}
           </div>
+
           <AddUniversityForm
             open={showForm}
             onClose={handleCloseForm}

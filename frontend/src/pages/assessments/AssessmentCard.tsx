@@ -87,7 +87,8 @@ export default function AssessmentCard({
           boxShadow: 3,
           backgroundColor: '#D9D9D9',
           '&:hover': {
-            backgroundColor: '#BFBFBF' // Change the background color on hover
+            backgroundColor: '#BFBFBF',
+            scale: '1.05'
           }
         }}
         style={{
@@ -95,7 +96,8 @@ export default function AssessmentCard({
           width: '200px',
           color: 'black',
           textTransform: 'none',
-          margin: '10px'
+          margin: '10px',
+          height: '100%'
         }}
       >
         <div style={{ flexDirection: 'row', display: 'flex' }}>

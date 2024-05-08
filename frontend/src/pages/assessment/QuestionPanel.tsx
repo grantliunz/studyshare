@@ -192,7 +192,17 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div
+        style={{
+          maxWidth: '1200px',
+          backgroundColor: 'white',
+          borderRadius: '10px 10px 0px 0px',
+          margin: '0 auto',
+          paddingBottom: '50px',
+          paddingLeft: '40px',
+          paddingRight: '40px'
+        }}
+      >
         <div style={{ paddingTop: '10px', display: 'flex' }}>
           {prevQuestion && (
             <Button
@@ -231,6 +241,11 @@ const QuestionPanel = ({
                 ? 'Add question to watchlist'
                 : 'Remove question from watchlist'
             }
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
@@ -240,12 +255,22 @@ const QuestionPanel = ({
           <IconButton
             onClick={() => toggleIsEditingQuestion()}
             title={!isEditingQuestion ? 'Edit question' : 'Cancel'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isEditingQuestion ? <EditOffOutlinedIcon /> : <EditOutlinedIcon />}
           </IconButton>
           <IconButton
             onClick={() => handleIsFlaggedChanged(!isFlagged)}
             title={!isFlagged ? 'Hide question' : 'Unhide question'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
@@ -364,7 +389,7 @@ const QuestionPanel = ({
                 'Anonymous'
               }
               avatarPos="left"
-              style={{ columnGap: '8px' }}
+              style={{ columnGap: '5px' }}
               anonymous={polledQuestion.versions.at(versionNo)?.isAnonymous}
             />
           </div>

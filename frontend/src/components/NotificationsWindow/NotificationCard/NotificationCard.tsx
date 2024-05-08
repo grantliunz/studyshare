@@ -80,9 +80,9 @@ export default function NotificationCard({
   const config = (name: string) => {
     const avatarConfig = genConfig(name || '');
     if (avatarConfig.hairStyle === 'womanLong') {
-        avatarConfig.hairStyle = 'womanShort';
+      avatarConfig.hairStyle = 'womanShort';
     } else if (avatarConfig.hairStyle === 'thick') {
-        avatarConfig.hairStyle = 'normal';
+      avatarConfig.hairStyle = 'normal';
     }
     return avatarConfig;
   };
@@ -111,7 +111,10 @@ export default function NotificationCard({
       }}
     >
       <div className={styles.avatar}>
-        <Avatar style={{ width: '50px', height: '50px' }} {...config(notification.authorName)} />
+        <Avatar
+          style={{ width: '50px', height: '50px', border: '2px solid black' }}
+          {...config(notification.authorName)}
+        />
       </div>
       <div>
         <p className={styles.notificationText}>

@@ -20,6 +20,11 @@ export const createCourse = async (
 
     // Remove spaces from course code and convert to uppercase
     const courseCode = code?.replace(/\s/g, '').toUpperCase();
+    if (courseCode!.trim().length > 30) {
+      return res
+        .status(404)
+        .json({ error: 'Course code must be less than 30 characters.' });
+    }
 
     // Get the university by its ID
     const university = await University.findById(req.params.universityId);
@@ -33,8 +38,7 @@ export const createCourse = async (
     });
     if (existingCourse) {
       return res.status(400).json({
-        error:
-          'Course with the same code already exists in this university'
+        error: 'Course with the same code already exists in this university'
       });
     }
 

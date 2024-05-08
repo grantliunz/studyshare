@@ -58,6 +58,11 @@ const UpDownVote = ({
           margin: '0',
           padding: '0'
         }}
+        sx={{
+          '&.MuiButtonBase-root:hover': {
+            scale: '1.15'
+          }
+        }}
       >
         {voteState === VoteDirection.UP ? (
           <ThumbUpIcon style={{ fontSize: iconSize }} />
@@ -84,6 +89,11 @@ const UpDownVote = ({
         style={{
           margin: '0',
           padding: '0'
+        }}
+        sx={{
+          '&.MuiButtonBase-root:hover': {
+            scale: '1.15'
+          }
         }}
       >
         {voteState === VoteDirection.DOWN ? (
