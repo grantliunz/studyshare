@@ -35,7 +35,6 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(#41709b 20%, #8abbd7 60%, #20384e 100%);
 }
 .upperContent {
   animation: fadeIn 0.5s ease forwards;

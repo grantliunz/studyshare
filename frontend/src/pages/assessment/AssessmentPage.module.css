@@ -9,7 +9,7 @@
 }
 
 .questionsTabContainer {
-  background-color: white;
+  background-color: #e8e9ec;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -17,14 +17,12 @@
 }
 
 .resizeBar {
-  background-color: rgba(0, 0, 0, 0.0);
+  background-color: rgba(0, 0, 0, 0);
   width: 3px;
   cursor: col-resize;
   position: absolute;
   height: 100%;
   align-self: end;
-  
-
 }
 
 .reportedQuestionNumber {

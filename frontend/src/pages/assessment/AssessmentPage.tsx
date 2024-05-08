@@ -275,16 +275,7 @@ const AssessmentPage = () => {
               className={styles.questionsTabContainer}
               style={{
                 minWidth: sidebarWidth,
-                maxWidth: sidebarWidth,
-                borderRadius: '0px 10px 0px 0px',
-                borderColor: '#8e8e8e',
-                borderWidth: '4px',
-                borderStyle: 'solid',
-                borderLeft: 'none',
-                borderTop: 'rgba(142, 142, 142, 1) solid',
-
-                borderRight: 'rgba(142, 142, 142, 1) solid',
-                borderBottom: 'none'
+                maxWidth: sidebarWidth
               }}
             >
               <div style={{ flexDirection: 'row', display: 'flex' }}>

@@ -1,21 +1,17 @@
 .container {
   width: 100%;
-  background-color: #253f55;
+  background-color: #41709b;
   padding: 0px 30px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  
+
   z-index: 100;
   box-sizing: border-box;
-  padding-top: 25px;
-  padding-bottom: 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   justify-items: center;
-  border-bottom: white;
-  border-bottom-width: 3px;
-  border-bottom-style: solid;
-  margin-bottom: 30px;
 }
 
 .title {
@@ -33,7 +29,7 @@
 .breadcrumbContainer {
   display: flex;
   flex-grow: 1;
-  margin-left: 75px;
+  margin-left: 20px;
 }
 
 .rightContainer {

@@ -20,8 +20,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        color: 'white',
-        backgroundColor: '#41709b',
+        backgroundColor: '#d9d9d9',
         borderRadius: 5,
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
         minWidth: 800,
@@ -31,7 +30,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         maxHeight: 70,
         marginBottom: 1.5,
         '&:hover': {
-          backgroundColor: '#6b9bbe',
+          backgroundColor: '#BFBFBF',
           scale: '1.05'
         }
       }}

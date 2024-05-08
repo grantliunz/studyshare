@@ -85,7 +85,7 @@ export default function AssessmentCardOther({
         variant="contained"
         sx={{
           borderRadius: '10px',
-          backgroundColor: '#d6dbf4',
+          backgroundColor: '#D9D9D9',
           '&:hover': {
             backgroundColor: '#BFBFBF',
             scale: '1.05'

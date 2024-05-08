@@ -1,7 +1,7 @@
 .searchBar {
   display: flex;
   align-items: center;
-  background-color: #EAF1F4;
+  background-color: #e7e7e7;
   border-radius: 10px;
   padding: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
@@ -29,5 +29,5 @@
 }
 .button:active {
   scale: 1;
-  cursor: initial
+  cursor: initial;
 }

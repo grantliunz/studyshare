@@ -110,7 +110,8 @@ export default function Header() {
               onClick={onClick}
               style={{
                 backgroundColor: 'white',
-                color: 'black'
+                color: 'black',
+                textTransform: 'none'
               }}
             >
               Login

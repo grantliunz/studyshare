@@ -21,17 +21,7 @@ export default function Landing() {
   return (
     <div className={styles.pageWrapper}>
       <div className="grid" />
-      <Paper
-        elevation={20}
-        className={styles.container}
-        style={{
-          borderRadius: '10px',
-          borderWidth: '1px',
-          borderColor: 'black',
-          borderStyle: 'solid'
-        }}
-        sx={{}}
-      >
+      <Paper elevation={20} className={styles.container} sx={{}}>
         <h1 className={styles.title}>StudyShare</h1>
         <p className={styles.description}>
           The collaborative platform where students come together to share,

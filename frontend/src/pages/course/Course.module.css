@@ -8,7 +8,6 @@
 
 .upperContent {
   animation: fadeIn 0.5s ease forwards;
-
 }
 
 .Mui-focused .MuiInputLabel-root {
@@ -18,9 +17,6 @@
   padding: 0;
   font-size: 3rem;
   text-overflow: ellipsis;
-  color:#EAF1F4;
-  font-family: "Calibri";
-  font-weight: 700;
 }
 
 .searchAndFilter {
@@ -34,7 +30,7 @@
 }
 
 .yearLevelSelect {
-  background-color: #EAF1F4;
+  background-color: #e7e7e7;
   border-radius: 10px;
   padding: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
@@ -43,7 +39,6 @@
 
 .yearLevelInputLabel {
   font-size: 14px;
-  color: #EAF1F4; /* Adjust the color as needed */
 }
 
 .yearLevelSelectMenu {

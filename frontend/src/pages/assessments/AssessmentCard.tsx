@@ -85,7 +85,7 @@ export default function AssessmentCard({
         sx={{
           borderRadius: '10px',
           boxShadow: 3,
-          backgroundColor: '#d6dbf4',
+          backgroundColor: '#D9D9D9',
           '&:hover': {
             backgroundColor: '#BFBFBF',
             scale: '1.05'
