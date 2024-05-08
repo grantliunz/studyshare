@@ -208,20 +208,44 @@ const QuestionPanel = ({
             <Button
               onClick={() => setQuestion(prevQuestion)}
               startIcon={<ArrowBackRoundedIcon />}
-              style={{ textTransform: 'none', marginRight: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginRight: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to previous question"
             >
-              {prevQuestion?.number.join('.')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {prevQuestion?.number.join('.')}
+              </span>
             </Button>
           )}
           {nextQuestion && (
             <Button
               onClick={() => setQuestion(nextQuestion)}
               endIcon={<ArrowForwardRoundedIcon />}
-              style={{ textTransform: 'none', marginLeft: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginLeft: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to next question"
             >
-              {nextQuestion.number.join('.')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {nextQuestion.number.join('.')}
+              </span>
             </Button>
           )}
         </div>
