@@ -177,10 +177,12 @@ describe('AssessmentPage', () => {
       fireEvent.click(
         screen.getByText(mockAssessment.questions[1].number.at(-1)!)
       );
-      expect(screen.getByText(mockAssessment.questions[1].number.join('')));
+      expect(
+        screen.getByText(mockAssessment.questions[1].number.join(''))
+      ).toBeInTheDocument();
       expect(
         screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
-      );
+      ).toBeInTheDocument();
       expect(
         screen.findByText(mockAssessment.questions[0].versions.at(-1)!.text)
       ).not.toBeInTheDocument();
@@ -213,10 +215,12 @@ describe('AssessmentPage', () => {
 
       fireEvent.click(screen.getByTitle('Go to next question'));
 
-      expect(screen.getByText(mockAssessment.questions[1].number.join('')));
+      expect(
+        screen.getByText(mockAssessment.questions[1].number.join(''))
+      ).toBeInTheDocument();
       expect(
         screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
-      );
+      ).toBeInTheDocument();
       expect(
         screen.findByText(mockAssessment.questions[0].versions.at(-1)!.text)
       ).not.toBeInTheDocument();
@@ -231,16 +235,13 @@ describe('AssessmentPage', () => {
       <AssessmentPage />,
       `/${mockAssessment._id}`,
       '/:assessmentId',
-      {
-        quest: initialQuestion._id
-      }
+      { quest: initialQuestion._id }
     );
 
     waitFor(() => {
       expect(
         screen.findByText(initialQuestion.versions.at(-1)!.text)
       ).toBeInTheDocument();
-
       expect(
         screen.queryByText(mockAssessment.questions[0].versions.at(-1)!.text)
       ).not.toBeInTheDocument();
