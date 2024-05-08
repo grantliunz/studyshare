@@ -2,7 +2,14 @@ import { ReactNode } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import API from '../../../util/api';
@@ -14,9 +21,14 @@ import {
 } from '@shared/types/models/assessment/assessment';
 import { UserDisplayDTO } from '@shared/types/models/user/user';
 
-const renderWithRouter = (element: ReactNode, url: string, path: string) => {
+const renderWithRouter = (
+  element: ReactNode,
+  url: string,
+  path: string,
+  state: { quest: string } | undefined = undefined
+) => {
   return render(
-    <MemoryRouter initialEntries={[url]}>
+    <MemoryRouter initialEntries={[{ pathname: url, state }]}>
       <Routes>
         <Route path={path} element={element}></Route>
       </Routes>
@@ -95,6 +107,10 @@ describe('AssessmentPage', () => {
     // Mock GET request to fetch assessment data
     axiosMock.onGet(assessmentUrl).reply(200, mockAssessment);
     axiosMock.onGet(authorUrl).reply(200, mockAuthor);
+    for (const question of mockAssessment.questions) {
+      const url = new RegExp(`.*${API.getQuestion}/${question._id}`);
+      axiosMock.onGet(url).reply(200, question);
+    }
   });
 
   afterEach(() => {
@@ -111,11 +127,11 @@ describe('AssessmentPage', () => {
 
     waitFor(() => {
       // question numbers should be displayed
-      expect(screen.getByText('1')).toBeInTheDocument();
-      expect(screen.getByText('a')).toBeInTheDocument();
-      expect(screen.getByText('i')).toBeInTheDocument();
-      expect(screen.getByText('ii')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
+      for (const question of mockAssessment.questions) {
+        for (const num of question.number) {
+          expect(screen.getByText(num)).toBeInTheDocument();
+        }
+      }
     });
   });
 
@@ -140,6 +156,104 @@ describe('AssessmentPage', () => {
 
       // author of latest version should be displayed
       expect(screen.getByText(mockAuthor.name)).toBeInTheDocument();
+    });
+  });
+
+  it('navigates by question tab', async () => {
+    // Render the AssessmentPage component
+    renderWithRouter(
+      <AssessmentPage />,
+      `/${mockAssessment._id}`,
+      '/:assessmentId'
+    );
+
+    // ensure first question is displayed
+    waitFor(() => {
+      // question number should be displayed
+      expect(
+        screen.getByText(mockAssessment.questions[0].number.join(''))
+      ).toBeInTheDocument();
+      // latest version of question should be displayed
+      expect(
+        screen.getByText(mockAssessment.questions[0].versions.at(-1)!.text)
+      ).toBeInTheDocument();
+    });
+
+    waitFor(async () => {
+      // click on next question
+      fireEvent.click(
+        screen.getByText(mockAssessment.questions[1].number.at(-1)!)
+      );
+      expect(screen.getByText(mockAssessment.questions[1].number.join('')));
+      expect(
+        screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
+      );
+      expect(
+        screen.findByText(mockAssessment.questions[0].versions.at(-1)!.text)
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('navigates by next question button', async () => {
+    // Render the AssessmentPage component
+    renderWithRouter(
+      <AssessmentPage />,
+      `/${mockAssessment._id}`,
+      '/:assessmentId'
+    );
+
+    // ensure first question is displayed
+    waitFor(() => {
+      // question number should be displayed
+      expect(
+        screen.getByText(mockAssessment.questions[0].number.join(''))
+      ).toBeInTheDocument();
+      // latest version of question should be displayed
+      expect(
+        screen.getByText(mockAssessment.questions[0].versions.at(-1)!.text)
+      ).toBeInTheDocument();
+    });
+
+    waitFor(async () => {
+      // click on next question button
+      expect(screen.getByTitle('Go to next question')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTitle('Go to next question'));
+
+      expect(screen.getByText(mockAssessment.questions[1].number.join('')));
+      expect(
+        screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
+      );
+      expect(
+        screen.findByText(mockAssessment.questions[0].versions.at(-1)!.text)
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('can set initial question', async () => {
+    // Render the AssessmentPage component
+    const initialQuestion = mockAssessment.questions[2];
+
+    renderWithRouter(
+      <AssessmentPage />,
+      `/${mockAssessment._id}`,
+      '/:assessmentId',
+      {
+        quest: initialQuestion._id
+      }
+    );
+
+    waitFor(() => {
+      expect(
+        screen.findByText(initialQuestion.versions.at(-1)!.text)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.queryByText(mockAssessment.questions[0].versions.at(-1)!.text)
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(mockAssessment.questions[1].versions.at(-1)!.text)
+      ).not.toBeInTheDocument();
     });
   });
 });
