@@ -138,7 +138,7 @@ const BreadCrumbs = () => {
             Profile
           </Typography>
         ) : (
-          <Link className={style.link} href="/">
+          <Link className={style.link} href="/universities">
             Universities
           </Link>
         )}
