@@ -22,7 +22,6 @@ const BreadCrumbs = () => {
 
   const fetchUniversity = async (universityId: string) => {
     try {
-      setIsProfile(false);
       const response = await axios.get(
         `${BACKEND_URL}${API.getUniversityById}/${universityId}`
       );
@@ -79,7 +78,7 @@ const BreadCrumbs = () => {
       setIsProfile(true);
       return;
     }
-
+    setIsProfile(false);
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
