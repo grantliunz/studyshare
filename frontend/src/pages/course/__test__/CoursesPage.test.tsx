@@ -56,11 +56,11 @@ afterEach(() => {
   axiosMock.reset();
 });
 
-const renderWithRouter = (children: ReactNode, url: string, path: string) => {
+const renderWithRouter = (element: ReactNode, url: string, path: string) => {
   return render(
     <MemoryRouter initialEntries={[url]}>
       <Routes>
-        <Route path={path} element={<CoursesPage />}></Route>
+        <Route path={path} element={element}></Route>
       </Routes>
     </MemoryRouter>
   );
