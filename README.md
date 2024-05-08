@@ -19,6 +19,8 @@ StudyShare provides its users with multiple features to help make the process of
  - Add assessments or questions to their watchlist so that they are notified if any questions or answers are posted
  - Hide any questions that are not relevant/innapropriate
  - View their profile where they can see their watchlisted assessments and questions as well as their asked and answered questions
+ - Get notified if anyone answers a question they posted or a question they are watching
+ - Get notified if anyone comments on their answer
 
 
 ## Setup
