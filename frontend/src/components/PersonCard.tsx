@@ -38,6 +38,7 @@ const PersonCard = ({
 }: PersonCardProps) => {
   return (
     <div
+      data-testid="person-card"
       style={{
         display: 'flex',
         placeItems: 'center',
