@@ -61,7 +61,7 @@ Before getting started, ensure you have the following installed on your system:
    ```
 
    Update the URLs accordingly if your backend server is running on a different port or host.
-   Get the `<value>` obtained from the submitted env files or get in contact with one of our [Team Members]()
+   Get the `<value>` obtained from the submitted env files or get in contact with one of our Team Members from our emails given below.
 
 #### Running the Frontend
 
@@ -100,7 +100,7 @@ Once the frontend server is up and running, you can access the StudyShare applic
    MONGODB_CONNECTION_STRING=mongodb+srv://StudyShare:<password>@studyshare.fhntujg.mongodb.net/
    ```
 
-   Replace `<password>` with the password obtained from the submitted env files or get in contact with one of our [Team Members]()
+   Replace `<password>` with the password obtained from the submitted env files or get in contact with one of our Team Members from our emails given below.
 
 #### Running the Backend
 
