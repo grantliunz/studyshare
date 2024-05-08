@@ -2,12 +2,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CoursesPage from '../CoursesPage';
 import API from '../../../util/api';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { it, expect } from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import { University } from '@shared/types/models/university/university';
 import { Course } from '@shared/types/models/course/course';
+import { ReactNode } from 'react';
 
 // Mock Axios requests
 const mockUniversity: University = {
@@ -38,7 +39,9 @@ const mockCourses: (Omit<Course, 'id'> & {
 ];
 
 const axiosMock = new MockAdapter(axios);
-const getUniversityUrl = new RegExp(`.*${API.getUniversityById}.*`);
+const getUniversityUrl = new RegExp(
+  `.*${API.getUniversityById}/${mockUniversity.id}`
+);
 const getCoursesUrl = new RegExp(`.*${API.getCourses}.*`);
 
 beforeEach(() => {
@@ -53,12 +56,22 @@ afterEach(() => {
   axiosMock.reset();
 });
 
+const renderWithRouter = (children: ReactNode, url: string, path: string) => {
+  return render(
+    <MemoryRouter initialEntries={[url]}>
+      <Routes>
+        <Route path={path} element={<CoursesPage />}></Route>
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
 describe('CoursesPage', () => {
   it('renders university name', async () => {
-    render(
-      <MemoryRouter initialEntries={['/test/123123']}>
-        <CoursesPage />
-      </MemoryRouter>
+    renderWithRouter(
+      <CoursesPage />,
+      `/${mockUniversity.id}`,
+      '/:universityId'
     );
 
     await waitFor(() => {
@@ -67,11 +80,12 @@ describe('CoursesPage', () => {
   });
 
   it('renders courses correctly', async () => {
-    render(
-      <MemoryRouter initialEntries={['/test/123123']}>
-        <CoursesPage />
-      </MemoryRouter>
+    renderWithRouter(
+      <CoursesPage />,
+      `/${mockUniversity.id}`,
+      '/:universityId'
     );
+
     await waitFor(() => {
       for (const course of mockCourses) {
         expect(screen.getByText(course.name)).toBeInTheDocument();
@@ -81,11 +95,12 @@ describe('CoursesPage', () => {
   });
 
   it('filters courses based on search query', async () => {
-    render(
-      <MemoryRouter initialEntries={['/test/123123']}>
-        <CoursesPage />
-      </MemoryRouter>
+    renderWithRouter(
+      <CoursesPage />,
+      `/${mockUniversity.id}`,
+      '/:universityId'
     );
+
     await waitFor(() => {
       const searchInput = screen.getByPlaceholderText('Search for a course');
 
