@@ -35,7 +35,7 @@ describe('AssessmentPage', () => {
     _id: '123',
     type: AssessmentType.EXAM,
     year: 2023,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     questions: [
       {
         _id: '900',

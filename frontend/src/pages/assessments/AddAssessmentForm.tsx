@@ -49,7 +49,7 @@ export default function AddAssessmentForm({
 }: AddAssessmentFormProps) {
   const [currentInput, setCurrentInput] = useState<FormInputs>({
     year: 2024,
-    semester: SemesterType.FIRST
+    semester: SemesterType.SEMESTER_1
   });
   const [currentInputErrors, setCurrentInputErrors] = useState<FormInputErrors>(
     {
@@ -70,7 +70,7 @@ export default function AddAssessmentForm({
   function clearInputs() {
     setCurrentInput({
       year: 2024,
-      semester: SemesterType.FIRST
+      semester: SemesterType.SEMESTER_1
     });
   }
 

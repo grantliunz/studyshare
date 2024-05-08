@@ -7,11 +7,11 @@ import University from '../routes/university/university-model';
 import Course from '../routes/course/course-model';
 import Question from '../routes/question/question-model';
 import Assessment from '../routes/assessment/assessment-model';
+import User from '../routes/user/user-model';
 import {
   AssessmentType,
   SemesterType
-} from '../routes/assessment/assessment-enums';
-import User from '../routes/user/user-model';
+} from '@shared/types/models/assessment/assessment';
 
 // Hardcoded a University list for testing
 
@@ -124,7 +124,7 @@ const assessments = [
   new Assessment({
     type: AssessmentType.EXAM,
     year: 2024,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     questions: [],
     latestContributor: users[0]._id,
     newestQuestion: null
@@ -132,7 +132,7 @@ const assessments = [
   new Assessment({
     type: AssessmentType.TEST,
     year: 2024,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     number: 1,
     questions: [],
     latestContributor: users[1]._id,
@@ -141,13 +141,13 @@ const assessments = [
   new Assessment({
     type: AssessmentType.EXAM,
     year: 2023,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     questions: []
   }),
   new Assessment({
     type: AssessmentType.OTHER,
     year: 2024,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     name: 'Problem Sheet 1',
     questions: [],
     latestContributor: users[2]._id,

@@ -39,7 +39,7 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
     semester: {
       type: String,
       enum: Object.values(SemesterType),
-      default: SemesterType.FIRST,
+      default: SemesterType.SEMESTER_1,
       required: true
     },
     questions: {
