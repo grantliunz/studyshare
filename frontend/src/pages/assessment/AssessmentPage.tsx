@@ -309,27 +309,29 @@ const AssessmentPage = () => {
                   {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
                 </IconButton>
               </div>
-              {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
-                rootNode.subquestions.map((question) => (
-                  <QuestionNumber
-                    key={question.number.join('.')}
-                    questionNode={question}
-                    setQuestion={setCurrentQuestion}
-                    currentQuestion={currentQuestion}
-                    handleAddQuestion={handleAddQuestion}
-                  />
-                ))
-              ) : (
-                <p
-                  style={{
-                    alignSelf: 'center',
-                    placeSelf: 'center',
-                    width: '100%'
-                  }}
-                >
-                  Create a question to get started!
-                </p>
-              )}
+              <div style={{ width: '100%', overflow: 'clip' }}>
+                {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
+                  rootNode.subquestions.map((question) => (
+                    <QuestionNumber
+                      key={question.number.join('.')}
+                      questionNode={question}
+                      setQuestion={setCurrentQuestion}
+                      currentQuestion={currentQuestion}
+                      handleAddQuestion={handleAddQuestion}
+                    />
+                  ))
+                ) : (
+                  <p
+                    style={{
+                      alignSelf: 'center',
+                      placeSelf: 'center',
+                      width: '100%'
+                    }}
+                  >
+                    Create a question to get started!
+                  </p>
+                )}
+              </div>
               <IconButton
                 size="medium"
                 style={{
