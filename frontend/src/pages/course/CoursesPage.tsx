@@ -17,8 +17,7 @@ import {
   Checkbox,
   FormControlLabel,
   SelectChangeEvent,
-  OutlinedInput,
-  Card
+  OutlinedInput
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
