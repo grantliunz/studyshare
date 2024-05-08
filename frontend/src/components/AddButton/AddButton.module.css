@@ -16,4 +16,5 @@
 
 .addButton:hover {
   background-color: #41709b;
+  scale: 1.2;
 }

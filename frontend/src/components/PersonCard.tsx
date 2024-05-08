@@ -27,7 +27,7 @@ const config = (name: string) => {
     avatarConfig.hairStyle = 'normal';
   }
   return avatarConfig;
-}
+};
 
 const PersonCard = ({
   name,
@@ -38,6 +38,7 @@ const PersonCard = ({
 }: PersonCardProps) => {
   return (
     <div
+      data-testid="person-card"
       style={{
         display: 'flex',
         placeItems: 'center',
@@ -46,14 +47,18 @@ const PersonCard = ({
       }}
     >
       {anonymous ? (
-         <AccountCircleOutlinedIcon style={{ fontSize: avatarSize }} />
-      ) :
+        <AccountCircleOutlinedIcon style={{ fontSize: avatarSize }} />
+      ) : (
         <Avatar
-          style={{ width: avatarSize, height: avatarSize }}
+          style={{
+            width: avatarSize,
+            height: avatarSize,
+            border: '1px solid black'
+          }}
           {...config(name)}
         />
-      }
-     
+      )}
+
       <p
         style={{
           margin: '0px',

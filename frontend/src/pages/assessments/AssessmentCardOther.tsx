@@ -87,7 +87,8 @@ export default function AssessmentCardOther({
           borderRadius: '10px',
           backgroundColor: '#D9D9D9',
           '&:hover': {
-            backgroundColor: '#BFBFBF' // Change the background color on hover
+            backgroundColor: '#BFBFBF',
+            scale: '1.05'
           },
           display: 'block',
           width: '300px',
@@ -101,7 +102,8 @@ export default function AssessmentCardOther({
           style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            height: '100%'
           }}
         >
           <div>

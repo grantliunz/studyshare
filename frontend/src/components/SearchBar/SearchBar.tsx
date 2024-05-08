@@ -1,10 +1,12 @@
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import style from './SearchBar.module.css';
+import { Tooltip } from '@mui/material';
 
 interface SearchBarProps {
   title: string;
   onQueryChange?: (query: string) => void;
+  width?: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = (props) => {
@@ -15,16 +17,21 @@ const SearchBar: React.FC<SearchBarProps> = (props) => {
   }
 
   return (
-    <div className={style.searchBar}>
+    <div
+      className={style.searchBar}
+      style={props.width ? { minWidth: props.width } : { minWidth: '600px' }}
+    >
       <input
         className="input"
         onChange={onChange}
         type="text"
         placeholder={props.title}
       />
-      <button className="button">
-        <SearchIcon />
-      </button>
+      <Tooltip title="Search">
+        <button className={style.button}>
+          <SearchIcon />
+        </button>
+      </Tooltip>
     </div>
   );
 };

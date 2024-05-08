@@ -192,26 +192,60 @@ const QuestionPanel = ({
       hidden={currentQuestion._id !== question._id}
       style={{ overflow: 'hidden', width: '100%' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div
+        style={{
+          maxWidth: '1200px',
+          backgroundColor: 'white',
+          borderRadius: '10px 10px 0px 0px',
+          margin: '0 auto',
+          paddingBottom: '50px',
+          paddingLeft: '40px',
+          paddingRight: '40px'
+        }}
+      >
         <div style={{ paddingTop: '10px', display: 'flex' }}>
           {prevQuestion && (
             <Button
               onClick={() => setQuestion(prevQuestion)}
               startIcon={<ArrowBackRoundedIcon />}
-              style={{ textTransform: 'none', marginRight: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginRight: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to previous question"
             >
-              {prevQuestion?.number.join('')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {prevQuestion?.number.join('.')}
+              </span>
             </Button>
           )}
           {nextQuestion && (
             <Button
               onClick={() => setQuestion(nextQuestion)}
               endIcon={<ArrowForwardRoundedIcon />}
-              style={{ textTransform: 'none', marginLeft: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginLeft: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to next question"
             >
-              {nextQuestion.number.join('')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {nextQuestion.number.join('.')}
+              </span>
             </Button>
           )}
         </div>
@@ -231,21 +265,43 @@ const QuestionPanel = ({
                 ? 'Add question to watchlist'
                 : 'Remove question from watchlist'
             }
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
-          <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
-            {polledQuestion.number}
+          <h2
+            style={{
+              margin: '0px',
+              flexGrow: '1',
+              textAlign: 'start',
+              overflow: 'auto'
+            }}
+          >
+            {polledQuestion.number.join('.')}
           </h2>
           <IconButton
             onClick={() => toggleIsEditingQuestion()}
             title={!isEditingQuestion ? 'Edit question' : 'Cancel'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isEditingQuestion ? <EditOffOutlinedIcon /> : <EditOutlinedIcon />}
           </IconButton>
           <IconButton
             onClick={() => handleIsFlaggedChanged(!isFlagged)}
             title={!isFlagged ? 'Hide question' : 'Unhide question'}
+            sx={{
+              '&.MuiButtonBase-root:hover': {
+                scale: '1.15'
+              }
+            }}
           >
             {isFlagged ? <FlagRoundedIcon /> : <OutlinedFlagRoundedIcon />}
           </IconButton>
@@ -364,9 +420,30 @@ const QuestionPanel = ({
                 'Anonymous'
               }
               avatarPos="left"
-              style={{ columnGap: '8px' }}
+              style={{ columnGap: '5px' }}
               anonymous={polledQuestion.versions.at(versionNo)?.isAnonymous}
             />
+            <p
+              style={{
+                fontSize: '0.8rem',
+                color: '#808080',
+                height: 'fit-content'
+              }}
+            >
+              {polledQuestion.versions
+                .at(versionNo)
+                ?.createdAt.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }) +
+                ' ' +
+                polledQuestion.createdAt.toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+            </p>
           </div>
         </div>
 

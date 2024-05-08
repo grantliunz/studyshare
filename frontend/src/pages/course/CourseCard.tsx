@@ -26,12 +26,17 @@ const CourseCard: React.FC<CourseCardProps> = ({
         minWidth: 800,
         cursor: 'pointer',
         outline: 'none',
+        minHeight: 70,
         maxHeight: 70,
-        marginBottom: 1.5
+        marginBottom: 1.5,
+        '&:hover': {
+          backgroundColor: '#BFBFBF',
+          scale: '1.05'
+        }
       }}
       onClick={onClick}
     >
-      <CardActionArea>
+      <CardActionArea style={{ height: '100%' }}>
         <CardContent className={style.cardContent}>
           <p className={style.courseCode}>{courseCode}</p>
           <p className={style.courseName}>{courseName}</p>

@@ -68,13 +68,14 @@ const QuestionNumber = ({
           fullWidth
           sx={{
             '&.MuiButtonBase-root:hover': {
+              scale: '1.05',
               bgcolor: questionNode.question
                 ? arrayEquals(
                     currentQuestion?.number || [],
                     questionNode.number
                   )
                   ? '#41709b'
-                  : 'rgba(0, 0, 0, 0.04)'
+                  : 'rgba(0, 0, 0, 0.10)'
                 : 'transparent'
             },
             '&.MuiButtonBase-root': {
@@ -90,12 +91,6 @@ const QuestionNumber = ({
             questionNode.question
               ? {
                   border: '1px solid black',
-                  color: arrayEquals(
-                    currentQuestion?.number || [],
-                    questionNode.number
-                  )
-                    ? 'white'
-                    : 'black',
                   minWidth: '30px',
                   padding: '0 0 0 10px',
                   textTransform: 'none',
@@ -103,12 +98,19 @@ const QuestionNumber = ({
                   justifyContent: 'start',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  maxWidth: '100%',
+                  color: arrayEquals(
+                    currentQuestion?.number || [],
+                    questionNode.number
+                  )
+                    ? 'white'
+                    : '#1f1f1f'
                 }
               : {
                   textTransform: 'none',
                   minWidth: '30px',
-                  padding: '0 0 0 0',
+                  padding: '0 0 0 10px',
                   pointerEvents: 'none',
                   display: 'flex',
                   justifyContent: 'start'
@@ -118,7 +120,6 @@ const QuestionNumber = ({
           {questionNode.number.at(-1)}&nbsp;
           <span
             style={{
-              opacity: 0.5,
               fontSize: '0.8rem',
               display: hideText ? 'none' : 'inline'
             }}
@@ -155,7 +156,7 @@ const QuestionNumber = ({
         {questionNode.subquestions &&
           questionNode.subquestions.map((q) => (
             <QuestionNumber
-              key={q.number.join(',')}
+              key={q.number.join('.')}
               questionNode={q}
               setQuestion={setQuestion}
               currentQuestion={currentQuestion}

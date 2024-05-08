@@ -9,7 +9,7 @@ export type Comment = {
   author: ObjectId;
   rating: Rating;
   createdAt: Date;
-  isAnonymous: boolean;
+  isAnonymous?: boolean;
 };
 
 export type CreateCommentDTO = {
@@ -57,8 +57,8 @@ export enum AssessmentType {
 }
 
 export enum SemesterType {
-  FIRST = 'First',
-  SECOND = 'Second',
-  THIRD = 'Third',
+  SEMESTER_1 = 'Semester 1',
+  SEMESTER_2 = 'Semester 2',
+  SUMMER_SCHOOL = 'Summer School',
   OTHER = 'Other'
 }

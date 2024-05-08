@@ -30,7 +30,7 @@ export default function Login() {
     const password = data.get('password') as string;
     login(email, password)
       .then(() => {
-        navigate('/universities');
+        navigate(-1);
         setLoading(false); // Set loading state to false on success
       })
       .catch((error: FirebaseError) => {
@@ -43,7 +43,7 @@ export default function Login() {
 
   const submitGoogle = async () => {
     await loginWithGoogle();
-    navigate('/universities');
+    navigate(-1);
   };
 
   return (
@@ -59,7 +59,8 @@ export default function Login() {
           justifyContent: 'center',
           margin: '0 auto',
           backgroundColor: 'white',
-          padding: '20px',
+          padding: '50px',
+          borderRadius: '20px',
           alignItems: 'center'
         }}
       >

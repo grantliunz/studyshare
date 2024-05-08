@@ -1,3 +1,4 @@
+@import url('../../App.css');
 .container {
   display: flex;
   flex-direction: column;
@@ -5,20 +6,27 @@
   align-items: center;
 }
 
+.upperContent {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.Mui-focused .MuiInputLabel-root {
+  display: none;
+}
 .uniName {
-  margin: 50px 0;
   padding: 0;
   font-size: 3rem;
+  text-overflow: ellipsis;
 }
 
 .searchAndFilter {
   display: flex;
   align-items: center; /* Vertically center the items */
-  margin-bottom: 20px;
+  margin-bottom: 60px;
 }
 
 .searchAndFilter > * {
-  margin-right: 30px; /* Adjust the spacing between the SearchBar and the FormControl */
+  margin-right: 40px;
 }
 
 .yearLevelSelect {
@@ -31,7 +39,6 @@
 
 .yearLevelInputLabel {
   font-size: 14px;
-  color: #333; /* Adjust the color as needed */
 }
 
 .yearLevelSelectMenu {
@@ -46,4 +53,12 @@
 
 .yearLevelCheckboxLabel {
   font-size: 14px;
+}
+
+.courseCards {
+  animation: swishUp 0.5s ease forwards;
+  max-width: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }

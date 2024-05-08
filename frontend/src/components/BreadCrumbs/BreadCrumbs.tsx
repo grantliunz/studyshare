@@ -22,7 +22,6 @@ const BreadCrumbs = () => {
 
   const fetchUniversity = async (universityId: string) => {
     try {
-      setIsProfile(false);
       const response = await axios.get(
         `${BACKEND_URL}${API.getUniversityById}/${universityId}`
       );
@@ -79,7 +78,7 @@ const BreadCrumbs = () => {
       setIsProfile(true);
       return;
     }
-
+    setIsProfile(false);
     if (pathnames.length >= 1) {
       const universityId = pathnames[0];
       if (universityId !== 'universities') {
@@ -105,13 +104,6 @@ const BreadCrumbs = () => {
   }, [pathname]);
 
   function createAssessmentString(assessment: AssessmentGET): React.ReactNode {
-    const semesterMap: { [key: string]: string } = {
-      First: 'Semester 1',
-      Second: 'Semester 2',
-      Third: 'Summer School',
-      Other: 'Other'
-    };
-
     const typeMap: { [key: string]: string } = {
       Exam: 'Exam',
       Test: 'Test',
@@ -120,7 +112,7 @@ const BreadCrumbs = () => {
       Other: 'Other'
     };
 
-    const semesterText = semesterMap[assessment.semester];
+    const semesterText = assessment.semester;
     const typeText = typeMap[assessment.type];
 
     let assessmentText = '';
@@ -145,7 +137,7 @@ const BreadCrumbs = () => {
             Profile
           </Typography>
         ) : (
-          <Link className={style.link} href="/">
+          <Link className={style.link} href="/universities">
             Universities
           </Link>
         )}

@@ -1,3 +1,5 @@
+@import url('../../App.css');
+
 .pageWrapper {
   position: relative;
   z-index: 100;
@@ -18,9 +20,11 @@
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  background-color: #fff;
+  background: #fff5d3;
   padding: 0 100px 20px 50px;
   border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  animation: swishRight 0.5s ease forwards;
 }
 
 .title {

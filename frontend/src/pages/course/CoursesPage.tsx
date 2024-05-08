@@ -15,9 +15,8 @@ import {
   Select,
   MenuItem,
   Checkbox,
-  FormControlLabel,
   SelectChangeEvent,
-  OutlinedInput
+  ListItemText
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
@@ -78,6 +77,8 @@ export default function CoursesPage() {
     }
   }, [query, courseData, yearLevels]);
 
+  useEffect(() => {}, [courseData]);
+
   const handleOpenForm = () => {
     if (!currentUser) {
       setShowLoginPopup(true);
@@ -99,58 +100,63 @@ export default function CoursesPage() {
   };
   return (
     <div className={style.container}>
-      {universityData && (
-        <h1 className={style.uniName}>{universityData.name}</h1>
-      )}
-      {errorString ? (
-        <div>{errorString}</div>
+      {errorString && universityData ? (
+        <div className={style.upperContent}>
+          <h1 className={style.uniName}>{universityData.name}</h1>
+
+          {errorString}
+        </div>
       ) : (
-        !isLoadingCourses && (
-          <div className={style.searchAndFilter}>
-            <SearchBar
-              title="Search for a course"
-              onQueryChange={onQueryChange}
-            />
-            <FormControl className={style.yearLevelSelect}>
-              <InputLabel id="year-level-select-label">Select Year</InputLabel>
-              <Select
-                labelId="year-level-select-label"
-                id="year-level-select"
-                multiple
-                value={yearLevels.sort((a, b) => a.localeCompare(b))}
-                onChange={onYearLevelChange}
-                input={<OutlinedInput label="Select Year" />}
-                renderValue={(selected) =>
-                  selected.map((value) => value + '00').join(', ')
-                }
-              >
-                {[1, 2, 3, 4, 7].map((value) => (
-                  <MenuItem key={value} value={value.toString()}>
-                    <FormControlLabel
-                      control={
+        !isLoadingCourses &&
+        universityData && (
+          <>
+            <div className={style.upperContent}>
+              <h1 className={style.uniName}>{universityData.name}</h1>
+              <div className={style.searchAndFilter}>
+                <SearchBar
+                  title="Search for a course"
+                  onQueryChange={onQueryChange}
+                />
+                <FormControl className={style.yearLevelSelect} focused={false}>
+                  <InputLabel id="year-level-select-label">
+                    Select Year
+                  </InputLabel>
+                  <Select
+                    labelId="year-level-select-label"
+                    id="year-level-select"
+                    multiple
+                    value={yearLevels.sort((a, b) => a.localeCompare(b))}
+                    onChange={onYearLevelChange}
+                    label="Select Year"
+                    renderValue={(selected) =>
+                      selected.map((value) => value + '00').join(', ')
+                    }
+                  >
+                    {[1, 2, 3, 4, 7].map((value) => (
+                      <MenuItem key={value} value={value.toString()}>
                         <Checkbox
                           checked={yearLevels.includes(value.toString())}
                         />
-                      }
-                      label={value * 100}
-                    />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
+                        <ListItemText primary={value * 100} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </>
         )
       )}
-
       {isLoadingCourses && <CircularProgress />}
       {displayedData &&
-        displayedData.map((course, index) => (
-          <CourseCard
-            key={index}
-            courseCode={course.code}
-            courseName={course.name}
-            onClick={() => navigate(`/${universityId}/${course.id}`)}
-          />
+        displayedData.map((course) => (
+          <div key={course.id} className={style.courseCards}>
+            <CourseCard
+              courseCode={course.code}
+              courseName={course.name}
+              onClick={() => navigate(`/${universityId}/${course.id}`)}
+            />
+          </div>
         ))}
       {displayedData?.length === 0 && !isLoadingCourses && !errorString && (
         <p>No courses found</p>

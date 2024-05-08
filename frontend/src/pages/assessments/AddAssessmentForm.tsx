@@ -49,7 +49,7 @@ export default function AddAssessmentForm({
 }: AddAssessmentFormProps) {
   const [currentInput, setCurrentInput] = useState<FormInputs>({
     year: 2024,
-    semester: SemesterType.FIRST
+    semester: SemesterType.SEMESTER_1
   });
   const [currentInputErrors, setCurrentInputErrors] = useState<FormInputErrors>(
     {
@@ -67,17 +67,10 @@ export default function AddAssessmentForm({
     });
   }
 
-  function updateError(parameter: string, errorMessage: string) {
-    setCurrentInputErrors({
-      ...currentInputErrors,
-      [parameter]: errorMessage
-    });
-  }
-
   function clearInputs() {
     setCurrentInput({
       year: 2024,
-      semester: SemesterType.FIRST
+      semester: SemesterType.SEMESTER_1
     });
   }
 
@@ -92,13 +85,20 @@ export default function AddAssessmentForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    currentInputErrors.year = '';
+    currentInputErrors.name = '';
+    currentInputErrors.semester = '';
+    currentInputErrors.number = '';
     if (!currentInput.year) return;
     if (
       currentInput.year < 1980 ||
       currentInput.year > new Date().getFullYear()
     ) {
       // test for a bad year
-      updateError('year', 'Please enter a valid Year.');
+      setCurrentInputErrors({
+        ...currentInputErrors,
+        year: 'Please enter a valid year'
+      });
       return;
     }
     // Change these to enums?
@@ -107,11 +107,11 @@ export default function AddAssessmentForm({
       state !== 'Exam' &&
       (!currentInput.number || currentInput.number <= 0)
     ) {
-      // // test for a bad assessment number
-      updateError(
-        'assessmentNumber',
-        'Please enter a valid assessment number.'
-      );
+      // test for a bad assessment number
+      setCurrentInputErrors({
+        ...currentInputErrors,
+        number: 'Please enter a valid assessment number.'
+      });
       return;
     }
 
@@ -120,7 +120,10 @@ export default function AddAssessmentForm({
       (!currentInput.name || !currentInput.name.trim())
     ) {
       // test for a bad name
-      updateError('name', 'Please enter a valid name.');
+      setCurrentInputErrors({
+        ...currentInputErrors,
+        name: 'Please enter a valid name'
+      });
       return;
     }
     if (state === 'Other') {
@@ -128,7 +131,14 @@ export default function AddAssessmentForm({
     }
     const error = await onAddAssessment(currentInput, state); //returns the current input fields and the type of assessment (exam, test, other)
     if (error) {
-      updateError(state !== 'Other' ? 'semester' : 'name', error);
+      setCurrentInputErrors(
+        state === 'Other'
+          ? {
+              ...currentInputErrors,
+              name: error
+            }
+          : { ...currentInputErrors, semester: error }
+      );
       return;
     }
     clearInputs(); // Clear input after submitting
@@ -205,9 +215,9 @@ export default function AddAssessmentForm({
                   className={styles.inputField}
                   label="Semester"
                 >
-                  <MenuItem value="First">Semester 1</MenuItem>
-                  <MenuItem value="Second">Semester 2</MenuItem>
-                  <MenuItem value="Third">Summer School</MenuItem>
+                  <MenuItem value="Semester 1">Semester 1</MenuItem>
+                  <MenuItem value="Semester 2">Semester 2</MenuItem>
+                  <MenuItem value="Summer School">Summer School</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
                 <FormHelperText>{currentInputErrors.semester}</FormHelperText>

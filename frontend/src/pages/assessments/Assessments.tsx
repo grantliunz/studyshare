@@ -20,26 +20,11 @@ import { Course } from '@shared/types/models/course/course';
 import { AxiosError } from 'axios';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
 
-function mapSemesterToString(semester: string) {
-  switch (semester) {
-    case 'First':
-      return 'Semester 1';
-    case 'Second':
-      return 'Semester 2';
-    case 'Third':
-      return 'Summer School';
-    case 'Other':
-      return 'Other';
-    default:
-      return semester;
-  }
-}
-
 function matchString(assessment: Assessment, searchText: string) {
   const str =
     assessment.year.toString() +
     ' ' +
-    mapSemesterToString(assessment.semester) +
+    assessment.semester +
     ' ' +
     assessment.number?.toString() +
     ' ' +
@@ -70,6 +55,13 @@ const Assessments = () => {
   const [searchText, setSearchText] = useState<string>('');
   const navigate = useNavigate();
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+
+  const semesterOrder: Record<string, number> = {
+    'Semester 1': 1,
+    'Semester 2': 2,
+    'Summer School': 3,
+    Other: 4
+  };
 
   function searchAssessments(searchText: string) {
     setSearchText(searchText);
@@ -119,90 +111,119 @@ const Assessments = () => {
     navigate(`/${universityId}/${courseId}/${assessmentId}`);
   };
 
-  if (isFetchingAssessments || isFetchingCourse) {
-    return <CircularProgress />;
-  }
-
   return (
     <div className={styles.container}>
-      <h1>{course?.code}</h1>
-      <h2>{course?.name}</h2>
-      <div className={styles.searchWrapper}>
-        <SearchBar
-          title="Search for a past paper"
-          onQueryChange={searchAssessments}
-        />
-      </div>
+      {isFetchingAssessments || isFetchingCourse ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <div className={styles.upperContent}>
+            <h1>{course?.code}</h1>
+            <h2>{course?.name}</h2>
+            <div className={styles.searchWrapper}>
+              <SearchBar
+                title="Search for a past paper"
+                onQueryChange={searchAssessments}
+              />
+            </div>
+          </div>
+          <div className={styles.assessmentsWrapper}>
+            <h2 className={styles.typeHeader}>Exams</h2>
+            <div className={styles.assessmentType}>
+              {assessments &&
+                assessments
+                  .filter((assessment) => matchString(assessment, searchText))
+                  .filter((assessment) => assessment.type === 'Exam')
+                  .sort((a: Assessment, b: Assessment) => {
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
 
-      <div className={styles.assessmentsWrapper}>
-        <h2 className={styles.typeHeader}>Exams</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments
-              .filter((assessment) => matchString(assessment, searchText))
-              .map((assessment) =>
-                assessment.type === 'Exam' ? (
-                  <AssessmentCard
-                    key={assessment._id}
-                    assessment={assessment}
-                    onClick={() => handleCardClicked(assessment._id)}
-                  />
-                ) : null
-              )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
-          />
-        </div>
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
+                    }
 
-        <h2 className={styles.typeHeader}>Tests</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments
-              .filter((assessment) => matchString(assessment, searchText))
-              .map((assessment) =>
-                assessment.type === 'Test' ? (
-                  <AssessmentCard
-                    key={assessment._id}
-                    assessment={assessment}
-                    onClick={() => handleCardClicked(assessment._id)}
-                  />
-                ) : null
-              )}
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
-          />
-        </div>
+                    return yearSort;
+                  })
+                  .map((assessment) => (
+                    <AssessmentCard
+                      key={assessment._id}
+                      assessment={assessment}
+                      onClick={() => handleCardClicked(assessment._id)}
+                    />
+                  ))}
+              <AddAssessmentButton
+                handleOpenForm={() => handleOpenForm(AssessmentType.EXAM)}
+              />
+            </div>
 
-        <h2 className={styles.typeHeader}>Other</h2>
-        <div className={styles.assessmentType}>
-          {assessments &&
-            assessments
-              .filter((assessment) => matchString(assessment, searchText))
-              .map((assessment) =>
-                assessment.type === 'Other' ? (
-                  <AssessmentCardOther
-                    key={assessment._id}
-                    assessment={assessment}
-                    onClick={() => handleCardClicked(assessment._id)}
-                  />
-                ) : null
-              )}
+            <h2 className={styles.typeHeader}>Tests</h2>
+            <div className={styles.assessmentType}>
+              {assessments &&
+                assessments
+                  .filter((assessment) => matchString(assessment, searchText))
+                  .sort((a: Assessment, b: Assessment) => {
+                    // First, sort by year
+                    const yearSort = b.year - a.year;
 
-          <AddAssessmentForm
-            state={assessmentTypeState}
-            show={showForm}
-            onAddAssessment={handleAddAssessment}
-            onClose={handleCloseForm}
-          />
+                    // If years are the same, sort by semester
+                    if (yearSort === 0) {
+                      return (
+                        semesterOrder[a.semester] - semesterOrder[b.semester]
+                      );
+                    }
 
-          <AddAssessmentButton
-            handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
-          />
-          <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
-        </div>
-      </div>
+                    return yearSort;
+                  })
+                  .map((assessment) =>
+                    assessment.type === 'Test' ? (
+                      <AssessmentCard
+                        key={assessment._id}
+                        assessment={assessment}
+                        onClick={() => handleCardClicked(assessment._id)}
+                      />
+                    ) : null
+                  )}
+              <AddAssessmentButton
+                handleOpenForm={() => handleOpenForm(AssessmentType.TEST)}
+              />
+            </div>
+
+            <h2 className={styles.typeHeader}>Other</h2>
+            <div className={styles.assessmentType}>
+              {assessments &&
+                assessments
+                  .filter((assessment) => matchString(assessment, searchText))
+                  .sort((a, b) => b.year - a.year)
+                  .map((assessment) =>
+                    assessment.type === 'Other' ? (
+                      <AssessmentCardOther
+                        key={assessment._id}
+                        assessment={assessment}
+                        onClick={() => handleCardClicked(assessment._id)}
+                      />
+                    ) : null
+                  )}
+
+              <AddAssessmentForm
+                state={assessmentTypeState}
+                show={showForm}
+                onAddAssessment={handleAddAssessment}
+                onClose={handleCloseForm}
+              />
+
+              <AddAssessmentButton
+                handleOpenForm={() => handleOpenForm(AssessmentType.OTHER)}
+              />
+
+              <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
-
 export default Assessments;

@@ -1,5 +1,8 @@
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
 import mongoose, { Types, Schema, Model } from 'mongoose';
-import { AssessmentType, SemesterType } from './assessment-enums';
 
 export interface IAssessment extends Document {
   type: AssessmentType;
@@ -39,7 +42,7 @@ const assessmentSchema: Schema<IAssessment> = new Schema(
     semester: {
       type: String,
       enum: Object.values(SemesterType),
-      default: SemesterType.FIRST,
+      default: SemesterType.SEMESTER_1,
       required: true
     },
     questions: {

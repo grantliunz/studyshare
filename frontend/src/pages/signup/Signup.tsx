@@ -90,7 +90,8 @@ export default function Signup() {
           justifyContent: 'center',
           margin: '0 auto',
           backgroundColor: 'white',
-          padding: '20px',
+          padding: '50px',
+          borderRadius: '20px',
           alignItems: 'center'
         }}
       >

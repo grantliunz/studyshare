@@ -36,6 +36,7 @@
 .title {
   font-size: 3rem;
   margin-bottom: 5px;
+  color: white;
 }
 
 .loadingContainer {
@@ -59,7 +60,7 @@
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 20px;
   margin-bottom: 20px;
   width: 45%;
   height: 130px;
@@ -94,11 +95,12 @@
 }
 
 .profileEmail {
-  color: #666;
+  color: black;
   margin: 0 0 20px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: normal;
 }
 
 .profileStats {
@@ -110,7 +112,7 @@
   align-items: center;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 20px;
   padding: 20px;
   margin-left: 20px;
   width: 45%;
@@ -139,6 +141,6 @@
 
 .noData {
   font-size: 1.25rem;
-  color: #666;
+  color: black;
   margin-top: 20px;
 }

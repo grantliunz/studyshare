@@ -6,24 +6,23 @@ import { Button, Chip, Typography, CircularProgress } from '@mui/material';
 import { useAuth } from '../../contexts/UserContext';
 import ProfileCard from './ProfileCard';
 import API from '../../util/api';
-import axios from 'axios';
-import { WatchListType } from '@shared/types/models/user/user';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+import {
+  ProfileCardDTO,
+  UserProfileDTO,
+  WatchListType
+} from '@shared/types/models/user/user';
+import useGet from '../../hooks/useGet';
 
 export default function Profile() {
   const { userDb, logout } = useAuth();
   const navigate = useNavigate();
 
-  // States to store data
-  const [watchlistedAssignments, setWatchlistedAssignments] = useState(
-    [] as any[]
-  );
-  const [watchlistedQuestions, setWatchlistedQuestions] = useState([] as any[]);
-  const [addedQuestions, setAddedQuestions] = useState([] as any[]);
-  const [answeredQuestions, setAnsweredQuestions] = useState([] as any[]);
+  const {
+    data: profileData,
+    isLoading,
+    error
+  } = useGet<UserProfileDTO>(`${API.getProfile}/${userDb?._id}`);
 
-  // Tags and states to manage selected tag and card data
   const tags = [
     'Assessment Watchlist',
     'Question Watchlist',
@@ -32,61 +31,22 @@ export default function Profile() {
   ];
 
   const [selectedTag, setSelectedTag] = useState('Assessment Watchlist');
-  const [selectedCardData, setSelectedCardData] = useState([] as any[]);
+  const [selectedCardData, setSelectedCardData] = useState<ProfileCardDTO[]>(
+    []
+  );
 
-  // States to manage loading and error
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  // Set profile cards data based on selected tag
   useEffect(() => {
+    if (profileData == null) return;
     if (selectedTag === 'Assessment Watchlist') {
-      setSelectedCardData(watchlistedAssignments);
+      setSelectedCardData(profileData.watchListedAssessments);
     } else if (selectedTag === 'Question Watchlist') {
-      setSelectedCardData(watchlistedQuestions);
+      setSelectedCardData(profileData.watchListedQuestions);
     } else if (selectedTag === 'Questions Added') {
-      setSelectedCardData(addedQuestions);
+      setSelectedCardData(profileData.addedQuestions);
     } else if (selectedTag === 'Answers') {
-      setSelectedCardData(answeredQuestions);
+      setSelectedCardData(profileData.answeredQuestions);
     }
-  }, [
-    selectedTag,
-    watchlistedAssignments,
-    watchlistedQuestions,
-    addedQuestions,
-    answeredQuestions
-  ]);
-
-  // Check if user data is available
-  useEffect(() => {
-    if (!userDb) {
-      setIsError(true);
-    } else {
-      setIsError(false);
-    }
-  }, [userDb]);
-
-  // Fetch user data upon component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userDb) return;
-      setIsLoading(true);
-      try {
-        const profileData = await axios.get<any>(
-          `${BACKEND_URL}${API.getProfile}/${userDb._id}`
-        );
-        setWatchlistedAssignments(profileData.data.watchListedAssessments);
-        setWatchlistedQuestions(profileData.data.watchListedQuestions);
-        setAddedQuestions(profileData.data.addedQuestions);
-        setAnsweredQuestions(profileData.data.answeredQuestions);
-      } catch (error) {
-        console.log(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [userDb]);
+  }, [selectedTag, profileData]);
 
   const logoutUser = () => {
     logout();
@@ -110,7 +70,7 @@ export default function Profile() {
 
   return (
     <div className={styles.container}>
-      {isError ? (
+      {error ? (
         <div className={styles.errorContainer}>
           <h1 className={styles.error}>Error!</h1>
         </div>
@@ -140,7 +100,11 @@ export default function Profile() {
             <div className={styles.profileContainer}>
               <div className={styles.avatar}>
                 <Avatar
-                  style={{ width: '125px', height: '125px' }}
+                  style={{
+                    width: '125px',
+                    height: '125px',
+                    border: '2px solid black'
+                  }}
                   {...config()}
                 />
               </div>
@@ -184,11 +148,11 @@ export default function Profile() {
           </div>
         </>
       )}
-      {isLoading && !isError ? (
+      {isLoading && !error ? (
         <div className={styles.loadingContainer}>
           <CircularProgress />
         </div>
-      ) : isError ? null : (
+      ) : error ? null : (
         <>
           <div className={styles.profileTags}>
             {tags.map((tag, index) => (

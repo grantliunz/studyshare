@@ -1,6 +1,9 @@
 import { Types } from 'mongoose';
-import { AssessmentType, SemesterType } from './assessment-enums';
 import { CreateQuestionDTO } from '../question/question-dto';
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
 
 export interface CreateAssessmentDTO extends Document {
   type: AssessmentType;
