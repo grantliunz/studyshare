@@ -240,6 +240,7 @@ describe('QuestionPanel', () => {
 
     waitFor(() => {
       // question text should be displayed
+      expect(screen.getByText('2 Answers')).toBeInTheDocument();
       for (const answer of mockQuestion.answers) {
         expect(screen.getByText(answer.text)).toBeInTheDocument();
       }
