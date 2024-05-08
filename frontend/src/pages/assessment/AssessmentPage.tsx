@@ -312,7 +312,7 @@ const AssessmentPage = () => {
               {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
                 rootNode.subquestions.map((question) => (
                   <QuestionNumber
-                    key={question.number.join(',')}
+                    key={question.number.join('.')}
                     questionNode={question}
                     setQuestion={setCurrentQuestion}
                     currentQuestion={currentQuestion}
@@ -372,7 +372,7 @@ const AssessmentPage = () => {
                     {reportedQuestions.map((q) => {
                       return (
                         <div
-                          key={q.number.join('')}
+                          key={q.number.join('.')}
                           className={styles.reportedQuestionNumber}
                           onClick={() => {
                             setCurrentQuestion(q);
@@ -384,7 +384,7 @@ const AssessmentPage = () => {
                                 : 'transparent'
                           }}
                         >
-                          {q.number.join('')}
+                          {q.number.join('.')}
                         </div>
                       );
                     })}
