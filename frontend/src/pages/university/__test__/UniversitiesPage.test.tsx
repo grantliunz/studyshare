@@ -5,7 +5,6 @@ import {
   waitFor
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AuthProvider } from '../../../contexts/UserContext';
 import UniversitiesPage from '../UniversitiesPage';
 import API from '../../../util/api';
 import { MemoryRouter } from 'react-router-dom';
@@ -45,9 +44,7 @@ afterEach(() => {
 
 const render = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) => {
   const Wrapper = ({ children }: { children: ReactNode }) => (
-    <AuthProvider>
-      <MemoryRouter>{children}</MemoryRouter>
-    </AuthProvider>
+    <MemoryRouter>{children}</MemoryRouter>
   );
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 };

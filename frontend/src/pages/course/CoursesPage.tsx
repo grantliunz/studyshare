@@ -77,9 +77,7 @@ export default function CoursesPage() {
     }
   }, [query, courseData, yearLevels]);
 
-  useEffect(() => {
-    console.log('courseData:', courseData);
-  }, [courseData]);
+  useEffect(() => {}, [courseData]);
 
   const handleOpenForm = () => {
     if (!currentUser) {
