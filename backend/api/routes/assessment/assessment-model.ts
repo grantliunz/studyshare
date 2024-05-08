@@ -1,5 +1,8 @@
+import {
+  AssessmentType,
+  SemesterType
+} from '@shared/types/models/assessment/assessment';
 import mongoose, { Types, Schema, Model } from 'mongoose';
-import { AssessmentType, SemesterType } from './assessment-enums';
 
 export interface IAssessment extends Document {
   type: AssessmentType;

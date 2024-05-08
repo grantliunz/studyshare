@@ -211,7 +211,7 @@ const QuestionPanel = ({
               style={{ textTransform: 'none', marginRight: 'auto' }}
               title="Go to previous question"
             >
-              {prevQuestion?.number.join('')}
+              {prevQuestion?.number.join('.')}
             </Button>
           )}
           {nextQuestion && (
@@ -221,7 +221,7 @@ const QuestionPanel = ({
               style={{ textTransform: 'none', marginLeft: 'auto' }}
               title="Go to next question"
             >
-              {nextQuestion.number.join('')}
+              {nextQuestion.number.join('.')}
             </Button>
           )}
         </div>
@@ -250,7 +250,7 @@ const QuestionPanel = ({
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
           <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
-            {polledQuestion.number}
+            {polledQuestion.number.join('.')}
           </h2>
           <IconButton
             onClick={() => toggleIsEditingQuestion()}
