@@ -22,7 +22,7 @@ export function getFirebaseErrorMessage(errorCode: string): string {
     case 'auth/email-already-in-use':
       return 'The email address is already in use.';
     case 'auth/weak-password':
-      return 'The password is too weak. Please use a stronger password.';
+      return 'The password is too weak. Passwords needs to be at least 6 characters.';
     case 'auth/network-request-failed':
       return 'There was a network error. Please check your internet connection and try again.';
     case 'auth/too-many-requests':
