@@ -1,31 +1,35 @@
 # Team Radiant Raccoons
+
 # StudyShare
-Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. Built with the MERN stack with Firebase authentication. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams. 
+
+Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. Built with the MERN stack with Firebase authentication. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams.
 
 ## Features
-StudyShare provides its users with multiple features to help make the process of finding, asking and answering questions as easy as possible.
- - Users are able to view different exams from different courses and universities without having to make an account
- - Users can create an account or login with Google
- - Users can view questions and answers of an assessment
- - Users can view the edit history of questions
- 
- Once logged in users can:
- - Create universities, courses and assessments
- - Post questions on exams/assessments
- - Edit posted questions
- - Answer questions
- - Comment on answers
- - Upvote/downvote comments and answers
- - Add assessments or questions to their watchlist so that they are notified if any questions or answers are posted
- - Hide any questions that are not relevant/innapropriate
- - View their profile where they can see their watchlisted assessments and questions as well as their asked and answered questions
- - Get notified if anyone answers a question they posted or a question they are watching
- - Get notified if anyone comments on their answer
 
+StudyShare provides its users with multiple features to help make the process of finding, asking and answering questions as easy as possible.
+
+- Users are able to view different exams from different courses and universities without having to make an account
+- Users can create an account or login with Google
+- Users can view questions and answers of an assessment
+- Users can view the edit history of questions
+
+Once logged in users can:
+
+- Create universities, courses and assessments
+- Post questions on exams/assessments
+- Edit posted questions
+- Answer questions
+- Comment on answers
+- Upvote/downvote comments and answers
+- Add assessments or questions to their watchlist so that they are notified if any questions or answers are posted
+- Hide any questions that are not relevant/innapropriate
+- View their profile where they can see their watchlisted assessments and questions as well as their asked and answered questions
+- Get notified if anyone answers a question they posted or a question they are watching
+- Get notified if anyone comments on their answer
 
 ## Setup
-### Setting up the frontend
 
+### Setting up the frontend
 
 #### Prerequisites
 
@@ -34,7 +38,6 @@ Before getting started, ensure you have the following installed on your system:
 - Node.js: [Download Node.js](https://nodejs.org/en/download/) and follow the installation instructions.
 
 #### Configuration
-
 
 1. Navigate to the frontend directory from main folder:
 
@@ -48,7 +51,7 @@ Before getting started, ensure you have the following installed on your system:
    npm install
    ```
 
-3. Create a `.env` file in the root directory of the frontend with the following structure:
+3. Create a `.env` file in the frontend directory with the following structure:
 
    ```plaintext
    VITE_FB_API_KEY="<value>"
@@ -61,11 +64,11 @@ Before getting started, ensure you have the following installed on your system:
    ```
 
    Update the URLs accordingly if your backend server is running on a different port or host.
-   Get the `<value>` obtained from the submitted env files or get in contact with one of our Team Members from our emails given below.
+   Get the `<value>` of each .env variable from the submitted .env files or get in contact with one of our Team Members from our emails given below.
 
 #### Running the Frontend
 
-To start the frontend development server, run the following command:
+To start the frontend development server, run the following command in the frontend directory:
 
 ```bash
 npm run dev
@@ -77,9 +80,17 @@ This will start the frontend server and you can access it in your browser at the
 
 Once the frontend server is up and running, you can access the StudyShare application in your browser and interact with it.
 
+#### Testing the Frontend
+
+To run the frontend tests, run the following command in the frontend directory:
+
+```bash
+npm run test
+```
+
+This will run all the tests within the frontend folder.
 
 ### Setting up the backend
-
 
 1. Navigate to the backend directory from main folder:
 
@@ -116,7 +127,6 @@ This will start the backend server on the specified port (default is 3000) and c
 
 Once the backend is up and running, you can start making requests to it from your frontend or API client.
 
-
 #### File Structure
 
 Each data object is grouped under the routes folder. There will be a route file that declares all the routes, a controller file that contains all the route functionality and the model file that contains the schema.
@@ -125,7 +135,7 @@ Use the existing user folder as reference.
 
 # Testing TODO
 
-# Contributing 
+# Contributing
 
 ## Commit conventions
 
@@ -162,6 +172,7 @@ One other member must approve the PR before it can be merged into main.
 ## Our Team
 
 Team members are:
+
 - Aaron Rodrigues (ardo715@aucklanduni.ac.nz)
 - Dhruv Joshi (djos192@aucklanduni.ac.nz)
 - Grant Liu (gliu871@aucklanduni.ac.nz)
