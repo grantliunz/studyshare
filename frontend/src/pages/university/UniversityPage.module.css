@@ -8,7 +8,6 @@
   column-gap: 30px;
   row-gap: 30px;
   margin-top: 25px;
-
 }
 
 .form-overlay {
@@ -74,9 +73,6 @@
 .title {
   align-self: center;
   font-size: 3rem;
-  margin-top: 10px;
-  margin-bottom: 45px;
-  color: white;
 }
 .container {
   display: flex;

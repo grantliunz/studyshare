@@ -96,7 +96,8 @@ export default function AssessmentCard({
           width: '200px',
           color: 'black',
           textTransform: 'none',
-          margin: '10px'
+          margin: '10px',
+          height: '100%'
         }}
       >
         <div style={{ flexDirection: 'row', display: 'flex' }}>

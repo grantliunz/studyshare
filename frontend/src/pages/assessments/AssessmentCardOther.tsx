@@ -102,7 +102,8 @@ export default function AssessmentCardOther({
           style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            height: '100%'
           }}
         >
           <div>

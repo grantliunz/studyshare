@@ -103,24 +103,8 @@ export default function CoursesPage() {
       {errorString && universityData ? (
         <div className={style.upperContent}>
           <h1 className={style.uniName}>{universityData.name}</h1>
-          <Card
-            style={{
-              backgroundColor: '#32506b',
-              borderRadius: 10,
-              minWidth: '100%'
-            }}
-          >
-            <div
-              style={{
-                color: 'white',
-                fontSize: '1.5rem',
-                textAlign: 'center',
-                padding: '1rem'
-              }}
-            >
-              {errorString}
-            </div>
-          </Card>
+
+          {errorString}
         </div>
       ) : (
         !isLoadingCourses &&

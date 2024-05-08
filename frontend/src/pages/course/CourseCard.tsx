@@ -36,7 +36,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       }}
       onClick={onClick}
     >
-      <CardActionArea>
+      <CardActionArea style={{ height: '100%' }}>
         <CardContent className={style.cardContent}>
           <p className={style.courseCode}>{courseCode}</p>
           <p className={style.courseName}>{courseName}</p>
