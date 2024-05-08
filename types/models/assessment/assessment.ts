@@ -9,7 +9,7 @@ export type Comment = {
   author: ObjectId;
   rating: Rating;
   createdAt: Date;
-  isAnonymous: boolean;
+  isAnonymous?: boolean;
 };
 
 export type CreateCommentDTO = {
