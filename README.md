@@ -51,11 +51,17 @@ Before getting started, ensure you have the following installed on your system:
 3. Create a `.env` file in the root directory of the frontend with the following structure:
 
    ```plaintext
-   VITE_API_BASE_URL=http://localhost:3000
-   VITE_IMAGE_BASE_URL=http://localhost:3000
+   VITE_FB_API_KEY="<value>"
+   VITE_FB_AUTH_DOMAIN= "<value>"
+   VITE_FB_PROJECT_ID="<value>"
+   VITE_FB_STORAGE_BUCKET="<value>"
+   VITE_FB_MESSAGING_SENDER_ID="<value>"
+   VITE_FB_APP_ID="<value>"
+   VITE_BACKEND_URL=http://localhost:3000
    ```
 
    Update the URLs accordingly if your backend server is running on a different port or host.
+   Get the `<value>` obtained from the submitted env files or get in contact with one of our [Team Members]()
 
 #### Running the Frontend
 
@@ -94,7 +100,7 @@ Once the frontend server is up and running, you can access the StudyShare applic
    MONGODB_CONNECTION_STRING=mongodb+srv://StudyShare:<password>@studyshare.fhntujg.mongodb.net/
    ```
 
-   Replace `<password>` with the password obtained from Discord server.
+   Replace `<password>` with the password obtained from the submitted env files or get in contact with one of our [Team Members]()
 
 #### Running the Backend
 
@@ -151,21 +157,14 @@ Please use the following convention when creating commits `[type]: [msg]`
 
 One other member must approve the PR before it can be merged into main.
 
-
-## Configuration
-
-1. Clone the repository to your local machine:
-
-   ```bash
-   git clone <repository-url>
-   ```
+## Our Team
 
 Team members are:
-- Aaron Rodrigues
-- Dhruv Joshi
-- Grant Liu
-- Wen Jie See
-- Connor Stevens
-- Leander Legaspi
+- Aaron Rodrigues (ardo715@aucklanduni.ac.nz)
+- Dhruv Joshi (djos192@aucklanduni.ac.nz)
+- Grant Liu (gliu871@aucklanduni.ac.nz)
+- Wen Jie See (wsee046@aucklanduni.ac.nz)
+- Connor Stevens (cste303@aucklanduni.ac.nz)
+- Leander Legaspi (lleg966@aucklanduni.ac.nz)
 
 ![](./group-image/Radiant%20Raccoons.webp)
