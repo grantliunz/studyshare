@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CoursesPage from '../CoursesPage';
 import API from '../../../util/api';
@@ -110,5 +110,68 @@ describe('CoursesPage', () => {
       expect(screen.getByText(mockCourses[0].name)).toBeInTheDocument();
       expect(screen.queryByText(mockCourses[1].name)).not.toBeInTheDocument();
     });
+  });
+
+  it('filters courses based on year level', async () => {
+    renderWithRouter(
+      <CoursesPage />,
+      `/${mockUniversity.id}`,
+      '/:universityId'
+    );
+
+    const searchInput = await screen.findByPlaceholderText(
+      'Search for a course'
+    );
+    expect(searchInput).toBeInTheDocument();
+
+    const noChoice = screen.queryByText('200');
+    expect(noChoice).not.toBeInTheDocument();
+
+    const combo = screen.getByRole('combobox');
+    expect(combo).toBeInTheDocument();
+    userEvent.click(combo);
+
+    const optionsPopupEl = await screen.findByRole('listbox');
+    expect(optionsPopupEl).toBeInTheDocument();
+
+    const choice200 = screen.getByText('200');
+    expect(choice200).toBeInTheDocument();
+
+    fireEvent.click(choice200);
+
+    expect(screen.queryByText(mockCourses[0].code)).toBeInTheDocument();
+    expect(screen.queryByText(mockCourses[1].code)).not.toBeInTheDocument();
+  });
+
+  it('no courses found', async () => {
+    renderWithRouter(
+      <CoursesPage />,
+      `/${mockUniversity.id}`,
+      '/:universityId'
+    );
+
+    const searchInput = await screen.findByPlaceholderText(
+      'Search for a course'
+    );
+    expect(searchInput).toBeInTheDocument();
+
+    const noChoice = screen.queryByText('200');
+    expect(noChoice).not.toBeInTheDocument();
+
+    const combo = screen.getByRole('combobox');
+    expect(combo).toBeInTheDocument();
+    userEvent.click(combo);
+
+    const optionsPopupEl = await screen.findByRole('listbox');
+    expect(optionsPopupEl).toBeInTheDocument();
+
+    const choice200 = screen.getByText('700');
+    expect(choice200).toBeInTheDocument();
+
+    fireEvent.click(choice200);
+
+    expect(screen.queryByText(mockCourses[0].code)).not.toBeInTheDocument();
+    expect(screen.queryByText(mockCourses[1].code)).not.toBeInTheDocument();
+    expect(screen.getByText(/No courses found/i)).toBeInTheDocument();
   });
 });

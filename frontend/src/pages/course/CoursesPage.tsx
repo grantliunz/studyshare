@@ -16,8 +16,7 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-  SelectChangeEvent,
-  OutlinedInput
+  SelectChangeEvent
 } from '@mui/material';
 import { mapGetUniversityData } from '../../mappers/universityMapper';
 import { useAuth } from '../../contexts/UserContext';
@@ -130,7 +129,7 @@ export default function CoursesPage() {
                     multiple
                     value={yearLevels.sort((a, b) => a.localeCompare(b))}
                     onChange={onYearLevelChange}
-                    input={<OutlinedInput label="Select Year" />}
+                    label="Select Year"
                     renderValue={(selected) =>
                       selected.map((value) => value + '00').join(', ')
                     }
