@@ -156,7 +156,7 @@ const QuestionNumber = ({
         {questionNode.subquestions &&
           questionNode.subquestions.map((q) => (
             <QuestionNumber
-              key={q.number.join(',')}
+              key={q.number.join('.')}
               questionNode={q}
               setQuestion={setQuestion}
               currentQuestion={currentQuestion}

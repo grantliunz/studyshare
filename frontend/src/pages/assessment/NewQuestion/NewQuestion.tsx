@@ -147,7 +147,9 @@ export default function NewQuestion({
         </p>
         <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
           <p>Question Number: &nbsp;</p>
-          <p>{parentNumber.length == 0 ? '' : parentNumber.join('.') + '.'}</p>
+          <p style={{ overflow: 'auto' }}>
+            {parentNumber.length == 0 ? '' : parentNumber.join('.') + '.'}
+          </p>
           <input
             style={{ width: '40px', paddingTop: '6px' }}
             className={styles.questionNumberInput}

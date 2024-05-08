@@ -57,8 +57,8 @@ export enum AssessmentType {
 }
 
 export enum SemesterType {
-  FIRST = 'Semester 1',
-  SECOND = 'Semester 2',
-  THIRD = 'Summer School',
+  SEMESTER_1 = 'Semester 1',
+  SEMESTER_2 = 'Semester 2',
+  SUMMER_SCHOOL = 'Summer School',
   OTHER = 'Other'
 }

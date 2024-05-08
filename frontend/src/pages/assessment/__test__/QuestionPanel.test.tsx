@@ -175,7 +175,7 @@ describe('QuestionPanel', () => {
     waitFor(() => {
       // question number should be displayed
       expect(
-        screen.getByText(mockQuestion.number.join(''))
+        screen.getByText(mockQuestion.number.join('.'))
       ).toBeInTheDocument();
     });
   });

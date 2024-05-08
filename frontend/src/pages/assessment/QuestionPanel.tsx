@@ -208,20 +208,44 @@ const QuestionPanel = ({
             <Button
               onClick={() => setQuestion(prevQuestion)}
               startIcon={<ArrowBackRoundedIcon />}
-              style={{ textTransform: 'none', marginRight: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginRight: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to previous question"
             >
-              {prevQuestion?.number.join('')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {prevQuestion?.number.join('.')}
+              </span>
             </Button>
           )}
           {nextQuestion && (
             <Button
               onClick={() => setQuestion(nextQuestion)}
               endIcon={<ArrowForwardRoundedIcon />}
-              style={{ textTransform: 'none', marginLeft: 'auto' }}
+              style={{
+                textTransform: 'none',
+                marginLeft: 'auto',
+                maxWidth: '150px'
+              }}
               title="Go to next question"
             >
-              {nextQuestion.number.join('')}
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}
+              >
+                {nextQuestion.number.join('.')}
+              </span>
             </Button>
           )}
         </div>
@@ -249,8 +273,15 @@ const QuestionPanel = ({
           >
             {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
           </IconButton>
-          <h2 style={{ margin: '0px', flexGrow: '1', textAlign: 'start' }}>
-            {polledQuestion.number}
+          <h2
+            style={{
+              margin: '0px',
+              flexGrow: '1',
+              textAlign: 'start',
+              overflow: 'auto'
+            }}
+          >
+            {polledQuestion.number.join('.')}
           </h2>
           <IconButton
             onClick={() => toggleIsEditingQuestion()}
@@ -392,6 +423,27 @@ const QuestionPanel = ({
               style={{ columnGap: '5px' }}
               anonymous={polledQuestion.versions.at(versionNo)?.isAnonymous}
             />
+            <p
+              style={{
+                fontSize: '0.8rem',
+                color: '#808080',
+                height: 'fit-content'
+              }}
+            >
+              {polledQuestion.versions
+                .at(versionNo)
+                ?.createdAt.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }) +
+                ' ' +
+                polledQuestion.createdAt.toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+            </p>
           </div>
         </div>
 

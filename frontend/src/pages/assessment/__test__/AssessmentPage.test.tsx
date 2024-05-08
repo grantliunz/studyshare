@@ -35,7 +35,7 @@ describe('AssessmentPage', () => {
     _id: '123',
     type: AssessmentType.EXAM,
     year: 2023,
-    semester: SemesterType.FIRST,
+    semester: SemesterType.SEMESTER_1,
     questions: [
       {
         _id: '900',
@@ -139,7 +139,7 @@ describe('AssessmentPage', () => {
     waitFor(() => {
       // question number should be displayed
       expect(
-        screen.getByText(mockAssessment.questions[0].number.join(''))
+        screen.getByText(mockAssessment.questions[0].number.join('.'))
       ).toBeInTheDocument();
 
       // latest version of question should be displayed
@@ -164,7 +164,7 @@ describe('AssessmentPage', () => {
     waitFor(() => {
       // question number should be displayed
       expect(
-        screen.getByText(mockAssessment.questions[0].number.join(''))
+        screen.getByText(mockAssessment.questions[0].number.join('.'))
       ).toBeInTheDocument();
       // latest version of question should be displayed
       expect(
@@ -178,7 +178,7 @@ describe('AssessmentPage', () => {
         screen.getByText(mockAssessment.questions[1].number.at(-1)!)
       );
       expect(
-        screen.getByText(mockAssessment.questions[1].number.join(''))
+        screen.getByText(mockAssessment.questions[1].number.join('.'))
       ).toBeInTheDocument();
       expect(
         screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
@@ -201,7 +201,7 @@ describe('AssessmentPage', () => {
     waitFor(() => {
       // question number should be displayed
       expect(
-        screen.getByText(mockAssessment.questions[0].number.join(''))
+        screen.getByText(mockAssessment.questions[0].number.join('.'))
       ).toBeInTheDocument();
       // latest version of question should be displayed
       expect(
@@ -216,7 +216,7 @@ describe('AssessmentPage', () => {
       fireEvent.click(screen.getByTitle('Go to next question'));
 
       expect(
-        screen.getByText(mockAssessment.questions[1].number.join(''))
+        screen.getByText(mockAssessment.questions[1].number.join('.'))
       ).toBeInTheDocument();
       expect(
         screen.getByText(mockAssessment.questions[1].versions.at(-1)!.text)
