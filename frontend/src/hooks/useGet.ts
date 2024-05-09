@@ -10,7 +10,7 @@ export default function useGet<T>(
   mappingDTO: Mapper<T> = (data: any) => data
 ) {
   const [data, setData] = useState<T | null>(initialState);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,6 +25,7 @@ export default function useGet<T>(
       } catch (error: any) {
         console.error('Error fetching data:', error);
         setError(error.response?.data?.error || 'An error occurred');
+        setLoading(false);
       }
       setLoading(false);
     }
