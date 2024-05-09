@@ -131,7 +131,6 @@ Once the backend is up and running, you can start making requests to it from you
 
 Each data object is grouped under the routes folder. There will be a route file that declares all the routes, a controller file that contains all the route functionality and the model file that contains the schema.
 
-Use the existing user folder as reference.
 
 # Testing TODO
 
