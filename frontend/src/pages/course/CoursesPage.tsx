@@ -23,7 +23,7 @@ import { useAuth } from '../../contexts/UserContext';
 import { Course } from '@shared/types/models/course/course';
 import { University } from '@shared/types/models/university/university';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
-import Error from '../../components/Error';
+import Error from '../../components/ErrorPage';
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
