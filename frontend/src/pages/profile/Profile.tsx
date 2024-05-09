@@ -71,9 +71,7 @@ export default function Profile() {
   return (
     <div className={styles.container}>
       {error ? (
-        <div className={styles.errorContainer}>
-          <h1 className={styles.error}>Error!</h1>
-        </div>
+        <div className={styles.errorContainer}></div>
       ) : (
         <>
           <div className={styles.profileHeader}>
