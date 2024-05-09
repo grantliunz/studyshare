@@ -44,7 +44,7 @@ export const createComment = async (
       latestContributor: isAnonymous ? null : author
     });
 
-    question.save();
+    await question.save();
 
     // create a new comment instance
     const comment = new Comment({
