@@ -13,18 +13,6 @@ import {
   SemesterType
 } from '@shared/types/models/assessment/assessment';
 
-// Hardcoded a University list for testing
-
-const university = new University({
-  Name: 'University of Auckland',
-  Courses: [
-    new Course({
-      Name: 'Computer Science',
-      Image:
-        'https://www.utoronto.ca/sites/default/files/2019-01/Computer-Science-Header.jpg'
-    })
-  ]
-});
 
 const users = [
   new User({
@@ -71,50 +59,61 @@ const users = [
 const universities = [
   new University({
     _id: '662f9cf0c02c023a03c89544',
-    name: 'Monkey',
+    name: 'University of Auckland',
     image: '1'
   }),
   new University({
     _id: '662f9d24bf818f416fcd1b38',
-    name: 'Gorilla',
+    name: 'Auckland University of Technology',
+    image: '1'
+  }),
+  new University({
+    _id: '662f9d24bf818f416fcd1a38',
+    name: 'University of Otago',
     image: '1'
   })
 ];
 
 const courses = [
   new Course({
-    name: 'Introduction to Swinging',
-    code: 'MONKEY184',
+    name: 'Software Architecture',
+    code: 'SOFTENG325',
     university: '662f9cf0c02c023a03c89544',
     assessments: []
   }),
   new Course({
-    name: 'Fundamentals of Swinging',
-    code: 'MONKEY284',
+    name: 'Engineering Mechanics',
+    code: 'ENGGEN121',
     university: '662f9cf0c02c023a03c89544',
     assessments: []
   }),
   new Course({
-    name: 'Fundamentals of Swinging 2',
-    code: 'MONKEY384',
+    name: 'Mathematical Modelling 2',
+    code: 'ENGSCI211',
     university: '662f9cf0c02c023a03c89544',
     assessments: []
   }),
   new Course({
-    name: 'Introduction to Gorilla',
-    code: 'GORRILLA101',
+    name: 'Fundamentals of Database Systems',
+    code: 'SOFTENG351',
+    university: '662f9cf0c02c023a03c89544',
+    assessments: []
+  }),
+  new Course({
+    name: 'Introduction to Artificial Intelligence',
+    code: 'COMPSCI320',
     university: '662f9d24bf818f416fcd1b38',
     assessments: []
   }),
   new Course({
-    name: 'Fundamentals of Chest Beating',
-    code: 'GORRILLA206',
+    name: 'Fundamentals of Computer Graphics',
+    code: 'COMPSCI373',
     university: '662f9d24bf818f416fcd1b38',
     assessments: []
   }),
   new Course({
-    name: 'How to Gorilla',
-    code: 'GORRILLA306',
+    name: 'Introduction to Computer Networks',
+    code: 'COMPSCI377',
     university: '662f9d24bf818f416fcd1b38',
     assessments: []
   })
@@ -123,7 +122,7 @@ const courses = [
 const assessments = [
   new Assessment({
     type: AssessmentType.EXAM,
-    year: 2024,
+    year: 2020,
     semester: SemesterType.SEMESTER_1,
     questions: [],
     latestContributor: users[0]._id,
@@ -140,7 +139,7 @@ const assessments = [
   }),
   new Assessment({
     type: AssessmentType.EXAM,
-    year: 2023,
+    year: 2019,
     semester: SemesterType.SEMESTER_1,
     questions: []
   }),
@@ -158,10 +157,10 @@ const assessments = [
 const questions = [
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'a', 'i'],
+    number: ['1', 'a'],
     versions: [
       {
-        text: '<p>How can I be like Penqor</p>',
+        text: '<p>A typical distributed information system can be structured according to three tiers: client, service, and data. Briefly describe how caching might be employed to improve a three-tier system’s scalability.</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -173,20 +172,15 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'a', 'ii'],
+    number: ['1', 'b'],
     versions: [
       {
-        text: '<p>How long did</p>',
+        text: '<p>Describe the term Data Transmission Object (DTO).</p>',
         author: users[0]._id,
         createdAt: new Date()
       },
       {
-        text: '<p>How long did Penqor ?</p>',
-        author: users[1]._id,
-        createdAt: new Date()
-      },
-      {
-        text: '<p>How long did Penqor spend at green place?</p>',
+        text: '<p>Describe the term Data Transmission Object (DTO), and briefly explain when it is appropriate to use DTOs.</p>',
         author: users[2]._id,
         createdAt: new Date()
       }
@@ -198,10 +192,10 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'a', 'iii'],
+    number: ['1', 'c'],
     versions: [
       {
-        text: '<p>What is green place?</p>',
+        text: '<p>Many of the technologies used in the course, including JAX-RS, JPA, HTTP and servlet containers, are based on open specifications. Briefly describe the term open specification and name a quality attribute that is promoted through use of open specifications.</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -213,10 +207,10 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'b', 'i'],
+    number: ['3', 'a'],
     versions: [
       {
-        text: '<p>Friend help?</p>',
+        text: '<p>Describe, using examples, one situation in which an asynchronous communication protocol would be beneficial compared with a traditional request-reply protocol.</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -228,10 +222,10 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'b', 'ii'],
-    versions: [
+    number: ['2', 'a'],
+    versions: [ 
       {
-        text: '<p>What sound does a monkey make?</p>',
+        text: '<p>Study the class definition in Figure 1 and the transaction code in Figure 2. If two instances of the transaction in Figure 2 were running concurrently, describe how they could conflict.</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -243,10 +237,10 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['1', 'b', 'iii'],
+    number: ['4'],
     versions: [
       {
-        text: '<p>How much can a gorilla deadlift?</p>',
+        text: '<p>You have been tasked to design a web service allowing users to book vehicle rentals using a website, before coming into a physical caryard to confirm the agreement and pick up the rental. The design brief for this system is given in Appendix B</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -258,10 +252,10 @@ const questions = [
   }),
   new Question({
     assessment: assessments[0]._id,
-    number: ['2', 'a'],
+    number: ['4', 'a'],
     versions: [
       {
-        text: '<p>How much did Penqor deadlift last week?</p>',
+        text: '<p>Create an object-oriented domain model, using JPA annotations, that could be used to represent the system described in the design brief. Be sure to include all necessary JPA annotations, but you may omit any getters, setters, and constructors. If you make any assumptions, be sure to state them. Justify all design decisions made.</p>',
         author: users[0]._id,
         createdAt: Date.now()
       }
@@ -269,36 +263,6 @@ const questions = [
     answers: [],
     reporters: [],
     comments: []
-  }),
-  new Question({
-    assessment: assessments[0]._id,
-    number: ['2', 'b'],
-    versions: [
-      {
-        text: '<p>How much can you deadlift?</p>',
-        author: users[0]._id,
-        createdAt: Date.now()
-      }
-    ],
-    answers: [],
-    reporters: [],
-    comments: [],
-    latestContributor: users[1]._id
-  }),
-  new Question({
-    assessment: assessments[0]._id,
-    number: ['3'],
-    versions: [
-      {
-        text: '<p>Where is ardo?</p>',
-        author: users[0]._id,
-        createdAt: Date.now()
-      }
-    ],
-    answers: [],
-    reporters: [],
-    comments: [],
-    latestContributor: users[1]._id
   })
 ];
 
