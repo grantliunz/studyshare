@@ -7,16 +7,11 @@
   margin-right: 5%;
 }
 
-.errorContainer {
+.emptyContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-}
-
-.error {
-  font-size: 1.75rem;
-  color: red;
 }
 
 .profileHeader {
