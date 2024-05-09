@@ -123,6 +123,16 @@ npm run dev
 
 This will start the backend server on the specified port (default is 3000) and connect it to the MongoDB Atlas database using the provided connection string.
 
+#### Testing the Backend
+
+To run the backend tests, run the following command in the frontend directory while the backend is running:
+
+```bash
+npm run route-test
+```
+
+This will run all the tests within the backend folder.
+
 #### Usage
 
 Once the backend is up and running, you can start making requests to it from your frontend or API client.
@@ -130,9 +140,6 @@ Once the backend is up and running, you can start making requests to it from you
 #### File Structure
 
 Each data object is grouped under the routes folder. There will be a route file that declares all the routes, a controller file that contains all the route functionality and the model file that contains the schema.
-
-
-# Testing TODO
 
 # Contributing
 
