@@ -13,6 +13,7 @@ import {
   SemesterType
 } from '@shared/types/models/assessment/assessment';
 import Answer from '../routes/answer/answer-model';
+import Comment from '../routes/comment/comment-model';
 
 const users = [
   new User({
@@ -302,6 +303,19 @@ const answers = [
   })
 ];
 
+const comments = [
+  new Comment({
+    answer: answers[0]._id,
+    text: 'Thank you!',
+    author: users[1],
+    rating: {
+      upvotes: 1,
+      downvotes: 0
+    },
+    createdAt: new Date(2024, 1, 24, 16, 48, 12)
+  })
+];
+
 // This is a standalone program which will populate the database with initial data.
 async function run() {
   try {
@@ -353,7 +367,6 @@ async function run() {
       const user = await User.findById(answer.author);
       if (!user) {
         console.log('Error in init-db!');
-
         return;
       }
       question.answers.push(answer._id);
@@ -363,6 +376,35 @@ async function run() {
       await question.save();
       user.answers.push(answer._id);
       await user.save();
+    }
+
+    for (const comment of comments) {
+      await comment.save();
+      const answer = await Answer.findById(comment.answer);
+      if (!answer) {
+        console.log('Error in init-db!');
+        return;
+      }
+      const user = await User.findById(comment.author);
+      if (!user) {
+        console.log('Error in init-db!');
+        return;
+      }
+      const question = await Question.findById(answer.question);
+      if (!question) {
+        console.log('Error in init-db!');
+        return;
+      }
+
+      answer.comments.push(comment._id);
+      await answer.save();
+
+      Object.assign(question, {
+        __v: question.__v + 1,
+        latestContributor: comment.isAnonymous ? null : comment.author
+      });
+
+      await question.save();
     }
 
     await mongoose.disconnect();
