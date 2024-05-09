@@ -68,6 +68,7 @@ export const createComment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -94,6 +95,7 @@ export const getAllComments = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -116,6 +118,7 @@ export const getComment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -152,6 +155,7 @@ export const updateComment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -178,6 +182,7 @@ export const deleteComment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -246,6 +251,7 @@ export const voteComment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }

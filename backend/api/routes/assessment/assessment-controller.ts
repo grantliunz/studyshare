@@ -75,6 +75,7 @@ export const createAssessment = async (
     console.log(error);
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -91,6 +92,7 @@ export const getAllAssessments = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -109,6 +111,7 @@ export const getAllAssessmentsInCourse = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -132,6 +135,7 @@ export const getAssessment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -175,6 +179,7 @@ export const updateAssessment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -197,6 +202,7 @@ export const deleteAssessment = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
