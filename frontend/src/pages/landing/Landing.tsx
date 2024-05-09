@@ -24,9 +24,8 @@ export default function Landing() {
       <Paper elevation={20} className={styles.container} sx={{}}>
         <h1 className={styles.title}>StudyShare</h1>
         <p className={styles.description}>
-          The collaborative platform where students come together to share,
-          <br />
-          review, and elevate their learning.
+          A platform for students to collaborate on past assessments <br /> and
+          elevate their learning
         </p>
         <Button
           onClick={onClick}
