@@ -1,8 +1,8 @@
-# Team Radiant Raccoons
-
 # StudyShare
 
 Welcome to StudyShare. A forum application that allows students to collaborate together to find the best answers to past exams and tests. Built with the MERN stack with Firebase authentication. StudyShare allows students to create and post questions from past exams that other students can provide answers to. This allows StudyShare to act as a database for present and future students who wish to find student made answers to past exams.
+
+View the deployed application here: https://se750-studyshare.vercel.app/ 
 
 ## Features
 
@@ -161,11 +161,11 @@ Please use the following convention when creating commits `[type]: [msg]`
 
 ## Branches
 
-- Branch name should be all lowercase and follow the format SS[ticket ID]-ticket-title _e.g. SS02-user-login_
+- Branch name should be all lowercase and follow the format ticket ID]-ticket-title _e.g. 2-user-login_
 
 ## Pull request conventions
 
-- PR title should be the same as the ticket title, with the ticket ID at the start. e.g. `SS002 User login`.
+- PR title should be the same as the ticket title, with the ticket ID at the start. e.g. `2-user-login`.
 
 One other member must approve the PR before it can be merged into main.
 
@@ -179,5 +179,17 @@ Team members are:
 - Wen Jie See (wsee046@aucklanduni.ac.nz)
 - Connor Stevens (cste303@aucklanduni.ac.nz)
 - Leander Legaspi (lleg966@aucklanduni.ac.nz)
+
+  ## Screenshots
+<img width="500" alt="landing page" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/38ccc0a0-9a9b-4e8e-aafb-dbadca7e5ab7" >
+<img width="500" alt="universities page" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/a267ae0b-d929-444f-a59d-99bca5e8e9ae">
+<img width="500" alt="courses page" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/857dbcd7-e641-41e1-9aab-52bbaa916391">
+<img width="500" alt="assessments page" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/359e77fd-d225-47de-b851-10fb1a18861a">
+<img width="500" alt="login" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/44a2e2bc-82ea-4547-b28f-efb9984a3c54">
+<img width="500" alt="assessment page" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/1a58940b-8e02-4fc0-8400-f8bd0b9ba0e5">
+<img width="500" alt="new question" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/e2e139d7-a6cc-4a70-a9f5-363cfbf55def">
+<img width="500" alt="profile" src="https://github.com/UOA-CS732-SE750-Students-2024/project-group-radiant-raccoons/assets/100253339/90d16343-3bd7-4e21-8ef0-e4a278a624a2">
+
+
 
 ![](./group-image/Radiant%20Raccoons.webp)
