@@ -77,7 +77,12 @@ export const createQuestion = async (
     user.save();
     res.status(201).json(createdQuestion); // respond with the created question
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -131,6 +136,10 @@ export const getQuestion = async (
 
     res.status(200).json(question); // respond with the question
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -163,7 +172,12 @@ export const updateQuestion = async (
 
     res.status(200).json(updatedQuestion); // respond with the updated question
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -203,7 +217,12 @@ export const newVersion = async (
 
     return res.status(200).json(updatedQuestion); // respond with the updated question
   } catch (error) {
-    return res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -222,6 +241,11 @@ export const deleteQuestion = async (
 
     return res.status(200).json(deletedQuestion); // respond with the deleted question
   } catch (error) {
-    return res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

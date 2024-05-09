@@ -72,8 +72,12 @@ export const createAssessment = async (
 
     res.status(201).json(createdAssessment); // respond with the created assessment
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -83,7 +87,13 @@ export const getAllAssessments = async (req: Request, res: Response) => {
     const assessments = await Assessment.find();
 
     res.status(200).json(assessments); // respond with all assessments
+
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -98,6 +108,10 @@ export const getAllAssessmentsInCourse = async (
 
     res.status(200).json(assessments); // respond with all assessments
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -118,6 +132,11 @@ export const getAssessment = async (
 
     res.status(200).json(assessment); // respond with the assessment
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -157,7 +176,12 @@ export const updateAssessment = async (
 
     res.status(200).json(updatedAssessment); // respond with the updated assessment
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -175,6 +199,11 @@ export const deleteAssessment = async (
 
     res.status(200).json(deletedAssessment); // respond with the deleted assessment
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

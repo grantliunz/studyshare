@@ -49,7 +49,12 @@ export const createUniversity = async (
 
     return res.status(201).json(createdUniversity); // Respond with the created university
   } catch (error) {
-    return res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -80,6 +85,10 @@ export const getUniversityById = async (
 
     res.status(200).json(university); // Respond with the university
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };

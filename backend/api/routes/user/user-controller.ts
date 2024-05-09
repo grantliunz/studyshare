@@ -70,7 +70,12 @@ export const createUser = async (
     res.status(201).json(createdUser); // respond with the created user
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -82,7 +87,12 @@ export const getAllUsers = async (req: Request<{}, {}, {}>, res: Response) => {
 
     res.status(200).json(users); // respond with the users
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -336,7 +346,12 @@ export const getNotifications = async (
     return res.status(200).json(filteredNotifications);
   } catch (error) {
     // Handle errors
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -766,7 +781,12 @@ export const getProfile = async (
     res.status(200).json(profile);
 
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -790,7 +810,12 @@ export const getUser = async (
 
     res.status(200).json(user); // respond with the user
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -819,7 +844,12 @@ export const updateUser = async (
 
     res.status(200).json(user); // Respond with the updated user
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -846,7 +876,12 @@ export const deleteUser = async (
 
     res.status(204).end(); // respond with no content
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -903,7 +938,12 @@ export const updateWatchList = async (
 
     res.status(204).end(); // respond with no content
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -954,6 +994,11 @@ export const updateReported = async (
 
     res.status(204).end(); // respond with no content
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+      return;
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
