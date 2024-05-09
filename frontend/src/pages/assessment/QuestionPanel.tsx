@@ -2,8 +2,12 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  FormControl,
   FormControlLabel,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Slider
 } from '@mui/material';
 import PersonCard from '../../components/PersonCard';
@@ -39,6 +43,7 @@ import { questionMapper } from '../../mappers/questionMapper';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import EditOffOutlinedIcon from '@mui/icons-material/EditOffOutlined';
 import Editor from '../../components/Editor/Editor';
+import { Answer } from '@shared/types/models/answer/answer';
 
 type QuestionPanelProps = {
   currentQuestion: QuestionLazy;
@@ -47,6 +52,32 @@ type QuestionPanelProps = {
   nextQuestion: QuestionLazy | undefined;
   setQuestion: React.Dispatch<React.SetStateAction<QuestionLazy | undefined>>;
 };
+
+const sortByRating = (a: Answer, b: Answer) =>
+  b.rating.upvotes -
+  b.rating.downvotes -
+  (a.rating.upvotes - a.rating.downvotes);
+
+const sortByDate = (a: Answer, b: Answer) =>
+  b.createdAt.getTime() - a.createdAt.getTime();
+
+type AnswerSorter = {
+  name: string;
+  sorter: (a: Answer, b: Answer) => number;
+};
+
+const answerSorters: AnswerSorter[] = [
+  { name: 'Rating (highest)', sorter: sortByRating },
+  {
+    name: 'Rating (lowest)',
+    sorter: (a: Answer, b: Answer) => -sortByRating(a, b)
+  },
+  { name: 'Date (newest)', sorter: sortByDate },
+  {
+    name: 'Date (oldest)',
+    sorter: (a: Answer, b: Answer) => -sortByDate(a, b)
+  }
+];
 
 const QuestionPanel = ({
   currentQuestion,
@@ -78,11 +109,15 @@ const QuestionPanel = ({
   const { putData: updateReported } = usePut<UpdateReportedDTO, null>(
     `${API.updateReported}/${userDb?._id}`
   );
+  const [answerSorter, setAnswerSorter] = useState<AnswerSorter>(
+    answerSorters[0]
+  );
 
   const { putData: createQuestionVersion } = usePut<
     CreateQuestionVersionEntryDTO,
     QuestionLazy
   >(`${API.createQuestionVersion}/${question._id}`);
+
   useEffect(() => {
     if (userDb) {
       setIsStarred(
@@ -396,11 +431,41 @@ const QuestionPanel = ({
             padding: '0px 20px'
           }}
         >
-          {polledQuestion.answers.length === 0
-            ? 'No'
-            : polledQuestion.answers.length}{' '}
-          Answer
-          {polledQuestion.answers.length === 1 ? '' : 's'}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              columnGap: '20px',
+              alignItems: 'center'
+            }}
+          >
+            {polledQuestion.answers.length === 0
+              ? 'No'
+              : polledQuestion.answers.length}{' '}
+            Answer
+            {polledQuestion.answers.length === 1 ? '' : 's'}
+            {polledQuestion.answers.length > 1 && (
+              <FormControl style={{ width: '180px' }} size="small">
+                <InputLabel id="sort-answers-by-label">Sort By</InputLabel>
+                <Select
+                  style={{ textAlign: 'left' }}
+                  labelId="sort-answers-by-label"
+                  id="sort-answers-by"
+                  label="Sort By"
+                  value={answerSorter}
+                  onChange={(event) =>
+                    setAnswerSorter(event.target.value as AnswerSorter)
+                  }
+                >
+                  {answerSorters.map((sorter) => (
+                    <MenuItem key={sorter.name} value={sorter as any}>
+                      {sorter.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          </div>
           <div
             style={{
               display: 'flex',
@@ -455,16 +520,9 @@ const QuestionPanel = ({
             alignItems: 'center'
           }}
         >
-          {polledQuestion.answers
-            .sort(
-              (a, b) =>
-                b.rating.upvotes -
-                b.rating.downvotes -
-                (a.rating.upvotes - a.rating.downvotes)
-            )
-            .map((answer) => (
-              <AnswerCard key={answer._id} answer={answer} />
-            ))}
+          {polledQuestion.answers.sort(answerSorter.sorter).map((answer) => (
+            <AnswerCard key={answer._id} answer={answer} />
+          ))}
         </div>
         <div
           style={{
