@@ -23,6 +23,7 @@ import { useAuth } from '../../contexts/UserContext';
 import { Course } from '@shared/types/models/course/course';
 import { University } from '@shared/types/models/university/university';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
+import Error from '../../components/ErrorPage';
 
 export default function CoursesPage() {
   const [showForm, setShowForm] = useState(false);
@@ -49,11 +50,12 @@ export default function CoursesPage() {
     mapGetCoursesData
   );
 
-  const { data: universityData } = useGet<University>(
-    `${API.getUniversityById}/${universityId}`,
-    null,
-    mapGetUniversityData
-  );
+  const { data: universityData, isLoading: isLoadingUniversity } =
+    useGet<University>(
+      `${API.getUniversityById}/${universityId}`,
+      null,
+      mapGetUniversityData
+    );
 
   useEffect(() => {
     if (!query.trim() && yearLevels.length === 0) {
@@ -106,9 +108,8 @@ export default function CoursesPage() {
 
           {errorString}
         </div>
-      ) : (
-        !isLoadingCourses &&
-        universityData && (
+      ) : !isLoadingUniversity ? (
+        universityData ? (
           <>
             <div className={style.upperContent}>
               <h1 className={style.uniName}>{universityData.name}</h1>
@@ -145,9 +146,12 @@ export default function CoursesPage() {
               </div>
             </div>
           </>
+        ) : (
+          <Error />
         )
+      ) : (
+        <CircularProgress />
       )}
-      {isLoadingCourses && <CircularProgress />}
       {displayedData &&
         displayedData.map((course) => (
           <div key={course.id} className={style.courseCards}>

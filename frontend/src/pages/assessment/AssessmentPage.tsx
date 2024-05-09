@@ -33,6 +33,7 @@ import {
 } from '@shared/types/models/user/user';
 import { AxiosError } from 'axios';
 import usePut from '../../hooks/usePut';
+import ErrorPage from '../../components/ErrorPage';
 
 export type QuestionNode = {
   number: string[];
@@ -266,181 +267,188 @@ const AssessmentPage = () => {
 
   return (
     <LoginPopupContext.Provider value={setShowLoginPopup}>
-      <div className={styles.container}>
+      <>
         {!assessment || !rootNode ? (
-          <div>Error retrieving assessment details</div>
+          <ErrorPage />
         ) : (
           <>
-            <div
-              className={styles.questionsTabContainer}
-              style={{
-                minWidth: sidebarWidth,
-                maxWidth: sidebarWidth
-              }}
-            >
-              <div style={{ flexDirection: 'row', display: 'flex' }}>
-                <h3
-                  style={{
-                    display: 'flex',
-                    textAlign: 'start',
-                    margin: '8px 0px 0px 8px'
-                  }}
-                >
-                  Questions
-                </h3>
+            <div className={styles.container}>
+              <div
+                className={styles.questionsTabContainer}
+                style={{
+                  minWidth: sidebarWidth,
+                  maxWidth: sidebarWidth
+                }}
+              >
+                <div style={{ flexDirection: 'row', display: 'flex' }}>
+                  <h3
+                    style={{
+                      display: 'flex',
+                      textAlign: 'start',
+                      margin: '8px 0px 0px 8px'
+                    }}
+                  >
+                    Questions
+                  </h3>
+                  <IconButton
+                    onClick={() => handleIsStarredChange(!isStarred)}
+                    title={
+                      !isStarred
+                        ? 'Add assessment to watchlist'
+                        : 'Remove assessment from watchlist'
+                    }
+                    style={{
+                      marginLeft: 'auto',
+                      marginRight: '8px',
+                      marginTop: '4px'
+                    }}
+                    sx={{
+                      '&.MuiButtonBase-root:hover': {
+                        scale: '1.15'
+                      }
+                    }}
+                  >
+                    {isStarred ? (
+                      <StarRoundedIcon />
+                    ) : (
+                      <StarBorderRoundedIcon />
+                    )}
+                  </IconButton>
+                </div>
+                <div style={{ width: '100%', overflow: 'clip' }}>
+                  {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
+                    rootNode.subquestions.map((question) => (
+                      <QuestionNumber
+                        key={question.number.join('.')}
+                        questionNode={question}
+                        setQuestion={setCurrentQuestion}
+                        currentQuestion={currentQuestion}
+                        handleAddQuestion={handleAddQuestion}
+                      />
+                    ))
+                  ) : (
+                    <p
+                      style={{
+                        alignSelf: 'center',
+                        placeSelf: 'center',
+                        width: '100%'
+                      }}
+                    >
+                      Create a question to get started!
+                    </p>
+                  )}
+                </div>
                 <IconButton
-                  onClick={() => handleIsStarredChange(!isStarred)}
-                  title={
-                    !isStarred
-                      ? 'Add assessment to watchlist'
-                      : 'Remove assessment from watchlist'
-                  }
+                  size="medium"
                   style={{
-                    marginLeft: 'auto',
-                    marginRight: '8px',
-                    marginTop: '4px'
+                    alignSelf: 'center',
+                    marginTop: '8px'
                   }}
+                  onClick={() => handleAddQuestion([])}
+                  title="Add question"
                   sx={{
                     '&.MuiButtonBase-root:hover': {
                       scale: '1.15'
                     }
                   }}
                 >
-                  {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
+                  <AddIcon fontSize="medium" />
                 </IconButton>
-              </div>
-              <div style={{ width: '100%', overflow: 'clip' }}>
-                {rootNode.subquestions && rootNode.subquestions.length > 0 ? (
-                  rootNode.subquestions.map((question) => (
-                    <QuestionNumber
-                      key={question.number.join('.')}
-                      questionNode={question}
-                      setQuestion={setCurrentQuestion}
-                      currentQuestion={currentQuestion}
-                      handleAddQuestion={handleAddQuestion}
-                    />
-                  ))
-                ) : (
-                  <p
+                {reportedQuestions.length > 0 && (
+                  <Accordion
+                    aria-controls="panel1-content"
+                    id="panel1-header"
                     style={{
-                      alignSelf: 'center',
-                      placeSelf: 'center',
-                      width: '100%'
+                      backgroundColor: 'rgba(0,0,0,0)',
+                      border: 'none',
+                      opacity: 0.5
                     }}
+                    elevation={0}
+                    sx={{ '&:before': { height: '0px' } }}
+                    disableGutters
                   >
-                    Create a question to get started!
-                  </p>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      Hidden Questions
+                    </AccordionSummary>
+                    <AccordionDetails
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px'
+                      }}
+                    >
+                      {reportedQuestions.map((q) => {
+                        return (
+                          <div
+                            key={q.number.join('.')}
+                            className={styles.reportedQuestionNumber}
+                            onClick={() => {
+                              setCurrentQuestion(q);
+                            }}
+                            style={{
+                              backgroundColor:
+                                currentQuestion?._id === q._id
+                                  ? 'rgba(0,0,0,0.1)'
+                                  : 'transparent'
+                            }}
+                          >
+                            {q.number.join('.')}
+                          </div>
+                        );
+                      })}
+                    </AccordionDetails>
+                  </Accordion>
                 )}
+                <div
+                  className={styles.resizeBar}
+                  onMouseDown={startResize}
+                  onMouseUp={stopResize}
+                />
               </div>
-              <IconButton
-                size="medium"
-                style={{
-                  alignSelf: 'center',
-                  marginTop: '8px'
-                }}
-                onClick={() => handleAddQuestion([])}
-                title="Add question"
-                sx={{
-                  '&.MuiButtonBase-root:hover': {
-                    scale: '1.15'
-                  }
-                }}
-              >
-                <AddIcon fontSize="medium" />
-              </IconButton>
-              {reportedQuestions.length > 0 && (
-                <Accordion
-                  aria-controls="panel1-content"
-                  id="panel1-header"
+
+              {currentQuestion ? (
+                orderedQuestionsArray.map((question, index) => (
+                  <QuestionPanel
+                    key={question.number.join()}
+                    currentQuestion={currentQuestion}
+                    question={question}
+                    prevQuestion={
+                      index > 0 ? orderedQuestionsArray[index - 1] : undefined
+                    }
+                    nextQuestion={
+                      index < orderedQuestionsArray.length - 1
+                        ? orderedQuestionsArray[index + 1]
+                        : undefined
+                    }
+                    setQuestion={setCurrentQuestion}
+                  />
+                ))
+              ) : (
+                <p
                   style={{
-                    backgroundColor: 'rgba(0,0,0,0)',
-                    border: 'none',
-                    opacity: 0.5
+                    alignSelf: 'center',
+                    placeSelf: 'center',
+                    width: '100%'
                   }}
-                  elevation={0}
-                  sx={{ '&:before': { height: '0px' } }}
-                  disableGutters
                 >
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    Hidden Questions
-                  </AccordionSummary>
-                  <AccordionDetails
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '4px'
-                    }}
-                  >
-                    {reportedQuestions.map((q) => {
-                      return (
-                        <div
-                          key={q.number.join('.')}
-                          className={styles.reportedQuestionNumber}
-                          onClick={() => {
-                            setCurrentQuestion(q);
-                          }}
-                          style={{
-                            backgroundColor:
-                              currentQuestion?._id === q._id
-                                ? 'rgba(0,0,0,0.1)'
-                                : 'transparent'
-                          }}
-                        >
-                          {q.number.join('.')}
-                        </div>
-                      );
-                    })}
-                  </AccordionDetails>
-                </Accordion>
+                  Create a question to get started!
+                </p>
               )}
-              <div
-                className={styles.resizeBar}
-                onMouseDown={startResize}
-                onMouseUp={stopResize}
+              <NewQuestion
+                open={newQuestionOpen}
+                handleClose={handleNewQuestionClose}
+                parentNumber={newQuestionParentNumber}
+                onAddQuestion={() => {
+                  refreshAssessment();
+                  handleNewQuestionClose();
+                }}
               />
             </div>
 
-            {currentQuestion ? (
-              orderedQuestionsArray.map((question, index) => (
-                <QuestionPanel
-                  key={question.number.join()}
-                  currentQuestion={currentQuestion}
-                  question={question}
-                  prevQuestion={
-                    index > 0 ? orderedQuestionsArray[index - 1] : undefined
-                  }
-                  nextQuestion={
-                    index < orderedQuestionsArray.length - 1
-                      ? orderedQuestionsArray[index + 1]
-                      : undefined
-                  }
-                  setQuestion={setCurrentQuestion}
-                />
-              ))
-            ) : (
-              <p
-                style={{
-                  alignSelf: 'center',
-                  placeSelf: 'center',
-                  width: '100%'
-                }}
-              >
-                Create a question to get started!
-              </p>
-            )}
-            <NewQuestion
-              open={newQuestionOpen}
-              handleClose={handleNewQuestionClose}
-              parentNumber={newQuestionParentNumber}
-              onAddQuestion={() => {
-                refreshAssessment();
-                handleNewQuestionClose();
-              }}
-            />
+            <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
           </>
-        )}
-      </div>
-      <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
+        )}{' '}
+      </>
     </LoginPopupContext.Provider>
   );
 };

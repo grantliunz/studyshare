@@ -19,6 +19,7 @@ import {
 import { Course } from '@shared/types/models/course/course';
 import { AxiosError } from 'axios';
 import LoginPopup from '../../components/LoginPopup/LoginPopup';
+import ErrorPage from '../../components/ErrorPage';
 
 function matchString(assessment: Assessment, searchText: string) {
   const str =
@@ -115,6 +116,8 @@ const Assessments = () => {
     <div className={styles.container}>
       {isFetchingAssessments || isFetchingCourse ? (
         <CircularProgress />
+      ) : !isFetchingCourse && !course ? (
+        <ErrorPage />
       ) : (
         <>
           <div className={styles.upperContent}>

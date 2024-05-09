@@ -10,6 +10,7 @@ import CoursesPage from './pages/course/CoursesPage.tsx';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header/Header.tsx';
 import AssessmentPage from './pages/assessment/AssessmentPage.tsx';
+import ErrorPage from './components/ErrorPage.tsx';
 
 const theme = createTheme({
   palette: {
@@ -47,6 +48,7 @@ function App() {
           path="/:universityId/:courseId/:assessmentId"
           element={<AssessmentPage />}
         />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </ThemeProvider>
   );
