@@ -145,6 +145,28 @@ export default function CoursesPage() {
                 </FormControl>
               </div>
             </div>
+            {displayedData &&
+              displayedData.map((course) => (
+                <div key={course.id} className={style.courseCards}>
+                  <CourseCard
+                    courseCode={course.code}
+                    courseName={course.name}
+                    onClick={() => navigate(`/${universityId}/${course.id}`)}
+                  />
+                </div>
+              ))}
+            {displayedData?.length === 0 &&
+              !isLoadingCourses &&
+              !errorString && <p>No courses found</p>}
+            <AddCourseForm
+              open={showForm}
+              onClose={handleCloseForm}
+              universityId={universityId!}
+              refreshCourses={refreshCourses}
+            />
+            <AddButton handleOpenForm={handleOpenForm} />
+
+            <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
           </>
         ) : (
           <Error />
@@ -152,28 +174,6 @@ export default function CoursesPage() {
       ) : (
         <CircularProgress />
       )}
-      {displayedData &&
-        displayedData.map((course) => (
-          <div key={course.id} className={style.courseCards}>
-            <CourseCard
-              courseCode={course.code}
-              courseName={course.name}
-              onClick={() => navigate(`/${universityId}/${course.id}`)}
-            />
-          </div>
-        ))}
-      {displayedData?.length === 0 && !isLoadingCourses && !errorString && (
-        <p>No courses found</p>
-      )}
-      <AddCourseForm
-        open={showForm}
-        onClose={handleCloseForm}
-        universityId={universityId!}
-        refreshCourses={refreshCourses}
-      />
-      <AddButton handleOpenForm={handleOpenForm} />
-
-      <LoginPopup open={showLoginPopup} setOpen={setShowLoginPopup} />
     </div>
   );
 }
