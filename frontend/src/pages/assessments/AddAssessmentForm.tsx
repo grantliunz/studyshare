@@ -92,7 +92,8 @@ export default function AddAssessmentForm({
     if (!currentInput.year) return;
     if (
       currentInput.year < 1980 ||
-      currentInput.year > new Date().getFullYear()
+      currentInput.year > new Date().getFullYear() ||
+      currentInput.year % 1 !== 0
     ) {
       // test for a bad year
       setCurrentInputErrors({
