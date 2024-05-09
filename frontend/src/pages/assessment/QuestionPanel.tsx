@@ -444,7 +444,7 @@ const QuestionPanel = ({
               : polledQuestion.answers.length}{' '}
             Answer
             {polledQuestion.answers.length === 1 ? '' : 's'}
-            <FormControl style={{ width: '250px' }} size="small">
+            <FormControl style={{ width: '180px' }} size="small">
               <InputLabel id="sort-answers-by-label">Sort By</InputLabel>
               <Select
                 style={{ textAlign: 'left' }}
