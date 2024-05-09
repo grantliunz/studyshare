@@ -55,7 +55,7 @@ export default async function setup(){
   courseId: courseId,
   type: "Exam",
   year: randomNo,
-  semester: "First",
+  semester: "Semester 1",
   questions: [],
   latestContributor: null,
   newestQuestion: null

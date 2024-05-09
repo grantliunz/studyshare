@@ -1,7 +1,7 @@
-export const userId = '663a0b1638cb00b762863544';
-export const universityId = '663a0b1638cb00b762863547';
-export const courseId = '663a0b1638cb00b76286354b';
-export const assessmentId = '663a0b1738cb00b762863550';
-export const questionId = '663a0b1738cb00b762863556';
-export const answerId = '663a0b1738cb00b76286355e';
-export const commentId = '663a0b1738cb00b762863565';
+export const userId = '663c7c266088961ae31404c4';
+export const universityId = '663c7db8c235b0f376ef0d2c';
+export const courseId = '663c7db8c235b0f376ef0d30';
+export const assessmentId = '663c7db8c235b0f376ef0d35';
+export const questionId = '663c7db9c235b0f376ef0d3b';
+export const answerId = '663c7db9c235b0f376ef0d43';
+export const commentId = '663c7db9c235b0f376ef0d4a';

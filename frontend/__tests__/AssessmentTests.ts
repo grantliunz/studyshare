@@ -13,7 +13,7 @@ it('createAssessment', async () => {
    courseId: courseId,
    type: AssessmentType.Exam,
    year: randomYear,
-   semester: "First",
+   semester: "Semester 1",
    questions: [],
    latestContributor: null,
    newestQuestion: null
@@ -28,7 +28,7 @@ it('createAssessmentDuplicate', async () => {
   courseId: courseId,
   type: AssessmentType.Exam,
   year: randomYear,
-  semester: "First",
+  semester: "Semester 1",
   questions: [],
   latestContributor: null,
   newestQuestion: null
@@ -41,7 +41,7 @@ it('createAssessmentMissingCourse', async () => {
   courseId: courseId,
   type: AssessmentType.Exam,
   year: randomYear,
-  semester: "First",
+  semester: "Semester 1",
   questions: [],
   latestContributor: null,
   newestQuestion: null

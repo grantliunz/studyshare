@@ -66,7 +66,11 @@ export const createComment = async (
 
     res.status(201).json(createdComment); // respond with the created comment
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -88,7 +92,11 @@ export const getAllComments = async (
 
     res.status(200).json(comments); // respond with the fetched comments
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -106,7 +114,11 @@ export const getComment = async (
     }
     res.status(200).json(comment); // respond with the fetched comment
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -138,7 +150,11 @@ export const updateComment = async (
 
     res.status(200).json(updatedComment); // respond with the updated comment
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -160,7 +176,11 @@ export const deleteComment = async (
 
     res.status(204).json({ error: 'Comment deleted successfully' }); // respond with success error
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -224,6 +244,9 @@ export const voteComment = async (
 
     res.status(201).json(updatedComment);
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };

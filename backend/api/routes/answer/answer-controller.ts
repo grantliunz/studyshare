@@ -62,7 +62,11 @@ export const createAnswer = async (
 
     res.status(201).json(createdAnswer); // respond with the created answer
   } catch (error) {
-    res.status(500).json({ error: `Internal server error: ${error}` });
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -108,6 +112,9 @@ export const getAnswer = async (
 
     res.status(200).json(answer); // respond with the answer
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -201,6 +208,9 @@ export const voteAnswer = async (
 
     res.status(201).json(updatedAnswer);
   } catch (error) {
+    if (error instanceof Error && error.name == 'CastError') {
+      res.status(404).json({ error: 'Invalid ID' });
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 };
