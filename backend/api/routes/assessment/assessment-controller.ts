@@ -72,7 +72,6 @@ export const createAssessment = async (
 
     res.status(201).json(createdAssessment); // respond with the created assessment
   } catch (error) {
-    console.log(error);
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
       return;
