@@ -79,6 +79,7 @@ export const createQuestion = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -137,6 +138,7 @@ export const getQuestion = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -172,6 +174,7 @@ export const updateQuestion = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -216,6 +219,7 @@ export const newVersion = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -239,6 +243,7 @@ export const deleteQuestion = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });

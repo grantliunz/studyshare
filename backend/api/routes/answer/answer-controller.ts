@@ -64,6 +64,7 @@ export const createAnswer = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -114,6 +115,7 @@ export const getAnswer = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -210,6 +212,7 @@ export const voteAnswer = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }

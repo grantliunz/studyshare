@@ -62,6 +62,7 @@ export const createCourse = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -111,6 +112,7 @@ export const getCourse = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -143,6 +145,7 @@ export const updateCourse = async (
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
@@ -163,6 +166,7 @@ export const deleteCourse = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {
       res.status(404).json({ error: 'Invalid ID' });
+      return;
     }
 
     res.status(500).json({ error: 'Internal server error' });
