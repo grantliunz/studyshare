@@ -58,7 +58,7 @@ export const createAnswer = async (
 
     user.answers.push(createdAnswer._id);
 
-    user.save();
+    await user.save();
 
     res.status(201).json(createdAnswer); // respond with the created answer
   } catch (error) {

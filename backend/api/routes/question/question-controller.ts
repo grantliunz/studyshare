@@ -74,7 +74,7 @@ export const createQuestion = async (
 
     user.questions.push(createdQuestion._id);
 
-    user.save();
+    await user.save();
     res.status(201).json(createdQuestion); // respond with the created question
   } catch (error) {
     if (error instanceof Error && error.name == 'CastError') {

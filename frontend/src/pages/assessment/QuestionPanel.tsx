@@ -502,12 +502,14 @@ const QuestionPanel = ({
                   minute: '2-digit'
                 }) +
                 ' ' +
-                polledQuestion.createdAt.toLocaleDateString('en-US', {
-                  weekday: 'short',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}
+                polledQuestion.versions
+                  .at(versionNo)
+                  ?.createdAt.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
             </p>
           </div>
         </div>
