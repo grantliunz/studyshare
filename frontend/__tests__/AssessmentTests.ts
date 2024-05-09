@@ -11,7 +11,7 @@ const randomYear = Math.floor(Math.random() * 10000 + 2000);
 it('createAssessment', async () => {
   const newAssessment: Assessment = {
    courseId: courseId,
-   type: AssessmentType.Exam,
+   type: AssessmentType.EXAM,
    year: randomYear,
    semester: "Semester 1",
    questions: [],
@@ -26,7 +26,7 @@ it('createAssessment', async () => {
 it('createAssessmentDuplicate', async () => {
  const newAssessment: Assessment = {
   courseId: courseId,
-  type: AssessmentType.Exam,
+  type: AssessmentType.EXAM,
   year: randomYear,
   semester: "Semester 1",
   questions: [],
