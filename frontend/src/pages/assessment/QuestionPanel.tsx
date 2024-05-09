@@ -444,25 +444,27 @@ const QuestionPanel = ({
               : polledQuestion.answers.length}{' '}
             Answer
             {polledQuestion.answers.length === 1 ? '' : 's'}
-            <FormControl style={{ width: '180px' }} size="small">
-              <InputLabel id="sort-answers-by-label">Sort By</InputLabel>
-              <Select
-                style={{ textAlign: 'left' }}
-                labelId="sort-answers-by-label"
-                id="sort-answers-by"
-                label="Sort By"
-                value={answerSorter}
-                onChange={(event) =>
-                  setAnswerSorter(event.target.value as AnswerSorter)
-                }
-              >
-                {answerSorters.map((sorter) => (
-                  <MenuItem key={sorter.name} value={sorter as any}>
-                    {sorter.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            {polledQuestion.answers.length > 1 && (
+              <FormControl style={{ width: '180px' }} size="small">
+                <InputLabel id="sort-answers-by-label">Sort By</InputLabel>
+                <Select
+                  style={{ textAlign: 'left' }}
+                  labelId="sort-answers-by-label"
+                  id="sort-answers-by"
+                  label="Sort By"
+                  value={answerSorter}
+                  onChange={(event) =>
+                    setAnswerSorter(event.target.value as AnswerSorter)
+                  }
+                >
+                  {answerSorters.map((sorter) => (
+                    <MenuItem key={sorter.name} value={sorter as any}>
+                      {sorter.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
           </div>
           <div
             style={{
